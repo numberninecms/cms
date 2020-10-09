@@ -1,0 +1,6 @@
+{% if is_granted('Administrator') %}
+    <div class="alert-warning" role="alert">
+        <p class="font-bold">{% trans with {'%class%': class} %}Class "%class%" has some missing properties:{% endtrans %} <b>{{ properties|keys|join(', ') }}</b><br>
+            <small>{% trans %}This alert is only shown to administrators.{% endtrans %}</small></p>
+    </div>
+{% endif %}

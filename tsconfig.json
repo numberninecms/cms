@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "rootDir": ".",
+        "allowJs": true,
+        "baseUrl": ".",
+        "esModuleInterop": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "sourceMap": true,
+        "strict": true,
+        "target": "es2018",
+        "strictPropertyInitialization": false,
+        "paths": {
+            "src/*": [
+                "assets/ts/*"
+            ]
+        }
+    },
+    "include": [
+        "assets/ts/**/*"
+    ],
+    "exclude": [
+        "/build",
+        "node_modules"
+    ]
+}

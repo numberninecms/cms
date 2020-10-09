@@ -1,0 +1,87 @@
+{
+    "name": "numberninecms/cms",
+    "description": "NumberNine is a content management system for Symfony",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "William Arin",
+            "email": "williamarin.dev@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4",
+        "ext-ctype": "*",
+        "ext-exif": "*",
+        "ext-gd": "*",
+        "ext-iconv": "*",
+        "ext-intl": "*",
+        "ext-json": "*",
+        "doctrine/doctrine-bundle": "^2.0",
+        "doctrine/doctrine-fixtures-bundle": "^3.3",
+        "doctrine/orm": "^2.7",
+        "friendsofsymfony/jsrouting-bundle": "^2.6",
+        "fzaninotto/faker": "^1.9",
+        "gedmo/doctrine-extensions": "^2.4",
+        "imagine/imagine": "^1.2",
+        "mpratt/relativetime": "^1.5",
+        "numberninecms/faker": "*@dev",
+        "scienta/doctrine-json-functions": "^4.1",
+        "stof/doctrine-extensions-bundle": "^1.4",
+        "symfony-cmf/routing-bundle": "^2.4",
+        "symfony/form": "^5.1",
+        "symfony/framework-bundle": "5.1.*",
+        "symfony/mime": "^5.1",
+        "symfony/security-core": "5.1.*",
+        "symfony/security-csrf": "5.1.*",
+        "symfony/security-guard": "5.1.*",
+        "symfony/security-http": "5.1.*",
+        "symfony/string": "5.1.*",
+        "symfony/translation": "^5.1",
+        "symfony/translation-contracts": "^2.0",
+        "symfony/uid": "5.1.*",
+        "symfony/validator": "^5.1",
+        "symfony/webpack-encore-bundle": "^1.7",
+        "thunderer/shortcode": "^0.7.4",
+        "wapmorgan/media-file": "^0.1.4"
+    },
+    "require-dev": {
+        "friendsoftwig/twigcs": "^3.2",
+        "nunomaduro/phpinsights": "^1.14",
+        "phpro/grumphp": "^0.18.0",
+        "phpstan/phpstan": "^0.12.25",
+        "phpstan/phpstan-doctrine": "^0.12.13",
+        "phpstan/phpstan-phpunit": "^0.12.8",
+        "phpstan/phpstan-symfony": "^0.12.6",
+        "phpunit/phpunit": "^9.2",
+        "roave/security-advisories": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "NumberNine\\": "src/"
+        },
+        "files": [
+            "src/Util/ArrayUtil/functions.php",
+            "src/Util/ConfigUtil/functions.php",
+            "src/Util/StringUtil/functions.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "NumberNine\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "stable",
+    "config": {
+        "sort-packages": true
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../faker",
+            "options": {
+                "symlink": true
+            }
+        }
+    ]
+}

@@ -1,0 +1,31 @@
+/*!
+ * This file is part of the NumberNine package.
+ *
+ * (c) William Arin <williamarin.dev@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+#page-builder-tool-context-menu {
+    @apply pointer-events-auto absolute w-auto z-50 px-3 py-0 border border-gray-500 shadow-md bg-white text-quaternary transition-transform duration-300 ease-in-out;
+    font-size: 15px;
+
+    .menu-buttons-list {
+        @apply flex flex-col relative p-0;
+        z-index: 2000;
+        user-select: none !important;
+
+        button {
+            @apply block w-full px-3 m-0 text-quaternary border-0 text-left bg-transparent cursor-pointer normal-case overflow-visible leading-relaxed;
+
+            &:hover {
+                @apply text-tertiary;
+            }
+
+            &:focus {
+                @apply outline-none;
+            }
+        }
+    }
+}

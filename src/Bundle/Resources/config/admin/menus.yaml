@@ -1,0 +1,60 @@
+# Routes are generated in NumberNine\EventSubscriber\RougeRegistrationEventSubscriber
+menus:
+    dashboard:
+        text: Dashboard
+        link: /
+        icon: dashboard
+    media_library:
+        text: Media Library
+        link: /media/
+        icon: photo_library
+    #    forms:
+    #        text: Forms
+    #        route:
+    #        icon: mdi-form-dropdown
+    #        children:
+    #            all:
+    #                text: All forms
+    #                link: /forms/
+    #            add_new:
+    #                text: Add new
+    #                link: /forms/new
+    users:
+        text: Users
+        route:
+        icon: person
+        children:
+            all:
+                text: All users
+                link: /users/
+            add_new:
+                text: Add new
+                link: /users/new
+            roles:
+                text: Roles
+                link: /users/roles/
+    settings:
+        text: Settings
+        route:
+        icon: settings_applications
+        children:
+            general:
+                text: General
+                link: /settings/general/
+            permalinks:
+                text: Permalinks
+                route: /settings/permalinks/
+    appearance:
+        text: Appearance
+        route: admin_appearance_themes
+        icon: brush
+        children:
+            themes:
+                text: Themes
+                route: admin_appearance_themes
+            customize:
+                text: Customize
+                link: /customizer/
+            menus:
+                text: Menus
+                link: /menus/

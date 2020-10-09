@@ -1,0 +1,38 @@
+parameters:
+    bin_dir: vendor/bin
+    tasks:
+        phpstan:
+            configuration: './phpstan.neon'
+            level: 8
+        #        twigcs:
+        #            path: './src/'
+        git_commit_message:
+            allow_empty_message: false
+            enforce_capitalized_subject: false
+            max_subject_width: 120
+            type_scope_conventions:
+                types:
+                    - build
+                    - ci
+                    - chore
+                    - docs
+                    - feat
+                    - fix
+                    - perf
+                    - refactor
+                    - style
+                    - test
+        git_blacklist:
+            keywords:
+                - 'die('
+                - ' dd('
+                - 'dump('
+                - 'var_dump('
+                - 'print_r('
+                - 'exit;'
+            whitelist_patterns: []
+            triggered_by: ['php']
+            regexp_type: G
+    ascii:
+        failed: ~
+        succeeded: ~

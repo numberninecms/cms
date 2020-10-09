@@ -1,0 +1,41 @@
+/*!
+ * This file is part of the NumberNine package.
+ *
+ * (c) William Arin <williamarin.dev@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+@import "~@fortawesome/fontawesome-free/css/all.css";
+
+@import "page_builder/colors";
+
+@import "page_builder/toolbox";
+@import "page_builder/drag_handle";
+@import "page_builder/line";
+@import "page_builder/add_button";
+@import "page_builder/outline";
+@import "page_builder/select";
+@import "page_builder/outline_select_common";
+@import "page_builder/context_menu";
+@import "page_builder/component";
+
+body {
+    user-select: none !important;
+}
+
+.px-3 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.text-white {
+    color: #fff;
+}
+
+.empty-page-builder {
+    height: 50px;
+    border: 1px dashed #ddd;
+    background-color: #eceff1;
+}

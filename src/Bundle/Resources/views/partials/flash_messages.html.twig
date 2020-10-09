@@ -1,0 +1,9 @@
+{% trans_default_domain 'numbernine' %}
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="alert alert-{% if label == 'error' %}danger{% else %}success{% endif %}" role="alert">
+            {{ message|raw }}
+        </div>
+    {% endfor %}
+{% endfor %}
+

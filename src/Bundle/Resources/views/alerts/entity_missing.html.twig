@@ -1,0 +1,5 @@
+{% trans_default_domain 'numbernine' %}
+<div class="alert-warning" role="alert">
+    <p class="font-bold">{% trans with {'%slug%': slug} %}Unable to render "%slug%".{% endtrans %}<br>
+        <small>{% trans %}This alert is only shown to administrators.{% endtrans %}</small></p>
+</div>

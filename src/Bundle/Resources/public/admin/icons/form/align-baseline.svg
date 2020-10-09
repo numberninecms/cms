@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 16 16" xml:space="preserve">
+    <path d="M0,7h16v1H0V7z"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M12,3H8v7h4V3z M11,4H9v3h2V4z M7,3H3v9h4V3z M6,4H4v3h2V4z"/>
+</svg>

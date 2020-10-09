@@ -1,0 +1,36 @@
+includes:
+    - vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan-symfony/rules.neon
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+
+parameters:
+    level: 8
+    paths:
+        - src
+    autoload_files:
+        - src/Util/ArrayUtil/functions.php
+        - src/Util/ConfigUtil/functions.php
+        - src/Util/StringUtil/functions.php
+    excludes_analyse:
+        - src/DataFixtures
+    checkGenericClassInNonGenericObjectType: false
+    checkMissingIterableValueType: false
+    ignoreErrors:
+        - '#Unreachable statement - code above always terminates.#'
+        - '#Service .* is not registered in the container#'
+        - '#NumberNine\\Entity\\ContentEntity::setFileSize#'
+        - '#Unable to resolve the template type T in call to method Doctrine\\Persistence\\ObjectManager::getRepository#'
+        - '#Psr\\Cache\\InvalidArgumentException is not subtype of Throwable#'
+        - '#Symfony\\Component\\Cache\\Adapter\\AdapterInterface::get#'
+        - '#Symfony\\Contracts\\Translation\\TranslatorInterface::getFallbackLocales#'
+        - '#Symfony\\Contracts\\Translation\\TranslatorInterface::addResource#'
+        - '#Symfony\\Component\\Serializer\\SerializerInterface::denormalize#'
+        - '#Symfony\\Component\\Config\\Definition\\Builder\\NodeDefinition::children#'
+        - '#Doctrine\\DBAL\\Driver\\Connection::createQueryBuilder#'
+        - '#Parameter \#1 \$className of method Doctrine\\Persistence\\ObjectManager::getRepository\(\) expects class-string<mixed>, string given.#'
+        - '#Parameter \#1 $argument of class ReflectionClass constructor expects class-string<T of object>|T of object, string given#'
+        - '#ReflectionClass constructor expects class-string<object>\|object#'
+        - '#Internal error: Object manager could not be loaded#'
+        - '#PHPDoc tag @throws with type Psr\\Cache\\CacheException is not subtype of Throwable#'
+        - '#Call to an undefined method Symfony\\Contracts\\Cache\\TagAwareCacheInterface::getItem#'
+        - '#Call to an undefined method Symfony\\Contracts\\Cache\\TagAwareCacheInterface::save#'

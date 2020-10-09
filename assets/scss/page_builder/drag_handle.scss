@@ -1,0 +1,43 @@
+/*!
+ * This file is part of the NumberNine package.
+ *
+ * (c) William Arin <williamarin.dev@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+#page-builder-tool-drag-handle {
+    position: fixed;
+    top: 0;
+    border: 0;
+    opacity: 1.0;
+    z-index: 9000;
+    cursor: grabbing;
+    pointer-events: none;
+    transform-origin: 0 0;
+    backface-visibility: hidden;
+
+    h3 {
+        position: relative;
+        margin: 0;
+        backface-visibility: hidden;
+        transform: scale(1) translate3d(-16px, -50%, 0);
+        transform-origin: 0% 50%;
+
+        span {
+            position: relative;
+            display: block;
+            padding: 0 10px 0 32px;
+            color: #fff;
+            font-size: 12px;
+            font-weight: normal;
+            white-space: nowrap;
+            box-shadow: 2px 6px 15px rgba(28, 32, 36, 0.15);
+            line-height: 28px;
+            background-color: var(--n9-tertiary);
+            backface-visibility: hidden;
+            transform-origin: 16px 50%;
+        }
+    }
+}

@@ -1,0 +1,52 @@
+/*!
+ * This file is part of the NumberNine package.
+ *
+ * (c) William Arin <williamarin.dev@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+$lineWidth: 3px;
+
+#page-builder-tool-insert-line {
+    backface-visibility: hidden;
+    z-index: 20;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    .line {
+        position: absolute;
+        background-color: var(--n9-tertiary);
+
+        &.left {
+            width: $lineWidth;
+            height: 100%;
+            left: 0;
+            top: 0;
+        }
+
+        &.right {
+            width: $lineWidth;
+            height: 100%;
+            right: 0;
+            top: 0;
+        }
+
+        &.top {
+            width: 100%;
+            height: $lineWidth;
+            left: 0;
+            top: 0;
+        }
+
+        &.bottom {
+            width: 100%;
+            height: $lineWidth;
+            left: 0;
+            bottom: 0;
+        }
+    }
+}

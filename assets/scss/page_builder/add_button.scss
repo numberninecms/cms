@@ -1,0 +1,64 @@
+/*!
+ * This file is part of the NumberNine package.
+ *
+ * (c) William Arin <williamarin.dev@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+#page-builder-tool-insert-button {
+    backface-visibility: hidden;
+    z-index: 50;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    button {
+        position: absolute;
+        background-color: var(--n9-tertiary);
+        color: #fff;
+        pointer-events: all;
+
+        &:focus {
+            outline: none;
+        }
+
+        &.left {
+            top: 50%;
+            left: -14px;
+            padding: 5px;
+            width: 35px;
+            border-radius: 30px;
+            transform: translateY(-17.5px);
+        }
+
+        &.right {
+            top: 50%;
+            right: -14px;
+            padding: 5px;
+            width: 35px;
+            border-radius: 30px;
+            transform: translateY(-17.5px);
+        }
+
+        &.top {
+            left: 50%;
+            top: -14px;
+            padding: 5px;
+            width: 35px;
+            border-radius: 30px;
+            transform: translateX(-17.5px);
+        }
+
+        &.bottom {
+            left: 50%;
+            bottom: -14px;
+            padding: 5px;
+            width: 35px;
+            border-radius: 30px;
+            transform: translateX(-17.5px);
+        }
+    }
+}

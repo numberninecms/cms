@@ -1,0 +1,80 @@
+/*!
+ * This file is part of the NumberNine package.
+ *
+ * (c) William Arin <williamarin.dev@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+#page-builder-tool-select {
+    z-index: 30;
+    border-color: var(--n9-tertiary);
+
+    .wrapper {
+        background-color: var(--n9-tertiary);
+        cursor: default;
+        white-space: nowrap;
+        pointer-events: auto;
+        padding-right: 2px !important;
+
+        h3 {
+            cursor: grab;
+        }
+
+        > button {
+            padding-left: 0.5em;
+            padding-right: 0.5em;
+        }
+
+        .material-icons {
+            color: #fff;
+            padding: 1px 7px;
+        }
+
+        .options {
+            .material-icons {
+                padding: 4px 7px 0px 10px;
+            }
+
+            &:focus {
+                outline: 0;
+            }
+        }
+    }
+
+    .ancestors {
+        display: inline-block;
+        margin-left: -14px;
+
+        > i {
+            padding-left: 1em;
+            padding-right: 0.5em;
+        }
+
+        > ul {
+            position: absolute;
+            top: 100%;
+            margin-left: 4px;
+            list-style: none;
+            transition: opacity 300ms cubic-bezier(0.23, 1, 0.32, 1), visibility 300ms cubic-bezier(0.23, 1, 0.32, 1);
+
+            li {
+                display: block;
+
+                button {
+                    display: block;
+                    margin: 0;
+                    padding: 3px 10px;
+                    text-align: left;
+                    font-size: 0.8em;
+                    line-height: 12px;
+                    color: #fff;
+                    border: 0;
+                    text-transform: none;
+                    background: rgba(var(--n9-tertiary-rgb), 0.85);
+                }
+            }
+        }
+    }
+}

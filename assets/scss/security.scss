@@ -1,0 +1,63 @@
+/*!
+ * This file is part of the NumberNine package.
+ *
+ * (c) William Arin <williamarin.dev@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+body {
+    @apply bg-gray-400;
+
+    &.login {
+    }
+}
+
+.card {
+    @apply relative w-full overflow-hidden shadow-lg bg-white rounded p-5;
+
+    h1 {
+        @apply font-light text-6xl leading-8 mt-3 mb-10;
+    }
+
+    form {
+        @apply pt-6;
+
+        label {
+            @apply block text-gray-700 text-sm font-bold mb-2 cursor-pointer;
+        }
+
+        input[type="text"], input[type="password"] {
+            @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight;
+
+            &:focus {
+                @apply outline-none shadow-outline;
+            }
+        }
+
+        .form-footer {
+            @apply flex items-center justify-between;
+
+            button {
+                @apply bg-blue-500 text-white font-bold py-2 px-4 rounded;
+
+                &:hover {
+                    @apply bg-blue-700;
+                }
+
+                &:focus {
+                    @apply outline-none shadow-outline;
+                }
+            }
+
+            a {
+                @apply inline-block align-baseline font-bold text-sm text-blue-500;
+
+                &:hover {
+                    @apply text-blue-800;
+                }
+            }
+        }
+    }
+}

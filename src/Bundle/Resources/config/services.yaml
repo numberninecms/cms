@@ -1,0 +1,75 @@
+parameters:
+    container.dumper.inline_factories: true
+    numbernine.config.admin_config_path: 'admin'
+    numbernine.config.base_upload_path: '/uploads'
+    numbernine.config.public_path: '%kernel.project_dir%/public'
+    numbernine.config.media_library_default_thumbnail_url: '/bundles/numbernine/images/default_thumbnail.png'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+            iterable $themes: !tagged_iterator numbernine.theme
+            iterable $capabilities: !tagged_iterator numbernine.security.capability
+            iterable $normalizers: !tagged_iterator numbernine.serializer.normalizer
+            iterable $dataTransformers: !tagged_iterator numbernine.data_transformer
+            string $publicPath: '%numbernine.config.public_path%'
+            string $templatePath: '%twig.default_path%'
+            string $adminMenuConfigPath: '%numbernine.config.admin_config_path%'
+            $entrypointLookupCollection: '@webpack_encore.entrypoint_lookup_collection'
+            string $uploadPath: '%numbernine.config.base_upload_path%'
+            array $bundles: '%kernel.bundles%'
+            string $environment: '%kernel.environment%'
+
+    NumberNine\Bundle\:
+        resource: '../../*'
+        exclude: '../../{DependencyInjection,Resources,NumberNineBundle.php}'
+
+    NumberNine\:
+        resource: '../../../*'
+        exclude: '../../../{Annotation,Entity,Event,Exception,Model,Util,Security/Capabilities.php}'
+
+    NumberNine\Controller\:
+        resource: '../../../Controller/*'
+        tags: ['controller.service_arguments']
+
+    NumberNine\Serializer\Normalizer\:
+        resource: '../../../Serializer/Normalizer/*'
+        tags: ['numbernine.serializer.normalizer']
+
+    # Annotation
+    NumberNine\Annotation\ExtendedAnnotationReader:
+        decorates: annotations.reader
+    NumberNine\Annotation\ExtendedReader: '@NumberNine\Annotation\ExtendedAnnotationReader'
+
+    # Slug
+    NumberNine\Util\StringUtil\ExtendedSlugger:
+        decorates: slugger
+        arguments:
+            - '@.inner'
+            - '%kernel.default_locale%'
+    NumberNine\Util\StringUtil\ExtendedSluggerInterface: '@NumberNine\Util\StringUtil\ExtendedSlugger'
+
+    Twig\Extension\StringLoaderExtension: ~
+
+    Symfony\Cmf\Component\Routing\RouteProviderInterface: '@NumberNine\Routing\RouteProvider'
+
+    Imagine\Gd\Imagine: ~
+
+    CssFrameworkInterface: '@NumberNine\Theme\CssFramework\TailwindCss'
+
+    RelativeTime\RelativeTime:
+        arguments:
+            $config:
+                truncate: 1
+
+    Thunder\Shortcode\Parser\RegularParser: ~
+    Thunder\Shortcode\Parser\ParserInterface: '@Thunder\Shortcode\Parser\RegularParser'
+
+    Faker\Generator:
+        factory: ['NumberNine\FakerBundle\Generator\FakerFactory', 'create']
+
+    security.role_hierarchy: '@NumberNine\Security\RoleHierarchy'
+    security.access.simple_role_voter: '@NumberNine\Security\Voter\RoleVoter'

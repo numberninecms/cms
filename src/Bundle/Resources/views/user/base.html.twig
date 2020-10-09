@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html class="n9-h-full">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('adminbar', 'numbernine', 'numbernine') }}
+    {% endblock %}
+
+    {% block javascripts_head %}
+    {% endblock %}
+</head>
+<body class="n9-h-full {% block body_classes %}{% endblock %}">
+<div class="n9-container n9-mx-auto n9-h-full">
+    <div class="n9-flex n9-flex-row n9-justify-center n9-items-center n9-h-full">
+        <div class="n9-w-1/2">
+            <div class="n9-card">
+                {% block body %}{% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block javascripts_footer %}{% endblock %}
+</body>
+</html>

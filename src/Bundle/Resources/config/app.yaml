@@ -1,0 +1,109 @@
+security:
+    encoders:
+        NumberNine\Entity\User:
+            algorithm: auto
+
+    providers:
+        numbernine_user_provider:
+            entity:
+                class: NumberNine\Entity\User
+                property: username
+
+    firewalls:
+        main:
+            anonymous: true
+            lazy: true
+            provider: numbernine_user_provider
+            guard:
+                authenticators:
+                    - NumberNine\Security\LoginFormAuthenticator
+            logout:
+                path: numbernine_logout
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 31536000 # 1 year in seconds
+                path:     /
+
+    access_control:
+        - { path: ^/admin/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/logout, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/, role: access_admin }
+        - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }
+
+twig:
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+
+cmf_routing:
+    chain:
+        routers_by_id:
+            router.default: 200
+            cmf_routing.dynamic_router: 100
+    dynamic:
+        enabled: true
+        route_provider_service_id: NumberNine\Routing\RouteProvider
+
+stof_doctrine_extensions:
+    default_locale: en_US
+    orm:
+        default:
+            sluggable: true
+            timestampable: true
+            softdeleteable: true
+            loggable: true
+
+framework:
+    cache:
+        pools:
+            doctrine.metadata_cache_pool:
+                adapter: cache.app
+            doctrine.query_cache_pool:
+                adapter: cache.app
+            doctrine.result_cache_pool:
+                adapter: cache.app
+    assets:
+        packages:
+            numbernine:
+                json_manifest_path: '%kernel.project_dir%/public/bundles/numbernine/build/manifest.json'
+    session:
+        handler_id: numbernine_session
+        cookie_secure: auto
+        cookie_samesite: lax
+
+webpack_encore:
+    builds:
+        numbernine: '%kernel.project_dir%/public/bundles/numbernine/build/'
+
+doctrine:
+    orm:
+        metadata_cache_driver:
+            type: pool
+            pool: doctrine.metadata_cache_pool
+        query_cache_driver:
+            type: pool
+            pool: doctrine.query_cache_pool
+        result_cache_driver:
+            type: pool
+            pool: doctrine.result_cache_pool
+        #        second_level_cache:
+        #            enabled: true
+        filters:
+            softdeleteable:
+                class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
+                enabled: true
+        dql:
+            string_functions:
+                JSON_EXTRACT: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Mysql\JsonExtract
+                JSON_CONTAINS: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Mysql\JsonContains
+                JSON_SEARCH: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Mysql\JsonSearch
+                JSON_KEYS: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Mysql\JsonKeys
+                CAST: DoctrineExtensions\Query\Mysql\Cast
+                LEAST: DoctrineExtensions\Query\Mysql\Least
+                REGEXP_REPLACE: DoctrineExtensions\Query\Postgresql\RegexpReplace
+        mappings:
+            gedmo_loggable:
+                type: annotation
+                prefix: Gedmo\Loggable\Entity
+                dir: "%kernel.project_dir%/vendor/gedmo/doctrine-extensions/lib/Gedmo/Loggable/Entity"
+                alias: GedmoLoggable
+                is_bundle: false
