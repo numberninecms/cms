@@ -133,7 +133,7 @@ final class ShortcodeProcessor
             }
 
             $shortcodeFullString = $parsedShortcode->getText();
-            $child = array_merge(['shortcode' => $shortcode], $this->shortcodeToArray($parsedShortcode->getName(), $shortcodeFullString, $position++, $isSerialization));
+            $child = array_merge($isSerialization ? [] : ['shortcode' => $shortcode], $this->shortcodeToArray($parsedShortcode->getName(), $shortcodeFullString, $position++, $isSerialization));
 
             if ($shortcodeMetadata->editable) {
                 $child['id'] = Uuid::v4()->toRfc4122();
