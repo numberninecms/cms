@@ -10,35 +10,35 @@
 
 namespace NumberNine\Tests\Model\Content;
 
-use Assert\InvalidArgumentException;
 use NumberNine\Entity\Post;
 use NumberNine\Model\Content\ContentType;
 use NumberNine\Model\Content\ContentTypeLabels;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
 class ContentTypeTest extends TestCase
 {
     public function testEmptyArguments(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(MissingOptionsException::class);
         new ContentType([]);
     }
 
     public function testMissingEntityClassName(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(MissingOptionsException::class);
         new ContentType(['name' => 'post']);
     }
 
     public function testMissingName(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(MissingOptionsException::class);
         new ContentType(['entity_class_name' => Post::class]);
     }
 
     public function testMinimumRequiredArguments(): void
     {
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             ContentType::class,
             new ContentType(
                 [
@@ -58,7 +58,7 @@ class ContentTypeTest extends TestCase
             ]
         );
 
-        $this->assertEquals('media_file', $contentType->getName());
+        self::assertEquals('media_file', $contentType->getName());
     }
 
     public function testNonNullLabels(): void
@@ -70,6 +70,6 @@ class ContentTypeTest extends TestCase
             ]
         );
 
-        $this->assertInstanceOf(ContentTypeLabels::class, $contentType->getLabels());
+        self::assertInstanceOf(ContentTypeLabels::class, $contentType->getLabels());
     }
 }

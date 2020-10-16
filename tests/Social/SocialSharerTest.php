@@ -25,7 +25,7 @@ class SocialSharerTest extends TestCase
 
     public function testFacebookShareLink(): void
     {
-        $this->assertEquals('https://www.facebook.com/sharer.php?u=https://www.google.com', $this->socialSharer->getFacebookShareLink('https://www.google.com'));
+        self::assertEquals('https://www.facebook.com/sharer.php?u=https://www.google.com', $this->socialSharer->getFacebookShareLink('https://www.google.com'));
 
         $this->expectException(InvalidArgumentException::class);
         $this->socialSharer->getFacebookShareLink('Not a valid url');
@@ -33,7 +33,7 @@ class SocialSharerTest extends TestCase
 
     public function testTwitterShareLink(): void
     {
-        $this->assertEquals('https://twitter.com/intent/tweet?url=https://www.google.com', $this->socialSharer->getTwitterShareLink('https://www.google.com'));
+        self::assertEquals('https://twitter.com/intent/tweet?url=https://www.google.com', $this->socialSharer->getTwitterShareLink('https://www.google.com'));
 
         $this->expectException(InvalidArgumentException::class);
         $this->socialSharer->getTwitterShareLink('Not a valid url');
@@ -41,7 +41,7 @@ class SocialSharerTest extends TestCase
 
     public function testPinterestShareLink(): void
     {
-        $this->assertEquals('http://pinterest.com/pin/create/button/?url=https://www.google.com', $this->socialSharer->getPinterestShareLink('https://www.google.com'));
+        self::assertEquals('http://pinterest.com/pin/create/button/?url=https://www.google.com', $this->socialSharer->getPinterestShareLink('https://www.google.com'));
 
         $this->expectException(InvalidArgumentException::class);
         $this->socialSharer->getPinterestShareLink('Not a valid url');
@@ -49,7 +49,7 @@ class SocialSharerTest extends TestCase
 
     public function testLinkedInShareLink(): void
     {
-        $this->assertEquals('https://www.linkedin.com/shareArticle?mini=true&url=https://www.google.com', $this->socialSharer->getLinkedInShareLink('https://www.google.com'));
+        self::assertEquals('https://www.linkedin.com/shareArticle?mini=true&url=https://www.google.com', $this->socialSharer->getLinkedInShareLink('https://www.google.com'));
 
         $this->expectException(InvalidArgumentException::class);
         $this->socialSharer->getLinkedInShareLink('Not a valid url');
@@ -57,7 +57,7 @@ class SocialSharerTest extends TestCase
 
     public function testEmailShareLink(): void
     {
-        $this->assertEquals(
+        self::assertEquals(
             'mailto:enteryour@addresshere.com?subject=Some%20subject%20line&body=Check%20this%20out:%20https://www.google.com',
             $this->socialSharer->getEmailShareLink('Some subject line', 'https://www.google.com')
         );

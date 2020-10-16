@@ -18,12 +18,12 @@ class ContentTypeLabelsTest extends TestCase
     public function testSingularName(): void
     {
         $labels = new ContentTypeLabels('media_file');
-        $this->assertEquals('media file', $labels->getSingularName());
+        self::assertEquals('media file', $labels->getSingularName());
     }
 
     public function testPluralName(): void
     {
         $labels = new ContentTypeLabels('media_file');
-        $this->assertEquals('media files', $labels->getPluralName());
+        self::assertEquals('media files', $labels->getPluralName());
     }
 }

@@ -13,6 +13,7 @@ parameters:
         - src/Util/StringUtil/functions.php
     excludes_analyse:
         - src/DataFixtures
+        - tests
     checkGenericClassInNonGenericObjectType: false
     checkMissingIterableValueType: false
     ignoreErrors:
