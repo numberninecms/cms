@@ -5,6 +5,9 @@
 NumberNine is a CMS for building websites and web applications with Symfony (PHP) and Quasar (Vue).
 While generic enough to meet standard websites requirements, it's designed to be easily extensible to target specific business needs.
 
+# Documentation
+Visit https://numberninecms.github.io/ for user and developer documentation.
+
 # Requirements
 * PHP 7.4
 * MySQL 8
@@ -26,25 +29,19 @@ While generic enough to meet standard websites requirements, it's designed to be
 # Ecosystem
 | Project | Description |
 |---------|-------------|
-| [numberninecms/cms]                | Core requirement for NumberNine (Symfony) |
-| [numberninecms/chapterone]         | Default theme (Symfony) |
-| [numberninecms/admin]              | Administration interface (Quasar) |
-| [numberninecms/demo]               | Demo application (Symfony) |
-| [numberninecms/docs]               | Documentation source code (Gridsome) |
+| [numberninecms/cms]                     | Core requirement for NumberNine (Symfony) |
+| [numberninecms/chapterone]              | Default theme (Symfony) |
+| [numberninecms/faker]                   | Faker data (Symfony) |
+| [numberninecms/admin]                   | Administration interface (Quasar) |
+| [numberninecms/demo]                    | Demo application (Symfony) |
+| [numberninecms/numberninecms.github.io] | Documentation source code (Gridsome) |
 
-[numberninecms/cms]: https://
-[numberninecms/chapterone]: https://
-[numberninecms/admin]: https://
-[numberninecms/demo]: https://
-[numberninecms/docs]: https://
-
-# Installation
-```
-composer create-project numberninecms/numbernine my_project_name
-```
-
-# Documentation
-Visit https:// for user and developer documentation.
+[numberninecms/cms]: https://github.com/numberninecms/cms
+[numberninecms/chapterone]: https://github.com/numberninecms/chapterone
+[numberninecms/faker]: https://github.com/numberninecms/faker
+[numberninecms/admin]: https://github.com/numberninecms/admin
+[numberninecms/demo]: https://github.com/numberninecms/demo
+[numberninecms/numberninecms.github.io]: https://github.com/numberninecms/numberninecms.github.io
 
 # Issues
 Feel free to submit issues.
@@ -53,6 +50,6 @@ Feel free to submit issues.
 Contributions are welcome.
 
 # License
-[MIT](http://opensource.org/licenses/MIT)
+[MIT](LICENSE)
 
 Copyright (c) 2020, William Arin
