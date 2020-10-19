@@ -17,7 +17,7 @@ use NumberNine\Model\Component\RenderableInterface;
 use NumberNine\Model\Inspector\InspectedRenderable;
 use NumberNine\Annotation\ExtendedReader;
 
-final class RenderableInspector
+final class RenderableInspector implements RenderableInspectorInterface
 {
     private ExtendedReader $annotationReader;
 

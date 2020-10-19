@@ -20,7 +20,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Preset[]    findAll()
  * @method Preset[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-final class PresetRepository extends ServiceEntityRepository
+class PresetRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

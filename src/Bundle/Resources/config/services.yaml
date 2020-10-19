@@ -52,13 +52,16 @@ services:
             - '%kernel.default_locale%'
     NumberNine\Util\StringUtil\ExtendedSluggerInterface: '@NumberNine\Util\StringUtil\ExtendedSlugger'
 
+    NumberNine\Theme\PresetFinderInterface: '@NumberNine\Theme\PresetFinder'
+    NumberNine\Theme\CssFramework\CssFrameworkInterface: '@NumberNine\Theme\CssFramework\TailwindCss'
+    NumberNine\Theme\TemplateResolverInterface: '@NumberNine\Theme\TemplateResolver'
+    NumberNine\Content\RenderableInspectorInterface: '@NumberNine\Content\RenderableInspector'
+
     Twig\Extension\StringLoaderExtension: ~
 
     Symfony\Cmf\Component\Routing\RouteProviderInterface: '@NumberNine\Routing\RouteProvider'
 
     Imagine\Gd\Imagine: ~
-
-    CssFrameworkInterface: '@NumberNine\Theme\CssFramework\TailwindCss'
 
     RelativeTime\RelativeTime:
         arguments:

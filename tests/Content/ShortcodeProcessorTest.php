@@ -10,16 +10,36 @@
 
 namespace NumberNine\Tests\Content;
 
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\DocParser;
+use NumberNine\Annotation\ExtendedAnnotationReader;
+use NumberNine\Content\RenderableInspector;
 use NumberNine\Content\ShortcodeProcessor;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use NumberNine\Content\ShortcodeStore;
+use NumberNine\Model\Shortcode\ShortcodeInterface;
+use NumberNine\Repository\PresetRepository;
+use NumberNine\Shortcode\FlexRowShortcode\FlexRowShortcode;
+use NumberNine\Shortcode\LinkShortcode\LinkShortcode;
+use NumberNine\Shortcode\TextShortcode\TextShortcode;
+use NumberNine\Theme\PresetFinderInterface;
+use NumberNine\Theme\TemplateResolverInterface;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
+use Thunder\Shortcode\Parser\RegularParser;
+use Twig\Environment;
+use function NumberNine\Util\ArrayUtil\unset_recursive;
 
-final class ShortcodeProcessorTest extends WebTestCase
+class ShortcodeProcessorTest extends TestCase
 {
     private const SAMPLE_SHORTCODE = '
         [flex_row justify="center" align="center" margin="10px auto 10px auto"]
             [link href="http://numbernine/" title="NumberNine - The most user friendly CMS based on Symfony"]
-                [image fromTitle="NumberNine Logo" maxWidth="581" maxHeight="131"/]
+                NumberNine
             [/link]
         [/flex_row]
     ';
@@ -29,11 +49,36 @@ final class ShortcodeProcessorTest extends WebTestCase
 
     protected function setUp(): void
     {
-        self::bootKernel();
-        $container = self::$container;
+        $annotationReader = new AnnotationReader(new DocParser());
+        $extendedAnnotationReader = new ExtendedAnnotationReader($annotationReader);
+        $shortcodeStore = new ShortcodeStore($extendedAnnotationReader);
+        $shortcodeParser = new RegularParser();
+        $renderableInspector = new RenderableInspector($extendedAnnotationReader);
 
-        $this->shortcodeProcessor = $container->get(ShortcodeProcessor::class);
-        $this->serializer = $container->get(SerializerInterface::class);
+        $shortcodes = [FlexRowShortcode::class, LinkShortcode::class, TextShortcode::class];
+
+        foreach ($shortcodes as $shortcodeName) {
+            /** @var ShortcodeInterface $shortcode */
+            $shortcode = new $shortcodeName();
+
+            $shortcode->setTwig($this->createMock(Environment::class));
+            $shortcode->setEventDispatcher($this->createMock(EventDispatcherInterface::class));
+            $shortcode->setRenderableInspector($renderableInspector);
+            $shortcode->setTemplateResolver($this->createMock(TemplateResolverInterface::class));
+
+            $shortcodeStore->addShortcode($shortcode);
+        }
+
+        $this->shortcodeProcessor = new ShortcodeProcessor(
+            $shortcodeStore,
+            $extendedAnnotationReader,
+            $this->createMock(PresetRepository::class),
+            $this->createMock(PresetFinderInterface::class),
+            $shortcodeParser,
+            $this->createMock(TagAwareCacheInterface::class)
+        );
+
+        $this->serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
     }
 
     public function testBuildShortcodeTreeCreatesArray(): void
@@ -51,5 +96,90 @@ final class ShortcodeProcessorTest extends WebTestCase
         );
 
         self::assertIsArray(json_decode($serialized, true));
+    }
+
+    public function testBuildShortcodeTreeOutputIsCorrect(): void
+    {
+        $tree = $this->shortcodeProcessor->buildShortcodeTree(self::SAMPLE_SHORTCODE, true, false, true);
+
+        unset_recursive($tree, 'id');
+        unset_recursive($tree, 'content');
+        unset_recursive($tree, 'position');
+
+        self::assertEquals(
+            [
+                0 => [
+                    'type' => 'NumberNine\\Shortcode\\FlexRowShortcode\\FlexRowShortcode',
+                    'name' => 'flex_row',
+                    'parameters' => [
+                        'justify' => 'center',
+                        'align' => 'center',
+                        'margin' => '10px auto 10px auto',
+                        'padding' => '',
+                    ],
+                    'responsive' => [
+                    ],
+                    'computed' => [
+                    ],
+                    'editable' => true,
+                    'container' => true,
+                    'label' => 'Flex row',
+                    'siblingsPosition' => [
+                        0 => 'top',
+                        1 => 'bottom',
+                    ],
+                    'siblingsShortcodes' => [
+                    ],
+                    'icon' => 'view_stream',
+                    'children' => [
+                        0 => [
+                            'type' => 'NumberNine\\Shortcode\\LinkShortcode\\LinkShortcode',
+                            'name' => 'link',
+                            'parameters' => [
+                                'href' => 'http://numbernine/',
+                                'title' => 'NumberNine - The most user friendly CMS based on Symfony',
+                            ],
+                            'responsive' => [
+                            ],
+                            'computed' => [
+                            ],
+                            'editable' => true,
+                            'container' => true,
+                            'label' => 'Link',
+                            'siblingsPosition' => [
+                                0 => 'top',
+                                1 => 'bottom',
+                            ],
+                            'siblingsShortcodes' => [
+                            ],
+                            'icon' => 'link',
+                            'children' => [
+                                0 => [
+                                    'type' => 'NumberNine\\Shortcode\\TextShortcode\\TextShortcode',
+                                    'name' => 'text',
+                                    'parameters' => [
+                                    ],
+                                    'responsive' => [
+                                    ],
+                                    'computed' => [
+                                    ],
+                                    'editable' => true,
+                                    'container' => false,
+                                    'leaf' => true,
+                                    'label' => 'Text',
+                                    'siblingsPosition' => [
+                                        0 => 'top',
+                                        1 => 'bottom',
+                                    ],
+                                    'siblingsShortcodes' => [
+                                    ],
+                                    'icon' => 'text_fields',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ]
+            , $tree);
     }
 }
