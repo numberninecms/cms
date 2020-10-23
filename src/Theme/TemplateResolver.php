@@ -27,7 +27,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\SyntaxError;
 use Twig\TemplateWrapper;
 
-final class TemplateResolver
+final class TemplateResolver implements TemplateResolverInterface
 {
     private Environment $twig;
     private ThemeStore $themeStore;

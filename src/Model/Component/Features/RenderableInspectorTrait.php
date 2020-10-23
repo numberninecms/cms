@@ -10,13 +10,13 @@
 
 namespace NumberNine\Model\Component\Features;
 
-use NumberNine\Content\RenderableInspector;
+use NumberNine\Content\RenderableInspectorInterface;
 
 trait RenderableInspectorTrait
 {
-    protected RenderableInspector $renderableInspector;
+    protected RenderableInspectorInterface $renderableInspector;
 
-    final public function setRenderableInspector(RenderableInspector $renderableInspector): self
+    final public function setRenderableInspector(RenderableInspectorInterface $renderableInspector): self
     {
         $this->renderableInspector = $renderableInspector;
         return $this;

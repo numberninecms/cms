@@ -18,7 +18,7 @@ use NumberNine\Exception\InvalidShortcodeException;
 use NumberNine\Model\Shortcode\CacheableContent;
 use NumberNine\Model\Shortcode\ShortcodeInterface;
 use NumberNine\Repository\PresetRepository;
-use NumberNine\Theme\PresetFinder;
+use NumberNine\Theme\PresetFinderInterface;
 use ReflectionException;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Thunder\Shortcode\Parser\ParserInterface;
@@ -33,7 +33,7 @@ final class ShortcodeProcessor
     private ShortcodeStore $shortcodeStore;
     private ExtendedReader $annotationReader;
     private PresetRepository $presetRepository;
-    private PresetFinder $presetFinder;
+    private PresetFinderInterface $presetFinder;
     private ParserInterface $shortcodeParser;
     private TagAwareCacheInterface $cache;
 
@@ -41,7 +41,7 @@ final class ShortcodeProcessor
         ShortcodeStore $shortcodeStore,
         ExtendedReader $annotationReader,
         PresetRepository $templateRepository,
-        PresetFinder $presetFinder,
+        PresetFinderInterface $presetFinder,
         ParserInterface $parser,
         TagAwareCacheInterface $cache
     ) {
@@ -133,7 +133,7 @@ final class ShortcodeProcessor
             }
 
             $shortcodeFullString = $parsedShortcode->getText();
-            $child = array_merge(['shortcode' => $shortcode], $this->shortcodeToArray($parsedShortcode->getName(), $shortcodeFullString, $position++, $isSerialization));
+            $child = array_merge($isSerialization ? [] : ['shortcode' => $shortcode], $this->shortcodeToArray($parsedShortcode->getName(), $shortcodeFullString, $position++, $isSerialization));
 
             if ($shortcodeMetadata->editable) {
                 $child['id'] = Uuid::v4()->toRfc4122();

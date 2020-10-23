@@ -230,3 +230,14 @@ function array_map_recursive(callable $callable, array $array, string $childrenK
         $array
     );
 }
+
+function unset_recursive(array &$array, string $keyToUnset): void
+{
+    unset($array[$keyToUnset]);
+
+    foreach ($array as &$value) {
+        if (is_array($value)) {
+            unset_recursive($value, $keyToUnset);
+        }
+    }
+}

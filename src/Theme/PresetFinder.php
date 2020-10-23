@@ -16,7 +16,7 @@ use Symfony\Component\Yaml\Yaml;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 
-final class PresetFinder
+final class PresetFinder implements PresetFinderInterface
 {
     private Environment $twig;
     private TemplateResolver $templateResolver;

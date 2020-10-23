@@ -10,16 +10,13 @@
 
 namespace NumberNine\Model\Component\Features;
 
-use NumberNine\Theme\TemplateResolver;
+use NumberNine\Theme\TemplateResolverInterface;
 
 trait TemplateResolverTrait
 {
-    protected TemplateResolver $templateResolver;
+    protected TemplateResolverInterface $templateResolver;
 
-    /**
-     * @param TemplateResolver $templateResolver
-     */
-    final public function setTemplateResolver(TemplateResolver $templateResolver): void
+    final public function setTemplateResolver(TemplateResolverInterface $templateResolver): void
     {
         $this->templateResolver = $templateResolver;
     }

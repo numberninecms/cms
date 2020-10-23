@@ -13,8 +13,7 @@ namespace NumberNine\Bundle;
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 use NumberNine\Bundle\DependencyInjection\Compiler\ComponentCompilerPass;
 use NumberNine\Bundle\DependencyInjection\Compiler\ShortcodeCompilerPass;
-use NumberNine\Bundle\DependencyInjection\Compiler\ThemeCompilerPass;
-use NumberNine\Bundle\DependencyInjection\Compiler\TransformerCompilerPass;
+use NumberNine\Content\RenderableInspectorInterface;
 use NumberNine\Model\Bundle\Bundle;
 use NumberNine\Model\Component\ComponentInterface;
 use NumberNine\Model\Shortcode\ShortcodeInterface;
@@ -27,7 +26,6 @@ use NumberNine\Theme\ThemeToolbox;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 final class NumberNineBundle extends Bundle
 {
@@ -49,7 +47,7 @@ final class NumberNineBundle extends Bundle
         $container->registerForAutoconfiguration(ShortcodeInterface::class)->addTag('numbernine.shortcode')
             ->addMethodCall('setTwig', [new Reference('twig')])
             ->addMethodCall('setEventDispatcher', [new Reference(EventDispatcherInterface::class)])
-            ->addMethodCall('setRenderableInspector', [new Reference(RenderableInspector::class)])
+            ->addMethodCall('setRenderableInspector', [new Reference(RenderableInspectorInterface::class)])
             ->addMethodCall('setTemplateResolver', [new Reference(TemplateResolver::class)]);
 
         $container->addCompilerPass(new ComponentCompilerPass());
