@@ -10,8 +10,8 @@
 
 namespace NumberNine\Repository;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query;
+use Doctrine\Persistence\ManagerRegistry;
 use NumberNine\Entity\MediaFile;
 
 /**

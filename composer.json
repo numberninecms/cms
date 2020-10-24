@@ -2,6 +2,7 @@
     "name": "numberninecms/cms",
     "description": "NumberNine is a content management system for Symfony",
     "type": "symfony-bundle",
+    "keywords": ["cms", "publishing"],
     "license": "MIT",
     "authors": [
         {
@@ -19,10 +20,10 @@
         "ext-json": "*",
         "doctrine/doctrine-bundle": "^2.0",
         "doctrine/doctrine-fixtures-bundle": "^3.3",
-        "doctrine/orm": "^2.7",
+        "doctrine/orm": "^2.7.4",
         "friendsofsymfony/jsrouting-bundle": "^2.6",
         "fzaninotto/faker": "^1.9",
-        "gedmo/doctrine-extensions": "^2.4",
+        "gedmo/doctrine-extensions": "^3.0",
         "imagine/imagine": "^1.2",
         "mpratt/relativetime": "^1.5",
         "numberninecms/faker": "*@dev",
@@ -47,8 +48,7 @@
     },
     "require-dev": {
         "friendsoftwig/twigcs": "^3.2",
-        "nunomaduro/phpinsights": "^1.14",
-        "phpro/grumphp": "^0.18.0",
+        "phpro/grumphp": "^1.0",
         "phpstan/phpstan": "^0.12.25",
         "phpstan/phpstan-doctrine": "^0.12.13",
         "phpstan/phpstan-phpunit": "^0.12.8",
@@ -74,14 +74,5 @@
     "minimum-stability": "stable",
     "config": {
         "sort-packages": true
-    },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../faker",
-            "options": {
-                "symlink": true
-            }
-        }
-    ]
+    }
 }

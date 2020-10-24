@@ -10,9 +10,9 @@
 
 namespace NumberNine\Repository;
 
+use Doctrine\Persistence\ManagerRegistry;
 use NumberNine\Entity\ContentEntityTerm;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * @method ContentEntityTerm|null find($id, $lockMode = null, $lockVersion = null)

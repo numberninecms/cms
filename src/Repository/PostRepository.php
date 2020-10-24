@@ -10,7 +10,7 @@
 
 namespace NumberNine\Repository;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use NumberNine\Entity\Post;
 
 /**
@@ -59,7 +59,7 @@ final class PostRepository extends AbstractContentEntityRepository
             'id'
         );
 
-        $currentPosition = array_search($post->getId(), $ids, true);
+        $currentPosition = (int)array_search($post->getId(), $ids, true);
         $previousId = $currentPosition >= 1 ? $ids[$currentPosition - 1] : false;
         $nextId = ($currentPosition < count($ids) - 1) ? $ids[$currentPosition + 1] : false;
 

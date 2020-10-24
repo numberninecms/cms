@@ -11,9 +11,8 @@
 namespace NumberNine\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use NumberNine\Entity\Comment;
-use NumberNine\Entity\User;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**

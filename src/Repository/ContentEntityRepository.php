@@ -10,14 +10,7 @@
 
 namespace NumberNine\Repository;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
-use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\UnexpectedResultException;
+use Doctrine\Persistence\ManagerRegistry;
 use NumberNine\Entity\ContentEntity;
 
 /**

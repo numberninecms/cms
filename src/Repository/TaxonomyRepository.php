@@ -10,9 +10,9 @@
 
 namespace NumberNine\Repository;
 
+use Doctrine\Persistence\ManagerRegistry;
 use NumberNine\Entity\Taxonomy;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use NumberNine\Model\Content\ContentType;
 
 /**

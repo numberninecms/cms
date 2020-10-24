@@ -1,5 +1,4 @@
-parameters:
-    bin_dir: vendor/bin
+grumphp:
     tasks:
         phpstan:
             configuration: './phpstan.neon'

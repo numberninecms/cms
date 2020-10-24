@@ -12,10 +12,10 @@ namespace NumberNine\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 use InvalidArgumentException;
 use NumberNine\Entity\Comment;
 use NumberNine\Entity\ContentEntity;
