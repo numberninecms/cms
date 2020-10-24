@@ -17,7 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-final class MediaRegenerateCommand extends Command implements ImageSizeAwareInterface
+final class MediaRegenerateCommand extends Command implements ImageSizeAwareCommandInterface
 {
     protected static $defaultName = 'numbernine:media:regenerate';
 

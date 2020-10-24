@@ -10,7 +10,7 @@
 
 namespace NumberNine\Command;
 
-interface RouteAwareInterface
+interface ImageSizeAwareCommandInterface
 {
 
 }

@@ -10,9 +10,10 @@
 
 namespace NumberNine\EventSubscriber;
 
-use NumberNine\Command\ImageSizeAwareInterface;
-use NumberNine\Command\RouteAwareInterface;
-use NumberNine\Command\AreaAwareInterface;
+use NumberNine\Command\ContentTypeAwareCommandInterface;
+use NumberNine\Command\ImageSizeAwareCommandInterface;
+use NumberNine\Command\RouteAwareCommandInterface;
+use NumberNine\Command\AreaAwareCommandInterface;
 use NumberNine\Event\ContentTypeRegistrationEvent;
 use NumberNine\Event\ImageSizesEvent;
 use NumberNine\Event\RouteRegistrationEvent;
@@ -81,7 +82,12 @@ final class RequestEventSubscriber implements EventSubscriberInterface, ServiceS
      */
     public function registerContentTypes($event): void
     {
-        if ($event instanceof ConsoleCommandEvent && ($command = $event->getCommand()) && $command->getName() !== 'doctrine:fixtures:load') {
+        if (
+            ($event instanceof ConsoleCommandEvent)
+            && ($command = $event->getCommand())
+            && !$command instanceof ContentTypeAwareCommandInterface
+            && $command->getName() !== 'doctrine:fixtures:load'
+        ) {
             return;
         }
 
@@ -98,7 +104,7 @@ final class RequestEventSubscriber implements EventSubscriberInterface, ServiceS
         if (
             ($event instanceof ConsoleCommandEvent)
             && ($command = $event->getCommand())
-            && !$command instanceof ImageSizeAwareInterface
+            && !$command instanceof ImageSizeAwareCommandInterface
             && $command->getName() !== 'doctrine:fixtures:load'
         ) {
             return;
@@ -118,7 +124,7 @@ final class RequestEventSubscriber implements EventSubscriberInterface, ServiceS
         if (
             ($event instanceof ConsoleCommandEvent)
             && ($command = $event->getCommand())
-            && !$command instanceof RouteAwareInterface
+            && !$command instanceof RouteAwareCommandInterface
             && $command->getName() !== 'doctrine:fixtures:load'
         ) {
             return;
@@ -141,7 +147,7 @@ final class RequestEventSubscriber implements EventSubscriberInterface, ServiceS
         if (
             ($event instanceof ConsoleCommandEvent)
             && ($command = $event->getCommand())
-            && !$command instanceof AreaAwareInterface
+            && !$command instanceof AreaAwareCommandInterface
             && $command->getName() !== 'doctrine:fixtures:load'
         ) {
             return;

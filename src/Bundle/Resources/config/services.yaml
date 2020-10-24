@@ -15,6 +15,7 @@ services:
             iterable $capabilities: !tagged_iterator numbernine.security.capability
             iterable $normalizers: !tagged_iterator numbernine.serializer.normalizer
             iterable $dataTransformers: !tagged_iterator numbernine.data_transformer
+            string $projectPath: '%kernel.project_dir%'
             string $publicPath: '%numbernine.config.public_path%'
             string $templatePath: '%twig.default_path%'
             string $adminMenuConfigPath: '%numbernine.config.admin_config_path%'
