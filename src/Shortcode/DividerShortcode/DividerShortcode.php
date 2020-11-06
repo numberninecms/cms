@@ -16,7 +16,7 @@ use NumberNine\Model\Shortcode\AbstractShortcode;
 
 use NumberNine\Model\Shortcode\CacheableContent;
 
-use function NumberNine\Util\ArrayUtil\array_implode_associative;
+use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
 
 /**
  * @Shortcode(name="divider", label="Divider", editable=true, icon="remove")

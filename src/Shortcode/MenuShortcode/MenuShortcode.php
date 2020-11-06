@@ -20,7 +20,7 @@ use NumberNine\Repository\ContentEntityRepository;
 use NumberNine\Repository\MenuRepository;
 use NumberNine\Content\PermalinkGenerator;
 
-use function NumberNine\Util\ArrayUtil\array_depth;
+use function NumberNine\Common\Util\ArrayUtil\array_depth;
 
 /**
  * @Shortcode(name="menu", label="Menu", editable=true, icon="menu")

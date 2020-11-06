@@ -15,8 +15,8 @@ use NumberNine\Annotation\Shortcode;
 use NumberNine\Annotation\Shortcode\Exclude;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 
-use function NumberNine\Util\ArrayUtil\array_implode_associative;
-use function NumberNine\Util\ArrayUtil\array_set_if_value_exists;
+use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
+use function NumberNine\Common\Util\ArrayUtil\array_set_if_value_exists;
 
 /**
  * @Shortcode(name="flex_row", label="Flex row", editable=true, container=true, icon="view_stream", siblingsPosition={"top", "bottom"})

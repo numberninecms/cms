@@ -10,7 +10,7 @@
 
 namespace NumberNine\Theme\CssFramework;
 
-use function NumberNine\Util\ArrayUtil\in_array_all;
+use function NumberNine\Common\Util\ArrayUtil\in_array_all;
 
 final class TailwindCss implements CssFrameworkInterface
 {

@@ -14,7 +14,7 @@ use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappi
 use NumberNine\Bundle\DependencyInjection\Compiler\ComponentCompilerPass;
 use NumberNine\Bundle\DependencyInjection\Compiler\ShortcodeCompilerPass;
 use NumberNine\Content\RenderableInspectorInterface;
-use NumberNine\Model\Bundle\Bundle;
+use NumberNine\Common\Bundle\Bundle;
 use NumberNine\Model\Component\ComponentInterface;
 use NumberNine\Model\Shortcode\ShortcodeInterface;
 use NumberNine\Model\Theme\ThemeInterface;

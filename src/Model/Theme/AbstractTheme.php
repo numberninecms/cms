@@ -13,10 +13,6 @@ namespace NumberNine\Model\Theme;
 use NumberNine\Entity\ThemeOptions;
 use ReflectionClass;
 
-use Symfony\Component\Yaml\Yaml;
-
-use function NumberNine\Util\ArrayUtil\array_merge_recursive_fixed;
-
 abstract class AbstractTheme implements ThemeInterface
 {
     private array $config = [];

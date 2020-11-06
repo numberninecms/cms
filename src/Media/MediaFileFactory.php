@@ -12,8 +12,7 @@ namespace NumberNine\Media;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use NumberNine\Media\ImageSizeStore;
-use NumberNine\Util\StringUtil\ExtendedSluggerInterface;
+use NumberNine\Common\Util\StringUtil\ExtendedSluggerInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use wapmorgan\MediaFile\MediaFile as MediaFileMetadataReader;

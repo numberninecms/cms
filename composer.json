@@ -26,6 +26,7 @@
         "gedmo/doctrine-extensions": "^3.0",
         "imagine/imagine": "^1.2",
         "mpratt/relativetime": "^1.5",
+        "numberninecms/common": "dev-develop",
         "numberninecms/faker": "*@dev",
         "scienta/doctrine-json-functions": "^4.1",
         "stof/doctrine-extensions-bundle": "^1.4",
@@ -59,12 +60,7 @@
     "autoload": {
         "psr-4": {
             "NumberNine\\": "src/"
-        },
-        "files": [
-            "src/Util/ArrayUtil/functions.php",
-            "src/Util/ConfigUtil/functions.php",
-            "src/Util/StringUtil/functions.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {
