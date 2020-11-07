@@ -10,7 +10,7 @@
 
 namespace NumberNine\Command;
 
-use NumberNine\Command\ContentTypeAwareCommandInterface;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,17 +18,24 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use function NumberNine\Common\Util\ConfigUtil\file_env_variable_exists;
+use function NumberNine\Common\Util\ConfigUtil\file_put_env_variable;
 
 final class InstallCommand extends Command implements ContentTypeAwareCommandInterface
 {
     protected static $defaultName = 'numbernine:install';
 
+    private SluggerInterface $slugger;
     private string $projectPath;
     private string $publicPath;
 
-    public function __construct(string $projectPath, string $publicPath)
+    public function __construct(SluggerInterface $slugger, string $projectPath, string $publicPath)
     {
         parent::__construct();
+        $this->slugger = $slugger;
         $this->projectPath = $projectPath;
         $this->publicPath = $publicPath;
     }
@@ -36,7 +43,8 @@ final class InstallCommand extends Command implements ContentTypeAwareCommandInt
     protected function configure(): void
     {
         $this
-            ->addOption('force', null, InputOption::VALUE_OPTIONAL, "Force recreation of '.env.local' file")
+            ->addOption('force', null, InputOption::VALUE_NONE, "Force recreation of mandatory environment variables")
+            ->addOption('sub-commands-only', null, InputOption::VALUE_NONE, "Run sub-commands only")
             ->setDescription('Installs NumberNine Admin assets and setup database');
     }
 
@@ -44,6 +52,17 @@ final class InstallCommand extends Command implements ContentTypeAwareCommandInt
     {
         $io = new SymfonyStyle($input, $output);
         $force = $input->getOption('force');
+        $subCommands = $input->getOption('sub-commands-only');
+
+        if ($subCommands) {
+            if (($result = $this->runSubCommands($output)) !== Command::SUCCESS) {
+                return $result;
+            }
+
+            $io->success('NumberNine install complete.');
+
+            return Command::SUCCESS;
+        }
 
         $source = $this->publicPath . '/bundles/numbernine/admin';
 
@@ -57,20 +76,52 @@ final class InstallCommand extends Command implements ContentTypeAwareCommandInt
 
         $envFile = $this->projectPath . '/.env.local';
 
-        if ($force || !file_exists($envFile)) {
-            if (($result = $this->createEnvFile($io, $envFile)) !== Command::SUCCESS) {
+        if ($force || !file_env_variable_exists($envFile, 'APP_NAME')) {
+            if (($result = $this->createBaseVariables($io, $envFile)) !== Command::SUCCESS) {
                 return $result;
             }
         }
 
-        $io->success('Install complete.');
+        if ($force || !file_env_variable_exists($envFile, 'DATABASE_URL')) {
+            if (($result = $this->createDatabaseString($io, $envFile)) !== Command::SUCCESS) {
+                return $result;
+            }
+        }
+
+        if ($force || !file_env_variable_exists($envFile, 'REDIS_URL')) {
+            if (($result = $this->installRedis($io)) !== Command::SUCCESS) {
+                return $result;
+            }
+        }
+
+        $io->success('NumberNine pre-install complete.');
 
         return Command::SUCCESS;
     }
 
-    private function createEnvFile(SymfonyStyle $io, string $envFile): int
+    private function createBaseVariables(SymfonyStyle $io, string $envFile): int
     {
-        $io->title('Database configuration wizard');
+        $io->title('General settings');
+
+        $appName = $io->ask('Application name', 'numbernine', function ($appName) {
+            if (empty($appName)) {
+                throw new \RuntimeException('Application name cannot be empty.');
+            }
+
+            return $this->slugger->slug($appName, '_')->lower();
+        });
+
+        if (file_put_env_variable($envFile, 'APP_NAME', $appName) === false) {
+            $io->error("Unable to create file '.env.local'");
+            return Command::FAILURE;
+        }
+
+        return Command::SUCCESS;
+    }
+
+    private function createDatabaseString(SymfonyStyle $io, string $envFile): int
+    {
+        $io->title('MySQL settings');
 
         $user = $io->ask('Database user', 'root', function ($user) {
             if (empty($user)) {
@@ -108,9 +159,49 @@ final class InstallCommand extends Command implements ContentTypeAwareCommandInt
 
         $url = sprintf('mysql://%s%s@%s:%d/%s?serverVersion=5.7', $user, $password ? ':' . $password : '', $host, $port, $name);
 
-        if (file_put_contents($envFile, sprintf('DATABASE_URL=%s', $url)) === false) {
+        if (file_put_env_variable($envFile, 'DATABASE_URL', $url) === false) {
             $io->error("Unable to create file '.env.local'");
             return Command::FAILURE;
+        }
+
+        return Command::SUCCESS;
+    }
+
+    private function installRedis(SymfonyStyle $io): int
+    {
+        if (!$io->confirm('Do you want to use Redis?')) {
+            return Command::SUCCESS;
+        }
+
+        $io->writeln('Installing required composer package...');
+
+        $composerProcess = (new Process(['composer', 'req', 'numberninecms/redis:dev-develop']))->setTty(Process::isTtySupported());
+        $composerProcess->run(function (string $type, string $buffer) use ($io) {
+            $io->write($buffer);
+        });
+
+        if (!$composerProcess->isSuccessful()) {
+            throw new ProcessFailedException($composerProcess);
+        }
+
+        return Command::SUCCESS;
+    }
+
+    private function runSubCommands(OutputInterface $output): int
+    {
+        $listSubCommandsProcess = Process::fromShellCommandline("php bin/console list numbernine:install | awk '/numbernine:install:/ {print $1}'");
+        $listSubCommandsProcess->run();
+
+        $commands = explode("\n", $listSubCommandsProcess->getOutput());
+
+        /** @var Application $application */
+        $application = $this->getApplication();
+
+        foreach (array_filter($commands) as $commandName) {
+            $command = $application->find($commandName);
+            if (($returnCode = $command->run(new ArrayInput([]), $output)) !== Command::SUCCESS) {
+                return Command::FAILURE;
+            }
         }
 
         return Command::SUCCESS;

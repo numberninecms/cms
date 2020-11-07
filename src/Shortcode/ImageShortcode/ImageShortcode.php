@@ -10,7 +10,6 @@
 
 namespace NumberNine\Shortcode\ImageShortcode;
 
-use InvalidArgumentException;
 use NumberNine\Annotation\Form\Control;
 use NumberNine\Annotation\Shortcode;
 use NumberNine\Annotation\Shortcode\Exclude;
@@ -19,8 +18,8 @@ use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\CacheableContent;
 use NumberNine\Repository\MediaFileRepository;
 
-use function NumberNine\Util\ArrayUtil\array_implode_associative;
-use function NumberNine\Util\ArrayUtil\array_set_if_value_exists;
+use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
+use function NumberNine\Common\Util\ArrayUtil\array_set_if_value_exists;
 
 /**
  * @Shortcode(name="image", label="Image", editable=true, icon="image")

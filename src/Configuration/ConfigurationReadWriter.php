@@ -20,7 +20,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
-use function NumberNine\Util\ArrayUtil\is_associative_array;
+use function NumberNine\Common\Util\ArrayUtil\is_associative_array;
 
 final class ConfigurationReadWriter
 {

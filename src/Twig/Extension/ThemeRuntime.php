@@ -34,7 +34,7 @@ use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Extension\RuntimeExtensionInterface;
 
-use function NumberNine\Util\ArrayUtil\array_implode_associative;
+use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
 
 final class ThemeRuntime implements RuntimeExtensionInterface
 {

@@ -46,12 +46,12 @@ services:
     NumberNine\Annotation\ExtendedReader: '@NumberNine\Annotation\ExtendedAnnotationReader'
 
     # Slug
-    NumberNine\Util\StringUtil\ExtendedSlugger:
+    NumberNine\Common\Util\StringUtil\ExtendedSlugger:
         decorates: slugger
         arguments:
             - '@.inner'
             - '%kernel.default_locale%'
-    NumberNine\Util\StringUtil\ExtendedSluggerInterface: '@NumberNine\Util\StringUtil\ExtendedSlugger'
+    NumberNine\Common\Util\StringUtil\ExtendedSluggerInterface: '@NumberNine\Common\Util\StringUtil\ExtendedSlugger'
 
     NumberNine\Theme\PresetFinderInterface: '@NumberNine\Theme\PresetFinder'
     NumberNine\Theme\CssFramework\CssFrameworkInterface: '@NumberNine\Theme\CssFramework\TailwindCss'

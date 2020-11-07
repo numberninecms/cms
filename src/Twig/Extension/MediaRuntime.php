@@ -16,7 +16,7 @@ use NumberNine\Exception\InvalidMimeTypeException;
 use Twig\Error\RuntimeError;
 use Twig\Extension\RuntimeExtensionInterface;
 
-use function NumberNine\Util\ArrayUtil\array_implode_associative;
+use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
 
 final class MediaRuntime implements RuntimeExtensionInterface
 {

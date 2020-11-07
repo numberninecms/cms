@@ -7,10 +7,6 @@ parameters:
     level: 8
     paths:
         - src
-    autoload_files:
-        - src/Util/ArrayUtil/functions.php
-        - src/Util/ConfigUtil/functions.php
-        - src/Util/StringUtil/functions.php
     excludes_analyse:
         - src/DataFixtures
         - tests

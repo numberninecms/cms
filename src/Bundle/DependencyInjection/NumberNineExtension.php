@@ -10,17 +10,15 @@
 
 namespace NumberNine\Bundle\DependencyInjection;
 
-use NumberNine\Model\Bundle\MergeConfigurationTrait;
+use NumberNine\Common\Bundle\MergeConfigurationTrait;
 use NumberNine\Model\General\Settings;
 use ReflectionClass;
-use ReflectionException;
 use Symfony\Component\Config\Exception\FileLocatorFileNotFoundException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
 final class NumberNineExtension extends Extension implements PrependExtensionInterface
@@ -55,12 +53,6 @@ final class NumberNineExtension extends Extension implements PrependExtensionInt
             ]
         );
 
-        // original security config
-        $securityConfig = null;
-        if ($container->hasExtension('security')) {
-            $securityConfig = $container->getExtensionConfig('security');
-        }
-
         $securityModified = false;
         $securityConfigs = [];
 
@@ -75,7 +67,7 @@ final class NumberNineExtension extends Extension implements PrependExtensionInt
                 $securityConfigs[] = $config;
                 $securityModified = true;
             } else {
-                $container->prependExtensionConfig($name, $config);
+                $this->mergeConfigIntoOne($container, $name, $config);
             }
         }
 

@@ -18,8 +18,8 @@ use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\ResponsiveShortcodeInterface;
 use NumberNine\Model\Shortcode\ResponsiveShortcodeTrait;
 
-use function NumberNine\Util\ArrayUtil\array_implode_associative;
-use function NumberNine\Util\ArrayUtil\array_set_if_value_exists;
+use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
+use function NumberNine\Common\Util\ArrayUtil\array_set_if_value_exists;
 
 /**
  * @Shortcode(name="section", label="Section", container=true, editable=true, icon="web", siblingsPosition={"top", "bottom"})
