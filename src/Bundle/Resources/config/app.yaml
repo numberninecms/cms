@@ -11,6 +11,7 @@ security:
 
     firewalls:
         main:
+            stateless: true
             anonymous: true
             lazy: true
             provider: numbernine_user_provider
@@ -54,6 +55,7 @@ stof_doctrine_extensions:
 
 framework:
     cache:
+        prefix_seed: ~
         pools:
             doctrine.metadata_cache_pool:
                 adapter: cache.app
@@ -66,7 +68,7 @@ framework:
             numbernine:
                 json_manifest_path: '%kernel.project_dir%/public/bundles/numbernine/build/manifest.json'
     session:
-        handler_id: numbernine_session
+        handler_id: ~
         cookie_secure: auto
         cookie_samesite: lax
 
