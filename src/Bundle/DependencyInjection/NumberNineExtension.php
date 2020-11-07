@@ -53,12 +53,6 @@ final class NumberNineExtension extends Extension implements PrependExtensionInt
             ]
         );
 
-        // original security config
-        $securityConfig = null;
-        if ($container->hasExtension('security')) {
-            $securityConfig = $container->getExtensionConfig('security');
-        }
-
         $securityModified = false;
         $securityConfigs = [];
 
@@ -73,7 +67,7 @@ final class NumberNineExtension extends Extension implements PrependExtensionInt
                 $securityConfigs[] = $config;
                 $securityModified = true;
             } else {
-                $container->prependExtensionConfig($name, $config);
+                $this->mergeConfigIntoOne($container, $name, $config);
             }
         }
 
