@@ -30,9 +30,9 @@ Encore
         exclude: /node_modules/,
         loader: 'eslint-loader',
     })
-    .enablePostCssLoader(function (options) {
-        options.plugins = function () {
-            return [
+    .enablePostCssLoader((options) => {
+        options.postcssOptions = {
+            plugins: [
                 require('tailwindcss'),
                 require('autoprefixer'),
                 require('postcss-prefixer')({

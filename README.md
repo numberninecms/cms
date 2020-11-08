@@ -32,6 +32,7 @@ Visit https://numberninecms.github.io/ for user and developer documentation.
 | [numberninecms/cms]                     | Core requirement for NumberNine (Symfony) |
 | [numberninecms/chapterone]              | Default theme (Symfony) |
 | [numberninecms/faker]                   | Faker data (Symfony) |
+| [numberninecms/redis]                   | Redis plugin (Symfony) |
 | [numberninecms/admin]                   | Administration interface (Quasar) |
 | [numberninecms/demo]                    | Demo application (Symfony) |
 | [numberninecms/numberninecms.github.io] | Documentation source code (Gridsome) |
@@ -39,15 +40,17 @@ Visit https://numberninecms.github.io/ for user and developer documentation.
 [numberninecms/cms]: https://github.com/numberninecms/cms
 [numberninecms/chapterone]: https://github.com/numberninecms/chapterone
 [numberninecms/faker]: https://github.com/numberninecms/faker
+[numberninecms/redis]: https://github.com/numberninecms/redis
 [numberninecms/admin]: https://github.com/numberninecms/admin
 [numberninecms/demo]: https://github.com/numberninecms/demo
 [numberninecms/numberninecms.github.io]: https://github.com/numberninecms/numberninecms.github.io
 
-# Issues
-Feel free to submit issues.
-
 # Contributions
-Contributions are welcome.
+Feel free to submit issues and pull requests.
+This project uses Git Flow workflow.
+
+# Credits
+Login page photo by [Nicolas Becker](https://www.pexels.com/photo/stack-of-stones-in-dry-valley-5530229/)
 
 # License
 [MIT](LICENSE)
