@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+@import "~@fortawesome/fontawesome-free/css/all.css";
+
 body {
     @apply bg-gray-400;
 
@@ -20,10 +22,18 @@ body {
     @apply relative w-full overflow-hidden shadow-lg bg-white rounded p-5 bg-opacity-50;
 
     h1 {
-        @apply font-light text-6xl leading-10 mt-3 mb-10 bg-left-top bg-no-repeat h-12 text-gray-800;
+        @apply font-light text-6xl leading-10 mt-3 mb-6 bg-left-top bg-no-repeat h-12 text-gray-800;
         padding-left: 3.5rem;
         background-image: url(../images/NumberNineWithoutText.png);
         background-size: auto 100%;
+    }
+
+    .back-to-front {
+        @apply font-bold text-blue-700 text-sm;
+
+        &:hover {
+            @apply text-blue-900;
+        }
     }
 
     form {

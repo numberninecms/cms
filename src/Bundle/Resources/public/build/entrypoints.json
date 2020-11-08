@@ -3,10 +3,10 @@
     "adminbar": {
       "js": [
         "/bundles/numbernine/build/runtime.95b22588.js",
-        "/bundles/numbernine/build/adminbar.65190d7a.js"
+        "/bundles/numbernine/build/adminbar.363960f3.js"
       ],
       "css": [
-        "/bundles/numbernine/build/adminbar.3771fbb8.css"
+        "/bundles/numbernine/build/adminbar.2690d8c2.css"
       ]
     },
     "adminpreviewmode": {
@@ -15,16 +15,18 @@
         "/bundles/numbernine/build/0.cf0f21ec.js"
       ],
       "css": [
-        "/bundles/numbernine/build/0.d40e6cc3.css",
+        "/bundles/numbernine/build/0.997efd05.css",
         "/bundles/numbernine/build/adminpreviewmode.2d4c2cf8.css"
       ]
     },
     "security": {
       "js": [
-        "/bundles/numbernine/build/runtime.95b22588.js"
+        "/bundles/numbernine/build/runtime.95b22588.js",
+        "/bundles/numbernine/build/0.cf0f21ec.js"
       ],
       "css": [
-        "/bundles/numbernine/build/security.65491dde.css"
+        "/bundles/numbernine/build/0.997efd05.css",
+        "/bundles/numbernine/build/security.2cac55fb.css"
       ]
     }
   }
