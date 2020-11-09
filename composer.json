@@ -43,6 +43,7 @@
         "symfony/translation-contracts": "^2.0",
         "symfony/uid": "5.1.*",
         "symfony/validator": "^5.1",
+        "symfony/web-link": "^5.1",
         "symfony/webpack-encore-bundle": "^1.7",
         "thunderer/shortcode": "^0.7.4",
         "wapmorgan/media-file": "^0.1.4"

@@ -73,6 +73,7 @@ framework:
         cookie_samesite: lax
 
 webpack_encore:
+    preload: true
     builds:
         numbernine: '%kernel.project_dir%/public/bundles/numbernine/build/'
 
