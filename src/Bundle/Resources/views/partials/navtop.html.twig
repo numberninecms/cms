@@ -1,7 +1,10 @@
 {% trans_default_domain 'numbernine' %}
 <nav class="n9-topbar" id="n9-adminbar">
     <div class="n9-topbar-title">
-        <a href="{{ path('numbernine_homepage') }}">N9</a>
+        <a href="{{ path('numbernine_homepage') }}">
+            <img src="{{ asset('bundles/numbernine/build/images/NumberNineWithoutText.png', 'numbernine') }}"
+                 alt="Homepage" width="25">
+        </a>
     </div>
     <div class="n9-topbar-burger-wrapper">
         <button class="n9-topbar-burger">
