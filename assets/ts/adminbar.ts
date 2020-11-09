@@ -8,6 +8,7 @@
  */
 
 import '../scss/adminbar.scss';
+import '../images/NumberNineWithoutText.png';
 
 class MenuBurgerButton {
     private readonly DOMElement: HTMLElement | null;
