@@ -56,6 +56,11 @@ final class ImageShortcode extends AbstractShortcode implements CacheableContent
      */
     private int $maxHeight = 200;
 
+    /**
+     * @Control\TextBox(label="Alternative text")
+     */
+    private ?string $alt = null;
+
     public function __construct(MediaFileRepository $mediaFileRepository, string $uploadPath)
     {
         $this->mediaFileRepository = $mediaFileRepository;
@@ -142,11 +147,21 @@ final class ImageShortcode extends AbstractShortcode implements CacheableContent
         $this->maxHeight = $maxHeight;
     }
 
+    public function getAlt(): ?string
+    {
+        return $this->alt;
+    }
+
+    public function setAlt(?string $alt): void
+    {
+        $this->alt = $alt;
+    }
+
     /**
      * @Shortcode\Exclude
      */
     public function getCacheIdentifier(): string
     {
-        return sprintf('shortcode_image_%s_%s_%d_%d', $this->id, $this->fromTitle, $this->maxWidth, $this->maxHeight);
+        return sprintf('shortcode_image_%s_%s_%d_%d_%d', $this->id, $this->fromTitle, $this->maxWidth, $this->maxHeight, $this->alt);
     }
 }
