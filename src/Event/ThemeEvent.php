@@ -14,40 +14,22 @@ use NumberNine\Model\Theme\ThemeInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\EventDispatcher\Event;
 
-/**
- * Class ThemeEvent
- * @package NumberNine\Event
- */
-final class ThemeEvent extends Event
+class ThemeEvent extends Event
 {
-    /** @var Response */
-    private $response;
+    private Response $response;
+    private ThemeInterface $theme;
 
-    /** @var ThemeInterface */
-    private $theme;
-
-    /**
-     * ThemeEvent constructor.
-     * @param Response $response
-     * @param ThemeInterface $theme
-     */
     public function __construct(Response $response, ThemeInterface $theme)
     {
         $this->response = $response;
         $this->theme = $theme;
     }
 
-    /**
-     * @return Response
-     */
     public function getResponse(): Response
     {
         return $this->response;
     }
 
-    /**
-     * @return ThemeInterface
-     */
     public function getTheme(): ThemeInterface
     {
         return $this->theme;

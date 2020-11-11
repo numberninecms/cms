@@ -19,6 +19,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use LogicException;
 use NumberNine\Annotation\FormType;
 use NumberNine\Entity\ContentEntity;
+use NumberNine\Entity\User;
 use NumberNine\Event\MainLoopQueryEvent;
 use NumberNine\Event\PaginatorEvent;
 use NumberNine\Exception\ContentTypeNotFoundException;
@@ -243,7 +244,7 @@ final class ContentService
 
         /** @var ContentEntity $entity */
         $entity = $entityReflection->newInstance();
-        /** @var UserInterface $user */
+        /** @var User $user */
         $user = $this->tokenStorage->getToken() !== null ? $this->tokenStorage->getToken()->getUser() : null;
         $entity->setAuthor($user);
 

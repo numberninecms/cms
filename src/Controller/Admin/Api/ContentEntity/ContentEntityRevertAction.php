@@ -75,7 +75,7 @@ final class ContentEntityRevertAction extends AbstractController implements Admi
         $user = $this->getUser();
         $this->denyAccessUnlessGranted($contentType->getMappedCapability(Capabilities::EDIT_POSTS));
 
-        if ($user instanceof User && $user->getId() !== $entity->getAuthor()->getId()) {
+        if ($user instanceof User && $entity->getAuthor() instanceof User && $user->getId() !== $entity->getAuthor()->getId()) {
             $this->denyAccessUnlessGranted($contentType->getMappedCapability(Capabilities::EDIT_OTHERS_POSTS));
         }
     }

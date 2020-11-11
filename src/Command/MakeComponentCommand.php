@@ -63,7 +63,7 @@ final class MakeComponentCommand extends Command
             return 1;
         }
 
-        if (!($componentName)) {
+        if (!empty($componentName)) {
             $io->title('Create a new component');
 
             if (!$componentName) {

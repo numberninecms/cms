@@ -25,7 +25,7 @@ final class TailwindCss implements CssFrameworkInterface
                 $classes[] = 'md:hidden';
             } elseif (in_array('md', $hiddenViewSizes, true)) {
                 $classes[] = 'md:hidden lg:block';
-            } elseif (in_array('lg', $hiddenViewSizes, true)) {
+            } elseif (in_array('lg', $hiddenViewSizes, true)) { /* @phpstan-ignore-line */
                 $classes[] = 'lg:hidden';
             }
 
