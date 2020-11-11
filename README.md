@@ -1,5 +1,9 @@
 ![NumberNine Logo](./assets/images/NumberNine512_slogan.png)
 
+<br>
+
+[![Travis](https://travis-ci.com/numberninecms/cms.svg?branch=master)](https://travis-ci.com/numberninecms/cms)
+
 # Introduction
 
 NumberNine is a CMS for building websites and web applications with Symfony (PHP) and Quasar (Vue).
