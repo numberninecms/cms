@@ -1,8 +1,11 @@
 {
     "name": "numberninecms/cms",
-    "description": "NumberNine is a content management system for Symfony",
     "type": "symfony-bundle",
-    "keywords": ["cms", "publishing"],
+    "description": "NumberNine is a content management system for Symfony",
+    "keywords": [
+        "cms",
+        "publishing"
+    ],
     "license": "MIT",
     "authors": [
         {
@@ -50,6 +53,7 @@
         "wapmorgan/media-file": "^0.1.4"
     },
     "require-dev": {
+        "ergebnis/composer-normalize": "^2.11",
         "friendsoftwig/twigcs": ">=4",
         "phpro/grumphp": "^1.0",
         "phpstan/phpstan": "^0.12.25",
@@ -59,6 +63,9 @@
         "phpunit/phpunit": "^9.2",
         "roave/security-advisories": "dev-master",
         "squizlabs/php_codesniffer": "^3.5"
+    },
+    "config": {
+        "sort-packages": true
     },
     "autoload": {
         "psr-4": {
@@ -70,8 +77,5 @@
             "NumberNine\\Tests\\": "tests/"
         }
     },
-    "minimum-stability": "stable",
-    "config": {
-        "sort-packages": true
-    }
+    "minimum-stability": "stable"
 }
