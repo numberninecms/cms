@@ -16,6 +16,20 @@ grumphp:
             indent_style: space
         yamllint:
             parse_custom_tags: true
+        phplint: ~
+        phpparser:
+            ignore_patterns:
+                - '#src/Event/Event.php#'
+                - '#test/Symfony/(.*)#'
+            visitors:
+                no_exit_statements: ~
+                forbidden_function_calls:
+                    blacklist:
+                        - die
+                        - dd
+                        - dump
+                        - var_dump
+                        - print_r
         git_commit_message:
             allow_empty_message: false
             enforce_capitalized_subject: false
