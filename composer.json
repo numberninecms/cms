@@ -49,7 +49,7 @@
         "wapmorgan/media-file": "^0.1.4"
     },
     "require-dev": {
-        "friendsoftwig/twigcs": "^3.2",
+        "friendsoftwig/twigcs": ">=4",
         "phpro/grumphp": "^1.0",
         "phpstan/phpstan": "^0.12.25",
         "phpstan/phpstan-doctrine": "^0.12.13",

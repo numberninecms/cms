@@ -3,8 +3,9 @@ grumphp:
         phpstan:
             configuration: './phpstan.neon'
             level: 8
-        #        twigcs:
-        #            path: './src/'
+        twigcs:
+            path: './src/'
+        phpunit: ~
         git_commit_message:
             allow_empty_message: false
             enforce_capitalized_subject: false
