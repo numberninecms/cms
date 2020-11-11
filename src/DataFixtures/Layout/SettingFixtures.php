@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -23,9 +24,12 @@ final class SettingFixtures extends BaseFixture implements DependentFixtureInter
 {
     public function loadData(ObjectManager $manager): void
     {
-        $siteTitle = (new CoreOption())->setName(Settings::SITE_TITLE)->setValue('My awesome website');
-        $myAccount = (new CoreOption())->setName(Settings::PAGE_FOR_MY_ACCOUNT)->setValue($this->getReference(Post::class . '_page_my_account')->getId());
-        $privacy = (new CoreOption())->setName(Settings::PAGE_FOR_PRIVACY)->setValue($this->getReference(Post::class . '_page_privacy')->getId());
+        $siteTitle = (new CoreOption())->setName(Settings::SITE_TITLE)
+            ->setValue('My awesome website');
+        $myAccount = (new CoreOption())->setName(Settings::PAGE_FOR_MY_ACCOUNT)
+            ->setValue($this->getReference(Post::class . '_page_my_account')->getId());
+        $privacy = (new CoreOption())->setName(Settings::PAGE_FOR_PRIVACY)
+            ->setValue($this->getReference(Post::class . '_page_privacy')->getId());
 
         $manager->persist($siteTitle);
         $manager->persist($myAccount);

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -193,11 +194,15 @@ class Comment
 
     public function getAuthorName(): string
     {
-        return (string)($this->getAuthor() instanceof User ? $this->getAuthor()->getDisplayName() : $this->getGuestAuthorName());
+        return (string)($this->getAuthor() instanceof User
+            ? $this->getAuthor()->getDisplayName()
+            : $this->getGuestAuthorName());
     }
 
     public function getAuthorEmail(): string
     {
-        return (string)($this->getAuthor() instanceof User ? $this->getAuthor()->getEmail() : $this->getGuestAuthorEmail());
+        return (string)($this->getAuthor() instanceof User
+            ? $this->getAuthor()->getEmail()
+            : $this->getGuestAuthorEmail());
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -162,6 +163,13 @@ final class ImageShortcode extends AbstractShortcode implements CacheableContent
      */
     public function getCacheIdentifier(): string
     {
-        return sprintf('shortcode_image_%s_%s_%d_%d_%d', $this->id, $this->fromTitle, $this->maxWidth, $this->maxHeight, $this->alt);
+        return sprintf(
+            'shortcode_image_%s_%s_%d_%d_%d',
+            $this->id,
+            $this->fromTitle,
+            $this->maxWidth,
+            $this->maxHeight,
+            $this->alt
+        );
     }
 }

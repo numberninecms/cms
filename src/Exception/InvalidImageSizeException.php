@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -22,6 +23,11 @@ final class InvalidImageSizeException extends Exception
      */
     public function __construct(MediaFile $mediaFile, string $size)
     {
-        parent::__construct(sprintf('MediaFile entity with ID "%d" has no size named "%s". Make sure this size is configured properly, then regenerate thumbnails.', $mediaFile->getId(), $size));
+        parent::__construct(sprintf(
+            'MediaFile entity with ID "%d" has no size named "%s". Make sure this size is configured properly, ' .
+            'then regenerate thumbnails.',
+            $mediaFile->getId(),
+            $size
+        ));
     }
 }

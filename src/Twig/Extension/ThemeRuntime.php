@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -98,7 +99,11 @@ final class ThemeRuntime implements RuntimeExtensionInterface
             return '<page-builder></page-builder>';
         }
 
-        $areaContent = $this->themeOptionsReadWriter->read($this->themeStore->getCurrentTheme(), 'areas', [])[$areaName] ?? '';
+        $areaContent = $this->themeOptionsReadWriter->read(
+            $this->themeStore->getCurrentTheme(),
+            'areas',
+            []
+        )[$areaName] ?? '';
 
         return $this->shortcodeProcessor->applyShortcodes($areaContent);
     }
@@ -123,7 +128,13 @@ final class ThemeRuntime implements RuntimeExtensionInterface
      */
     public function getThemeOption(string $optionName)
     {
-        return $this->themeOptionsReadWriter->read($this->themeStore->getCurrentTheme(), $optionName, null, false, $this->requestAnalyzer->isPreviewMode());
+        return $this->themeOptionsReadWriter->read(
+            $this->themeStore->getCurrentTheme(),
+            $optionName,
+            null,
+            false,
+            $this->requestAnalyzer->isPreviewMode()
+        );
     }
 
     /**
@@ -193,8 +204,12 @@ final class ThemeRuntime implements RuntimeExtensionInterface
      * @param array $attributes
      * @return string
      */
-    public function getTermsLinkList(ContentEntity $contentEntity, string $taxonomyName, string $separator = ', ', array $attributes = []): string
-    {
+    public function getTermsLinkList(
+        ContentEntity $contentEntity,
+        string $taxonomyName,
+        string $separator = ', ',
+        array $attributes = []
+    ): string {
         return implode($separator, $this->getTermsLinkArray($contentEntity, $taxonomyName, $attributes));
     }
 
@@ -204,9 +219,15 @@ final class ThemeRuntime implements RuntimeExtensionInterface
      * @param array $attributes
      * @return array
      */
-    private function getTermsLinkArray(ContentEntity $contentEntity, string $taxonomyName, array $attributes = []): array
-    {
-        return array_map(fn(Term $term) => $this->getTermLink($term, $attributes), $contentEntity->getTerms($taxonomyName));
+    private function getTermsLinkArray(
+        ContentEntity $contentEntity,
+        string $taxonomyName,
+        array $attributes = []
+    ): array {
+        return array_map(
+            fn(Term $term) => $this->getTermLink($term, $attributes),
+            $contentEntity->getTerms($taxonomyName)
+        );
     }
 
     /**

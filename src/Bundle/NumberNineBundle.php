@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -39,8 +40,10 @@ final class NumberNineBundle extends Bundle
 
     public function build(ContainerBuilder $container): void
     {
-        $container->registerForAutoconfiguration(CapabilityInterface::class)->addTag('numbernine.security.capability');
-        $container->registerForAutoconfiguration(DataTransformerInterface::class)->addTag('numbernine.data_transformer');
+        $container->registerForAutoconfiguration(CapabilityInterface::class)
+            ->addTag('numbernine.security.capability');
+        $container->registerForAutoconfiguration(DataTransformerInterface::class)
+            ->addTag('numbernine.data_transformer');
         $container->registerForAutoconfiguration(ThemeInterface::class)->addTag('numbernine.theme');
         $container->registerForAutoconfiguration(ComponentInterface::class)->addTag('numbernine.component')
             ->addMethodCall('setTwig', [new Reference('twig')])

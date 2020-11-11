@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -35,7 +36,13 @@ final class ContentEntityIndexAction extends AbstractController
         $perPage = $configurationReadWriter->read(Settings::POSTS_PER_PAGE, 12);
 
         /** @var PaginationParameters $paginationParameters */
-        $paginationParameters = $serializer->denormalize($request->query->all(), PaginationParameters::class, null, [AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]);
+        $paginationParameters = $serializer->denormalize(
+            $request->query->all(),
+            PaginationParameters::class,
+            null,
+            [AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]
+        );
+
         $paginationParameters
             ->setStartRow($perPage * ($page - 1))
             ->setFetchCount($perPage)
@@ -45,7 +52,11 @@ final class ContentEntityIndexAction extends AbstractController
         $criteria = (new Criteria())
             ->andWhere((Criteria::expr())->eq('c.status', 'publish'));
 
-        $contentEntities = $contentService->getEntitiesOfType($contentService->getContentType('post'), $paginationParameters, $criteria);
+        $contentEntities = $contentService->getEntitiesOfType(
+            $contentService->getContentType('post'),
+            $paginationParameters,
+            $criteria
+        );
 
         return $this->render(
             $templateResolver->resolveIndex('post'),

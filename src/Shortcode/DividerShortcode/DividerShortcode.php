@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -13,7 +14,6 @@ namespace NumberNine\Shortcode\DividerShortcode;
 use NumberNine\Annotation\Form\Control;
 use NumberNine\Annotation\Shortcode;
 use NumberNine\Model\Shortcode\AbstractShortcode;
-
 use NumberNine\Model\Shortcode\CacheableContent;
 
 use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
@@ -107,6 +107,14 @@ final class DividerShortcode extends AbstractShortcode implements CacheableConte
      */
     public function getCacheIdentifier(): string
     {
-        return sprintf('shortcode_divider_%s_%d_%d_%f_%s_%d', $this->align, $this->width, $this->height, $this->margin, $this->color, $this->fullWidth);
+        return sprintf(
+            'shortcode_divider_%s_%d_%d_%f_%s_%d',
+            $this->align,
+            $this->width,
+            $this->height,
+            $this->margin,
+            $this->color,
+            $this->fullWidth
+        );
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -37,7 +38,13 @@ final class MediaFileFixtures extends BaseFixture implements DependentFixtureInt
     {
         /** @var User $admin */
         $admin = $this->getReference(User::class . '_administrator');
-        $logo = $this->mediaFileFactory->createMediaFileFromFilename(__DIR__ . '/../../../assets/images/NumberNine512_slogan.png', $admin, false, true, false);
+        $logo = $this->mediaFileFactory->createMediaFileFromFilename(
+            __DIR__ . '/../../../assets/images/NumberNine512_slogan.png',
+            $admin,
+            false,
+            true,
+            false
+        );
         $logo->setTitle('NumberNine Logo');
         $this->addReference(MediaFile::class . '_logo', $logo);
 

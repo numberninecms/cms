@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -9,7 +10,6 @@
  */
 
 namespace NumberNine\Security\Voter;
-
 
 use NumberNine\Security\Capabilities;
 use NumberNine\Security\Capability\CapabilityInterface;
@@ -23,7 +23,10 @@ final class ReaderVoter extends Voter
 
     public function __construct(iterable $capabilities)
     {
-        $this->readCapability = array_filter([...$capabilities], fn(CapabilityInterface $c) => $c->getName() === Capabilities::READ)[0];
+        $this->readCapability = array_filter(
+            [...$capabilities],
+            fn(CapabilityInterface $c) => $c->getName() === Capabilities::READ
+        )[0];
     }
 
     protected function supports(string $attribute, $subject): bool

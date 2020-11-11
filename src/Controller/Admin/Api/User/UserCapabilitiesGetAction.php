@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -21,12 +22,20 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/users/capabilities/", name="numbernine_admin_user_capabilities_get_collection", options={"expose"=true}, methods={"GET"})
+ * @Route(
+ *     "/users/capabilities/",
+ *     name="numbernine_admin_user_capabilities_get_collection",
+ *     options={"expose"=true},
+ *     methods={"GET"}
+ * )
  */
 final class UserCapabilitiesGetAction extends AbstractController implements AdminController
 {
-    public function __invoke(ResponseFactory $responseFactory, EventDispatcherInterface $eventDispatcher, CapabilityGenerator $capabilityGenerator): JsonResponse
-    {
+    public function __invoke(
+        ResponseFactory $responseFactory,
+        EventDispatcherInterface $eventDispatcher,
+        CapabilityGenerator $capabilityGenerator
+    ): JsonResponse {
         $this->denyAccessUnlessGranted(Capabilities::MANAGE_ROLES);
 
         $capabilities = [

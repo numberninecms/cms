@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -125,7 +126,11 @@ abstract class AbstractTheme implements ThemeInterface
 
     public function getComponentNamespace(): string
     {
-        return $this->getNamespace() . '\\' . trim(str_replace($this->getRootPath(), '', $this->getComponentPath()), '/');
+        return $this->getNamespace() . '\\' . trim(str_replace(
+            $this->getRootPath(),
+            '',
+            $this->getComponentPath()
+        ), '/');
     }
 
     public function getShortcodePath(): string

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -21,6 +22,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 use Symfony\Component\String\Slugger\SluggerInterface;
+
 use function NumberNine\Common\Util\ConfigUtil\file_env_variable_exists;
 use function NumberNine\Common\Util\ConfigUtil\file_put_env_variable;
 
@@ -157,7 +159,14 @@ final class InstallCommand extends Command implements ContentTypeAwareCommandInt
             return (int) $port;
         });
 
-        $url = sprintf('mysql://%s%s@%s:%d/%s?serverVersion=5.7', $user, $password ? ':' . $password : '', $host, $port, $name);
+        $url = sprintf(
+            'mysql://%s%s@%s:%d/%s?serverVersion=5.7',
+            $user,
+            $password ? ':' . $password : '',
+            $host,
+            $port,
+            $name
+        );
 
         if (file_put_env_variable($envFile, 'DATABASE_URL', $url) === false) {
             $io->error("Unable to create file '.env.local'");
@@ -175,7 +184,8 @@ final class InstallCommand extends Command implements ContentTypeAwareCommandInt
 
         $io->writeln('Installing required composer package...');
 
-        $composerProcess = (new Process(['composer', 'req', 'numberninecms/redis:dev-develop']))->setTty(Process::isTtySupported());
+        $composerProcess = (new Process(['composer', 'req', 'numberninecms/redis:dev-develop']))
+            ->setTty(Process::isTtySupported());
         $composerProcess->run(function (string $type, string $buffer) use ($io) {
             $io->write($buffer);
         });
@@ -189,7 +199,9 @@ final class InstallCommand extends Command implements ContentTypeAwareCommandInt
 
     private function runSubCommands(OutputInterface $output): int
     {
-        $listSubCommandsProcess = Process::fromShellCommandline("php bin/console list numbernine:install | awk '/numbernine:install:/ {print $1}'");
+        $listSubCommandsProcess = Process::fromShellCommandline(
+            "php bin/console list numbernine:install | awk '/numbernine:install:/ {print $1}'"
+        );
         $listSubCommandsProcess->run();
 
         $commands = explode("\n", $listSubCommandsProcess->getOutput());

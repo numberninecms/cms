@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -17,7 +18,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use function NumberNine\Common\Util\ConfigUtil\get_file_upload_max_size;
 
 /**
- * @Route("/media_files/options", name="numbernine_admin_media_files_get_options", options={"expose"=true}, methods={"GET"})
+ * @RoutMediaLibraryOptionsGetAction.e(
+ *     "/media_files/options",
+ *     name="numbernine_admin_media_files_get_options",
+ *     options={"expose"=true},
+ *     methods={"GET"}
+ * )
  */
 final class MediaLibraryOptionsGetAction
 {

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -23,6 +24,10 @@ final class ComponentAlreadyExistsForThemeException extends Exception
      */
     public function __construct(ThemeInterface $theme, ComponentInterface $component)
     {
-        parent::__construct(sprintf('Component "%s" is already registered for theme "%s" which is theoretically impossible.', get_class($component), $theme->getName()));
+        parent::__construct(sprintf(
+            'Component "%s" is already registered for theme "%s" which is theoretically impossible.',
+            get_class($component),
+            $theme->getName()
+        ));
     }
 }

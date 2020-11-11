@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -19,7 +20,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
- * @Route("content_entities/{type}/{id<\d+>}/", name="numbernine_admin_contententity_get_item", options={"expose"=true}, methods={"GET"}, priority="100")
+ * @Route(
+ *     "content_entities/{type}/{id<\d+>}/",
+ *     name="numbernine_admin_contententity_get_item",
+ *     options={"expose"=true},
+ *     methods={"GET"},
+ *     priority="100"
+ * )
  */
 final class ContentEntityGetAction
 {

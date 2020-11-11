@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -64,8 +65,13 @@ final class ThemeOptionsReadWriter
      * @param bool $merged
      * @return mixed
      */
-    public function read(ThemeInterface $theme, string $optionName, $default = null, bool $draft = false, bool $merged = false)
-    {
+    public function read(
+        ThemeInterface $theme,
+        string $optionName,
+        $default = null,
+        bool $draft = false,
+        bool $merged = false
+    ) {
         return $this->readAll($theme, $draft, $merged)[$optionName] ?? $default;
     }
 
@@ -77,8 +83,14 @@ final class ThemeOptionsReadWriter
      * @param bool $flush
      * @param bool $overwrite
      */
-    public function write(ThemeInterface $theme, string $option, $value, bool $draft = false, bool $flush = false, bool $overwrite = true): void
-    {
+    public function write(
+        ThemeInterface $theme,
+        string $option,
+        $value,
+        bool $draft = false,
+        bool $flush = false,
+        bool $overwrite = true
+    ): void {
         $options = $this->readAll($theme, $draft);
 
         if ($overwrite || !array_key_exists($option, $options)) {

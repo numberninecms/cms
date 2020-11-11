@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -43,7 +44,11 @@ final class ComponentStore
             return;
         }
 
-        $relativePath = str_replace([$this->themeStore->getCurrentTheme()->getComponentPath(), '\\'], ['', '/'], dirname((string)$reflection->getFileName()));
+        $relativePath = str_replace(
+            [$this->themeStore->getCurrentTheme()->getComponentPath(), '\\'],
+            ['', '/'],
+            dirname((string)$reflection->getFileName())
+        );
 
         $twigPath = sprintf('@%sComponents/%s', $this->themeStore->getCurrentThemeName(), $relativePath);
 
@@ -61,7 +66,13 @@ final class ComponentStore
         $theme = $this->themeStore->getCurrentTheme();
 
         foreach ($this->components as $componentFqcn => $component) {
-            if (trim(dirname(str_replace([$theme->getComponentNamespace(), '\\'], ['', '/'], $componentFqcn)), '/') === str_replace('\\', '/', $componentName)) {
+            if (
+                trim(dirname(str_replace(
+                    [$theme->getComponentNamespace(), '\\'],
+                    ['', '/'],
+                    $componentFqcn
+                )), '/') === str_replace('\\', '/', $componentName)
+            ) {
                 return $component;
             }
         }

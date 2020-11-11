@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -89,7 +90,9 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
 
         foreach ($menus as $key => $menuItem) {
             if (empty($menuItem['link'])) {
-                $menuItem['link'] = !empty($menuItem['route']) ? $this->urlGenerator->generate($menuItem['route']) : '/';
+                $menuItem['link'] = !empty($menuItem['route'])
+                    ? $this->urlGenerator->generate($menuItem['route'])
+                    : '/';
             }
 
             $builder->append($key, $menuItem);

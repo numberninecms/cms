@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -21,12 +22,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * @Route("/users/roles/", name="numbernine_admin_user_roles_update_collection", options={"expose"=true}, methods={"PUT"})
+ * @Route(
+ *     "/users/roles/",
+ *     name="numbernine_admin_user_roles_update_collection",
+ *     Options={"expose"=true},
+ *     methods={"PUT"}
+ * )
  */
 final class UserRolesUpdateAction extends AbstractController implements AdminController
 {
@@ -54,7 +59,12 @@ final class UserRolesUpdateAction extends AbstractController implements AdminCon
                     ->setCapabilities($role['capabilities']);
             } else {
                 /** @var UserRole $userRole */
-                $userRole = $serializer->denormalize($role, UserRole::class, null, [AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]);
+                $userRole = $serializer->denormalize(
+                    $role,
+                    UserRole::class,
+                    null,
+                    [AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]
+                );
                 $entityManager->persist($userRole);
             }
         }

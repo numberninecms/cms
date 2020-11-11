@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -90,7 +91,10 @@ abstract class AbstractShortcode implements ShortcodeInterface
      */
     final public function renderPageBuilderTemplate(): string
     {
-        return trim($this->getTwig()->render($this->templateResolver->resolveShortcodePageBuilder($this), $this->getParameters(true)));
+        return trim($this->getTwig()->render(
+            $this->templateResolver->resolveShortcodePageBuilder($this),
+            $this->getParameters(true)
+        ));
     }
 
     /**

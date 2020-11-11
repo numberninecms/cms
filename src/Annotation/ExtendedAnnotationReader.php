@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -108,7 +109,11 @@ final class ExtendedAnnotationReader implements ExtendedReader
                     throw new RuntimeException(sprintf('Annotation of type "%s" is missing.', $type));
                 }
 
-                throw new RuntimeException(sprintf('Annotation of type "%s" is missing on "%s" class.', $type, is_string($object) ? $object : get_class($object)));
+                throw new RuntimeException(sprintf(
+                    'Annotation of type "%s" is missing on "%s" class.',
+                    $type,
+                    is_string($object) ? $object : get_class($object)
+                ));
             }
 
             return null;

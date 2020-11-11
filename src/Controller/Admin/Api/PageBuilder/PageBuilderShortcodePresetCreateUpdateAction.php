@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -21,7 +22,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("page_builder/shortcodes/{name}/presets/", name="numbernine_admin_page_builder_shortcode_post_presets", options={"expose"=true}, methods={"POST"})
+ * @Route(
+ *     "page_builder/shortcodes/{name}/presets/",
+ *     name="numbernine_admin_page_builder_shortcode_post_presets",
+ *     options={"expose"=true},
+ *     methods={"POST"}
+ * )
  */
 final class PageBuilderShortcodePresetCreateUpdateAction
 {

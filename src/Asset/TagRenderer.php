@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -36,10 +37,21 @@ final class TagRenderer
      * @param RequestStack $requestStack
      * @param EntrypointLookupInterface|EntrypointLookupCollection $entrypointLookupCollection
      */
-    public function __construct(ThemeStore $themeStore, Packages $packages, RequestStack $requestStack, $entrypointLookupCollection)
-    {
+    public function __construct(
+        ThemeStore $themeStore,
+        Packages $packages,
+        RequestStack $requestStack,
+        $entrypointLookupCollection
+    ) {
         if ($entrypointLookupCollection instanceof EntrypointLookupInterface) {
-            @trigger_error(sprintf('The "$entrypointLookupCollection" argument in method "%s()" must be an instance of EntrypointLookupCollection.', __METHOD__), E_USER_DEPRECATED);
+            @trigger_error(
+                sprintf(
+                    'The "$entrypointLookupCollection" argument in method "%s()" must be an instance of ' .
+                    'EntrypointLookupCollection.',
+                    __METHOD__
+                ),
+                E_USER_DEPRECATED
+            );
 
             $this->entrypointLookupCollection = new EntrypointLookupCollection(
                 new ServiceLocator(
@@ -53,7 +65,9 @@ final class TagRenderer
         } elseif ($entrypointLookupCollection instanceof EntrypointLookupCollection) {
             $this->entrypointLookupCollection = $entrypointLookupCollection;
         } else {
-            throw new TypeError('The "$entrypointLookupCollection" argument must be an instance of EntrypointLookupCollection.');
+            throw new TypeError(
+                'The "$entrypointLookupCollection" argument must be an instance of EntrypointLookupCollection.'
+            );
         }
 
         $this->themeStore = $themeStore;
@@ -67,8 +81,11 @@ final class TagRenderer
      * @param bool $ignoreRuntime
      * @return string
      */
-    public function renderWebpackScriptTags(string $entryName = null, string $configName = null, bool $ignoreRuntime = false): string
-    {
+    public function renderWebpackScriptTags(
+        string $entryName = null,
+        string $configName = null,
+        bool $ignoreRuntime = false
+    ): string {
         $entryName = $entryName ?? $this->getThemeMainEntry($this->themeStore->getCurrentTheme());
         $configName = $configName ?? $this->themeStore->getCurrentTheme()->getWebpackConfigName();
 

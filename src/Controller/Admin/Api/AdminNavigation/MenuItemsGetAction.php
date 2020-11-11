@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -23,10 +24,14 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class MenuItemsGetAction extends AbstractController implements AdminController
 {
-    public function __invoke(ResponseFactory $responseFactory, AdminMenuBuilderStore $adminMenuBuilderStore): JsonResponse
-    {
+    public function __invoke(
+        ResponseFactory $responseFactory,
+        AdminMenuBuilderStore $adminMenuBuilderStore
+    ): JsonResponse {
         $this->denyAccessUnlessGranted(Capabilities::EDIT_POSTS);
 
-        return $responseFactory->createSerializedJsonResponse($adminMenuBuilderStore->getAdminMenuBuilder()->getMenuItems());
+        return $responseFactory->createSerializedJsonResponse(
+            $adminMenuBuilderStore->getAdminMenuBuilder()->getMenuItems()
+        );
     }
 }

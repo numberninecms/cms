@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -27,8 +28,12 @@ final class ComponentRenderer
     private AuthorizationCheckerInterface $authorizationChecker;
     private TagAwareCacheInterface $cache;
 
-    public function __construct(Environment $twig, ComponentStore $componentStore, AuthorizationCheckerInterface $authorizationChecker, TagAwareCacheInterface $cache)
-    {
+    public function __construct(
+        Environment $twig,
+        ComponentStore $componentStore,
+        AuthorizationCheckerInterface $authorizationChecker,
+        TagAwareCacheInterface $cache
+    ) {
         $this->twig = $twig;
         $this->componentStore = $componentStore;
         $this->authorizationChecker = $authorizationChecker;
@@ -68,7 +73,10 @@ final class ComponentRenderer
         }
 
         if ($this->authorizationChecker->isGranted('Administrator')) {
-            return $this->twig->render('@NumberNine/alerts/component_missing.html.twig', ['component' => $componentName]);
+            return $this->twig->render(
+                '@NumberNine/alerts/component_missing.html.twig',
+                ['component' => $componentName]
+            );
         }
 
         return '';

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -20,7 +21,13 @@ use NumberNine\Repository\TermRepository;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * @Shortcode(name="categories", label="Categories", description="Displays the posts categories.", editable=true, icon="category")
+ * @Shortcode(
+ *     name="categories",
+ *     label="Categories",
+ *     description="Displays the posts categories.",
+ *     editable=true,
+ *     icon="category"
+ * )
  */
 final class CategoriesShortcode extends AbstractShortcode
 {

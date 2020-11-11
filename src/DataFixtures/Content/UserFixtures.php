@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -26,8 +27,12 @@ final class UserFixtures extends BaseFixture implements FixtureGroupInterface, D
     private UserFactory $userFactory;
     private UserPasswordEncoderInterface $passwordEncoder;
 
-    public function __construct(ContentService $contentService, Generator $faker, UserFactory $userFactory, UserPasswordEncoderInterface $passwordEncoder)
-    {
+    public function __construct(
+        ContentService $contentService,
+        Generator $faker,
+        UserFactory $userFactory,
+        UserPasswordEncoderInterface $passwordEncoder
+    ) {
         parent::__construct($contentService, $faker);
         $this->userFactory = $userFactory;
         $this->passwordEncoder = $passwordEncoder;
@@ -35,11 +40,45 @@ final class UserFixtures extends BaseFixture implements FixtureGroupInterface, D
 
     public function loadData(ObjectManager $manager): void
     {
-        $administrator = $this->userFactory->createUser('admin', 'administrator@numbernine-fakedomain.com', 'password', [$this->getReference(UserRole::class . '_administrator')], false);
-        $editor = $this->userFactory->createUser('editor', 'editor@numbernine-fakedomain.com', 'password', [$this->getReference(UserRole::class . '_editor')], false);
-        $author = $this->userFactory->createUser('author', 'author@numbernine-fakedomain.com', 'password', [$this->getReference(UserRole::class . '_author')], false);
-        $contributor = $this->userFactory->createUser('contributor', 'contributor@numbernine-fakedomain.com', 'password', [$this->getReference(UserRole::class . '_contributor')], false);
-        $subscriber = $this->userFactory->createUser('subscriber', 'subscriber@numbernine-fakedomain.com', 'password', [$this->getReference(UserRole::class . '_subscriber')], false);
+        $administrator = $this->userFactory->createUser(
+            'admin',
+            'administrator@numbernine-fakedomain.com',
+            'password',
+            [$this->getReference(UserRole::class . '_administrator')],
+            false
+        );
+
+        $editor = $this->userFactory->createUser(
+            'editor',
+            'editor@numbernine-fakedomain.com',
+            'password',
+            [$this->getReference(UserRole::class . '_editor')],
+            false
+        );
+
+        $author = $this->userFactory->createUser(
+            'author',
+            'author@numbernine-fakedomain.com',
+            'password',
+            [$this->getReference(UserRole::class . '_author')],
+            false
+        );
+
+        $contributor = $this->userFactory->createUser(
+            'contributor',
+            'contributor@numbernine-fakedomain.com',
+            'password',
+            [$this->getReference(UserRole::class . '_contributor')],
+            false
+        );
+
+        $subscriber = $this->userFactory->createUser(
+            'subscriber',
+            'subscriber@numbernine-fakedomain.com',
+            'password',
+            [$this->getReference(UserRole::class . '_subscriber')],
+            false
+        );
 
         $administrator->setFirstName($this->faker->firstName)->setLastName($this->faker->lastName);
         $editor->setFirstName($this->faker->firstName)->setLastName($this->faker->lastName);

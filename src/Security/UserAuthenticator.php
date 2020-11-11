@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -43,6 +44,11 @@ final class UserAuthenticator
             throw new RuntimeException('Unable to authenticate user.');
         }
 
-        return $this->guardHandler->authenticateUserAndHandleSuccess($user, $this->request, $this->formAuthenticator, 'main');
+        return $this->guardHandler->authenticateUserAndHandleSuccess(
+            $user,
+            $this->request,
+            $this->formAuthenticator,
+            'main'
+        );
     }
 }

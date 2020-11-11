@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -18,7 +19,13 @@ use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Repository\PostRepository;
 
 /**
- * @Shortcode(name="recent_posts", label="Recent posts", description="Displays the most recent posts.", editable=true, icon="description")
+ * @Shortcode(
+ *     name="recent_posts",
+ *     label="Recent posts",
+ *     description="Displays the most recent posts.",
+ *     editable=true,
+ *     icon="description"
+ * )
  */
 final class RecentPostsShortcode extends AbstractShortcode
 {

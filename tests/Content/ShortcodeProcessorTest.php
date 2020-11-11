@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -32,7 +33,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Thunder\Shortcode\Parser\RegularParser;
 use Twig\Environment;
-use function NumberNine\Util\ArrayUtil\unset_recursive;
+
+use function NumberNine\Common\Util\ArrayUtil\unset_recursive;
 
 class ShortcodeProcessorTest extends TestCase
 {
@@ -179,7 +181,8 @@ class ShortcodeProcessorTest extends TestCase
                         ],
                     ],
                 ],
-            ]
-            , $tree);
+            ],
+            $tree
+        );
     }
 }

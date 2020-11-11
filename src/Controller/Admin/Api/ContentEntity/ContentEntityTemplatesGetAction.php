@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -20,12 +21,23 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("content_entities/{type}/templates/", name="numbernine_admin_contententity_templates_get_collection", options={"expose"=true}, methods={"GET"}, priority="200")
+ * @Route(
+ *     "content_entities/{type}/templates/",
+ *     name="numbernine_admin_contententity_templates_get_collection",
+ *     options={"expose"=true},
+ *     methods={"GET"},
+ *     priority="200"
+ * )
  */
 final class ContentEntityTemplatesGetAction extends AbstractController implements AdminController
 {
-    public function __invoke(Request $request, ResponseFactory $responseFactory, ContentService $contentService, TemplateResolver $templateResolver, string $type): JsonResponse
-    {
+    public function __invoke(
+        Request $request,
+        ResponseFactory $responseFactory,
+        ContentService $contentService,
+        TemplateResolver $templateResolver,
+        string $type
+    ): JsonResponse {
         $contentType = $contentService->getContentType($type);
         $candidates = $templateResolver->getContentEntitySingleTemplateCandidates($contentType);
 

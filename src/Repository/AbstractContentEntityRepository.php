@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -36,8 +37,11 @@ abstract class AbstractContentEntityRepository extends ServiceEntityRepository
      * @return QueryBuilder
      * @throws QueryException
      */
-    public function getPaginatedCollectionQueryBuilder(string $contentType, PaginationParameters $paginationParameters, Criteria $criteria = null): QueryBuilder
-    {
+    public function getPaginatedCollectionQueryBuilder(
+        string $contentType,
+        PaginationParameters $paginationParameters,
+        Criteria $criteria = null
+    ): QueryBuilder {
         $queryBuilder = $this->createQueryBuilder('c')
             ->select('c', 'a', 'cet_fetch_join', 't_fetch_join')
             ->leftJoin('c.author', 'a')
@@ -116,8 +120,11 @@ abstract class AbstractContentEntityRepository extends ServiceEntityRepository
      * @param int $fetchCount
      * @return QueryBuilder
      */
-    public function getSimplePaginatedCollectionQueryBuilder(string $contentType, int $startRow = 0, int $fetchCount = PHP_INT_MAX): QueryBuilder
-    {
+    public function getSimplePaginatedCollectionQueryBuilder(
+        string $contentType,
+        int $startRow = 0,
+        int $fetchCount = PHP_INT_MAX
+    ): QueryBuilder {
         return $this->createQueryBuilder('c')
             ->select('c')
             ->where('c.customType = :customType')

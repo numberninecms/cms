@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -21,8 +22,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class TermNewAction extends AbstractTermController
 {
-    public function __invoke(TaxonomyRepository $taxonomyRepository, ResponseFactory $responseFactory, string $taxonomy): JsonResponse
-    {
+    public function __invoke(
+        TaxonomyRepository $taxonomyRepository,
+        ResponseFactory $responseFactory,
+        string $taxonomy
+    ): JsonResponse {
         $taxonomyEntity = $taxonomyRepository->findOneBy(['name' => $taxonomy]);
 
         if (!$taxonomyEntity) {

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -17,12 +18,20 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("page_builder/shortcodes/{name}/presets/", name="numbernine_admin_page_builder_shortcode_get_presets", options={"expose"=true}, methods={"GET"})
+ * @Route(
+ *     "page_builder/shortcodes/{name}/presets/",
+ *     name="numbernine_admin_page_builder_shortcode_get_presets",
+ *     options={"expose"=true},
+ *     methods={"GET"}
+ * )
  */
 final class PageBuilderShortcodePresetsGetAction implements AdminController
 {
-    public function __invoke(ResponseFactory $responseFactory, ShortcodeProcessor $shortcodeProcessor, string $name): JsonResponse
-    {
+    public function __invoke(
+        ResponseFactory $responseFactory,
+        ShortcodeProcessor $shortcodeProcessor,
+        string $name
+    ): JsonResponse {
         $associativePresets = $shortcodeProcessor->getShortcodePresets($name);
 
         $presets = array_map(

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -33,8 +34,7 @@ final class CommentFormType extends AbstractType
         CommentToNumberTransformer $commentToNumberTransformer,
         ContentEntityToNumberTransformer $contentEntityToNumberTransformer,
         UserToNumberTransformer $userToNumberTransformer
-    )
-    {
+    ) {
         $this->tokenStorage = $tokenStorage;
         $this->commentToNumberTransformer = $commentToNumberTransformer;
         $this->contentEntityToNumberTransformer = $contentEntityToNumberTransformer;

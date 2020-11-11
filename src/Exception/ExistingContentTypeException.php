@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -25,6 +26,9 @@ final class ExistingContentTypeException extends LogicException
      */
     public function __construct(ContentType $contentType)
     {
-        parent::__construct(sprintf('Content type "%s" has already been registered. Choose another type name.', $contentType->getName()));
+        parent::__construct(sprintf(
+            'Content type "%s" has already been registered. Choose another type name.',
+            $contentType->getName()
+        ));
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -13,7 +14,6 @@ namespace NumberNine\Content;
 use Doctrine\ORM\EntityNotFoundException;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Repository\ContentEntityRepository;
-use NumberNine\Content\ContentService;
 use NumberNine\Theme\TemplateResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Twig\Environment;
@@ -23,36 +23,17 @@ use Twig\Error\SyntaxError;
 
 final class ContentEntityRenderer
 {
-    /** @var ContentService */
-    private $contentService;
+    private ContentEntityRepository $contentEntityRepository;
+    private AuthorizationCheckerInterface $authorizationChecker;
+    private Environment $twig;
+    private TemplateResolver $templateResolver;
 
-    /** @var ContentEntityRepository */
-    private $contentEntityRepository;
-
-    /** @var AuthorizationCheckerInterface */
-    private $authorizationChecker;
-
-    /** @var Environment */
-    private $twig;
-
-    /** @var TemplateResolver */
-    private $templateResolver;
-
-    /**
-     * @param ContentService $contentService
-     * @param ContentEntityRepository $contentEntityRepository
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param Environment $twig
-     * @param TemplateResolver $templateResolver
-     */
     public function __construct(
-        ContentService $contentService,
         ContentEntityRepository $contentEntityRepository,
         AuthorizationCheckerInterface $authorizationChecker,
         Environment $twig,
         TemplateResolver $templateResolver
     ) {
-        $this->contentService = $contentService;
         $this->contentEntityRepository = $contentEntityRepository;
         $this->authorizationChecker = $authorizationChecker;
         $this->twig = $twig;
@@ -74,7 +55,9 @@ final class ContentEntityRenderer
 
         if (!$entity) {
             if ($throwException) {
-                throw new EntityNotFoundException(sprintf("Entity of type '%s' for slug '%s' was not found", ContentEntity::class, $slug));
+                throw new EntityNotFoundException(
+                    sprintf("Entity of type '%s' for slug '%s' was not found", ContentEntity::class, $slug)
+                );
             }
 
             if ($this->authorizationChecker->isGranted('Administrator')) {

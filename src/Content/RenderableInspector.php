@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -34,10 +35,19 @@ final class RenderableInspector implements RenderableInspectorInterface
     public function inspect(RenderableInterface $renderable, bool $isSerialization = false): InspectedRenderable
     {
         $annotations = $this->annotationReader->getAllAnnotations($renderable);
-        $exclusionPolicy = $this->annotationReader->getValueOfFirstAnnotationOfType($annotations, ExclusionPolicy::class, 'none');
+        $exclusionPolicy = $this->annotationReader->getValueOfFirstAnnotationOfType(
+            $annotations,
+            ExclusionPolicy::class,
+            'none'
+        );
 
-        $excludes = $exclusionPolicy === ExclusionPolicy::NONE ? $this->annotationReader->getAnnotationsOfType($annotations, Exclude::class) : [];
-        $exposes = $exclusionPolicy === ExclusionPolicy::ALL ? $this->annotationReader->getAnnotationsOfType($annotations, Expose::class) : [];
+        $excludes = $exclusionPolicy === ExclusionPolicy::NONE
+            ? $this->annotationReader->getAnnotationsOfType($annotations, Exclude::class)
+            : [];
+
+        $exposes = $exclusionPolicy === ExclusionPolicy::ALL
+            ? $this->annotationReader->getAnnotationsOfType($annotations, Expose::class)
+            : [];
 
         return new InspectedRenderable($renderable, $exclusionPolicy, $excludes, $exposes, $isSerialization);
     }
