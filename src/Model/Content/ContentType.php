@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -10,11 +11,8 @@
 
 namespace NumberNine\Model\Content;
 
-use Assert\Assert;
-
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Security\Capabilities;
-
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -164,7 +162,11 @@ final class ContentType
             static function (Options $options, $value) {
                 if (!class_exists($value) || !is_subclass_of($value, ContentEntity::class)) {
                     throw new InvalidOptionsException(
-                        sprintf('"entity_class_name" option must be a fully qualified class name which extends NumberNine\Entity\ContentEntity. "%s" is invalid.', $value)
+                        sprintf(
+                            '"entity_class_name" option must be a fully qualified class name which extends ' .
+                            'NumberNine\Entity\ContentEntity. "%s" is invalid.',
+                            $value
+                        )
                     );
                 }
 
@@ -240,7 +242,11 @@ final class ContentType
         ];
 
         $mappedCapabilities = array_map(
-            static fn($capability) => str_replace('posts', u($options['labels']->getPluralName())->snake()->toString(), $capability),
+            static fn($capability) => str_replace(
+                'posts',
+                u($options['labels']->getPluralName())->snake()->toString(),
+                $capability
+            ),
             $defaultCapabilities
         );
 

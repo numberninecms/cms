@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -25,8 +26,13 @@ final class UserFactory
         $this->entityManager = $entityManager;
     }
 
-    public function createUser(string $username, string $email, string $password, array $roles = [], bool $flush = true): User
-    {
+    public function createUser(
+        string $username,
+        string $email,
+        string $password,
+        array $roles = [],
+        bool $flush = true
+    ): User {
         $user = new User();
         $user->setUsername($username);
         $user->setEmail($email);

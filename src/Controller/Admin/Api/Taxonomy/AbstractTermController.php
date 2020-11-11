@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -26,8 +27,11 @@ abstract class AbstractTermController extends AbstractController implements Admi
     private EntityManagerInterface $entityManager;
     private ResponseFactory $responseFactory;
 
-    public function __construct(RequestStack $requestStack, EntityManagerInterface $entityManager, ResponseFactory $responseFactory)
-    {
+    public function __construct(
+        RequestStack $requestStack,
+        EntityManagerInterface $entityManager,
+        ResponseFactory $responseFactory
+    ) {
         $this->request = $requestStack->getCurrentRequest();
         $this->entityManager = $entityManager;
         $this->responseFactory = $responseFactory;

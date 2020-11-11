@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -29,8 +30,7 @@ final class ThemeToolbox
         ThemeOptionsReadWriter $themeOptionsReadWriter,
         ConfigurationReadWriter $configurationReadWriter,
         RequestAnalyzer $requestAnalyzer
-    )
-    {
+    ) {
         $this->themeStore = $themeStore;
         $this->themeOptionsReadWriter = $themeOptionsReadWriter;
         $this->configurationReadWriter = $configurationReadWriter;
@@ -44,7 +44,13 @@ final class ThemeToolbox
     public function getThemeOption(string $optionName)
     {
         try {
-            return $this->themeOptionsReadWriter->read($this->themeStore->getCurrentTheme(), $optionName, null, false, $this->requestAnalyzer->isPreviewMode());
+            return $this->themeOptionsReadWriter->read(
+                $this->themeStore->getCurrentTheme(),
+                $optionName,
+                null,
+                false,
+                $this->requestAnalyzer->isPreviewMode()
+            );
         } catch (ThemeNotFoundException $e) {
             return null;
         }

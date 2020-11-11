@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -35,8 +36,13 @@ final class TemplateResolver implements TemplateResolverInterface
     private array $bundles;
     private string $templatePath;
 
-    public function __construct(Environment $twig, ThemeStore $themeStore, ContentService $contentService, array $bundles, string $templatePath)
-    {
+    public function __construct(
+        Environment $twig,
+        ThemeStore $themeStore,
+        ContentService $contentService,
+        array $bundles,
+        string $templatePath
+    ) {
         $this->twig = $twig;
         $this->themeStore = $themeStore;
         $this->contentService = $contentService;
@@ -70,7 +76,9 @@ final class TemplateResolver implements TemplateResolverInterface
         );
 
         if ($pageTemplate = $entity->getCustomField('page_template')) {
-            $candidates = $this->getContentEntitySingleTemplateCandidates($this->contentService->getContentType((string)$entity->getCustomType()));
+            $candidates = $this->getContentEntitySingleTemplateCandidates(
+                $this->contentService->getContentType((string)$entity->getCustomType())
+            );
             $filename = array_search($pageTemplate, $candidates);
 
             if ($filename) {
@@ -87,7 +95,9 @@ final class TemplateResolver implements TemplateResolverInterface
             $template = $this->twig->resolveTemplate($templates);
 
             if ($this->hasFrontMatterBlock($template->getSourceContext()->getCode())) {
-                $template = $this->createTwigTemplateFromFrontMatterAnnotatedFile($template->getSourceContext()->getPath());
+                $template = $this->createTwigTemplateFromFrontMatterAnnotatedFile(
+                    $template->getSourceContext()->getPath()
+                );
             }
         } catch (SyntaxError $e) {
             if (($context = $e->getSourceContext()) && $this->hasFrontMatterBlock($context->getCode())) {
@@ -146,7 +156,13 @@ final class TemplateResolver implements TemplateResolverInterface
         foreach ($contentTypes as $contentType) {
             $templates[] = [
                 sprintf('theme/%s/index_%s_%s.html.twig', $contentType, $taxonomy->getName(), $term->getSlug()),
-                sprintf('@%s/%s/index_%s_%s.html.twig', $themeName, $contentType, $taxonomy->getName(), $term->getSlug()),
+                sprintf(
+                    '@%s/%s/index_%s_%s.html.twig',
+                    $themeName,
+                    $contentType,
+                    $taxonomy->getName(),
+                    $term->getSlug()
+                ),
                 sprintf('theme/%s/index_%s_%d.html.twig', $contentType, $taxonomy->getName(), $term->getId()),
                 sprintf('@%s/%s/index_%s_%d.html.twig', $themeName, $contentType, $taxonomy->getName(), $term->getId()),
                 sprintf('theme/%s/index_%s.html.twig', $contentType, $taxonomy->getName()),
@@ -253,7 +269,12 @@ final class TemplateResolver implements TemplateResolverInterface
         ];
 
         foreach ($this->bundles as $bundle => $fqcn) {
-            $templates[] = sprintf("@%sShortcodes/%s/template.%s.twig", str_replace('Bundle', '', $bundle), $subNamespace, $type);
+            $templates[] = sprintf(
+                "@%sShortcodes/%s/template.%s.twig",
+                str_replace('Bundle', '', $bundle),
+                $subNamespace,
+                $type
+            );
         }
 
         $templates[] = sprintf("@NumberNineShortcodes/%s/template.%s.twig", $subNamespace, $type);

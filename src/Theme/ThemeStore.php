@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -65,7 +66,10 @@ final class ThemeStore implements EventSubscriberInterface
             return $this->themeWrappers[$themeNameOrClassName] ?? null;
         }
 
-        return current(array_filter($this->themeWrappers, fn(ThemeWrapper $wrapper) => $wrapper->getDescriptor()->getName() === $themeNameOrClassName)) ?: null;
+        return current(array_filter(
+            $this->themeWrappers,
+            fn(ThemeWrapper $wrapper) => $wrapper->getDescriptor()->getName() === $themeNameOrClassName
+        )) ?: null;
     }
 
     public function getCurrentTheme(): ThemeInterface

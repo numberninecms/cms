@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -22,7 +23,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * @Route("content_entities/{type}/delete-collection", name="numbernine_admin_contententity_delete_collection", options={"expose"=true}, methods={"POST"})
+ * @Route(
+ *     "content_entities/{type}/delete-collection",
+ *     name="numbernine_admin_contententity_delete_collection",
+ *     options={"expose"=true},
+ *     methods={"POST"}
+ * )
  */
 final class ContentEntitiesDeleteAction extends AbstractController implements AdminController
 {
@@ -34,8 +40,13 @@ final class ContentEntitiesDeleteAction extends AbstractController implements Ad
      * @param string $type
      * @return JsonResponse
      */
-    public function __invoke(Request $request, SerializerInterface $serializer, ContentService $contentService, ResponseFactory $responseFactory, string $type): JsonResponse
-    {
+    public function __invoke(
+        Request $request,
+        SerializerInterface $serializer,
+        ContentService $contentService,
+        ResponseFactory $responseFactory,
+        string $type
+    ): JsonResponse {
         $contentType = $contentService->getContentType($type);
 
         $this->denyAccessUnlessGranted($contentType->getMappedCapability(Capabilities::DELETE_POSTS));

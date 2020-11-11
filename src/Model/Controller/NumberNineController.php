@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -9,7 +10,6 @@
  */
 
 namespace NumberNine\Model\Controller;
-
 
 use NumberNine\Model\Translation\QuickTranslate;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

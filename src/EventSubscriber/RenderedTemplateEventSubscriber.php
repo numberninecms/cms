@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -45,7 +46,9 @@ final class RenderedTemplateEventSubscriber implements EventSubscriberInterface
         $doc->loadHTML($event->getTemplate(), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         libxml_clear_errors();
 
-        $responsiveVisibilityClasses = $this->cssFramework->getResponsiveVisibilityClasses($renderable->getVisibleViewSizes());
+        $responsiveVisibilityClasses = $this->cssFramework->getResponsiveVisibilityClasses(
+            $renderable->getVisibleViewSizes()
+        );
 
         foreach ($doc->childNodes as $childNode) {
             /** @var DOMElement $childNode */

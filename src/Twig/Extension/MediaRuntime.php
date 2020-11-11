@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -39,10 +40,16 @@ final class MediaRuntime implements RuntimeExtensionInterface
      * @throws RuntimeError
      * @throws InvalidMimeTypeException
      */
-    public function getFeaturedImage(ContentEntity $contentEntity, string $size = 'large', array $attributes = []): string
-    {
+    public function getFeaturedImage(
+        ContentEntity $contentEntity,
+        string $size = 'large',
+        array $attributes = []
+    ): string {
         if (!method_exists($contentEntity, 'getFeaturedImage')) {
-            throw new RuntimeError(sprintf("Entity of type %s doesn't have a \$featuredImage property.", get_class($contentEntity)));
+            throw new RuntimeError(sprintf(
+                "Entity of type %s doesn't have a \$featuredImage property.",
+                get_class($contentEntity)
+            ));
         }
 
         /** @var ?MediaFile $featuredImage */

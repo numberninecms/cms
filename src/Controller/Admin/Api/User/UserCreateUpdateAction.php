@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -29,8 +30,11 @@ final class UserCreateUpdateAction extends AbstractController implements AdminCo
     private UserRoleRepository $userRoleRepository;
     private ResponseFactory $responseFactory;
 
-    public function __construct(EntityManagerInterface $entityManager, UserRoleRepository $userRoleRepository, ResponseFactory $responseFactory)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        UserRoleRepository $userRoleRepository,
+        ResponseFactory $responseFactory
+    ) {
         $this->entityManager = $entityManager;
         $this->userRoleRepository = $userRoleRepository;
         $this->responseFactory = $responseFactory;

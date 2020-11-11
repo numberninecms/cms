@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -76,7 +77,9 @@ final class HeadEventSubscriber implements EventSubscriberInterface
 
     public function title(HeadEvent $event): void
     {
-        $titleEvent = $this->eventDispatcher->dispatch(new HeadTitleEvent($this->configurationReadWriter->read(Settings::SITE_TITLE)));
+        $titleEvent = $this->eventDispatcher->dispatch(
+            new HeadTitleEvent($this->configurationReadWriter->read(Settings::SITE_TITLE))
+        );
         $event->setObject($event . $titleEvent);
     }
 
@@ -98,7 +101,10 @@ final class HeadEventSubscriber implements EventSubscriberInterface
     {
         $theme = $this->themeStore->getCurrentTheme();
         try {
-            $styles = $this->twig->render(sprintf('@%s/customizable_styles.css.twig', $theme->getName()), $this->themeOptionsReadWriter->readAll($theme, false, $this->requestAnalyzer->isPreviewMode()));
+            $styles = $this->twig->render(
+                sprintf('@%s/customizable_styles.css.twig', $theme->getName()),
+                $this->themeOptionsReadWriter->readAll($theme, false, $this->requestAnalyzer->isPreviewMode())
+            );
         } catch (LoaderError $e) {
             $styles = '';
         }
@@ -115,6 +121,6 @@ final class HeadEventSubscriber implements EventSubscriberInterface
     {
         $scripts = $this->tagRenderer->renderWebpackScriptTags();
         $scriptsEvent = $this->eventDispatcher->dispatch(new HeaderScriptsEvent($scripts));
-        $event->setObject($event.$scriptsEvent);
+        $event->setObject($event . $scriptsEvent);
     }
 }

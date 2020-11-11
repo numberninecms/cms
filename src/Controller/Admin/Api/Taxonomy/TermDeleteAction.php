@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -20,12 +21,22 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("terms/{taxonomy}/delete-collection", name="numbernine_admin_terms_delete_collection", options={"expose": true}, methods={"POST"})
+ * @Route(
+ *     "terms/{taxonomy}/delete-collection",
+ *     name="numbernine_admin_terms_delete_collection",
+ *     options={"expose": true},
+ *     methods={"POST"}
+ * )
  */
 final class TermDeleteAction implements AdminController
 {
-    public function __invoke(Request $request, EntityManagerInterface $entityManager, TermRepository $termRepository, ResponseFactory $responseFactory, string $taxonomy): JsonResponse
-    {
+    public function __invoke(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        TermRepository $termRepository,
+        ResponseFactory $responseFactory,
+        string $taxonomy
+    ): JsonResponse {
         /** @var array $ids */
         $ids = $request->request->get('ids');
 

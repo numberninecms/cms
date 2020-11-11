@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -15,7 +16,15 @@ use NumberNine\Annotation\Shortcode;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 
 /**
- * @Shortcode(name="flex_column", label="Flex column", editable=true, container=true, icon="view_column", siblingsPosition={"left", "right"}, siblingsShortcodes={"flex_column"})
+ * @Shortcode(
+ *     name="flex_column",
+ *     label="Flex column",
+ *     editable=true,
+ *     container=true,
+ *     icon="view_column",
+ *     siblingsPosition={"left", "right"},
+ *     siblingsShortcodes={"flex_column"}
+ * )
  */
 final class FlexColumnShortcode extends AbstractShortcode
 {

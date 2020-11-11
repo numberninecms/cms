@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -31,7 +32,9 @@ final class ContentEntityTermFixtures extends BaseFixture implements DependentFi
             function (ContentEntityTerm $contentEntityTerm, $i) {
                 $contentEntityTerm
                     ->setContentEntity($this->getReference(Post::class . '_post_' . $i))
-                    ->setTerm($this->getReference(Term::class . '_' . (random_int(0, FixtureSettings::CATEGORIES_COUNT - 1))));
+                    ->setTerm($this->getReference(
+                        Term::class . '_' . (random_int(0, FixtureSettings::CATEGORIES_COUNT - 1))
+                    ));
             }
         );
 
@@ -40,14 +43,26 @@ final class ContentEntityTermFixtures extends BaseFixture implements DependentFi
             FixtureSettings::POSTS_COUNT * 2,
             function (ContentEntityTerm $contentEntityTerm, $i) {
                 $contentEntityTerm
-                    ->setContentEntity($this->getReference(Post::class . '_post_' . (int)floor(($i - FixtureSettings::POSTS_COUNT) / 2)));
+                    ->setContentEntity($this->getReference(
+                        Post::class . '_post_' . (int)floor(($i - FixtureSettings::POSTS_COUNT) / 2)
+                    ));
 
                 if ($i % 2 === 0) {
                     $contentEntityTerm
-                        ->setTerm($this->getReference(Term::class . '_' . (random_int(FixtureSettings::CATEGORIES_COUNT, FixtureSettings::TAGS_COUNT / 2))));
+                        ->setTerm($this->getReference(
+                            Term::class . '_' . (random_int(
+                                FixtureSettings::CATEGORIES_COUNT,
+                                FixtureSettings::TAGS_COUNT / 2
+                            ))
+                        ));
                 } else {
                     $contentEntityTerm
-                        ->setTerm($this->getReference(Term::class . '_' . (random_int(FixtureSettings::CATEGORIES_COUNT + FixtureSettings::TAGS_COUNT / 2, FixtureSettings::TAGS_COUNT))));
+                        ->setTerm($this->getReference(
+                            Term::class . '_' . (random_int(
+                                FixtureSettings::CATEGORIES_COUNT + FixtureSettings::TAGS_COUNT / 2,
+                                FixtureSettings::TAGS_COUNT
+                            ))
+                        ));
                 }
             },
             FixtureSettings::POSTS_COUNT

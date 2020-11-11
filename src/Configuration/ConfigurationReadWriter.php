@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -33,8 +34,8 @@ final class ConfigurationReadWriter
         EntityManagerInterface $entityManager,
         CoreOptionRepository $coreOptionRepository,
         TagAwareCacheInterface $cache,
-        SerializerInterface $serializer)
-    {
+        SerializerInterface $serializer
+    ) {
 
         $this->entityManager = $entityManager;
         $this->coreOptionRepository = $coreOptionRepository;
@@ -55,7 +56,9 @@ final class ConfigurationReadWriter
         return $this->cache->get(
             sprintf('coreoption_value_%s', $optionName),
             function (ItemInterface $item) use ($optionName, $default) {
-                $value = ($option = $this->coreOptionRepository->findOneBy(['name' => $optionName])) ? ($option->getValue() ?? $default) : $default;
+                $value = ($option = $this->coreOptionRepository->findOneBy(['name' => $optionName]))
+                    ? ($option->getValue() ?? $default)
+                    : $default;
 
                 try {
                     $value = json_decode($value, true, 512, JSON_THROW_ON_ERROR);

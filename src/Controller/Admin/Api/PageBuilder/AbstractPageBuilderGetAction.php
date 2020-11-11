@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -24,8 +25,12 @@ abstract class AbstractPageBuilderGetAction implements AdminController
     private ShortcodeStore $shortcodeStore;
     private FormGenerator $formGenerator;
 
-    public function __construct(ResponseFactory $responseFactory, ShortcodeProcessor $shortcodeProcessor, ShortcodeStore $shortcodeStore, FormGenerator $formGenerator)
-    {
+    public function __construct(
+        ResponseFactory $responseFactory,
+        ShortcodeProcessor $shortcodeProcessor,
+        ShortcodeStore $shortcodeStore,
+        FormGenerator $formGenerator
+    ) {
         $this->responseFactory = $responseFactory;
         $this->shortcodeProcessor = $shortcodeProcessor;
         $this->shortcodeStore = $shortcodeStore;

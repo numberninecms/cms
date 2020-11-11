@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -24,8 +25,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 final class SettingsGetAction extends AbstractController implements AdminController
 {
-    public function __invoke(UrlGeneratorInterface $urlGenerator, ResponseFactory $responseFactory, ConfigurationReadWriter $configurationReadWriter): JsonResponse
-    {
+    public function __invoke(
+        UrlGeneratorInterface $urlGenerator,
+        ResponseFactory $responseFactory,
+        ConfigurationReadWriter $configurationReadWriter
+    ): JsonResponse {
         $settings = $configurationReadWriter->readMany(
             [
                 Settings::PAGE_FOR_FRONT,

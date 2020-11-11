@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -38,7 +39,10 @@ final class Paginator implements IteratorAggregate
         $query = $paginator->getQuery();
 
         if (($firstResult = $query->getFirstResult()) === null || ($maxResults = $query->getMaxResults()) === null) {
-            throw new InvalidArgumentException(sprintf('"%1$s::setFirstResult()" or/and "%1$s::setMaxResults()" was/were not applied to the query.', Query::class));
+            throw new InvalidArgumentException(sprintf(
+                '"%1$s::setFirstResult()" or/and "%1$s::setMaxResults()" was/were not applied to the query.',
+                Query::class
+            ));
         }
 
         $this->paginator = $paginator;

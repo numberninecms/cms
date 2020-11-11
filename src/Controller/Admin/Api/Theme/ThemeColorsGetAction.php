@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -19,12 +20,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("theme/colors/", name="numbernine_admin_theme_colors_get_collection", options={"expose"=true}, methods={"GET"})
+ * @Route(
+ *     "theme/colors/",
+ *     name="numbernine_admin_theme_colors_get_collection",
+ *     options={"expose"=true},
+ *     methods={"GET"}
+ * )
  */
 final class ThemeColorsGetAction implements AdminController
 {
-    public function __invoke(Request $request, ResponseFactory $responseFactory, ThemeStore $themeStore, ThemeOptionsReadWriter $themeOptionsReadWriter): JsonResponse
-    {
+    public function __invoke(
+        Request $request,
+        ResponseFactory $responseFactory,
+        ThemeStore $themeStore,
+        ThemeOptionsReadWriter $themeOptionsReadWriter
+    ): JsonResponse {
         $themeOptions = $themeOptionsReadWriter->readAll($themeStore->getCurrentTheme(), false, true);
 
         // The need to reorder the colors is due to a feature of MySQL which automatically sorts keys in JSON columns.

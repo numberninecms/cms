@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -23,12 +24,18 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class SettingsUpdateAction extends AbstractController implements AdminController
 {
-    public function __invoke(Request $request, ResponseFactory $responseFactory, ConfigurationReadWriter $configurationReadWriter): JsonResponse
-    {
+    public function __invoke(
+        Request $request,
+        ResponseFactory $responseFactory,
+        ConfigurationReadWriter $configurationReadWriter
+    ): JsonResponse {
         $settings = $request->request->all();
 
         if (!empty($settings)) {
-            $configurationReadWriter->writeMany((array)array_combine(array_column($settings, 'name'), array_column($settings, 'value')));
+            $configurationReadWriter->writeMany((array)array_combine(
+                array_column($settings, 'name'),
+                array_column($settings, 'value')
+            ));
         }
 
         return $responseFactory->createSuccessJsonResponse();

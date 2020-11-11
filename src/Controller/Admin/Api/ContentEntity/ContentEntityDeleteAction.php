@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -22,7 +23,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Inflector\EnglishInflector;
 
 /**
- * @Route("content_entities/{type}/{id<\d+>}/", name="numbernine_admin_contententity_delete_item", options={"expose"=true}, methods={"DELETE"})
+ * @Route(
+ *     "content_entities/{type}/{id<\d+>}/",
+ *     name="numbernine_admin_contententity_delete_item",
+ *     options={"expose"=true},
+ *     methods={"DELETE"}
+ * )
  */
 final class ContentEntityDeleteAction extends AbstractController implements AdminController
 {
@@ -33,8 +39,11 @@ final class ContentEntityDeleteAction extends AbstractController implements Admi
      * @return JsonResponse
      * @throws ORMException
      */
-    public function __invoke(ContentService $contentService, ResponseFactory $responseFactory, ContentEntity $entity): JsonResponse
-    {
+    public function __invoke(
+        ContentService $contentService,
+        ResponseFactory $responseFactory,
+        ContentEntity $entity
+    ): JsonResponse {
         $contentType = $contentService->getContentType($entity->getType());
         $this->denyAccessUnlessGranted($contentType->getMappedCapability(Capabilities::DELETE_POSTS));
 

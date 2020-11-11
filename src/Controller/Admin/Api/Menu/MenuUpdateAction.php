@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -23,8 +24,12 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class MenuUpdateAction implements AdminController
 {
-    public function __invoke(Request $request, EntityManagerInterface $entityManager, ResponseFactory $responseFactory, Menu $menu): JsonResponse
-    {
+    public function __invoke(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        ResponseFactory $responseFactory,
+        Menu $menu
+    ): JsonResponse {
         /** @var array $menuItems */
         $menuItems = $request->request->get('menuItems') ?: [];
 

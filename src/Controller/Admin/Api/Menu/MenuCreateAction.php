@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -24,8 +25,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class MenuCreateAction implements AdminController
 {
-    public function __invoke(Request $request, ResponseFactory $responseFactory, EntityManagerInterface $entityManager): JsonResponse
-    {
+    public function __invoke(
+        Request $request,
+        ResponseFactory $responseFactory,
+        EntityManagerInterface $entityManager
+    ): JsonResponse {
         $name = $request->request->get('menu');
 
         if (!$name) {

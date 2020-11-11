@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -57,7 +58,7 @@ final class RequestEventSubscriber implements EventSubscriberInterface, ServiceS
         return $this->container->get(__METHOD__);
     }
 
-    private function AreaStore(): AreaStore
+    private function areaStore(): AreaStore
     {
         return $this->container->get(__METHOD__);
     }

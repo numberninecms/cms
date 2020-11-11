@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -42,12 +43,23 @@ final class MakeShortcodeCommand extends Command
     {
         $this
             ->setDescription('Creates a new shortcode')
-            ->setHelp('This command allows you to create a shortcode in the current theme, or in the theme your choose.')
+            ->setHelp(
+                'This command allows you to create a shortcode in the current theme, or in the theme your choose.'
+            )
             ->addArgument('shortcode-class-name', InputArgument::OPTIONAL, 'Shortcode class name')
-            ->addArgument('shortcode-name', InputArgument::OPTIONAL, 'Shortcode name for the user (e.g. [shortcode-name])')
+            ->addArgument(
+                'shortcode-name',
+                InputArgument::OPTIONAL,
+                'Shortcode name for the user (e.g. [shortcode-name])'
+            )
             ->addOption('editable', null, InputOption::VALUE_OPTIONAL, 'Is the shortcode editable in page builder?')
             ->addOption('container', null, InputOption::VALUE_OPTIONAL, 'Is the shortcode editable in page builder?')
-            ->addOption('icon', null, InputOption::VALUE_OPTIONAL, 'Material Design icon for the shortcode editor in page builder (see material.io)')
+            ->addOption(
+                'icon',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Material Design icon for the shortcode editor in page builder (see material.io)'
+            )
             ->addOption('theme', null, InputOption::VALUE_OPTIONAL, 'Theme to create shortcode into')
             ->addOption('no-sample-data', null, InputOption::VALUE_NONE, "Don't create sample data");
     }
@@ -65,7 +77,9 @@ final class MakeShortcodeCommand extends Command
         $noSampleData = $input->getOption('no-sample-data');
 
         try {
-            $theme = !$themeName ? $this->themeStore->getCurrentTheme() : $this->themeStore->getTheme((string)$themeName);
+            $theme = !$themeName
+                ? $this->themeStore->getCurrentTheme()
+                : $this->themeStore->getTheme((string)$themeName);
         } catch (ThemeNotFoundException $e) {
             $io->error($e->getMessage());
             return 1;
@@ -84,7 +98,10 @@ final class MakeShortcodeCommand extends Command
             }
 
             if (!$shortcodeName) {
-                $shortcodeName = $io->ask('Choose a shortcode name for the user', u(str_replace('Shortcode', '', $shortcodeClassName))->snake());
+                $shortcodeName = $io->ask(
+                    'Choose a shortcode name for the user',
+                    u(str_replace('Shortcode', '', $shortcodeClassName))->snake()
+                );
             }
 
             if ($editable === null) {
@@ -157,8 +174,17 @@ $sampleData
 SHORTCODE
             );
 
-            file_put_contents($shortcodePath . 'template.html.twig', sprintf('<div>%s</div>', $noSampleData ? '' : '{{ sampleProperty }}'));
-            file_put_contents($shortcodePath . 'template.vue.twig', sprintf('{%% verbatim %%}<div>%s</div>{%% endverbatim %%}', $noSampleData ? '' : '{{ parameters.sampleProperty }}'));
+            file_put_contents(
+                $shortcodePath . 'template.html.twig',
+                sprintf('<div>%s</div>', $noSampleData ? '' : '{{ sampleProperty }}')
+            );
+            file_put_contents(
+                $shortcodePath . 'template.vue.twig',
+                sprintf(
+                    '{%% verbatim %%}<div>%s</div>{%% endverbatim %%}',
+                    $noSampleData ? '' : '{{ parameters.sampleProperty }}'
+                )
+            );
         } catch (Exception $e) {
             $io->error('Shortcode cannot be created.');
             $io->writeln($e->getMessage());
@@ -171,7 +197,11 @@ SHORTCODE
         $io->writeln("<info>{$shortcodePath}template.vue.twig</info>");
         $io->newLine();
         $io->writeln(
-            sprintf('Use it either in the page builder either in text editor with: <comment>[%s%s]</comment>', $shortcodeName, $noSampleData ? '' : 'sample_property="Some alternative text"')
+            sprintf(
+                'Use it either in the page builder either in text editor with: <comment>[%s%s]</comment>',
+                $shortcodeName,
+                $noSampleData ? '' : 'sample_property="Some alternative text"'
+            )
         );
         $io->newLine();
 

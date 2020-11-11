@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -77,10 +78,19 @@ final class ImageProcessor
     public function createImageVariation(string $filename, ImageSize $size): array
     {
         $image = $this->imagine->open($filename);
-        $thumbnail = $image->thumbnail(new Box((int)$size->getWidth(), (int)$size->getHeight()), $size->isCrop() ? ImageInterface::THUMBNAIL_OUTBOUND : ImageInterface::THUMBNAIL_INSET);
+        $thumbnail = $image->thumbnail(
+            new Box((int)$size->getWidth(), (int)$size->getHeight()),
+            $size->isCrop() ? ImageInterface::THUMBNAIL_OUTBOUND : ImageInterface::THUMBNAIL_INSET
+        );
 
         $thumbnailSize = $thumbnail->getSize();
-        $thumbnailFilename = sprintf('%s.%dx%d.%s', $filename, $thumbnailSize->getWidth(), $thumbnailSize->getHeight(), pathinfo($filename, PATHINFO_EXTENSION));
+        $thumbnailFilename = sprintf(
+            '%s.%dx%d.%s',
+            $filename,
+            $thumbnailSize->getWidth(),
+            $thumbnailSize->getHeight(),
+            pathinfo($filename, PATHINFO_EXTENSION)
+        );
         $thumbnail->save($thumbnailFilename);
 
         return [

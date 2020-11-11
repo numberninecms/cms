@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -10,7 +11,6 @@
 
 namespace NumberNine\EventSubscriber;
 
-use NumberNine\Controller\Frontend\Content\HomepageAction;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Event\CurrentContentEntityEvent;
 use NumberNine\Asset\TagRenderer;
@@ -42,8 +42,13 @@ final class ResponseEventSubscriber implements EventSubscriberInterface
      * @param Environment $twig
      * @param TagRenderer $tagRenderer
      */
-    public function __construct(RequestStack $requestStack, AuthorizationCheckerInterface $authorizationChecker, TokenStorageInterface $tokenStorage, Environment $twig, TagRenderer $tagRenderer)
-    {
+    public function __construct(
+        RequestStack $requestStack,
+        AuthorizationCheckerInterface $authorizationChecker,
+        TokenStorageInterface $tokenStorage,
+        Environment $twig,
+        TagRenderer $tagRenderer
+    ) {
         $this->request = $requestStack->getMasterRequest();
         $this->authorizationChecker = $authorizationChecker;
         $this->tokenStorage = $tokenStorage;
@@ -68,21 +73,29 @@ final class ResponseEventSubscriber implements EventSubscriberInterface
     public function renderAdminBar(ResponseEvent $event): void
     {
         if (
-        !(
+            !(
             !$this->alreadyRendered
             && $this->tokenStorage->getToken()
             && $this->authorizationChecker->isGranted('Administrator')
             && $event->getResponse()->getStatusCode() === 200
-        )
+            )
         ) {
             return;
         }
 
         $response = $event->getResponse();
-        $navtop = $this->twig->render('@NumberNine/partials/navtop.html.twig', ['entity' => $this->currentContentEntity]);
+        $navtop = $this->twig->render(
+            '@NumberNine/partials/navtop.html.twig',
+            ['entity' => $this->currentContentEntity]
+        );
         $navtopScript = '';
 
-        if ($this->request && ($this->request->attributes->get('_route') === 'numbernine_admin_index' || $this->request->get('n9') === 'admin')) {
+        if (
+            $this->request
+            && (
+                $this->request->attributes->get('_route') === 'numbernine_admin_index'
+                || $this->request->get('n9') === 'admin')
+        ) {
             $navtopStyles = $this->tagRenderer->renderWebpackLinkTags('adminpreviewmode', 'numbernine');
         } else {
             $navtopStyles = $this->tagRenderer->renderWebpackLinkTags('adminbar', 'numbernine');
@@ -90,7 +103,11 @@ final class ResponseEventSubscriber implements EventSubscriberInterface
             $response->setContent(preg_replace('@(<body.*>)@simU', '$1' . $navtop, (string)$response->getContent()));
         }
 
-        $response->setContent(preg_replace('@</head>@i', $navtopStyles . $navtopScript . '</head>', (string)$response->getContent()));
+        $response->setContent(preg_replace(
+            '@</head>@i',
+            $navtopStyles . $navtopScript . '</head>',
+            (string)$response->getContent()
+        ));
 
         $this->alreadyRendered = true;
     }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -25,8 +26,13 @@ final class InspectedRenderable
     private array $exposes;
     private bool $isSerialization;
 
-    public function __construct(RenderableInterface $renderable, string $exclusionPolicy, array $excludes, array $exposes, bool $isSerialization)
-    {
+    public function __construct(
+        RenderableInterface $renderable,
+        string $exclusionPolicy,
+        array $excludes,
+        array $exposes,
+        bool $isSerialization
+    ) {
         $this->renderable = $renderable;
         $this->reflection = new ReflectionClass($renderable);
         $this->exclusionPolicy = $exclusionPolicy;

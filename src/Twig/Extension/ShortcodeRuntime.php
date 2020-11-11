@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -21,8 +22,11 @@ final class ShortcodeRuntime implements RuntimeExtensionInterface
     private AuthorizationCheckerInterface $authorizationChecker;
     private string $environment;
 
-    public function __construct(ShortcodeProcessor $shortcodeProcessor, AuthorizationCheckerInterface $authorizationChecker, string $environment)
-    {
+    public function __construct(
+        ShortcodeProcessor $shortcodeProcessor,
+        AuthorizationCheckerInterface $authorizationChecker,
+        string $environment
+    ) {
         $this->shortcodeProcessor = $shortcodeProcessor;
         $this->authorizationChecker = $authorizationChecker;
         $this->environment = $environment;

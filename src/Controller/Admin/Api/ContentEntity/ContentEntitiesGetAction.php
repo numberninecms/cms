@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -24,7 +25,12 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * @Route("content_entities/{type}", name="numbernine_admin_contententity_get_collection", options={"expose"=true}, methods={"GET"})
+ * @Route(
+ *     "content_entities/{type}",
+ *     name="numbernine_admin_contententity_get_collection",
+ *     options={"expose"=true},
+ *     methods={"GET"}
+ * )
  */
 final class ContentEntitiesGetAction
 {
@@ -39,10 +45,21 @@ final class ContentEntitiesGetAction
      * @throws ExceptionInterface
      * @throws QueryException
      */
-    public function __invoke(Request $request, SerializerInterface $serializer, ContentService $contentService, ResponseFactory $responseFactory, string $type): JsonResponse
-    {
+    public function __invoke(
+        Request $request,
+        SerializerInterface $serializer,
+        ContentService $contentService,
+        ResponseFactory $responseFactory,
+        string $type
+    ): JsonResponse {
         /** @var PaginationParameters $paginationParameters */
-        $paginationParameters = $serializer->denormalize($request->query->all(), PaginationParameters::class, null, [AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]);
+        $paginationParameters = $serializer->denormalize(
+            $request->query->all(),
+            PaginationParameters::class,
+            null,
+            [AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]
+        );
+
         $entities = $contentService->getEntitiesOfType($type, $paginationParameters);
 
         return $responseFactory->createSerializedPaginatedJsonResponse($entities);

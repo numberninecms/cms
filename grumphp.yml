@@ -6,6 +6,8 @@ grumphp:
         twigcs:
             path: './src/'
         phpunit: ~
+        phpcs:
+            standard: PSR12
         git_commit_message:
             allow_empty_message: false
             enforce_capitalized_subject: false

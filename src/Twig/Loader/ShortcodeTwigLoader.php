@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -35,6 +36,9 @@ final class ShortcodeTwigLoader extends FilesystemLoader implements EventSubscri
     public function load(): void
     {
         $this->addPath(__DIR__ . '/../../Shortcode/', 'NumberNineShortcodes');
-        $this->addPath($this->themeStore->getCurrentTheme()->getShortcodePath(), $this->themeStore->getCurrentThemeName() . 'Shortcodes');
+        $this->addPath(
+            $this->themeStore->getCurrentTheme()->getShortcodePath(),
+            $this->themeStore->getCurrentThemeName() . 'Shortcodes'
+        );
     }
 }

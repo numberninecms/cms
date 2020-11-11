@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -26,8 +27,12 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 final class UsersDeleteAction extends AbstractController implements AdminController
 {
-    public function __invoke(Request $request, ResponseFactory $responseFactory, SerializerInterface $serializer, UserRepository $userRepository): JsonResponse
-    {
+    public function __invoke(
+        Request $request,
+        ResponseFactory $responseFactory,
+        SerializerInterface $serializer,
+        UserRepository $userRepository
+    ): JsonResponse {
         $this->denyAccessUnlessGranted(Capabilities::DELETE_USERS);
 
         /** @var array $ids */

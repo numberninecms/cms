@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -66,11 +67,15 @@ final class ContentEntityShowAction extends AbstractController
         $eventDispatcher->dispatch(new CurrentContentEntityEvent($entity));
 
         /** @var ContentEntityShowForwardEvent $contentEntityShowForwardEvent */
-        $contentEntityShowForwardEvent = $eventDispatcher->dispatch(new ContentEntityShowForwardEvent($request, $entity));
+        $contentEntityShowForwardEvent = $eventDispatcher->dispatch(
+            new ContentEntityShowForwardEvent($request, $entity)
+        );
         $forwardResponse = $contentEntityShowForwardEvent->getResponse();
 
         /** @var TemplateToRenderEvent $templateToRenderEvent */
-        $templateToRenderEvent = $eventDispatcher->dispatch(new TemplateToRenderEvent($request, $entity, $templateResolver->resolveSingle($entity)));
+        $templateToRenderEvent = $eventDispatcher->dispatch(
+            new TemplateToRenderEvent($request, $entity, $templateResolver->resolveSingle($entity))
+        );
 
         return $forwardResponse ?? new Response($templateToRenderEvent->getTemplate()->render(['entity' => $entity]));
     }

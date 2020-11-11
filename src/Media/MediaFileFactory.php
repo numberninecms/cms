@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -72,8 +73,13 @@ final class MediaFileFactory
      * @param bool $flush
      * @return MediaFile
      */
-    public function createMediaFileFromFilename(string $filename, UserInterface $user, bool $move = false, bool $overwrite = true, bool $flush = true): MediaFile
-    {
+    public function createMediaFileFromFilename(
+        string $filename,
+        UserInterface $user,
+        bool $move = false,
+        bool $overwrite = true,
+        bool $flush = true
+    ): MediaFile {
         $file = $this->getFileDescriptor($filename);
         $this->moveOrCopy($file, $move, $overwrite);
 
@@ -88,8 +94,13 @@ final class MediaFileFactory
      * @param bool $flush
      * @return MediaFile
      */
-    public function createMediaFileFromFileDescriptor(FileDescriptor $file, UserInterface $user, bool $move = false, bool $overwrite = true, bool $flush = true): MediaFile
-    {
+    public function createMediaFileFromFileDescriptor(
+        FileDescriptor $file,
+        UserInterface $user,
+        bool $move = false,
+        bool $overwrite = true,
+        bool $flush = true
+    ): MediaFile {
         $this->moveOrCopy($file, $move, $overwrite);
 
         return $this->createMediaFile($file, $user, $flush);
@@ -118,7 +129,11 @@ final class MediaFileFactory
      */
     private function getFileDescriptor(string $filename): FileDescriptor
     {
-        if (!file_exists($this->datedAbsoluteUploadPath) && !mkdir($this->datedAbsoluteUploadPath, 0755, true) && !is_dir($this->datedAbsoluteUploadPath)) {
+        if (
+            !file_exists($this->datedAbsoluteUploadPath)
+            && !mkdir($this->datedAbsoluteUploadPath, 0755, true)
+            && !is_dir($this->datedAbsoluteUploadPath)
+        ) {
             throw new RuntimeException(sprintf('Directory "%s" was not created.', $this->datedAbsoluteUploadPath));
         }
 
@@ -151,7 +166,11 @@ final class MediaFileFactory
         }
 
         if (!$result) {
-            throw new FileException(sprintf('Failed to move or copy "%s" to "%s".', $file->getOriginalFilename(), $file->getNewFilename()));
+            throw new FileException(sprintf(
+                'Failed to move or copy "%s" to "%s".',
+                $file->getOriginalFilename(),
+                $file->getNewFilename()
+            ));
         }
     }
 
@@ -173,11 +192,18 @@ final class MediaFileFactory
             ->setTitle(pathinfo($file->getOriginalFilename(), PATHINFO_FILENAME))
             ->setStatus(PublishingStatusInterface::STATUS_PUBLISH)
             ->setSlug(pathinfo($file->getSlugifiedFilename(), PATHINFO_FILENAME))
-            ->setPath($this->uploadPath . str_replace([realpath($this->absoluteUploadPath), '\\'], ['', '/'], (string)realpath($file->getNewFilename())))
+            ->setPath($this->uploadPath . str_replace(
+                [realpath($this->absoluteUploadPath), '\\'],
+                ['', '/'],
+                (string)realpath($file->getNewFilename())
+            ))
             ->setMimeType($mimeType);
 
         if (strpos($mimeType, 'image') === 0) {
-            $processedImage = $this->imageProcessor->processImage($file->getNewFilename(), $this->imageSizeStore->getImageSizes());
+            $processedImage = $this->imageProcessor->processImage(
+                $file->getNewFilename(),
+                $this->imageSizeStore->getImageSizes()
+            );
             $size = $processedImage->getImage()->getSize();
 
             $mediaFile

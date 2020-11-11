@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -20,12 +21,20 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("content_entities/existing-custom-fields/", name="numbernine_admin_contententity_customfields_get_collection", options={"expose"=true}, methods={"GET"})
+ * @Route(
+ *     "content_entities/existing-custom-fields/",
+ *     name="numbernine_admin_contententity_customfields_get_collection",
+ *     options={"expose"=true},
+ *     methods={"GET"}
+ * )
  */
 final class ContentEntitiesExistingCustomFieldsGetAction extends AbstractController implements AdminController
 {
-    public function __invoke(ResponseFactory $responseFactory, ContentService $contentService, ContentEntityRepository $contentEntityRepository): JsonResponse
-    {
+    public function __invoke(
+        ResponseFactory $responseFactory,
+        ContentService $contentService,
+        ContentEntityRepository $contentEntityRepository
+    ): JsonResponse {
         $contentType = $contentService->getContentType('page');
 
         $this->denyAccessUnlessGranted($contentType->getMappedCapability(Capabilities::EDIT_POSTS));

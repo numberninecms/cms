@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -36,7 +37,12 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * @Route("content_entities/{type}/{id<\d+>}/", name="numbernine_admin_contententity_update_item", options={"expose"=true}, methods={"PUT"})
+ * @Route(
+ *     "content_entities/{type}/{id<\d+>}/",
+ *     name="numbernine_admin_contententity_update_item",
+ *     options={"expose"=true},
+ *     methods={"PUT"}
+ * )
  */
 final class ContentEntityUpdateAction extends AbstractController implements AdminController
 {
@@ -119,13 +125,17 @@ final class ContentEntityUpdateAction extends AbstractController implements Admi
         }
 
         $submittedTermIds = array_map(static fn($term) => $term['id'], $data['terms'] ?? []);
-        $existingTermIds = $entity->getContentEntityTerms()->map(fn(ContentEntityTerm $cet) => $cet->getTerm() instanceof Term ? $cet->getTerm()->getId() : null)->toArray();
+        $existingTermIds = $entity->getContentEntityTerms()->map(
+            fn(ContentEntityTerm $cet) => $cet->getTerm() instanceof Term ? $cet->getTerm()->getId() : null
+        )->toArray();
 
         $termIdsToDelete = array_diff($existingTermIds, $submittedTermIds);
         $termIdsToAdd = array_diff($submittedTermIds, $existingTermIds);
 
         foreach ($termIdsToDelete as $id) {
-            $cet = $entity->getContentEntityTerms()->filter(fn(ContentEntityTerm $cet) => $cet->getTerm() instanceof Term ? $cet->getTerm()->getId() === $id : false)->first();
+            $cet = $entity->getContentEntityTerms()->filter(
+                fn(ContentEntityTerm $cet) => $cet->getTerm() instanceof Term ? $cet->getTerm()->getId() === $id : false
+            )->first();
             $entity->removeContentEntityTerm($cet);
         }
 
@@ -168,7 +178,11 @@ final class ContentEntityUpdateAction extends AbstractController implements Admi
         $user = $this->getUser();
         $this->denyAccessUnlessGranted($contentType->getMappedCapability(Capabilities::EDIT_POSTS));
 
-        if ($user instanceof User && $entity->getAuthor() instanceof User && $user->getId() !== $entity->getAuthor()->getId()) {
+        if (
+            $user instanceof User
+            && $entity->getAuthor() instanceof User
+            && $user->getId() !== $entity->getAuthor()->getId()
+        ) {
             $this->denyAccessUnlessGranted($contentType->getMappedCapability(Capabilities::EDIT_OTHERS_POSTS));
         }
     }

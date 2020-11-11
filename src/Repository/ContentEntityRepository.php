@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -63,9 +64,9 @@ final class ContentEntityRepository extends AbstractContentEntityRepository
         return array_unique(
             array_merge(
                 ...array_map(
-                       fn($json) => json_decode($json) ?? [],
-                       array_column($result, 'custom_fields')
-                   )
+                    fn($json) => json_decode($json) ?? [],
+                    array_column($result, 'custom_fields')
+                )
             )
         );
     }

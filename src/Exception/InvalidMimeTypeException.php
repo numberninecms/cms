@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -22,6 +23,10 @@ final class InvalidMimeTypeException extends Exception
      */
     public function __construct(MediaFile $mediaFile, string $expectedMimeType)
     {
-        parent::__construct(sprintf('MediaFile entity with ID "%d" should be of type %s.', $mediaFile->getId(), $expectedMimeType));
+        parent::__construct(sprintf(
+            'MediaFile entity with ID "%d" should be of type %s.',
+            $mediaFile->getId(),
+            $expectedMimeType
+        ));
     }
 }

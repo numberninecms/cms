@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -75,8 +76,10 @@ final class TermRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-    public function getByTaxonomyPaginatedCollectionQueryBuilder(string $taxonomy, PaginationParameters $paginationParameters): QueryBuilder
-    {
+    public function getByTaxonomyPaginatedCollectionQueryBuilder(
+        string $taxonomy,
+        PaginationParameters $paginationParameters
+    ): QueryBuilder {
         $queryBuilder = $this->createQueryBuilder('t')
             ->join('t.taxonomy', 'tax', Join::WITH, 'tax.name = :taxonomy')
             ->setParameter('taxonomy', $taxonomy)

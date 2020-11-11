@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -52,13 +53,20 @@ final class ResponseFactory
      * @return JsonResponse
      * @throws ExceptionInterface
      */
-    public function createSerializedJsonResponse($data = null, array $context = [], int $status = 200, array $headers = []): JsonResponse
-    {
+    public function createSerializedJsonResponse(
+        $data = null,
+        array $context = [],
+        int $status = 200,
+        array $headers = []
+    ): JsonResponse {
         if ($data instanceof ContentEntity) {
             $type = $this->contentService->getContentType((string)$data->getCustomType());
 
             if (empty($context)) {
-                $normalizationContext = $this->annotationReader->getFirstAnnotationOfType($type->getEntityClassName(), NormalizationContext::class) ?? [];
+                $normalizationContext = $this->annotationReader->getFirstAnnotationOfType(
+                    $type->getEntityClassName(),
+                    NormalizationContext::class
+                ) ?? [];
                 $context = array_merge_recursive($context, (array)$normalizationContext);
             }
 
@@ -78,20 +86,32 @@ final class ResponseFactory
      * @return JsonResponse
      * @throws ReflectionException
      */
-    public function createSerializedPaginatedJsonResponse(Paginator $data, array $context = [], int $status = 200, array $headers = []): JsonResponse
-    {
+    public function createSerializedPaginatedJsonResponse(
+        Paginator $data,
+        array $context = [],
+        int $status = 200,
+        array $headers = []
+    ): JsonResponse {
         /** @var ArrayIterator $iterator */
         $iterator = $data->getIterator();
 
         if (empty($context) && $iterator->count() > 0) {
-            $normalizationContext = $this->annotationReader->getFirstAnnotationOfType(get_class($iterator->current()), NormalizationContext::class) ?? [];
+            $normalizationContext = $this->annotationReader->getFirstAnnotationOfType(
+                get_class($iterator->current()),
+                NormalizationContext::class
+            ) ?? [];
             $context = array_merge_recursive($context, (array)$normalizationContext);
         }
 
         $paginator = new NumberNinePaginator($data);
         $normalizedData = $this->normalize($paginator, null, $context);
 
-        return new JsonResponse($this->serializer->serialize($normalizedData, 'json', $context), $status, $headers, true);
+        return new JsonResponse(
+            $this->serializer->serialize($normalizedData, 'json', $context),
+            $status,
+            $headers,
+            true
+        );
     }
 
     public function createSuccessJsonResponse(string $message = '', int $status = 200): JsonResponse

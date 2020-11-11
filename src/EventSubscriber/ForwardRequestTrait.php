@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -20,8 +21,11 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  */
 trait ForwardRequestTrait
 {
-    protected function getForwardResponse(ContentEntityShowForwardEvent $event, string $controller, array $path = []): Response
-    {
+    protected function getForwardResponse(
+        ContentEntityShowForwardEvent $event,
+        string $controller,
+        array $path = []
+    ): Response {
         if (!(property_exists($this, 'httpKernel') && $this->httpKernel instanceof HttpKernelInterface)) {
             throw new LogicException(sprintf('Class %s must inject HttpKernelInterface.', self::class));
         }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -65,13 +66,26 @@ final class RouteRegistrationEventSubscriber implements EventSubscriberInterface
 
         // Homepage route
         $route = new Route('/', ['_controller' => HomepageAction::class], [], [], '', [], ['GET'], '');
-        $routePage = new Route('/page/{page<\d+>}/', ['_controller' => HomepageAction::class], [], [], '', [], ['GET'], '');
+        $routePage = new Route(
+            '/page/{page<\d+>}/',
+            ['_controller' => HomepageAction::class],
+            [],
+            [],
+            '',
+            [],
+            ['GET'],
+            ''
+        );
         $event->addRoute('numbernine_homepage', $route);
         $event->addRoute('numbernine_homepage_page', $routePage);
 
         // Content entities routes
         foreach ($this->contentService->getContentTypes() as $contentType) {
-            $route = (new Route(str_replace('{slug}', '{slug<[\w\-]+>}', $permalinks[$contentType->getName()] ?? $contentType->getPermalink())))
+            $route = (new Route(str_replace(
+                '{slug}',
+                '{slug<[\w\-]+>}',
+                $permalinks[$contentType->getName()] ?? $contentType->getPermalink()
+            )))
                 ->setDefaults(
                     [
                         '_controller' => ContentEntityShowAction::class,

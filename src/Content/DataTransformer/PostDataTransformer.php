@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -24,8 +25,11 @@ final class PostDataTransformer implements DataTransformerInterface
     private ?Request $request;
     private RequestAnalyzer $requestAnalyzer;
 
-    public function __construct(ShortcodeProcessor $shortcodeProcessor, RequestAnalyzer $requestAnalyzer, RequestStack $requestStack)
-    {
+    public function __construct(
+        ShortcodeProcessor $shortcodeProcessor,
+        RequestAnalyzer $requestAnalyzer,
+        RequestStack $requestStack
+    ) {
         $this->shortcodeProcessor = $shortcodeProcessor;
         $this->request = $requestStack->getMasterRequest();
         $this->requestAnalyzer = $requestAnalyzer;
@@ -43,8 +47,14 @@ final class PostDataTransformer implements DataTransformerInterface
      */
     public function transform($object)
     {
-        $isPreviewMode = $this->request && $this->requestAnalyzer->isPreviewMode() && $this->request->get('area') === null;
-        $content = $isPreviewMode ? '<page-builder></page-builder>' : $this->shortcodeProcessor->applyShortcodes((string)$object->getContent());
+        $isPreviewMode = $this->request
+            && $this->requestAnalyzer->isPreviewMode()
+            && $this->request->get('area') === null;
+
+        $content = $isPreviewMode
+            ? '<page-builder></page-builder>'
+            : $this->shortcodeProcessor->applyShortcodes((string)$object->getContent());
+
         $object->setContent($content);
 
         return $object;
