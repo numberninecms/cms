@@ -14,6 +14,8 @@ grumphp:
         composer_normalize:
             indent_size: 4
             indent_style: space
+        yamllint:
+            parse_custom_tags: true
         git_commit_message:
             allow_empty_message: false
             enforce_capitalized_subject: false
