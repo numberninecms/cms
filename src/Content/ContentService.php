@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -19,6 +20,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use LogicException;
 use NumberNine\Annotation\FormType;
 use NumberNine\Entity\ContentEntity;
+use NumberNine\Entity\User;
 use NumberNine\Event\MainLoopQueryEvent;
 use NumberNine\Event\PaginatorEvent;
 use NumberNine\Exception\ContentTypeNotFoundException;
@@ -33,7 +35,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 final class ContentService
 {
@@ -106,15 +107,22 @@ final class ContentService
      * @return Paginator
      * @throws QueryException
      */
-    public function getEntitiesOfType($contentType, PaginationParameters $paginationParameters, Criteria $criteria = null): Paginator
-    {
+    public function getEntitiesOfType(
+        $contentType,
+        PaginationParameters $paginationParameters,
+        Criteria $criteria = null
+    ): Paginator {
         if (is_string($contentType)) {
             $contentType = $this->getContentType($contentType);
         }
 
         /** @var AbstractContentEntityRepository $repository */
         $repository = $this->entityManager->getRepository($contentType->getEntityClassName());
-        $queryBuilder = $repository->getPaginatedCollectionQueryBuilder($contentType->getName(), $paginationParameters, $criteria);
+        $queryBuilder = $repository->getPaginatedCollectionQueryBuilder(
+            $contentType->getName(),
+            $paginationParameters,
+            $criteria
+        );
 
         /** @var MainLoopQueryEvent $mainLoopQueryEvent */
         $mainLoopQueryEvent = $this->eventDispatcher->dispatch(new MainLoopQueryEvent($queryBuilder));
@@ -129,15 +137,19 @@ final class ContentService
     }
 
     /**
-     * Todo: Low priority. Make this method do what it's meant to do. At the moment it queries only the first content type of the array.
+     * Todo: Low priority. Make this method do what it's meant to do.
+     * At the moment it queries only the first content type of the array.
      *
      * @param ContentType[] $contentTypes
      * @param PaginationParameters $paginationParameters
      * @param Criteria|null $criteria
      * @return Paginator
      */
-    public function getEntitiesOfMultipleTypes(array $contentTypes, PaginationParameters $paginationParameters, Criteria $criteria = null): Paginator
-    {
+    public function getEntitiesOfMultipleTypes(
+        array $contentTypes,
+        PaginationParameters $paginationParameters,
+        Criteria $criteria = null
+    ): Paginator {
         if (empty($contentTypes)) {
             throw new RuntimeException('No ContentType object in array.');
         }
@@ -243,7 +255,7 @@ final class ContentService
 
         /** @var ContentEntity $entity */
         $entity = $entityReflection->newInstance();
-        /** @var UserInterface $user */
+        /** @var User $user */
         $user = $this->tokenStorage->getToken() !== null ? $this->tokenStorage->getToken()->getUser() : null;
         $entity->setAuthor($user);
 
@@ -256,8 +268,11 @@ final class ContentService
      * @param array $options
      * @return FormInterface
      */
-    public function getFormTypeEditForType(ContentType $contentType, ContentEntity $entity, array $options = []): FormInterface
-    {
+    public function getFormTypeEditForType(
+        ContentType $contentType,
+        ContentEntity $entity,
+        array $options = []
+    ): FormInterface {
         try {
             $entityReflection = new ReflectionClass($contentType->getEntityClassName());
         } catch (ReflectionException $e) {
@@ -279,19 +294,29 @@ final class ContentService
     private function validateFormTypeAnnotation(?FormType $formType, ContentType $contentType): void
     {
         if (!$formType) {
-            throw new LogicException(sprintf('@FormType annotation missing on class "%s".', $contentType->getEntityClassName()));
+            throw new LogicException(
+                sprintf('@FormType annotation missing on class "%s".', $contentType->getEntityClassName())
+            );
         }
 
         try {
             new ReflectionClass($formType->new);
         } catch (ReflectionException $e) {
-            throw new LogicException(sprintf('Class %s doesn\'t exist in @FormType annotation with parameter "new" for class %s.', $formType->new, $contentType->getEntityClassName()));
+            throw new LogicException(sprintf(
+                'Class %s doesn\'t exist in @FormType annotation with parameter "new" for class %s.',
+                $formType->new,
+                $contentType->getEntityClassName()
+            ));
         }
 
         try {
             new ReflectionClass($formType->edit);
         } catch (ReflectionException $e) {
-            throw new LogicException(sprintf('Class %s doesn\'t exist in @FormType annotation with parameter "edit" for class %s.', $formType->edit, $contentType->getEntityClassName()));
+            throw new LogicException(sprintf(
+                'Class %s doesn\'t exist in @FormType annotation with parameter "edit" for class %s.',
+                $formType->edit,
+                $contentType->getEntityClassName()
+            ));
         }
     }
 }

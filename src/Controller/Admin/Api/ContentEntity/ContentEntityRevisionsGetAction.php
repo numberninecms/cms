@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -20,17 +21,33 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("content_entities/{type}/{id<\d+>}/revisions/", name="numbernine_admin_contententity_revisions_get_collection", options={"expose"=true}, methods={"GET"}, priority="100")
+ * @Route(
+ *     "content_entities/{type}/{id<\d+>}/revisions/",
+ *     name="numbernine_admin_contententity_revisions_get_collection",
+ *     options={"expose"=true},
+ *     methods={"GET"},
+ *     priority="100"
+ * )
  */
 final class ContentEntityRevisionsGetAction
 {
-    public function __invoke(Request $request, ResponseFactory $responseFactory, EntityManagerInterface $entityManager, ContentEntity $entity): JsonResponse
-    {
+    public function __invoke(
+        Request $request,
+        ResponseFactory $responseFactory,
+        EntityManagerInterface $entityManager,
+        ContentEntity $entity
+    ): JsonResponse {
         /** @var LogEntryRepository $logEntryRepository */
         $logEntryRepository = $entityManager->getRepository(LogEntry::class);
 
         $entries = $logEntryRepository->getLogEntries($entity);
-        $revisions = array_map(fn(LogEntry $entry) => array_merge($entry->getData(), ['version' => $entry->getVersion(), 'date' => $entry->getLoggedAt()]), $entries);
+        $revisions = array_map(
+            fn(LogEntry $entry) => array_merge(
+                $entry->getData(),
+                ['version' => $entry->getVersion(), 'date' => $entry->getLoggedAt()]
+            ),
+            $entries
+        );
 
         return $responseFactory->createSerializedJsonResponse($revisions);
     }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -20,7 +21,7 @@ use NumberNine\Repository\ContentEntityRepository;
 use NumberNine\Repository\MenuRepository;
 use NumberNine\Content\PermalinkGenerator;
 
-use function NumberNine\Util\ArrayUtil\array_depth;
+use function NumberNine\Common\Util\ArrayUtil\array_depth;
 
 /**
  * @Shortcode(name="menu", label="Menu", editable=true, icon="menu")
@@ -43,8 +44,11 @@ final class MenuShortcode extends AbstractShortcode
      */
     private ?array $menuItems = null;
 
-    public function __construct(MenuRepository $menuRepository, ContentEntityRepository $contentEntityRepository, PermalinkGenerator $permalinkGenerator)
-    {
+    public function __construct(
+        MenuRepository $menuRepository,
+        ContentEntityRepository $contentEntityRepository,
+        PermalinkGenerator $permalinkGenerator
+    ) {
         $this->menuRepository = $menuRepository;
         $this->contentEntityRepository = $contentEntityRepository;
         $this->permalinkGenerator = $permalinkGenerator;
@@ -121,7 +125,10 @@ final class MenuShortcode extends AbstractShortcode
             function ($menuItem) use ($entities) {
                 if (!empty($menuItem['entityId'])) {
                     $menuItem['link'] = $this->permalinkGenerator->generateContentEntityPermalink(
-                        current(array_filter($entities, fn(ContentEntity $entity) => $entity->getId() === (int)$menuItem['entityId']))
+                        current(array_filter(
+                            $entities,
+                            fn(ContentEntity $entity) => $entity->getId() === (int)$menuItem['entityId']
+                        ))
                     );
                 }
 

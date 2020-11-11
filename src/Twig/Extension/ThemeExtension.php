@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -28,7 +29,11 @@ final class ThemeExtension extends AbstractExtension
             new TwigFunction('N9_setting', [ThemeRuntime::class, 'getSetting']),
             new TwigFunction('N9_entity_url', [ThemeRuntime::class, 'getEntityUrl']),
             new TwigFunction('N9_entity_link', [ThemeRuntime::class, 'getEntitylink'], ['is_safe' => ['html']]),
-            new TwigFunction('N9_entity_admin_url', [ThemeRuntime::class, 'getEntityAdminUrl'], ['is_safe' => ['html']]),
+            new TwigFunction(
+                'N9_entity_admin_url',
+                [ThemeRuntime::class, 'getEntityAdminUrl'],
+                ['is_safe' => ['html']]
+            ),
             new TwigFunction('N9_terms_links', [ThemeRuntime::class, 'getTermsLinkList'], ['is_safe' => ['html']]),
             new TwigFunction('N9_term_link', [ThemeRuntime::class, 'getTermLink'], ['is_safe' => ['html']]),
             new TwigFunction('N9_base_template', [ThemeRuntime::class, 'getBaseTemplate']),

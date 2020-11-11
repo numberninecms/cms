@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -10,13 +11,16 @@
 
 namespace NumberNine\Security;
 
+use NumberNine\Entity\User;
 use NumberNine\Event\LoginPathsEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
@@ -37,17 +41,23 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implem
     private CsrfTokenManagerInterface $csrfTokenManager;
     private UserPasswordEncoderInterface $passwordEncoder;
     private EventDispatcherInterface $eventDispatcher;
+    private AuthorizationCheckerInterface $authorizationChecker;
+    private TokenStorageInterface $tokenStorage;
 
     public function __construct(
         UrlGeneratorInterface $urlGenerator,
         CsrfTokenManagerInterface $csrfTokenManager,
         UserPasswordEncoderInterface $passwordEncoder,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        AuthorizationCheckerInterface $authorizationChecker,
+        TokenStorageInterface $tokenStorage
     ) {
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
         $this->eventDispatcher = $eventDispatcher;
+        $this->authorizationChecker = $authorizationChecker;
+        $this->tokenStorage = $tokenStorage;
     }
 
     public function supports(Request $request): bool
@@ -101,6 +111,14 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implem
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): Response
     {
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
+            if ($request->attributes->get('_route') === 'numbernine_login') {
+                if ($this->authorizationChecker->isGranted(Capabilities::ACCESS_ADMIN)) {
+                    $targetPath = $this->urlGenerator->generate('numbernine_admin_index');
+                } else {
+                    $targetPath = $this->urlGenerator->generate('numbernine_homepage');
+                }
+            }
+
             return new RedirectResponse($targetPath);
         }
 
@@ -124,5 +142,16 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implem
     public function getPassword($credentials): ?string
     {
         return $credentials['password'];
+    }
+
+    public function start(Request $request, AuthenticationException $authException = null)
+    {
+        $token = $this->tokenStorage->getToken();
+
+        $url = ($token && $token->getUser() instanceof User)
+            ? $this->urlGenerator->generate('numbernine_homepage')
+            : $this->getLoginUrl();
+
+        return new RedirectResponse($url);
     }
 }

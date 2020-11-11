@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -26,6 +27,10 @@ final class InvalidContentTypeException extends LogicException
      */
     public function __construct(ContentType $contentType)
     {
-        parent::__construct(sprintf('%s must extend %s to qualify as content type.', $contentType->getEntityClassName(), ContentEntity::class));
+        parent::__construct(sprintf(
+            '%s must extend %s to qualify as content type.',
+            $contentType->getEntityClassName(),
+            ContentEntity::class
+        ));
     }
 }

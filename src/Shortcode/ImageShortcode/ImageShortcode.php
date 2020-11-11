@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -10,7 +11,6 @@
 
 namespace NumberNine\Shortcode\ImageShortcode;
 
-use InvalidArgumentException;
 use NumberNine\Annotation\Form\Control;
 use NumberNine\Annotation\Shortcode;
 use NumberNine\Annotation\Shortcode\Exclude;
@@ -19,8 +19,8 @@ use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\CacheableContent;
 use NumberNine\Repository\MediaFileRepository;
 
-use function NumberNine\Util\ArrayUtil\array_implode_associative;
-use function NumberNine\Util\ArrayUtil\array_set_if_value_exists;
+use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
+use function NumberNine\Common\Util\ArrayUtil\array_set_if_value_exists;
 
 /**
  * @Shortcode(name="image", label="Image", editable=true, icon="image")
@@ -56,6 +56,11 @@ final class ImageShortcode extends AbstractShortcode implements CacheableContent
      * @Control\SliderInput(label="Maximum height", max=1000.0, suffix="px")
      */
     private int $maxHeight = 200;
+
+    /**
+     * @Control\TextBox(label="Alternative text")
+     */
+    private ?string $alt = null;
 
     public function __construct(MediaFileRepository $mediaFileRepository, string $uploadPath)
     {
@@ -143,11 +148,28 @@ final class ImageShortcode extends AbstractShortcode implements CacheableContent
         $this->maxHeight = $maxHeight;
     }
 
+    public function getAlt(): ?string
+    {
+        return $this->alt;
+    }
+
+    public function setAlt(?string $alt): void
+    {
+        $this->alt = $alt;
+    }
+
     /**
      * @Shortcode\Exclude
      */
     public function getCacheIdentifier(): string
     {
-        return sprintf('shortcode_image_%s_%s_%d_%d', $this->id, $this->fromTitle, $this->maxWidth, $this->maxHeight);
+        return sprintf(
+            'shortcode_image_%s_%s_%d_%d_%d',
+            $this->id,
+            $this->fromTitle,
+            $this->maxWidth,
+            $this->maxHeight,
+            $this->alt
+        );
     }
 }

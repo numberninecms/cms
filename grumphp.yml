@@ -1,11 +1,32 @@
-parameters:
-    bin_dir: vendor/bin
+grumphp:
     tasks:
         phpstan:
             configuration: './phpstan.neon'
             level: 8
-        #        twigcs:
-        #            path: './src/'
+        twigcs:
+            path: './src/'
+        phpunit: ~
+        phpcs:
+            standard: PSR12
+        composer:
+            no_check_lock: true
+            no_local_repository: true
+        composer_normalize:
+            indent_size: 4
+            indent_style: space
+        yamllint:
+            parse_custom_tags: true
+        phplint: ~
+        phpparser:
+            visitors:
+                no_exit_statements: ~
+                forbidden_function_calls:
+                    blacklist:
+                        - die
+                        - dd
+                        - dump
+                        - var_dump
+                        - print_r
         git_commit_message:
             allow_empty_message: false
             enforce_capitalized_subject: false

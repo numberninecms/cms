@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -20,12 +21,20 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/users/roles/{id}/", name="numbernine_admin_user_roles_delete_item", options={"expose"=true}, methods={"DELETE"})
+ * @Route(
+ *     "/users/roles/{id}/",
+ *     name="numbernine_admin_user_roles_delete_item",
+ *     options={"expose"=true},
+ *     methods={"DELETE"}
+ * )
  */
 final class UserRolesDeleteAction extends AbstractController implements AdminController
 {
-    public function __invoke(EntityManagerInterface $entityManager, ResponseFactory $responseFactory, UserRole $userRole): JsonResponse
-    {
+    public function __invoke(
+        EntityManagerInterface $entityManager,
+        ResponseFactory $responseFactory,
+        UserRole $userRole
+    ): JsonResponse {
         $this->denyAccessUnlessGranted(Capabilities::MANAGE_ROLES);
 
         $entityManager->remove($userRole);

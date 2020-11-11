@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -60,7 +61,13 @@ final class IndexAction extends AbstractController
             sprintf('term_index_%s', sha1($request->getRequestUri())),
             static function () use ($request, $serializer, $configurationReadWriter, $contentService, $term) {
                 /** @var PaginationParameters $paginationParameters */
-                $paginationParameters = $serializer->denormalize($request->query->all(), PaginationParameters::class, null, [AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]);
+                $paginationParameters = $serializer->denormalize(
+                    $request->query->all(),
+                    PaginationParameters::class,
+                    null,
+                    [AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]
+                );
+
                 $paginationParameters
                     ->setFetchCount($configurationReadWriter->read(Settings::POSTS_PER_PAGE, 12))
                     ->setOrderBy('createdAt')

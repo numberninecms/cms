@@ -2,6 +2,7 @@
 <html class="n9-h-full">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <title>{% block title %}{% endblock %}</title>
 
     {% block stylesheets %}
@@ -13,11 +14,9 @@
 </head>
 <body class="n9-h-full {% block body_classes %}{% endblock %}">
 <div class="n9-container n9-mx-auto n9-h-full">
-    <div class="n9-flex n9-flex-row n9-justify-center n9-items-center n9-h-full">
-        <div class="n9-w-1/2">
-            <div class="n9-card">
-                {% block body %}{% endblock %}
-            </div>
+    <div class="n9-flex n9-flex-row n9-justify-center n9-items-center n9-h-full n9-p-5">
+        <div class="n9-card">
+            {% block body %}{% endblock %}
         </div>
     </div>
 </div>

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -10,7 +11,7 @@
 
 namespace NumberNine\Theme\CssFramework;
 
-use function NumberNine\Util\ArrayUtil\in_array_all;
+use function NumberNine\Common\Util\ArrayUtil\in_array_all;
 
 final class TailwindCss implements CssFrameworkInterface
 {
@@ -25,7 +26,7 @@ final class TailwindCss implements CssFrameworkInterface
                 $classes[] = 'md:hidden';
             } elseif (in_array('md', $hiddenViewSizes, true)) {
                 $classes[] = 'md:hidden lg:block';
-            } elseif (in_array('lg', $hiddenViewSizes, true)) {
+            } elseif (in_array('lg', $hiddenViewSizes, true)) { /* @phpstan-ignore-line */
                 $classes[] = 'lg:hidden';
             }
 

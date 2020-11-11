@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -12,10 +13,6 @@ namespace NumberNine\Model\Theme;
 
 use NumberNine\Entity\ThemeOptions;
 use ReflectionClass;
-
-use Symfony\Component\Yaml\Yaml;
-
-use function NumberNine\Util\ArrayUtil\array_merge_recursive_fixed;
 
 abstract class AbstractTheme implements ThemeInterface
 {
@@ -129,7 +126,11 @@ abstract class AbstractTheme implements ThemeInterface
 
     public function getComponentNamespace(): string
     {
-        return $this->getNamespace() . '\\' . trim(str_replace($this->getRootPath(), '', $this->getComponentPath()), '/');
+        return $this->getNamespace() . '\\' . trim(str_replace(
+            $this->getRootPath(),
+            '',
+            $this->getComponentPath()
+        ), '/');
     }
 
     public function getShortcodePath(): string

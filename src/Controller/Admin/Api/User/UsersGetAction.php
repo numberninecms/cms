@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -28,12 +29,21 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 final class UsersGetAction extends AbstractController implements AdminController
 {
-    public function __invoke(Request $request, ResponseFactory $responseFactory, SerializerInterface $serializer, UserRepository $userRepository): JsonResponse
-    {
+    public function __invoke(
+        Request $request,
+        ResponseFactory $responseFactory,
+        SerializerInterface $serializer,
+        UserRepository $userRepository
+    ): JsonResponse {
         $this->denyAccessUnlessGranted(Capabilities::LIST_USERS);
 
         /** @var PaginationParameters $paginationParameters */
-        $paginationParameters = $serializer->denormalize($request->query->all(), PaginationParameters::class, null, [AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]);
+        $paginationParameters = $serializer->denormalize(
+            $request->query->all(),
+            PaginationParameters::class,
+            null,
+            [AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]
+        );
 
         $queryBuilder = $userRepository->getPaginatedCollectionQueryBuilder($paginationParameters);
         $users = new Paginator($queryBuilder, true);

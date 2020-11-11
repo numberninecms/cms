@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -23,8 +24,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class MediaFileUploadAction
 {
-    public function __invoke(Request $request, MediaFileFactory $mediaFileFactory, ResponseFactory $responseFactory): JsonResponse
-    {
+    public function __invoke(
+        Request $request,
+        MediaFileFactory $mediaFileFactory,
+        ResponseFactory $responseFactory
+    ): JsonResponse {
         /** @var UploadedFile|null $file */
         $file = $request->files->get('file');
 
@@ -32,6 +36,8 @@ final class MediaFileUploadAction
             throw new RuntimeException('No file uploaded.');
         }
 
-        return $responseFactory->createSerializedJsonResponse($mediaFileFactory->createMediaFileFromUploadedFile($file));
+        return $responseFactory->createSerializedJsonResponse(
+            $mediaFileFactory->createMediaFileFromUploadedFile($file)
+        );
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -38,7 +39,9 @@ trait BatchSetPropertiesTrait
             try {
                 if (method_exists($this, $setter)) {
                     $reflectionMethod = new ReflectionMethod($this, $setter);
-                    if (($parameters = $reflectionMethod->getParameters()) && count($parameters) > 0) {
+                    $parameters = $reflectionMethod->getParameters();
+
+                    if (is_array($parameters) && count($parameters) > 0) {
                         if ($type = $parameters[0]->getType()) {
                             if ($field !== 'content') {
                                 $value = $this->prepareValue($value);

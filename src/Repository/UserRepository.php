@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -12,10 +13,10 @@ namespace NumberNine\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 use InvalidArgumentException;
 use NumberNine\Entity\Comment;
 use NumberNine\Entity\ContentEntity;
@@ -82,8 +83,10 @@ final class UserRepository extends ServiceEntityRepository
      * @return QueryBuilder
      * @throws QueryException
      */
-    public function getPaginatedCollectionQueryBuilder(PaginationParameters $paginationParameters, Criteria $criteria = null): QueryBuilder
-    {
+    public function getPaginatedCollectionQueryBuilder(
+        PaginationParameters $paginationParameters,
+        Criteria $criteria = null
+    ): QueryBuilder {
         $queryBuilder = $this->createQueryBuilder('u')
             ->select('u', 'r')
             ->join('u.userRoles', 'r')
@@ -116,7 +119,11 @@ final class UserRepository extends ServiceEntityRepository
     public function deleteUsers(array $ids, string $associatedContent): void
     {
         if (!in_array($associatedContent, [self::DELETE_MODE_REASSIGN, self::DELETE_MODE_DELETE], true)) {
-            throw new InvalidArgumentException(sprintf('Parameter $associatedContent value must be one of "%s" or "%s".', self::DELETE_MODE_REASSIGN, self::DELETE_MODE_DELETE));
+            throw new InvalidArgumentException(sprintf(
+                'Parameter $associatedContent value must be one of "%s" or "%s".',
+                self::DELETE_MODE_REASSIGN,
+                self::DELETE_MODE_DELETE
+            ));
         }
 
         /** @var ?User $currentUser */

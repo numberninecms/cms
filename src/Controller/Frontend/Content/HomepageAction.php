@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -24,8 +25,11 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final class HomepageAction extends AbstractController
 {
-    public function __invoke(Request $request, ContentService $contentService, ConfigurationReadWriter $configurationReadWriter): Response
-    {
+    public function __invoke(
+        Request $request,
+        ContentService $contentService,
+        ConfigurationReadWriter $configurationReadWriter
+    ): Response {
         $homepage = $configurationReadWriter->read(Settings::PAGE_FOR_FRONT);
 
         if ($homepage) {

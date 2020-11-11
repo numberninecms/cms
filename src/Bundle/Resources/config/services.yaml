@@ -15,6 +15,7 @@ services:
             iterable $capabilities: !tagged_iterator numbernine.security.capability
             iterable $normalizers: !tagged_iterator numbernine.serializer.normalizer
             iterable $dataTransformers: !tagged_iterator numbernine.data_transformer
+            string $projectPath: '%kernel.project_dir%'
             string $publicPath: '%numbernine.config.public_path%'
             string $templatePath: '%twig.default_path%'
             string $adminMenuConfigPath: '%numbernine.config.admin_config_path%'
@@ -45,12 +46,12 @@ services:
     NumberNine\Annotation\ExtendedReader: '@NumberNine\Annotation\ExtendedAnnotationReader'
 
     # Slug
-    NumberNine\Util\StringUtil\ExtendedSlugger:
+    NumberNine\Common\Util\StringUtil\ExtendedSlugger:
         decorates: slugger
         arguments:
             - '@.inner'
             - '%kernel.default_locale%'
-    NumberNine\Util\StringUtil\ExtendedSluggerInterface: '@NumberNine\Util\StringUtil\ExtendedSlugger'
+    NumberNine\Common\Util\StringUtil\ExtendedSluggerInterface: '@NumberNine\Common\Util\StringUtil\ExtendedSlugger'
 
     NumberNine\Theme\PresetFinderInterface: '@NumberNine\Theme\PresetFinder'
     NumberNine\Theme\CssFramework\CssFrameworkInterface: '@NumberNine\Theme\CssFramework\TailwindCss'

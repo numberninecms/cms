@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -46,7 +47,8 @@ final class SocialSharer
     {
         $this->validateUrl($url);
 
-        return 'mailto:enteryour@addresshere.com?subject=' . rawurlencode($subject) . '&body=Check%20this%20out:%20' . $url;
+        return 'mailto:enteryour@addresshere.com?subject=' .
+            rawurlencode($subject) . '&body=Check%20this%20out:%20' . $url;
     }
 
     private function validateUrl(string $url): void

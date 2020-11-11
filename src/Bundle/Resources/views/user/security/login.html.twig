@@ -1,6 +1,6 @@
 {% extends '@NumberNine/user/base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Administration - NumberNine{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -11,48 +11,40 @@
 
 {% block body %}
     <h1>Login</h1>
+    <a href="{{ path('numbernine_homepage') }}" class="n9-back-to-front"><i class="n9-fa n9-fa-arrow-left"></i> Back to front page</a>
 
-    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-        {#
-                <div class="n9-mb-3">
-                    You are logged in as {{ app.user.username }}, <a href="{{ path('numbernine_logout') }}">Logout</a>
-                </div>
-        #}
-    {% else %}
+    <form method="post">
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
 
-        <form method="post">
-            {% if error %}
-                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
+        <div class="n9-mb-4">
+            <label class="" for="username">
+                Username
+            </label>
+            <input id="username" type="text" value="{{ last_username }}" name="username" required autofocus>
+        </div>
+        <div class="n9-mb-4">
+            <label for="password">
+                Password
+            </label>
+            <input id="password" type="password" name="password" required>
+        </div>
+        <div class="n9-mb-6">
+            <label>
+                <input type="checkbox" name="_remember_me"> Remember me
+            </label>
+        </div>
 
-            <div class="n9-mb-4">
-                <label class="" for="username">
-                    Username
-                </label>
-                <input id="username" type="text" value="{{ last_username }}" name="username" required autofocus>
-            </div>
-            <div class="n9-mb-4">
-                <label for="password">
-                    Password
-                </label>
-                <input id="password" type="password" name="password" required>
-            </div>
-            <div class="n9-mb-6">
-                <label>
-                    <input type="checkbox" name="_remember_me"> Remember me
-                </label>
-            </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-            <div class="n9-form-footer">
-                <button type="submit">
-                    Sign In
-                </button>
-                <a href="#">
-                    Forgot Password?
-                </a>
-            </div>
-        </form>
-    {% endif %}
+        <div class="n9-form-footer">
+            <button type="submit">
+                Sign In
+            </button>
+            <a href="#">
+                Forgot Password?
+            </a>
+        </div>
+    </form>
 {% endblock %}

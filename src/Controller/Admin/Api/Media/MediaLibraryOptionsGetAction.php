@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -14,10 +15,15 @@ use NumberNine\Http\ResponseFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-use function NumberNine\Util\ConfigUtil\get_file_upload_max_size;
+use function NumberNine\Common\Util\ConfigUtil\get_file_upload_max_size;
 
 /**
- * @Route("/media_files/options", name="numbernine_admin_media_files_get_options", options={"expose"=true}, methods={"GET"})
+ * @Route(
+ *     "/media_files/options",
+ *     name="numbernine_admin_media_files_get_options",
+ *     options={"expose"=true},
+ *     methods={"GET"}
+ * )
  */
 final class MediaLibraryOptionsGetAction
 {

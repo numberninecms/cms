@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -39,7 +40,9 @@ final class MakeComponentCommand extends Command
     {
         $this
             ->setDescription('Creates a new component')
-            ->setHelp('This command allows you to create a component in the current theme, or in the theme your choose.')
+            ->setHelp(
+                'This command allows you to create a component in the current theme, or in the theme your choose.'
+            )
             ->addArgument('component-name', InputArgument::OPTIONAL, 'Component name')
             ->addOption('theme', 't', InputOption::VALUE_OPTIONAL, 'Theme to create component into');
     }
@@ -52,7 +55,9 @@ final class MakeComponentCommand extends Command
         $themeName = $input->getOption('theme');
 
         try {
-            $theme = !$themeName ? $this->themeStore->getCurrentTheme() : $this->themeStore->getTheme((string)$themeName);
+            $theme = !$themeName
+                ? $this->themeStore->getCurrentTheme()
+                : $this->themeStore->getTheme((string)$themeName);
         } catch (ThemeNotFoundException $e) {
             $io->error($e->getMessage());
             return 1;
@@ -63,7 +68,7 @@ final class MakeComponentCommand extends Command
             return 1;
         }
 
-        if (!($componentName)) {
+        if (!empty($componentName)) {
             $io->title('Create a new component');
 
             if (!$componentName) {
@@ -117,7 +122,8 @@ TEMPLATE
         $io->writeln("<info>{$componentPath}template.html.twig</info>");
         $io->newLine();
         $componentName = str_replace('\\', '/', $componentName);
-        $io->writeln("Use it in your template with the following twig command: <comment>{{ N9_component('$componentName') }}</comment>");
+        $io->writeln("Use it in your template with the following twig command: ' .
+            '<comment>{{ N9_component('$componentName') }}</comment>");
         $io->newLine();
 
         return 0;

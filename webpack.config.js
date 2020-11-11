@@ -9,9 +9,9 @@ Encore
     .setPublicPath('/bundles/numbernine/build')
     .setManifestKeyPrefix('bundles/numbernine/build/')
 
-    .addEntry('adminbar', './assets/ts/adminbar.ts')
-    .addStyleEntry('adminpreviewmode', './assets/scss/page_builder.scss')
-    .addStyleEntry('security', './assets/scss/security.scss')
+    .addEntry('adminbar', './assets/ts/adminbar.ts', { preload: true, async: true })
+    .addStyleEntry('adminpreviewmode', './assets/scss/page_builder.scss', { preload: true, async: true })
+    .addStyleEntry('security', './assets/scss/security.scss', { preload: true, async: true })
 
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
@@ -30,9 +30,9 @@ Encore
         exclude: /node_modules/,
         loader: 'eslint-loader',
     })
-    .enablePostCssLoader(function (options) {
-        options.plugins = function () {
-            return [
+    .enablePostCssLoader((options) => {
+        options.postcssOptions = {
+            plugins: [
                 require('tailwindcss'),
                 require('autoprefixer'),
                 require('postcss-prefixer')({

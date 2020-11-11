@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -21,7 +22,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("content_entities/{type}/new/", name="numbernine_admin_contententity_new_item", options={"expose"=true}, methods={"GET"}, priority="50")
+ * @Route(
+ *     "content_entities/{type}/new/",
+ *     name="numbernine_admin_contententity_new_item",
+ *     options={"expose"=true},
+ *     methods={"GET"},
+ *     priority="50"
+ * )
  */
 final class ContentEntityCreateAction extends AbstractController implements AdminController
 {
@@ -33,8 +40,13 @@ final class ContentEntityCreateAction extends AbstractController implements Admi
      * @param string $type
      * @return Response
      */
-    public function __invoke(Request $request, EntityManagerInterface $entityManager, ContentService $contentService, ResponseFactory $responseFactory, string $type): Response
-    {
+    public function __invoke(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        ContentService $contentService,
+        ResponseFactory $responseFactory,
+        string $type
+    ): Response {
         $contentType = $contentService->getContentType($type);
         $class = $contentType->getEntityClassName();
 

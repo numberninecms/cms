@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -18,11 +19,18 @@ use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\ResponsiveShortcodeInterface;
 use NumberNine\Model\Shortcode\ResponsiveShortcodeTrait;
 
-use function NumberNine\Util\ArrayUtil\array_implode_associative;
-use function NumberNine\Util\ArrayUtil\array_set_if_value_exists;
+use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
+use function NumberNine\Common\Util\ArrayUtil\array_set_if_value_exists;
 
 /**
- * @Shortcode(name="section", label="Section", container=true, editable=true, icon="web", siblingsPosition={"top", "bottom"})
+ * @Shortcode(
+ *     name="section",
+ *     label="Section",
+ *     container=true,
+ *     editable=true,
+ *     icon="web",
+ *     siblingsPosition={"top", "bottom"}
+ * )
  */
 final class SectionShortcode extends AbstractShortcode implements ResponsiveShortcodeInterface
 {
@@ -120,7 +128,12 @@ final class SectionShortcode extends AbstractShortcode implements ResponsiveShor
         $styles = [];
 
         array_set_if_value_exists($styles, 'background-color', $this->backgroundColor);
-        array_set_if_value_exists($styles, 'background-image', $this->background, sprintf("url('%s')", $this->background));
+        array_set_if_value_exists(
+            $styles,
+            'background-image',
+            $this->background,
+            sprintf("url('%s')", $this->background)
+        );
         array_set_if_value_exists($styles, 'background-position', $this->backgroundPosition);
 
         return sprintf(' style="%s"', array_implode_associative($styles, ';', ':'));

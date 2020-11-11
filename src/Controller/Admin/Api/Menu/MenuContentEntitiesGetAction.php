@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -19,14 +20,31 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/menus/entities/{type}/{page<\d+>}/", name="numbernine_admin_menus_get_entities", options={"expose"=true}, methods={"GET"})
+ * @Route(
+ *     "/menus/entities/{type}/{page<\d+>}/",
+ *     name="numbernine_admin_menus_get_entities",
+ *     options={"expose"=true},
+ *     methods={"GET"}
+ * )
  */
 final class MenuContentEntitiesGetAction implements AdminController
 {
-    public function __invoke(ResponseFactory $responseFactory, ContentService $contentService, ContentEntityRepository $contentEntityRepository, string $type, int $page): JsonResponse
-    {
-        $contentEntities = $contentEntityRepository->getSimplePaginatedCollectionQueryBuilder($type, ($page - 1) * 20, 20);
+    public function __invoke(
+        ResponseFactory $responseFactory,
+        ContentService $contentService,
+        ContentEntityRepository $contentEntityRepository,
+        string $type,
+        int $page
+    ): JsonResponse {
+        $contentEntities = $contentEntityRepository->getSimplePaginatedCollectionQueryBuilder(
+            $type,
+            ($page - 1) * 20,
+            20
+        );
 
-        return $responseFactory->createSerializedPaginatedJsonResponse(new Paginator($contentEntities), ['groups' => ['menu_get']]);
+        return $responseFactory->createSerializedPaginatedJsonResponse(
+            new Paginator($contentEntities),
+            ['groups' => ['menu_get']]
+        );
     }
 }

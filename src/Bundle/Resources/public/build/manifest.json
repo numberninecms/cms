@@ -1,11 +1,12 @@
 {
-  "bundles/numbernine/build/0.d40e6cc3.css": "/bundles/numbernine/build/0.d40e6cc3.css",
-  "bundles/numbernine/build/0.cf0f21ec.js": "/bundles/numbernine/build/0.cf0f21ec.js",
-  "bundles/numbernine/build/adminbar.css": "/bundles/numbernine/build/adminbar.6c9274f4.css",
-  "bundles/numbernine/build/adminbar.js": "/bundles/numbernine/build/adminbar.c6af44f4.js",
-  "bundles/numbernine/build/adminpreviewmode.css": "/bundles/numbernine/build/adminpreviewmode.3390ba71.css",
-  "bundles/numbernine/build/runtime.js": "/bundles/numbernine/build/runtime.95b22588.js",
-  "bundles/numbernine/build/security.css": "/bundles/numbernine/build/security.ef9ceed5.css",
+  "bundles/numbernine/build/adminbar.css": "/bundles/numbernine/build/adminbar.css",
+  "bundles/numbernine/build/adminbar.js": "/bundles/numbernine/build/adminbar.js",
+  "bundles/numbernine/build/adminpreviewmode.css": "/bundles/numbernine/build/adminpreviewmode.css",
+  "bundles/numbernine/build/runtime.js": "/bundles/numbernine/build/runtime.js",
+  "bundles/numbernine/build/security.css": "/bundles/numbernine/build/security.css",
+  "bundles/numbernine/build/vendors~adminbar.js": "/bundles/numbernine/build/vendors~adminbar.js",
+  "bundles/numbernine/build/vendors~adminpreviewmode~security.css": "/bundles/numbernine/build/vendors~adminpreviewmode~security.css",
+  "bundles/numbernine/build/vendors~adminpreviewmode~security.js": "/bundles/numbernine/build/vendors~adminpreviewmode~security.js",
   "bundles/numbernine/build/fonts/fa-brands-400.eot": "/bundles/numbernine/build/fonts/fa-brands-400.0fea2496.eot",
   "bundles/numbernine/build/fonts/fa-brands-400.woff2": "/bundles/numbernine/build/fonts/fa-brands-400.c967a94c.woff2",
   "bundles/numbernine/build/fonts/fa-brands-400.woff": "/bundles/numbernine/build/fonts/fa-brands-400.dc2cbadd.woff",
@@ -18,7 +19,9 @@
   "bundles/numbernine/build/fonts/fa-solid-900.eot": "/bundles/numbernine/build/fonts/fa-solid-900.3a24a60e.eot",
   "bundles/numbernine/build/fonts/fa-solid-900.woff2": "/bundles/numbernine/build/fonts/fa-solid-900.3ceb50e7.woff2",
   "bundles/numbernine/build/fonts/fa-solid-900.woff": "/bundles/numbernine/build/fonts/fa-solid-900.46fdbd2d.woff",
+  "bundles/numbernine/build/images/NumberNineWithoutText.png": "/bundles/numbernine/build/images/NumberNineWithoutText.c117dd5c.png",
   "bundles/numbernine/build/images/fa-brands-400.svg": "/bundles/numbernine/build/images/fa-brands-400.e33e2cf6.svg",
   "bundles/numbernine/build/images/fa-regular-400.svg": "/bundles/numbernine/build/images/fa-regular-400.06b9d19c.svg",
-  "bundles/numbernine/build/images/fa-solid-900.svg": "/bundles/numbernine/build/images/fa-solid-900.371dbce0.svg"
+  "bundles/numbernine/build/images/fa-solid-900.svg": "/bundles/numbernine/build/images/fa-solid-900.371dbce0.svg",
+  "bundles/numbernine/build/images/login_background.jpg": "/bundles/numbernine/build/images/login_background.5d371e91.jpg"
 }

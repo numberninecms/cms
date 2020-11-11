@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -21,7 +22,12 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * @Route("content_entities/{type}/restore-collection", name="numbernine_admin_contententity_restore_collection", options={"expose"=true}, methods={"POST"})
+ * @Route(
+ *     "content_entities/{type}/restore-collection",
+ *     name="numbernine_admin_contententity_restore_collection",
+ *     options={"expose"=true},
+ *     methods={"POST"}
+ * )
  */
 final class ContentEntitiesRestoreAction
 {
@@ -33,8 +39,13 @@ final class ContentEntitiesRestoreAction
      * @param string $type
      * @return JsonResponse
      */
-    public function __invoke(Request $request, SerializerInterface $serializer, ContentService $contentService, ResponseFactory $responseFactory, string $type): JsonResponse
-    {
+    public function __invoke(
+        Request $request,
+        SerializerInterface $serializer,
+        ContentService $contentService,
+        ResponseFactory $responseFactory,
+        string $type
+    ): JsonResponse {
         /** @var array $ids */
         $ids = $request->request->get('ids');
 

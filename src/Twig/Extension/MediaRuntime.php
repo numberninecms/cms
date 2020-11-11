@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -13,13 +14,24 @@ namespace NumberNine\Twig\Extension;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\MediaFile;
 use NumberNine\Exception\InvalidMimeTypeException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\WebLink\GenericLinkProvider;
+use Symfony\Component\WebLink\Link;
 use Twig\Error\RuntimeError;
 use Twig\Extension\RuntimeExtensionInterface;
 
-use function NumberNine\Util\ArrayUtil\array_implode_associative;
+use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
 
 final class MediaRuntime implements RuntimeExtensionInterface
 {
+    private ?Request $request;
+
+    public function __construct(RequestStack $requestStack)
+    {
+        $this->request = $requestStack->getMasterRequest();
+    }
+
     /**
      * @param ContentEntity $contentEntity
      * @param string $size
@@ -28,10 +40,16 @@ final class MediaRuntime implements RuntimeExtensionInterface
      * @throws RuntimeError
      * @throws InvalidMimeTypeException
      */
-    public function getFeaturedImage(ContentEntity $contentEntity, string $size = 'large', array $attributes = []): string
-    {
+    public function getFeaturedImage(
+        ContentEntity $contentEntity,
+        string $size = 'large',
+        array $attributes = []
+    ): string {
         if (!method_exists($contentEntity, 'getFeaturedImage')) {
-            throw new RuntimeError(sprintf("Entity of type %s doesn't have a \$featuredImage property.", get_class($contentEntity)));
+            throw new RuntimeError(sprintf(
+                "Entity of type %s doesn't have a \$featuredImage property.",
+                get_class($contentEntity)
+            ));
         }
 
         /** @var ?MediaFile $featuredImage */
@@ -82,9 +100,18 @@ final class MediaRuntime implements RuntimeExtensionInterface
 
         $sizeInfo = $mediaFile->getSize($size);
 
+        $assetPath = $sizeInfo ? $mediaFile->getSizePath($size) : (string)$mediaFile->getPath();
+
+        if ($this->request) {
+            $linkProvider = $this->request->attributes->get('_links', new GenericLinkProvider());
+            $this->request->attributes->set('_links', $linkProvider->withLink(
+                (new Link('preload', $assetPath))->withAttribute('as', 'image')
+            ));
+        }
+
         return sprintf(
             '<img src="%s" width="%d" height="%d" %s>',
-            $sizeInfo ? $mediaFile->getSizePath($size) : $mediaFile->getPath(),
+            $assetPath,
             $sizeInfo['width'] ?? $mediaFile->getWidth(),
             $sizeInfo['height'] ?? $mediaFile->getHeight(),
             array_implode_associative($attributes, ' ', '=', '', '"'),

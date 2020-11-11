@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -14,9 +15,9 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 use NumberNine\Entity\Term;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use NumberNine\Model\Pagination\PaginationParameters;
 
 /**
@@ -75,8 +76,10 @@ final class TermRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-    public function getByTaxonomyPaginatedCollectionQueryBuilder(string $taxonomy, PaginationParameters $paginationParameters): QueryBuilder
-    {
+    public function getByTaxonomyPaginatedCollectionQueryBuilder(
+        string $taxonomy,
+        PaginationParameters $paginationParameters
+    ): QueryBuilder {
         $queryBuilder = $this->createQueryBuilder('t')
             ->join('t.taxonomy', 'tax', Join::WITH, 'tax.name = :taxonomy')
             ->setParameter('taxonomy', $taxonomy)

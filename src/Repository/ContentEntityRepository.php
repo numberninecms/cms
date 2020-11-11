@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -10,14 +11,7 @@
 
 namespace NumberNine\Repository;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
-use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\UnexpectedResultException;
+use Doctrine\Persistence\ManagerRegistry;
 use NumberNine\Entity\ContentEntity;
 
 /**
@@ -70,9 +64,9 @@ final class ContentEntityRepository extends AbstractContentEntityRepository
         return array_unique(
             array_merge(
                 ...array_map(
-                       fn($json) => json_decode($json) ?? [],
-                       array_column($result, 'custom_fields')
-                   )
+                    fn($json) => json_decode($json) ?? [],
+                    array_column($result, 'custom_fields')
+                )
             )
         );
     }

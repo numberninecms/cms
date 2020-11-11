@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -18,7 +19,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("content-types/", name="numbernine_admin_contenttypes_get_collection", options={"expose"=true}, methods={"GET"})
+ * @Route(
+ *     "content-types/",
+ *     name="numbernine_admin_contenttypes_get_collection",
+ *     options={"expose"=true},
+ *     methods={"GET"}
+ * )
  */
 final class ContentTypesGetAction extends AbstractController implements AdminController
 {

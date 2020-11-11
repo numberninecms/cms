@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -20,12 +21,20 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/users/check-username-availability/{username}", name="numbernine_admin_users_check_username_availability", options={"expose"=true}, methods={"GET"})
+ * @Route(
+ *     "/users/check-username-availability/{username}",
+ *     name="numbernine_admin_users_check_username_availability",
+ *     options={"expose"=true},
+ *     methods={"GET"}
+ * )
  */
 final class UserCheckUsernameAvailabilityAction extends AbstractController implements AdminController
 {
-    public function __invoke(ResponseFactory $responseFactory, UserRepository $userRepository, string $username): JsonResponse
-    {
+    public function __invoke(
+        ResponseFactory $responseFactory,
+        UserRepository $userRepository,
+        string $username
+    ): JsonResponse {
         $this->denyAccessUnlessGranted(Capabilities::EDIT_USERS);
         $this->denyAccessUnlessGranted(Capabilities::CREATE_USERS);
 

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -15,7 +16,11 @@ use NumberNine\Annotation\Shortcode;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 
 /**
- * @Shortcode(name="logo", label="Site logo", description="Displays the site logo with dynamic header tag for better SEO.")
+ * @Shortcode(
+ *     name="logo",
+ *     label="Site logo",
+ *     description="Displays the site logo with dynamic header tag for better SEO."
+ * )
  */
 final class LogoShortcode extends AbstractShortcode
 {

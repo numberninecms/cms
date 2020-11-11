@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -26,8 +27,10 @@ use Symfony\Component\Uid\Uuid;
 
 final class ShortcodeProcessor
 {
-    private const REGEX_ISOLATE_FULL_SHORTCODE = '@\[(\[?)(%shortcode%)(?![\w\-])([^\]/]*(?:/(?!\])[^\]/]*)*?)(?:(/)\]|\](?:([^\[]*(?:\[(?!/\2\])[^\[]*)*)(\[/\2\]))?)(\]?)@';
-    private const REGEX_ISOLATE_SHORTCODE_PARAMETER = '@([\w\-]+)\s*=\s*"([^"]*)"(?:\s|$)|([\w\-]+)\s*=\s*\'([^\']*)\'(?:\s|$)|([\w\-]+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|\'([^\']*)\'(?:\s|$)|(\S+)(?:\s|$)@';
+    private const REGEX_ISOLATE_FULL_SHORTCODE = '@\[(\[?)(%shortcode%)(?![\w\-])([^\]/]*(?:/(?!\])[^\]/]*)*?)' .
+        '(?:(/)\]|\](?:([^\[]*(?:\[(?!/\2\])[^\[]*)*)(\[/\2\]))?)(\]?)@';
+    private const REGEX_ISOLATE_SHORTCODE_PARAMETER = '@([\w\-]+)\s*=\s*"([^"]*)"(?:\s|$)|([\w\-]+)\s*=\s*\'([^\']*)' .
+        '\'(?:\s|$)|([\w\-]+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|\'([^\']*)\'(?:\s|$)|(\S+)(?:\s|$)@';
     private const REGEX_HAS_IMAGE_EXTENSION = '@\.(?:jpe?g|png|gif|bmp|webp)$@i';
 
     private ShortcodeStore $shortcodeStore;
@@ -111,8 +114,12 @@ final class ShortcodeProcessor
      * @return array
      * @throws Exception
      */
-    public function buildShortcodeTree(string $text, bool $onlyEditables = true, bool $storeShortcodeFullString = false, bool $isSerialization = false): array
-    {
+    public function buildShortcodeTree(
+        string $text,
+        bool $onlyEditables = true,
+        bool $storeShortcodeFullString = false,
+        bool $isSerialization = false
+    ): array {
         $text = $this->insertTextShortcodes($text);
 
         $parsedShortcodes = $this->shortcodeParser->parse($text);
@@ -133,14 +140,27 @@ final class ShortcodeProcessor
             }
 
             $shortcodeFullString = $parsedShortcode->getText();
-            $child = array_merge($isSerialization ? [] : ['shortcode' => $shortcode], $this->shortcodeToArray($parsedShortcode->getName(), $shortcodeFullString, $position++, $isSerialization));
+            $child = array_merge(
+                $isSerialization ? [] : ['shortcode' => $shortcode],
+                $this->shortcodeToArray(
+                    $parsedShortcode->getName(),
+                    $shortcodeFullString,
+                    $position++,
+                    $isSerialization
+                )
+            );
 
             if ($shortcodeMetadata->editable) {
                 $child['id'] = Uuid::v4()->toRfc4122();
             }
 
             if ($shortcodeMetadata->container) {
-                $child['children'] = $this->buildShortcodeTree((string)$parsedShortcode->getContent(), $onlyEditables, $storeShortcodeFullString, $isSerialization);
+                $child['children'] = $this->buildShortcodeTree(
+                    (string)$parsedShortcode->getContent(),
+                    $onlyEditables,
+                    $storeShortcodeFullString,
+                    $isSerialization
+                );
             }
 
             if ($storeShortcodeFullString) {
@@ -161,18 +181,27 @@ final class ShortcodeProcessor
      * @return array
      * @throws ReflectionException
      */
-    public function shortcodeToArray(string $shortcodeName, string $shortcodeFullString = null, int $position = 0, bool $isSerialization = false): array
-    {
+    public function shortcodeToArray(
+        string $shortcodeName,
+        string $shortcodeFullString = null,
+        int $position = 0,
+        bool $isSerialization = false
+    ): array {
         $shortcode = $this->shortcodeStore->getShortcode($shortcodeName);
         $shortcodeMetadata = $this->shortcodeStore->getShortcodeMetadata($shortcodeName);
-        $shortcodeData = $shortcodeFullString ? $this->extractShortcodeData($shortcodeMetadata->name, $shortcodeFullString) : null;
+        $shortcodeData = $shortcodeFullString
+            ? $this->extractShortcodeData($shortcodeMetadata->name, $shortcodeFullString)
+            : null;
 
         $responsive = $this->getShortcodeResponsiveParameters($shortcode);
 
         $array = [
             'type' => get_class($shortcode),
             'name' => $shortcodeMetadata->name,
-            'parameters' => $shortcode->setParameters(is_array($shortcodeData) ? ($shortcodeData[0]['parameters'] ?? []) : [], $isSerialization)->getParameters($isSerialization),
+            'parameters' => $shortcode->setParameters(
+                is_array($shortcodeData) ? ($shortcodeData[0]['parameters'] ?? []) : [],
+                $isSerialization
+            )->getParameters($isSerialization),
             'responsive' => $responsive,
             'computed' => [],
             'editable' => $shortcodeMetadata->editable,
@@ -214,7 +243,12 @@ final class ShortcodeProcessor
         $text = preg_replace('@\[text]\s*?\[/text]@', '', $text);
 
         foreach ($parsedShortcodes as $parsedShortcode) {
-            $text = preg_replace('/' . preg_quote($placeholder, '/') . '/', $parsedShortcode->getText(), (string)$text, 1);
+            $text = preg_replace(
+                '/' . preg_quote($placeholder, '/') . '/',
+                $parsedShortcode->getText(),
+                (string)$text,
+                1
+            );
         }
 
         // Remove things such as :
@@ -227,7 +261,13 @@ final class ShortcodeProcessor
 
     private function extractShortcodeData(string $shortcodeName, string $text): ?array
     {
-        if (!preg_match_all(str_replace('%shortcode%', $shortcodeName, self::REGEX_ISOLATE_FULL_SHORTCODE), $text, $matches, PREG_SET_ORDER)) {
+        if (
+            !preg_match_all(str_replace(
+                '%shortcode%',
+                $shortcodeName,
+                self::REGEX_ISOLATE_FULL_SHORTCODE
+            ), $text, $matches, PREG_SET_ORDER)
+        ) {
             return null;
         }
 
@@ -235,7 +275,10 @@ final class ShortcodeProcessor
             function ($match) {
                 return [
                     'full' => $match[0],
-                    'parameters' => array_merge($this->getShortcodeParameters($match[3]), ['content' => trim($match[5])])
+                    'parameters' => array_merge(
+                        $this->getShortcodeParameters($match[3]),
+                        ['content' => trim($match[5])]
+                    )
                 ];
             },
             $matches
@@ -279,7 +322,10 @@ final class ShortcodeProcessor
     public function getShortcodePresets(string $name): array
     {
         $builtInPresets = $this->presetFinder->findShortcodePresets($this->shortcodeStore->getShortcode($name));
-        $presets = array_merge([], ...array_map(fn(Preset $preset) => [$preset->getName() => $preset->getContent()], $this->presetRepository->findBy(['shortcodeName' => $name])));
+        $presets = array_merge([], ...array_map(
+            fn(Preset $preset) => [$preset->getName() => $preset->getContent()],
+            $this->presetRepository->findBy(['shortcodeName' => $name])
+        ));
 
         return array_merge($builtInPresets, $presets);
     }

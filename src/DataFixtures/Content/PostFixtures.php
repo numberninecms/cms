@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -36,7 +37,12 @@ final class PostFixtures extends BaseFixture implements DependentFixtureInterfac
             'post',
             FixtureSettings::POSTS_COUNT,
             function (Post $post, $i) use ($authors) {
-                $startDate = $this->faker->dateTimeInInterval($i === 0 ? '-5 years' : $this->getReference(Post::class . '_post_' . ($i - 1))->getCreatedAt(), '+1 day');
+                $startDate = $this->faker->dateTimeInInterval(
+                    $i === 0
+                        ? '-5 years'
+                        : $this->getReference(Post::class . '_post_' . ($i - 1))->getCreatedAt(),
+                    '+1 day'
+                );
 
                 $post
                     ->setTitle($this->faker->blogTitle)
@@ -44,7 +50,10 @@ final class PostFixtures extends BaseFixture implements DependentFixtureInterfac
                     ->setContent($this->faker->text(2000))
                     ->setAuthor($authors[array_rand($authors)])
                     ->setStatus(PublishingStatusInterface::STATUS_PUBLISH)
-                    ->setCreatedAt($this->faker->dateTimeBetween($startDate, $startDate->add(DateInterval::createFromDateString('+1 month'))))
+                    ->setCreatedAt($this->faker->dateTimeBetween(
+                        $startDate,
+                        $startDate->add(DateInterval::createFromDateString('+1 month'))
+                    ))
                     ->setPublishedAt($post->getCreatedAt());
             }
         );

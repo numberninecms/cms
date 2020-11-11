@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -26,7 +27,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("content_entities/{type}/{id<\d+>}/revert/{version}/", name="numbernine_admin_contententity_revert_item", options={"expose"=true}, methods={"POST"})
+ * @Route(
+ *     "content_entities/{type}/{id<\d+>}/revert/{version}/",
+ *     name="numbernine_admin_contententity_revert_item",
+ *     options={"expose"=true},
+ *     methods={"POST"}
+ * )
  */
 final class ContentEntityRevertAction extends AbstractController implements AdminController
 {
@@ -75,13 +81,21 @@ final class ContentEntityRevertAction extends AbstractController implements Admi
         $user = $this->getUser();
         $this->denyAccessUnlessGranted($contentType->getMappedCapability(Capabilities::EDIT_POSTS));
 
-        if ($user instanceof User && $user->getId() !== $entity->getAuthor()->getId()) {
+        if (
+            $user instanceof User
+            && $entity->getAuthor() instanceof User
+            && $user->getId() !== $entity->getAuthor()->getId()
+        ) {
             $this->denyAccessUnlessGranted($contentType->getMappedCapability(Capabilities::EDIT_OTHERS_POSTS));
         }
     }
 
-    private function deleteNewerVersions(EntityManagerInterface $entityManager, LogEntryRepository $logEntryRepository, ContentEntity $entity, int $version): void
-    {
+    private function deleteNewerVersions(
+        EntityManagerInterface $entityManager,
+        LogEntryRepository $logEntryRepository,
+        ContentEntity $entity,
+        int $version
+    ): void {
         $logEntryRepository->createQueryBuilder('l')
             ->delete()
             ->where('l.objectId = :id')

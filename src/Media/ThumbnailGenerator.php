@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -70,7 +71,10 @@ final class ThumbnailGenerator
             $mediaFile = $row[0];
 
             $finder = new Finder();
-            $finder->files()->name('@' . pathinfo((string)$mediaFile->getPath(), PATHINFO_BASENAME) . '.+@')->in($this->publicPath . dirname((string)$mediaFile->getPath()));
+            $finder
+                ->files()
+                ->name('@' . pathinfo((string)$mediaFile->getPath(), PATHINFO_BASENAME) . '.+@')
+                ->in($this->publicPath . dirname((string)$mediaFile->getPath()));
 
             if (iterator_count($finder) > 0) {
                 $mediaFile->setSizes([]);
@@ -80,7 +84,10 @@ final class ThumbnailGenerator
                 }
             }
 
-            $processedImage = $this->imageProcessor->processImage($this->publicPath . $mediaFile->getPath(), $this->imageSizeStore->getImageSizes());
+            $processedImage = $this->imageProcessor->processImage(
+                $this->publicPath . $mediaFile->getPath(),
+                $this->imageSizeStore->getImageSizes()
+            );
             $mediaFile->setSizes($processedImage->getSizes());
             $this->entityManager->persist($mediaFile);
 

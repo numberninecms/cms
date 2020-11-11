@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -32,7 +33,9 @@ final class MenuFixtures extends Fixture implements FixtureGroupInterface, Depen
             $items[] = [
                 'title' => $pageName,
                 'children' => [],
-                'entityId' => $this->getReference(Post::class . '_page_' . strtolower(str_replace(' ', '_', $pageName)))->getId(),
+                'entityId' => $this->getReference(
+                    Post::class . '_page_' . strtolower(str_replace(' ', '_', $pageName))
+                )->getId(),
             ];
         }
 

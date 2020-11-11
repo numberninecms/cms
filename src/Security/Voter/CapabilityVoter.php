@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -38,7 +39,10 @@ final class CapabilityVoter implements VoterInterface
             return $result;
         }
 
-        $userCapabilities = array_merge(...array_map(fn(UserRole $role) => $role->getCapabilities(), $user->getUserRoles()->toArray()));
+        $userCapabilities = array_merge(...array_map(
+            fn(UserRole $role) => $role->getCapabilities(),
+            $user->getUserRoles()->toArray()
+        ));
 
         foreach ($attributes as $attribute) {
             $result = self::ACCESS_DENIED;

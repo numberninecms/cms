@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -35,8 +36,7 @@ final class ThemeActivator implements EventSubscriberInterface
         ThemeStore $themeStore,
         ConfigurationReadWriter $configurationReadWriter,
         ThemeOptionsRepository $themeOptionsRepository
-    )
-    {
+    ) {
         $this->themeStore = $themeStore;
         $this->configurationReadWriter = $configurationReadWriter;
         $this->themeOptionsRepository = $themeOptionsRepository;

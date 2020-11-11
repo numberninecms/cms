@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -30,8 +31,11 @@ final class PermalinkGenerator
      * @param RouteProviderInterface $routeProvider
      * @param SluggerInterface $slugger
      */
-    public function __construct(UrlGeneratorInterface $urlGenerator, RouteProviderInterface $routeProvider, SluggerInterface $slugger)
-    {
+    public function __construct(
+        UrlGeneratorInterface $urlGenerator,
+        RouteProviderInterface $routeProvider,
+        SluggerInterface $slugger
+    ) {
         $this->urlGenerator = $urlGenerator;
         $this->routeProvider = $routeProvider;
         $this->slugger = $slugger;
@@ -67,7 +71,11 @@ final class PermalinkGenerator
             $parameters['slug'] = $contentEntity->getSlug();
         }
 
-        return $this->urlGenerator->generate($routeName, $parameters, $absolute ? UrlGeneratorInterface::ABSOLUTE_URL : UrlGeneratorInterface::ABSOLUTE_PATH);
+        return $this->urlGenerator->generate(
+            $routeName,
+            $parameters,
+            $absolute ? UrlGeneratorInterface::ABSOLUTE_URL : UrlGeneratorInterface::ABSOLUTE_PATH
+        );
     }
 
     /**
@@ -81,9 +89,16 @@ final class PermalinkGenerator
             return '';
         }
 
-        $routeName = sprintf('numbernine_taxonomy_%s_term_index', $this->slugger->slug((string)$taxonomy->getName(), '_'));
+        $routeName = sprintf(
+            'numbernine_taxonomy_%s_term_index',
+            $this->slugger->slug((string)$taxonomy->getName(), '_')
+        );
         $parameters = ['slug' => $term->getSlug()];
 
-        return $this->urlGenerator->generate($routeName, $parameters, $absolute ? UrlGeneratorInterface::ABSOLUTE_URL : UrlGeneratorInterface::ABSOLUTE_PATH);
+        return $this->urlGenerator->generate(
+            $routeName,
+            $parameters,
+            $absolute ? UrlGeneratorInterface::ABSOLUTE_URL : UrlGeneratorInterface::ABSOLUTE_PATH
+        );
     }
 }

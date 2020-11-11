@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -10,7 +11,7 @@
 
 namespace NumberNine\Content;
 
-use function NumberNine\Util\ArrayUtil\array_implode_associative;
+use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
 
 final class ArrayToShortcodeConverter
 {

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -18,7 +19,11 @@ final class AssetExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new TwigFunction('N9_theme_stylesheet', [AssetRuntime::class, 'renderStylesheetTag'], ['is_safe' => ['html']]),
+            new TwigFunction(
+                'N9_theme_stylesheet',
+                [AssetRuntime::class, 'renderStylesheetTag'],
+                ['is_safe' => ['html']]
+            ),
             new TwigFunction('N9_theme_script', [AssetRuntime::class, 'renderScriptTag'], ['is_safe' => ['html']]),
             new TwigFunction('N9_theme_assets', [AssetRuntime::class, 'renderEntryTags'], ['is_safe' => ['html']]),
         ];

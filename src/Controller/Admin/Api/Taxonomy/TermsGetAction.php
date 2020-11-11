@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -26,10 +27,20 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 final class TermsGetAction implements AdminController
 {
-    public function __invoke(Request $request, SerializerInterface $serializer, TermRepository $termRepository, ResponseFactory $responseFactory, string $taxonomy): JsonResponse
-    {
+    public function __invoke(
+        Request $request,
+        SerializerInterface $serializer,
+        TermRepository $termRepository,
+        ResponseFactory $responseFactory,
+        string $taxonomy
+    ): JsonResponse {
         /** @var PaginationParameters $paginationParameters */
-        $paginationParameters = $serializer->denormalize($request->query->all(), PaginationParameters::class, null, [AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]);
+        $paginationParameters = $serializer->denormalize(
+            $request->query->all(),
+            PaginationParameters::class,
+            null,
+            [AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]
+        );
 
         $queryBuilder = $termRepository->getByTaxonomyPaginatedCollectionQueryBuilder($taxonomy, $paginationParameters);
         $terms = new Paginator($queryBuilder, true);

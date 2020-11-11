@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the NumberNine package.
  *
@@ -16,8 +17,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="NumberNine\Repository\ContentEntityTermRepository")
- * @ORM\Table(name="contententity_term", uniqueConstraints={@ORM\UniqueConstraint(columns={"content_entity_id", "term_id"})})
- * @UniqueEntity(fields={"contentEntity", "term"}, errorPath="term", message="This term is already in use on that content entity.")
+ * @ORM\Table(
+ *     name="contententity_term",
+ *     uniqueConstraints={@ORM\UniqueConstraint(columns={"content_entity_id", "term_id"})}
+ * )
+ * @UniqueEntity(
+ *     fields={"contentEntity", "term"},
+ *     errorPath="term",
+ *     message="This term is already in use on that content entity."
+ * )
  */
 class ContentEntityTerm
 {
