@@ -1,8 +1,6 @@
 grumphp:
     tasks:
-        phpstan:
-            configuration: './phpstan.neon'
-            level: 8
+        phpstan: ~
         twigcs:
             path: './src/'
         phpunit: ~

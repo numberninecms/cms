@@ -148,7 +148,7 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
 
         foreach ($taxonomies as $taxonomy) {
             $name = $taxonomy->getName();
-            $plural = current($this->inflector->pluralize((string)$name));
+            $plural = (string)current($this->inflector->pluralize((string)$name));
 
             $menus[$name . '_taxonomy'] = [
                 'text' => $this->__(ucfirst($plural)),
