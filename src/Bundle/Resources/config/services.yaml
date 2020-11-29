@@ -72,8 +72,5 @@ services:
     Thunder\Shortcode\Parser\RegularParser: ~
     Thunder\Shortcode\Parser\ParserInterface: '@Thunder\Shortcode\Parser\RegularParser'
 
-    Faker\Generator:
-        factory: ['NumberNine\FakerBundle\Generator\FakerFactory', 'create']
-
     security.role_hierarchy: '@NumberNine\Security\RoleHierarchy'
     security.access.simple_role_voter: '@NumberNine\Security\Voter\RoleVoter'

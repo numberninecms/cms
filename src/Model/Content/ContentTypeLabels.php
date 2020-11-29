@@ -41,7 +41,7 @@ final class ContentTypeLabels
     {
         $inflector = new EnglishInflector();
         $singularName = u($singularName)->replace('_', ' ')->lower()->toString();
-        $pluralName = current($inflector->pluralize($singularName));
+        $pluralName = (string)current($inflector->pluralize($singularName));
 
         $this
             ->setSingularName($singularName)

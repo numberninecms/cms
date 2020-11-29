@@ -73,7 +73,6 @@ final class NumberNineExtension extends Extension implements PrependExtensionInt
         }
 
         if ($securityModified) {
-            $securityConfigs = array_reverse($securityConfigs);
             foreach ($securityConfigs as $config) {
                 $this->mergeConfigIntoOne($container, 'security', $config);
             }
