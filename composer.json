@@ -26,12 +26,11 @@
         "doctrine/doctrine-fixtures-bundle": "^3.3",
         "doctrine/orm": "^2.7.4",
         "friendsofsymfony/jsrouting-bundle": "^2.6",
-        "fzaninotto/faker": "^1.9",
         "gedmo/doctrine-extensions": "^3.0",
         "imagine/imagine": "^1.2",
         "mpratt/relativetime": "^1.5",
-        "numberninecms/common": "dev-develop",
-        "numberninecms/faker": "*@dev",
+        "numberninecms/common": "0.1.*-dev",
+        "numberninecms/faker": "0.1.*-dev",
         "scienta/doctrine-json-functions": "^4.1",
         "stof/doctrine-extensions-bundle": "^1.4",
         "symfony-cmf/routing-bundle": "^2.4",
@@ -69,6 +68,11 @@
     "config": {
         "sort-packages": true
     },
+    "extra": {
+        "branch-alias": {
+            "dev-develop": "0.1.x-dev"
+        }
+    },
     "autoload": {
         "psr-4": {
             "NumberNine\\": "src/"
@@ -79,5 +83,6 @@
             "NumberNine\\Tests\\": "tests/"
         }
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
