@@ -68,6 +68,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
         $this->reset = (bool)$input->getOption('reset');
 
         $tasks = [
+            [$this, 'prepareDockerComposeFile'],
             [$this, 'symlinkAdmin'],
             [$this, 'createBaseVariables'],
             [$this, 'createSSLCertificate'],
@@ -93,6 +94,28 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
         ));
 
         return Command::SUCCESS;
+    }
+
+    private function prepareDockerComposeFile(): int
+    {
+        $finalFilename = "{$this->projectPath}/docker-compose.yml";
+        $recipeFilename = "{$this->projectPath}/docker/docker-compose.yaml";
+
+        if (file_exists($finalFilename)) {
+            return Command::SUCCESS;
+        }
+
+        if (file_exists($recipeFilename)) {
+            $result = rename($recipeFilename, $finalFilename);
+
+            if ($result) {
+                return Command::SUCCESS;
+            }
+        }
+
+        $this->io->error('File docker-compose.yml not found. Consider reinstalling recipe.');
+
+        return Command::FAILURE;
     }
 
     private function symlinkAdmin(): int
