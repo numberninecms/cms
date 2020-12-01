@@ -38,6 +38,7 @@
         "symfony/framework-bundle": "^5.1",
         "symfony/http-kernel": "^5.1",
         "symfony/mime": "^5.1",
+        "symfony/process": "^5.1",
         "symfony/security-bundle": "^5.1",
         "symfony/security-core": "^5.1",
         "symfony/security-csrf": "^5.1",
