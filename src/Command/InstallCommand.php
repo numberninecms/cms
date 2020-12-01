@@ -96,7 +96,7 @@ final class InstallCommand extends Command implements ContentTypeAwareCommandInt
             }
         }
 
-        $io->success('NumberNine pre-install complete.');
+        $io->comment('NumberNine pre-install complete.');
 
         return Command::SUCCESS;
     }
@@ -184,7 +184,7 @@ final class InstallCommand extends Command implements ContentTypeAwareCommandInt
 
         $io->writeln('Installing required composer package...');
 
-        $composerProcess = (new Process(['composer', 'req', 'numberninecms/redis:dev-develop']))
+        $composerProcess = (new Process(['composer', 'require', 'numberninecms/redis']))
             ->setTty(Process::isTtySupported());
         $composerProcess->run(function (string $type, string $buffer) use ($io) {
             $io->write($buffer);
