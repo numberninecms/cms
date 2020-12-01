@@ -54,6 +54,7 @@ stof_doctrine_extensions:
             loggable: true
 
 framework:
+    profiler: { only_exceptions: false }
     cache:
         prefix_seed: ~
         pools:
