@@ -54,6 +54,7 @@ stof_doctrine_extensions:
             loggable: true
 
 framework:
+    secret: '%env(APP_SECRET)%'
     profiler: { only_exceptions: false }
     cache:
         prefix_seed: ~
@@ -74,6 +75,7 @@ framework:
         cookie_samesite: lax
 
 webpack_encore:
+    output_path: '%kernel.project_dir%/public/build'
     preload: true
     builds:
         numbernine: '%kernel.project_dir%/public/bundles/numbernine/build/'

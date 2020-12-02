@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Tests\Content;
+namespace NumberNine\Tests\Unit\Content;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\DocParser;

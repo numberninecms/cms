@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d934fa512d86ce7ccf126473b0ea951c",
+    "content-hash": "801cd00648fdbb7519bfef3915a3df34",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -9457,6 +9457,91 @@
             "time": "2020-09-26T10:30:38+00:00"
         },
         {
+            "name": "numberninecms/chapterone",
+            "version": "0.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/numberninecms/chapterone.git",
+                "reference": "815c440e7c66abe75f63a4b858de314f2eae617a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/numberninecms/chapterone/zipball/815c440e7c66abe75f63a4b858de314f2eae617a",
+                "reference": "815c440e7c66abe75f63a4b858de314f2eae617a",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "doctrine/doctrine-bundle": "^2.0",
+                "doctrine/doctrine-fixtures-bundle": "^3.3",
+                "doctrine/orm": "^2.7",
+                "numberninecms/cms": "^0.1",
+                "numberninecms/common": "^0.1",
+                "numberninecms/faker": "^0.1",
+                "php": "^7.4",
+                "symfony/event-dispatcher": "^5.1",
+                "symfony/form": "^5.1",
+                "symfony/http-foundation": "^5.1",
+                "symfony/security-core": "^5.1",
+                "symfony/security-csrf": "^5.1",
+                "symfony/security-http": "^5.1"
+            },
+            "require-dev": {
+                "ergebnis/composer-normalize": "^2.11",
+                "friendsoftwig/twigcs": "^4.0",
+                "nikic/php-parser": "^4.10",
+                "php-parallel-lint/php-parallel-lint": "^1.2",
+                "phpro/grumphp": "^1.0.0",
+                "phpstan/phpstan": "^0.12.25",
+                "phpstan/phpstan-doctrine": "^0.12.13",
+                "phpstan/phpstan-phpunit": "^0.12.8",
+                "phpstan/phpstan-symfony": "^0.12.6",
+                "phpunit/phpunit": "^9.4",
+                "roave/security-advisories": "dev-latest",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "NumberNine\\ChapterOne\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "William Arin",
+                    "email": "williamarin.dev@gmail.com"
+                }
+            ],
+            "description": "ChapterOne is a full-featured starter theme for NumberNine CMS",
+            "keywords": [
+                "blog",
+                "blogging",
+                "cms",
+                "numbernine",
+                "symfony",
+                "theme"
+            ],
+            "support": {
+                "issues": "https://github.com/numberninecms/chapterone/issues",
+                "source": "https://github.com/numberninecms/chapterone/tree/0.1.3"
+            },
+            "time": "2020-11-30T08:50:29+00:00"
+        },
+        {
             "name": "ondram/ci-detector",
             "version": "3.5.1",
             "source": {
@@ -10911,12 +10996,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "fa05999280434eacf621cc78ab9179d9394c7998"
+                "reference": "676668eda60bb8a32bd2a4efcb12c96d6e1c4bc6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/fa05999280434eacf621cc78ab9179d9394c7998",
-                "reference": "fa05999280434eacf621cc78ab9179d9394c7998",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/676668eda60bb8a32bd2a4efcb12c96d6e1c4bc6",
+                "reference": "676668eda60bb8a32bd2a4efcb12c96d6e1c4bc6",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -10952,7 +11037,7 @@
                 "composer/composer": "<=1-alpha.11",
                 "contao-components/mediaelement": ">=2.14.2,<2.21.1",
                 "contao/core": ">=2,<3.5.39",
-                "contao/core-bundle": "= 4.10.0|>=4,<4.4.52|>=4.5,<4.9.6",
+                "contao/core-bundle": ">=4,<4.4.52|>=4.5,<4.9.6|= 4.10.0",
                 "contao/listing-bundle": ">=4,<4.4.8",
                 "datadog/dd-trace": ">=0.30,<0.30.2",
                 "david-garcia/phpwhois": "<=4.3.1",
@@ -11228,7 +11313,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-12-01T13:02:08+00:00"
+            "time": "2020-12-02T06:02:50+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -12420,6 +12505,163 @@
                 "wiki": "https://github.com/squizlabs/PHP_CodeSniffer/wiki"
             },
             "time": "2020-10-23T02:01:07+00:00"
+        },
+        {
+            "name": "symfony/browser-kit",
+            "version": "v5.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/browser-kit.git",
+                "reference": "4fc769a12282a12bc47f883f04f01ff3777e369b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/4fc769a12282a12bc47f883f04f01ff3777e369b",
+                "reference": "4fc769a12282a12bc47f883f04f01ff3777e369b",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=7.2.5",
+                "symfony/dom-crawler": "^4.4|^5.0"
+            },
+            "require-dev": {
+                "symfony/css-selector": "^4.4|^5.0",
+                "symfony/http-client": "^4.4|^5.0",
+                "symfony/mime": "^4.4|^5.0",
+                "symfony/process": "^4.4|^5.0"
+            },
+            "suggest": {
+                "symfony/process": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\BrowserKit\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony BrowserKit Component",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/browser-kit/tree/v5.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-11-14T11:04:29+00:00"
+        },
+        {
+            "name": "symfony/dom-crawler",
+            "version": "v5.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/dom-crawler.git",
+                "reference": "0969122fe144dd8ab2e8c98c7e03eedc621b368c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/0969122fe144dd8ab2e8c98c7e03eedc621b368c",
+                "reference": "0969122fe144dd8ab2e8c98c7e03eedc621b368c",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=7.2.5",
+                "symfony/polyfill-ctype": "~1.8",
+                "symfony/polyfill-mbstring": "~1.0",
+                "symfony/polyfill-php80": "^1.15"
+            },
+            "conflict": {
+                "masterminds/html5": "<2.6"
+            },
+            "require-dev": {
+                "masterminds/html5": "^2.6",
+                "symfony/css-selector": "^4.4|^5.0"
+            },
+            "suggest": {
+                "symfony/css-selector": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\DomCrawler\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony DomCrawler Component",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/dom-crawler/tree/v5.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-10-24T12:01:57+00:00"
         },
         {
             "name": "symfony/dotenv",

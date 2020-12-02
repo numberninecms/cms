@@ -12,10 +12,11 @@
         <ini name="error_reporting" value="-1"/>
         <server name="APP_ENV" value="test" force="true"/>
         <server name="SHELL_VERBOSITY" value="-1"/>
+        <server name="KERNEL_CLASS" value="NumberNine\Tests\Functional\NumberNineBundleKernel"/>
     </php>
     <testsuites>
         <testsuite name="NumberNine Core Test Suite">
-            <directory>tests</directory>
+            <directory>tests/Unit</directory>
         </testsuite>
     </testsuites>
 </phpunit>
