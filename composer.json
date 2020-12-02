@@ -60,6 +60,7 @@
         "wapmorgan/media-file": "^0.1.4"
     },
     "require-dev": {
+        "dama/doctrine-test-bundle": "^6.4",
         "ergebnis/composer-normalize": "^2.11",
         "friendsoftwig/twigcs": ">=4",
         "nikic/php-parser": "^4.10",

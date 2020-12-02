@@ -3,7 +3,6 @@ grumphp:
         phpstan: ~
         twigcs:
             path: './src/'
-        phpunit: ~
         phpcs:
             standard: PSR12
             ignore_patterns:

@@ -1,0 +1,35 @@
+#
+# This file builds a test environment for running functional tests
+#
+
+version: "3.8"
+
+services:
+    php:
+        container_name: cms_php
+        image: numberninecms/php:7.4-fpm-dev
+        working_dir: /srv/app
+        user: '1000:1000'
+        restart: always
+        env_file:
+            - .env
+            - .env.test.local
+        volumes:
+            - ./:/srv/app
+            - ./docker/symfony.ini:/etc/php7/conf.d/symfony.ini
+
+    mysql:
+        container_name: cms_mysql
+        image: mysql:8
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        environment:
+            - MYSQL_USER=test
+            - MYSQL_PASSWORD=test
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_DATABASE=numbernine_test
+        volumes:
+            - mysql_data:/var/lib/mysql
+
+volumes:
+    mysql_data:

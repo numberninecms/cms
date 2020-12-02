@@ -11,8 +11,12 @@
 
 namespace NumberNine\Tests\Functional;
 
+use DAMA\DoctrineTestBundle\DAMADoctrineTestBundle;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle;
 use NumberNine\Bundle\NumberNineBundle;
+use NumberNine\ChapterOne\NumberNineChapterOneBundle;
+use NumberNine\FakerBundle\NumberNineFakerBundle;
 use Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
@@ -43,26 +47,19 @@ class NumberNineBundleKernel extends Kernel
             new StofDoctrineExtensionsBundle(),
             new WebpackEncoreBundle(),
             new DoctrineBundle(),
+            new DoctrineFixturesBundle(),
+            new DAMADoctrineTestBundle(),
             new NumberNineBundle(),
+            new NumberNineChapterOneBundle(),
+            new NumberNineFakerBundle(),
         ];
     }
 
     protected function configureContainer(ContainerConfigurator $container): void
     {
-        $container->extension('framework', [
-            'secret' => 'F00',
-            'test' => true,
-        ]);
-
-        $container->extension('doctrine', [
-            'dbal' => [
-                'url' => 'mysql://db_user:db_password@127.0.0.1:5432/db_name?serverVersion=5.7',
-            ],
-        ]);
-
         $container->import('../../src/Bundle/Resources/config/app.yaml');
+        $container->import('../../src/Bundle/Resources/config/{app}_' . $this->environment . '.yaml');
         $container->import('../../src/Bundle/Resources/config/services.yaml');
-        $container->import('../../src/Bundle/Resources/config/{services}_' . $this->environment . '.yaml');
     }
 
     protected function configureRoutes(RoutingConfigurator $routes): void
@@ -72,6 +69,6 @@ class NumberNineBundleKernel extends Kernel
 
     public function getCacheDir(): string
     {
-        return __DIR__ . '/../../var/cache/' . spl_object_hash($this);
+        return __DIR__ . '/../../var/cache/test/' . spl_object_hash($this);
     }
 }

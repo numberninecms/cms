@@ -1,0 +1,7 @@
+framework:
+    test: true
+    secret: F00
+
+doctrine:
+    dbal:
+        url: "%env(resolve:DATABASE_URL)%"
