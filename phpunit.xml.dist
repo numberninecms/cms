@@ -2,7 +2,7 @@
 <!-- https://phpunit.readthedocs.io/en/latest/configuration.html -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" backupGlobals="false" colors="true"
-         bootstrap="vendor/autoload.php">
+         bootstrap="tests/bootstrap.php">
     <coverage processUncoveredFiles="true">
         <include>
             <directory suffix=".php">src</directory>
@@ -12,7 +12,12 @@
         <ini name="error_reporting" value="-1"/>
         <server name="APP_ENV" value="test" force="true"/>
         <server name="SHELL_VERBOSITY" value="-1"/>
+        <server name="KERNEL_CLASS" value="NumberNine\Tests\Functional\NumberNineBundleKernel"/>
+        <env name="BOOTSTRAP_RESET_DATABASE" value="1" />
     </php>
+    <extensions>
+        <extension class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension"/>
+    </extensions>
     <testsuites>
         <testsuite name="NumberNine Core Test Suite">
             <directory>tests</directory>

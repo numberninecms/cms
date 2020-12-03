@@ -202,7 +202,14 @@ final class InstallCommand extends Command implements ContentTypeAwareCommandInt
         $listSubCommandsProcess = Process::fromShellCommandline(
             "php bin/console list numbernine:install | awk '/numbernine:install:/ {print $1}'"
         );
-        $listSubCommandsProcess->run();
+        $exitCode = $listSubCommandsProcess->run(function (string $type, string $buffer) {
+            // Not printing process result
+        });
+
+        if ($exitCode !== Command::SUCCESS) {
+            // No sub-commands registered
+            return Command::SUCCESS;
+        }
 
         $commands = explode("\n", $listSubCommandsProcess->getOutput());
 
@@ -211,7 +218,7 @@ final class InstallCommand extends Command implements ContentTypeAwareCommandInt
 
         foreach (array_filter($commands) as $commandName) {
             $command = $application->find($commandName);
-            if (($returnCode = $command->run(new ArrayInput([]), $output)) !== Command::SUCCESS) {
+            if (($exitCode = $command->run(new ArrayInput([]), $output)) !== Command::SUCCESS) {
                 return Command::FAILURE;
             }
         }

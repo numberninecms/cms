@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Tests\Social;
+namespace NumberNine\Tests\Unit\Social;
 
 use InvalidArgumentException;
 use NumberNine\Social\SocialSharer;

@@ -74,12 +74,14 @@ framework:
         cookie_samesite: lax
 
 webpack_encore:
+    output_path: '%kernel.project_dir%/public/build'
     preload: true
     builds:
         numbernine: '%kernel.project_dir%/public/bundles/numbernine/build/'
 
 doctrine:
     orm:
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         metadata_cache_driver:
             type: pool
             pool: doctrine.metadata_cache_pool

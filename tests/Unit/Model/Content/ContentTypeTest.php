@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Tests\Model\Content;
+namespace NumberNine\Tests\Unit\Model\Content;
 
 use NumberNine\Entity\Post;
 use NumberNine\Model\Content\ContentType;
