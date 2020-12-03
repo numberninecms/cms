@@ -1918,16 +1918,16 @@
         },
         {
             "name": "numberninecms/common",
-            "version": "0.1.4",
+            "version": "0.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/numberninecms/common.git",
-                "reference": "1eaea091463a479f21e6faa0ee9ce43fce7a20ae"
+                "reference": "73062095437eef2f46faf711cc7583dd5356dde3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/numberninecms/common/zipball/1eaea091463a479f21e6faa0ee9ce43fce7a20ae",
-                "reference": "1eaea091463a479f21e6faa0ee9ce43fce7a20ae",
+                "url": "https://api.github.com/repos/numberninecms/common/zipball/73062095437eef2f46faf711cc7583dd5356dde3",
+                "reference": "73062095437eef2f46faf711cc7583dd5356dde3",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1985,9 +1985,9 @@
             "description": "Shared infrastructure among NumberNine ecosystem",
             "support": {
                 "issues": "https://github.com/numberninecms/common/issues",
-                "source": "https://github.com/numberninecms/common/tree/0.1.4"
+                "source": "https://github.com/numberninecms/common/tree/0.1.5"
             },
-            "time": "2020-11-30T18:04:57+00:00"
+            "time": "2020-12-03T15:06:11+00:00"
         },
         {
             "name": "numberninecms/faker",
