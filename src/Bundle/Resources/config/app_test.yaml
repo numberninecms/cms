@@ -1,6 +1,8 @@
 framework:
     test: true
     secret: F00
+    session:
+        storage_id: session.storage.mock_file
 
 doctrine:
     dbal:

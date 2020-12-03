@@ -35,6 +35,7 @@ if (isset($_ENV['BOOTSTRAP_RESET_DATABASE']) && $_ENV['BOOTSTRAP_RESET_DATABASE'
             __DIR__
         )
     );
+    passthru('ln -s bundles/numbernine/admin public/admin');
     passthru(
         sprintf(
             'php "%s/../bin/console" doctrine:fixtures:load --env=test --no-interaction',

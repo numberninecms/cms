@@ -23,6 +23,5 @@ abstract class DotEnvAwareWebTestCase extends WebTestCase
     {
         (new Dotenv())->bootEnv(dirname(__DIR__) . '/../.env');
         $this->client = static::createClient();
-        self::bootKernel();
     }
 }

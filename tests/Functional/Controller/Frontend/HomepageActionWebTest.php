@@ -12,18 +12,14 @@
 namespace NumberNine\Tests\Functional\Controller\Frontend;
 
 use NumberNine\Tests\Functional\DotEnvAwareWebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class HomepageActionWebTest extends DotEnvAwareWebTestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
     public function testHomepageIsAccessible(): void
     {
         $this->client->request('GET', '/');
 
-        self::assertEquals(200, $this->client->getResponse()->getStatusCode());
+        self::assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
     }
 }
