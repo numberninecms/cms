@@ -22,7 +22,7 @@ class AdminIndexActionWebTest extends DotEnvAwareWebTestCase
         self::assertResponseRedirects('/admin/login');
     }
 
-    public function testLoginIsSuccessful(): void
+    public function testAdminLoginIsSuccessful(): void
     {
         $userRepository = self::$container->get(UserRepository::class);
         $adminUser = $userRepository->findOneByUsername('admin');
@@ -32,5 +32,16 @@ class AdminIndexActionWebTest extends DotEnvAwareWebTestCase
         $this->client->request('GET', '/admin/');
         self::assertResponseIsSuccessful();
         self::assertSelectorExists('div#q-app');
+    }
+
+    public function testSubscriberCantAccessAdmin(): void
+    {
+        $userRepository = self::$container->get(UserRepository::class);
+        $subscriberUser = $userRepository->findOneByUsername('subscriber');
+
+        $this->client->loginUser($subscriberUser);
+
+        $this->client->request('GET', '/admin/');
+        self::assertResponseRedirects('/');
     }
 }
