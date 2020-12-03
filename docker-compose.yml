@@ -9,7 +9,6 @@ services:
         container_name: cms_php
         image: numberninecms/php:7.4-fpm-dev
         working_dir: /srv/app
-        user: '1000:1000'
         restart: always
         env_file:
             - .env
