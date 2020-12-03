@@ -5,15 +5,43 @@ language: php
 php:
     - 7.4
 
-env:
-    - COMPOSER_VERSION=2
-
 cache:
     directories:
-        - ~/.cache/composer
+        - $HOME/.composer/cache/files
+
+env:
+    - COMPOSER_VERSION=2
+      DOCKER_COMPOSE_VERSION=1.27.4
+
+before_install:
+    - sudo apt-get -y remove docker docker-engine docker.io containerd runc
+    - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    - sudo apt-get update
+    - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce docker-ce-cli containerd.io
+    - docker --version
+    - sudo rm /usr/local/bin/docker-compose
+    - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+    - chmod +x docker-compose
+    - sudo mv docker-compose /usr/local/bin
+    - |
+        if [ "$TRAVIS_BRANCH" != "master" ] && [ "$TRAVIS_BRANCH" != "develop" ]; then
+            composer config extra.branch-alias.dev-$(git rev-parse HEAD) 0.1.x-dev
+        fi
 
 install:
-    - composer install
+    - composer install --no-interaction
+    - |
+        if [ "$TRAVIS_BRANCH" != "master" ] && [ "$TRAVIS_BRANCH" != "develop" ]; then
+            composer update --lock
+        fi
+    - echo 'DATABASE_URL=mysql://test:test@mysql:3306/numbernine_test?serverVersion=5.7' > .env.test.local
+    - mkdir -p var/cache
+    - mkdir -p public/uploads
+    - chmod -R 0777 var
+    - chmod -R 0777 public
+    - docker-compose up -d
 
 script:
     - ./vendor/bin/grumphp run --no-interaction
+    - docker-compose exec php vendor/bin/phpunit
