@@ -38,7 +38,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
     private string $appName;
     private bool $reset;
     private string $envFile;
-    private int $port;
+    private int $port = 0;
 
     public function __construct(SluggerInterface $slugger, string $projectPath, string $publicPath)
     {
@@ -239,18 +239,36 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
     private function findEmptyPort(): int
     {
         $ports = [443, ...range(8000, 8100)];
+        $context = stream_context_create(
+            [
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false
+                ]
+            ]
+        );
 
         foreach ($ports as $port) {
-            $connection = @fsockopen('localhost', $port, $errno, $errstr, $timeout = 10);
+            try {
+                $connection = stream_socket_client(
+                    sprintf('ssl://localhost:%d', $port),
+                    $errno,
+                    $errstr,
+                    10,
+                    STREAM_CLIENT_CONNECT,
+                    $context
+                );
 
-            if (is_resource($connection)) {
+                if (is_resource($connection)) {
+                    fclose($connection);
+                }
+            } catch (\Exception $exception) {
                 $this->port = $port;
-                fclose($connection);
                 break;
             }
         }
 
-        if (!$this->port) {
+        if ($this->port === 0) {
             $this->io->error("Unable find an empty port to serve your application.");
             return Command::FAILURE;
         }
