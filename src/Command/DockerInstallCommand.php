@@ -13,6 +13,7 @@ namespace NumberNine\Command;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -66,27 +67,40 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
         $this->io = new SymfonyStyle($input, $output);
         $this->envFile = $this->projectPath . '/.env.local';
         $this->reset = (bool)$input->getOption('reset');
+        $verbosity = $this->io->getVerbosity();
 
         $tasks = [
             [$this, 'prepareDockerComposeFile'],
             [$this, 'symlinkAdmin'],
-            [$this, 'createBaseVariables'],
             [$this, 'createSSLCertificate'],
             [$this, 'requireRedisBundle'],
-            [$this, 'runInstallSubCommands'],
             [$this, 'findEmptyPort'],
             [$this, 'createDockerContainers'],
             [$this, 'installDatabase'],
         ];
 
+        $this->createBaseVariables();
+
+        $progressBar = new ProgressBar($output, count($tasks));
+        $progressBar->start();
+
         foreach ($tasks as $task) {
+            $this->io->setVerbosity(OutputInterface::VERBOSITY_QUIET);
+
             /** @var callable $task */
             if (($errorCode = call_user_func($task)) !== Command::SUCCESS) {
                 $this->io->error('An error occurred. Aborting installation.');
                 return $errorCode;
             }
+
+            $this->io->setVerbosity($verbosity);
+
+            $progressBar->advance();
         }
 
+        $progressBar->finish();
+
+        $this->io->newLine(2);
         $this->io->success('NumberNine Docker install complete.');
         $this->io->comment(sprintf(
             'Access your website through <comment>https://localhost%s/</comment>',
@@ -177,21 +191,27 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
             return Command::FAILURE;
         }
 
+        $keyFile = sprintf('%s/localhost.key', $certPath);
+        $certFile = sprintf('%s/localhost.crt', $certPath);
+
+        if (file_exists($keyFile) && file_exists($certFile)) {
+            return Command::SUCCESS;
+        }
+
         $command = sprintf(
             'openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj "%s" -keyout %s -out %s',
             '/C=US/ST=Denial/L=Springfield/O=Dis/CN=localhost',
-            sprintf('%s/localhost.key', $certPath),
-            sprintf('%s/localhost.crt', $certPath),
+            $keyFile,
+            $certFile,
         );
 
         $process = Process::fromShellCommandline($command);
 
         try {
-            $process->mustRun(function (string $type, string $buffer) {
-                $this->io->write($buffer);
-            });
+            $this->getHelper('process')->mustRun($this->output, $process);
         } catch (ProcessFailedException $exception) {
             $this->io->error("Unable to create SSL certificate.");
+            $this->io->error($exception->getMessage());
             return Command::FAILURE;
         }
 
@@ -200,36 +220,14 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
 
     private function requireRedisBundle(): int
     {
-        $process = (new Process(['composer', 'require', 'numberninecms/redis']))
+        $process = (new Process(['composer', 'require', 'numberninecms/redis', '-q']))
             ->setTimeout(null)
             ->setTty(Process::isTtySupported());
 
         try {
-            $process->mustRun(function (string $type, string $buffer) {
-                $this->io->write($buffer);
-            });
+            $process->mustRun();
         } catch (ProcessFailedException $exception) {
             $this->io->error("Unable to install numbernine/redis package.");
-            return Command::FAILURE;
-        }
-
-        return Command::SUCCESS;
-    }
-
-    private function runInstallSubCommands(): int
-    {
-        /** @var Application $application */
-        $application = $this->getApplication();
-
-        $command = $application->find('numbernine:install');
-
-        if (
-            ($returnCode = $command->run(
-                new ArrayInput(['--sub-commands-only' => true]),
-                $this->output
-            )) !== Command::SUCCESS
-        ) {
-            $this->io->error("An error occurred while installing NumberNine extensions.");
             return Command::FAILURE;
         }
 
@@ -287,14 +285,14 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
         );
         file_put_contents($filename, $dockerCompose);
 
-        $process = (new Process(['docker-compose', 'up', '-d']))
+        $process = Process::fromShellCommandline(
+            '{ docker-compose up -d --quiet-pull; } > /dev/null 2>&1'
+        )
             ->setTimeout(null)
             ->setTty(Process::isTtySupported());
 
         try {
-            $process->mustRun(function (string $type, string $buffer) {
-                $this->io->write($buffer);
-            });
+            $this->getHelper('process')->mustRun($this->output, $process);
         } catch (ProcessFailedException $exception) {
             $this->io->error("Unable to create Docker containers.");
             return Command::FAILURE;
@@ -311,69 +309,54 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
             $this->projectPath,
             basename($this->projectPath),
         );
-
         $symfony = "$php bin/console";
-
-        $command = sprintf(
-            "%s -r '%s'",
-            $php,
-            'echo "Waiting for database...\n"; set_time_limit(30); ' .
-            'for(;;) { if(@fsockopen("mysql:".(3306))) { break; } }'
-        );
+        $command = "$php -r 'set_time_limit(30); for(;;) { if(@fsockopen(\"mysql:\".(3306))) { break; } }'";
 
         try {
             $process = Process::fromShellCommandline($command)
                 ->setTimeout(30)
                 ->setTty(Process::isTtySupported());
-            $process->mustRun(function (string $type, string $buffer) {
-                $this->io->write($buffer);
-            });
+            $this->getHelper('process')->mustRun($this->output, $process);
 
             if ($this->reset) {
                 $process = Process::fromShellCommandline('rm -rf migrations/*.php')
                     ->setTty(Process::isTtySupported());
-                $process->mustRun();
+                $this->getHelper('process')->mustRun($this->output, $process);
 
                 $process = Process::fromShellCommandline('rm -rf public/uploads')
                     ->setTty(Process::isTtySupported());
-                $process->mustRun();
+                $this->getHelper('process')->mustRun($this->output, $process);
             }
 
-            $this->io->writeln('Initializing database...');
             $process = Process::fromShellCommandline("$symfony doctrine:database:drop --quiet --if-exists --force")
                 ->setTimeout(300)
                 ->setTty(Process::isTtySupported());
-            $process->mustRun();
+            $this->getHelper('process')->mustRun($this->output, $process);
 
             $process = Process::fromShellCommandline("$symfony doctrine:database:create --quiet --if-not-exists")
                 ->setTimeout(300)
                 ->setTty(Process::isTtySupported());
-            $process->mustRun();
+            $this->getHelper('process')->mustRun($this->output, $process);
 
             $process = Process::fromShellCommandline("$symfony doctrine:migrations:diff --quiet --no-interaction")
                 ->setTimeout(300)
                 ->setTty(Process::isTtySupported());
-            $process->mustRun();
+            $this->getHelper('process')->mustRun($this->output, $process);
 
             $process = Process::fromShellCommandline("$symfony doctrine:migrations:migrate --quiet --no-interaction")
                 ->setTimeout(300)
                 ->setTty(Process::isTtySupported());
-            $process->mustRun();
+            $this->getHelper('process')->mustRun($this->output, $process);
 
-            $this->io->writeln('Creating initial data...');
-            $process = Process::fromShellCommandline("$symfony doctrine:fixtures:load --no-interaction")
+            $process = Process::fromShellCommandline("$symfony doctrine:fixtures:load --quiet --no-interaction")
                 ->setTimeout(null)
                 ->setTty(Process::isTtySupported());
-            $process->mustRun(function (string $type, string $buffer) {
-                $this->io->write($buffer);
-            });
+            $this->getHelper('process')->mustRun($this->output, $process);
 
-            $process = Process::fromShellCommandline("$symfony cache:clear")
+            $process = Process::fromShellCommandline("$symfony cache:clear --quiet")
                 ->setTimeout(300)
                 ->setTty(Process::isTtySupported());
-            $process->mustRun(function (string $type, string $buffer) {
-                $this->io->write($buffer);
-            });
+            $this->getHelper('process')->mustRun($this->output, $process);
         } catch (ProcessFailedException $exception) {
             $this->io->error("Database installation failed.");
             return Command::FAILURE;
