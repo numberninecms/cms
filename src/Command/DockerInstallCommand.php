@@ -233,7 +233,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
     {
         $process = Process::fromShellCommandline(
             sprintf(
-                'composer require numberninecms/redis %s',
+                'composer require numberninecms/redis %s --ignore-platform-reqs',
                 $this->verbosity <= OutputInterface::VERBOSITY_NORMAL ? '--quiet' : ''
             )
         )
