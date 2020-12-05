@@ -11,7 +11,7 @@
 
 namespace NumberNine\Tests\Functional\Controller\Frontend;
 
-use NumberNine\Tests\Functional\DotEnvAwareWebTestCase;
+use NumberNine\Tests\DotEnvAwareWebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class HomepageActionWebTest extends DotEnvAwareWebTestCase

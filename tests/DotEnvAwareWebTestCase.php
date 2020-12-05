@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Tests\Functional;
+namespace NumberNine\Tests;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -21,7 +21,7 @@ abstract class DotEnvAwareWebTestCase extends WebTestCase
 
     public function setUp(): void
     {
-        (new Dotenv())->bootEnv(dirname(__DIR__) . '/../.env');
+        (new Dotenv())->bootEnv(dirname(__DIR__) . '/.env');
         $this->client = static::createClient();
     }
 }
