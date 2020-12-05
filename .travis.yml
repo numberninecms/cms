@@ -53,7 +53,11 @@ jobs:
         -
             name: New project Docker installation
             install:
+                - cd ..
                 - curl -s https://raw.githubusercontent.com/numberninecms/numbernine/master/installer | bash -s newproject
-            script:
                 - cd newproject
-                - bin/console numbernine:docker:install
+                - "composer config repositories.cms '{\"type\": \"path\", \"url\": \"../cms\"}'"
+                - composer update
+            script:
+                - bin/console numbernine:docker:install --no-interaction
+                - wget --spider https://localhost:443/
