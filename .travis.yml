@@ -14,7 +14,6 @@ env:
       DOCKER_COMPOSE_VERSION=1.27.4
 
 before_install:
-    - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
     - sudo apt-get -y remove docker docker-engine docker.io containerd runc
     - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
     - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
@@ -57,8 +56,8 @@ jobs:
                 - cd ..
                 - curl -s https://raw.githubusercontent.com/numberninecms/numbernine/master/installer | bash -s newproject
                 - cd newproject
-                - "composer config repositories.cms '{\"type\": \"path\", \"url\": \"../cms\"}'"
-                - composer update
+                - "composer config repositories.cms '{\"type\": \"path\", \"url\": \"../cms\", \"options\": {\"symlink\": false}}'"
+                - composer update numberninecms/cms
             script:
                 - bin/console numbernine:docker:install -v --no-interaction
                 - wget --spider https://localhost:443/
