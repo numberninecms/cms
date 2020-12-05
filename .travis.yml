@@ -29,19 +29,31 @@ before_install:
             composer config extra.branch-alias.dev-$(git rev-parse HEAD) 0.1.x-dev
         fi
 
-install:
-    - composer install --no-interaction
-    - |
-        if [ "$TRAVIS_BRANCH" != "master" ] && [ "$TRAVIS_BRANCH" != "develop" ]; then
-            composer update --lock
-        fi
-    - echo 'DATABASE_URL=mysql://test:test@mysql:3306/numbernine_test?serverVersion=5.7' > .env.test.local
-    - mkdir -p var/cache
-    - mkdir -p public/uploads
-    - chmod -R 0777 var
-    - chmod -R 0777 public
-    - docker-compose up -d
+jobs:
+    include:
+        -
+            stage: Test
+            name: Bundle tests
+            install:
+                - composer install --no-interaction
+                - |
+                    if [ "$TRAVIS_BRANCH" != "master" ] && [ "$TRAVIS_BRANCH" != "develop" ]; then
+                        composer update --lock
+                    fi
+                - echo 'DATABASE_URL=mysql://test:test@mysql:3306/numbernine_test?serverVersion=5.7' > .env.test.local
+                - mkdir -p var/cache
+                - mkdir -p public/uploads
+                - chmod -R 0777 var
+                - chmod -R 0777 public
+                - docker-compose up -d
+            script:
+                - ./vendor/bin/grumphp run --no-interaction
+                - docker-compose exec php vendor/bin/phpunit
 
-script:
-    - ./vendor/bin/grumphp run --no-interaction
-    - docker-compose exec php vendor/bin/phpunit
+        -
+            name: New project Docker installation
+            install:
+                - curl -s https://raw.githubusercontent.com/numberninecms/numbernine/master/installer | bash -s newproject
+            script:
+                - cd newproject
+                - bin/console numbernine:docker:install
