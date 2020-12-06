@@ -233,8 +233,11 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
     {
         $process = Process::fromShellCommandline(
             sprintf(
-                'composer require numberninecms/redis %s --ignore-platform-reqs',
-                $this->verbosity <= OutputInterface::VERBOSITY_NORMAL ? '--quiet' : ''
+                "docker run --rm --name numbernine_installer -it -u '1000:1000' " .
+                '-v %s:/srv/app -w /srv/app numberninecms/php:7.4-fpm-dev ' .
+                'composer require numberninecms/redis%s',
+                $this->projectPath,
+                $this->verbosity <= OutputInterface::VERBOSITY_NORMAL ? ' --quiet' : ''
             )
         )
             ->setTimeout(null)
@@ -324,7 +327,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
     private function installDatabase(): int
     {
         $php = sprintf(
-            "docker run --rm -it -u '1000:1000' -v %s:/srv/app --network %s_default " .
+            "docker run --rm --name numbernine_installer -it -u '1000:1000' -v %s:/srv/app --network %s_default " .
             "-w /srv/app numberninecms/php:7.4-fpm-dev php",
             $this->projectPath,
             basename($this->projectPath),
