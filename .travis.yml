@@ -61,4 +61,4 @@ jobs:
                 - sed -i "s/1000:1000/$(id -u):$(id -g)/" docker/docker-compose.yaml
             script:
                 - bin/console numbernine:docker:install -v --no-interaction
-                - wget --spider https://localhost:443/
+                - wget --spider --no-check-certificate https://localhost:443/
