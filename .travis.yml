@@ -54,7 +54,7 @@ jobs:
             name: New project Docker installation
             install:
                 - cd ..
-                - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/numberninecms/numbernine/master/installer | bash -s newproject"
+                - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/numberninecms/numbernine/master/installer | bash -s newproject -v"
                 - cd newproject
                 - "composer config repositories.cms '{\"type\": \"path\", \"url\": \"../cms\", \"options\": {\"symlink\": false}}'"
                 - composer update numberninecms/cms
