@@ -56,8 +56,8 @@ jobs:
                 - cd ..
                 - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/numberninecms/numbernine/master/installer | bash -s newproject -v"
                 - cd newproject
-                - "composer config repositories.cms '{\"type\": \"path\", \"url\": \"../cms\", \"options\": {\"symlink\": false}}'"
-                - composer update numberninecms/cms
+                - rm -rf vendor/numberninecms/cms
+                - cp -R ../cms vendor/numberninecms/cms
                 - sed -i "s/1000:1000/$(id -u):$(id -g)/" docker/docker-compose.yaml
             script:
                 - bin/console numbernine:docker:install -v --no-interaction
