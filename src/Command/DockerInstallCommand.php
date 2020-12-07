@@ -233,7 +233,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
     {
         $process = Process::fromShellCommandline(
             sprintf(
-                "docker run --rm --name numbernine_installer -it -u '1000:1000' " .
+                'docker run --rm --name numbernine_installer -it -u "$(id -u):$(id -g)" ' .
                 '-v %s:/srv/app -w /srv/app numberninecms/php:7.4-fpm-dev ' .
                 'composer require numberninecms/redis%s',
                 $this->projectPath,
@@ -327,8 +327,8 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
     private function installDatabase(): int
     {
         $php = sprintf(
-            "docker run --rm --name numbernine_installer -it -u '1000:1000' -v %s:/srv/app --network %s_default " .
-            "-w /srv/app numberninecms/php:7.4-fpm-dev php",
+            'docker run --rm --name numbernine_installer -it -u "$(id -u):$(id -g)" -v %s:/srv/app ' .
+            "--network %s_default -w /srv/app numberninecms/php:7.4-fpm-dev php",
             $this->projectPath,
             basename($this->projectPath),
         );

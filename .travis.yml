@@ -58,6 +58,7 @@ jobs:
                 - cd newproject
                 - "composer config repositories.cms '{\"type\": \"path\", \"url\": \"../cms\", \"options\": {\"symlink\": false}}'"
                 - composer update numberninecms/cms
+                - sed -i "s/1000:1000/$(id -u):$(id -g)/" docker/docker-compose.yaml
             script:
                 - bin/console numbernine:docker:install -v --no-interaction
                 - wget --spider https://localhost:443/
