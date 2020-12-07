@@ -40,6 +40,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
     private bool $reset;
     private string $envFile;
     private int $port = 0;
+    private int $verbosity;
 
     public function __construct(SluggerInterface $slugger, string $projectPath, string $publicPath)
     {
@@ -67,7 +68,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
         $this->io = new SymfonyStyle($input, $output);
         $this->envFile = $this->projectPath . '/.env.local';
         $this->reset = (bool)$input->getOption('reset');
-        $verbosity = $this->io->getVerbosity();
+        $this->verbosity = $this->io->getVerbosity();
 
         $tasks = [
             [$this, 'prepareDockerComposeFile'],
@@ -82,10 +83,16 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
         $this->createBaseVariables();
 
         $progressBar = new ProgressBar($output, count($tasks));
-        $progressBar->start();
+        $progressBar->setFormat('normal');
+
+        if ($this->verbosity <= OutputInterface::VERBOSITY_NORMAL) {
+            $progressBar->start();
+        }
 
         foreach ($tasks as $task) {
-            $this->io->setVerbosity(OutputInterface::VERBOSITY_QUIET);
+            if ($this->verbosity <= OutputInterface::VERBOSITY_NORMAL) {
+                $this->io->setVerbosity(OutputInterface::VERBOSITY_QUIET);
+            }
 
             /** @var callable $task */
             if (($errorCode = call_user_func($task)) !== Command::SUCCESS) {
@@ -93,12 +100,16 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
                 return $errorCode;
             }
 
-            $this->io->setVerbosity($verbosity);
+            $this->io->setVerbosity($this->verbosity);
 
-            $progressBar->advance();
+            if ($this->verbosity <= OutputInterface::VERBOSITY_NORMAL) {
+                $progressBar->advance();
+            }
         }
 
-        $progressBar->finish();
+        if ($this->verbosity <= OutputInterface::VERBOSITY_NORMAL) {
+            $progressBar->finish();
+        }
 
         $this->io->newLine(2);
         $this->io->success('NumberNine Docker install complete.');
@@ -106,6 +117,33 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
             'Access your website through <comment>https://localhost%s/</comment>',
             $this->port === 443 ? '' : ':' . $this->port
         ));
+
+        return Command::SUCCESS;
+    }
+
+    private function createBaseVariables(): int
+    {
+        $this->io->title('General settings');
+
+        $this->appName = $this->io->ask('Application name', 'numbernine', function ($appName) {
+            if (empty($appName)) {
+                throw new \RuntimeException('Application name cannot be empty.');
+            }
+
+            return $this->slugger->slug($appName, '_')->lower();
+        });
+
+        if (file_put_env_variable($this->envFile, 'APP_NAME', $this->appName) === false) {
+            $this->io->error("Unable to create file '.env.local'");
+            return Command::FAILURE;
+        }
+
+        file_put_env_variable(
+            $this->envFile,
+            'DATABASE_URL',
+            'mysql://user:user@mysql:3306/numbernine_app?serverVersion=5.7'
+        );
+        file_put_env_variable($this->envFile, 'REDIS_URL', 'redis://redis:6379');
 
         return Command::SUCCESS;
     }
@@ -143,33 +181,6 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
 
         $filesystem = new Filesystem();
         $filesystem->mirror($source, $this->publicPath . '/admin/');
-
-        return Command::SUCCESS;
-    }
-
-    private function createBaseVariables(): int
-    {
-        $this->io->title('General settings');
-
-        $this->appName = $this->io->ask('Application name', 'numbernine', function ($appName) {
-            if (empty($appName)) {
-                throw new \RuntimeException('Application name cannot be empty.');
-            }
-
-            return $this->slugger->slug($appName, '_')->lower();
-        });
-
-        if (file_put_env_variable($this->envFile, 'APP_NAME', $this->appName) === false) {
-            $this->io->error("Unable to create file '.env.local'");
-            return Command::FAILURE;
-        }
-
-        file_put_env_variable(
-            $this->envFile,
-            'DATABASE_URL',
-            'mysql://user:user@mysql:3306/numbernine_app?serverVersion=5.7'
-        );
-        file_put_env_variable($this->envFile, 'REDIS_URL', 'redis://redis:6379');
 
         return Command::SUCCESS;
     }
@@ -220,7 +231,15 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
 
     private function requireRedisBundle(): int
     {
-        $process = (new Process(['composer', 'require', 'numberninecms/redis', '-q']))
+        $process = Process::fromShellCommandline(
+            sprintf(
+                'docker run --rm --name numbernine_installer -it -u "$(id -u):$(id -g)" ' .
+                '-v %s:/srv/app -w /srv/app numberninecms/php:7.4-fpm-dev ' .
+                'composer require numberninecms/redis%s',
+                $this->projectPath,
+                $this->verbosity <= OutputInterface::VERBOSITY_NORMAL ? ' --quiet' : ''
+            )
+        )
             ->setTimeout(null)
             ->setTty(Process::isTtySupported());
 
@@ -285,9 +304,13 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
         );
         file_put_contents($filename, $dockerCompose);
 
-        $process = Process::fromShellCommandline(
-            '{ docker-compose up -d --quiet-pull; } > /dev/null 2>&1'
-        )
+        $command = 'docker-compose up -d';
+
+        if ($this->verbosity <= OutputInterface::VERBOSITY_NORMAL) {
+            $command = "{ $command --quiet-pull; } > /dev/null 2>&1";
+        }
+
+        $process = Process::fromShellCommandline($command)
             ->setTimeout(null)
             ->setTty(Process::isTtySupported());
 
@@ -304,13 +327,14 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
     private function installDatabase(): int
     {
         $php = sprintf(
-            "docker run --rm -it -u '1000:1000' -v %s:/srv/app --network %s_default " .
-            "-w /srv/app numberninecms/php:7.4-fpm-dev php",
+            'docker run --rm --name numbernine_installer -it -u "$(id -u):$(id -g)" -v %s:/srv/app ' .
+            "--network %s_default -w /srv/app numberninecms/php:7.4-fpm-dev php",
             $this->projectPath,
             basename($this->projectPath),
         );
         $symfony = "$php bin/console";
         $command = "$php -r 'set_time_limit(30); for(;;) { if(@fsockopen(\"mysql:\".(3306))) { break; } }'";
+        $quiet = $this->verbosity <= OutputInterface::VERBOSITY_NORMAL ? ' --quiet' : '';
 
         try {
             $process = Process::fromShellCommandline($command)
@@ -328,32 +352,32 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
                 $this->getHelper('process')->mustRun($this->output, $process);
             }
 
-            $process = Process::fromShellCommandline("$symfony doctrine:database:drop --quiet --if-exists --force")
+            $process = Process::fromShellCommandline("$symfony doctrine:database:drop$quiet --if-exists --force")
                 ->setTimeout(300)
                 ->setTty(Process::isTtySupported());
             $this->getHelper('process')->mustRun($this->output, $process);
 
-            $process = Process::fromShellCommandline("$symfony doctrine:database:create --quiet --if-not-exists")
+            $process = Process::fromShellCommandline("$symfony doctrine:database:create$quiet --if-not-exists")
                 ->setTimeout(300)
                 ->setTty(Process::isTtySupported());
             $this->getHelper('process')->mustRun($this->output, $process);
 
-            $process = Process::fromShellCommandline("$symfony doctrine:migrations:diff --quiet --no-interaction")
+            $process = Process::fromShellCommandline("$symfony doctrine:migrations:diff$quiet --no-interaction")
                 ->setTimeout(300)
                 ->setTty(Process::isTtySupported());
             $this->getHelper('process')->mustRun($this->output, $process);
 
-            $process = Process::fromShellCommandline("$symfony doctrine:migrations:migrate --quiet --no-interaction")
+            $process = Process::fromShellCommandline("$symfony doctrine:migrations:migrate$quiet --no-interaction")
                 ->setTimeout(300)
                 ->setTty(Process::isTtySupported());
             $this->getHelper('process')->mustRun($this->output, $process);
 
-            $process = Process::fromShellCommandline("$symfony doctrine:fixtures:load --quiet --no-interaction")
+            $process = Process::fromShellCommandline("$symfony doctrine:fixtures:load$quiet --no-interaction")
                 ->setTimeout(null)
                 ->setTty(Process::isTtySupported());
             $this->getHelper('process')->mustRun($this->output, $process);
 
-            $process = Process::fromShellCommandline("$symfony cache:clear --quiet")
+            $process = Process::fromShellCommandline("$symfony cache:clear$quiet")
                 ->setTimeout(300)
                 ->setTty(Process::isTtySupported());
             $this->getHelper('process')->mustRun($this->output, $process);

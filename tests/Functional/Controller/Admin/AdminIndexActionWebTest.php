@@ -12,7 +12,7 @@
 namespace NumberNine\Tests\Functional\Controller\Admin;
 
 use NumberNine\Repository\UserRepository;
-use NumberNine\Tests\Functional\DotEnvAwareWebTestCase;
+use NumberNine\Tests\DotEnvAwareWebTestCase;
 
 class AdminIndexActionWebTest extends DotEnvAwareWebTestCase
 {

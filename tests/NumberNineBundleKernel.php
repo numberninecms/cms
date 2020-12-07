@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Tests\Functional;
+namespace NumberNine\Tests;
 
 use DAMA\DoctrineTestBundle\DAMADoctrineTestBundle;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
@@ -57,18 +57,18 @@ class NumberNineBundleKernel extends Kernel
 
     protected function configureContainer(ContainerConfigurator $container): void
     {
-        $container->import('../../src/Bundle/Resources/config/app.yaml');
-        $container->import('../../src/Bundle/Resources/config/{app}_' . $this->environment . '.yaml');
-        $container->import('../../src/Bundle/Resources/config/services.yaml');
+        $container->import('../src/Bundle/Resources/config/app.yaml');
+        $container->import('../src/Bundle/Resources/config/{app}_' . $this->environment . '.yaml');
+        $container->import('../src/Bundle/Resources/config/services.yaml');
     }
 
     protected function configureRoutes(RoutingConfigurator $routes): void
     {
-        $routes->import('../../src/Bundle/Resources/config/routing.yaml');
+        $routes->import('../src/Bundle/Resources/config/routing.yaml');
     }
 
     public function getCacheDir(): string
     {
-        return __DIR__ . '/../../var/cache/test/' . spl_object_hash($this);
+        return __DIR__ . '/../var/cache/test/' . spl_object_hash($this);
     }
 }
