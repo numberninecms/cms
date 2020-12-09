@@ -11,6 +11,7 @@
 
 namespace NumberNine\Model\Component;
 
-interface ComponentInterface extends RenderableInterface, OptionsAndSettingsInjectableInterface
+interface ComponentInterface
 {
+    public function getExposedValues(): array;
 }

@@ -12,6 +12,7 @@
 namespace NumberNine\Content;
 
 use NumberNine\Model\Shortcode\CacheableContent;
+use NumberNine\Theme\TemplateResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Twig\Environment;
@@ -24,17 +25,20 @@ use function Symfony\Component\String\u;
 final class ComponentRenderer
 {
     private Environment $twig;
+    private TemplateResolver $templateResolver;
     private ComponentStore $componentStore;
     private AuthorizationCheckerInterface $authorizationChecker;
     private TagAwareCacheInterface $cache;
 
     public function __construct(
         Environment $twig,
+        TemplateResolver $templateResolver,
         ComponentStore $componentStore,
         AuthorizationCheckerInterface $authorizationChecker,
         TagAwareCacheInterface $cache
     ) {
         $this->twig = $twig;
+        $this->templateResolver = $templateResolver;
         $this->componentStore = $componentStore;
         $this->authorizationChecker = $authorizationChecker;
         $this->cache = $cache;
@@ -60,16 +64,18 @@ final class ComponentRenderer
                 }
             }
 
-            if (is_subclass_of($component, CacheableContent::class)) {
-                return $this->cache->get(
-                    $component->getCacheIdentifier(),
-                    function () use ($component) {
-                        return $component->render();
-                    }
-                );
-            } else {
-                return $component->render();
-            }
+//            if (is_subclass_of($component, CacheableContent::class)) {
+//                return $this->cache->get(
+//                    $component->getCacheIdentifier(),
+//                    function () use ($component) {
+//                        return $component->render();
+//                    }
+//                );
+//            } else {
+//                return $component->render();
+//            }
+            
+            $this->twig->render($this->templateResolver->resolveComponent($component), $component->getExposedValues());
         }
 
         if ($this->authorizationChecker->isGranted('Administrator')) {

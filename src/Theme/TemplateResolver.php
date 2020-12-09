@@ -14,6 +14,7 @@ namespace NumberNine\Theme;
 use InvalidArgumentException;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\Term;
+use NumberNine\Model\Component\ComponentInterface;
 use NumberNine\Model\Content\ContentType;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\ShortcodeInterface;
@@ -180,6 +181,18 @@ final class TemplateResolver implements TemplateResolverInterface
     }
 
     /**
+     * @param ComponentInterface $component
+     * @return string
+     * @throws LoaderError
+     * @throws SyntaxError
+     */
+    public function resolveComponent(ComponentInterface $component): string
+    {
+        $templates = $this->getComponentTemplatesCandidates($component);
+        return $this->twig->resolveTemplate($templates)->getTemplateName();
+    }
+
+    /**
      * @param AbstractShortcode $shortcode
      * @return string
      * @throws LoaderError
@@ -278,6 +291,35 @@ final class TemplateResolver implements TemplateResolverInterface
         }
 
         $templates[] = sprintf("@NumberNineShortcodes/%s/template.%s.twig", $subNamespace, $type);
+
+        return $templates;
+    }
+
+    public function getComponentTemplatesCandidates(ComponentInterface $component): array
+    {
+        $themeName = $this->themeStore->getCurrentThemeName();
+        $reflectionClass = new ReflectionClass($component);
+
+        $subNamespace = dirname(
+            str_replace(
+                '\\',
+                '/',
+                substr($reflectionClass->getName(), strpos($reflectionClass->getName(), '\\Component\\') + 11)
+            )
+        );
+
+        $templates = [
+            sprintf("@AppComponents/%s/template.html.twig", $subNamespace),
+            sprintf("@%sComponents/%s/template.html.twig", $themeName, $subNamespace),
+        ];
+
+        foreach ($this->bundles as $bundle => $fqcn) {
+            $templates[] = sprintf(
+                "@%sComponents/%s/template.html.twig",
+                str_replace('Bundle', '', $bundle),
+                $subNamespace
+            );
+        }
 
         return $templates;
     }
