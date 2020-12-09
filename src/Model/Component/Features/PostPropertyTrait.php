@@ -15,12 +15,7 @@ use NumberNine\Entity\Post;
 
 trait PostPropertyTrait
 {
-    private ?Post $post = null;
-
-    public function getPost(): ?Post
-    {
-        return $this->post;
-    }
+    protected ?Post $post = null;
 
     public function setPost(?Post $post): void
     {

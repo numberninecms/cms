@@ -11,7 +11,6 @@
 
 namespace NumberNine\Content;
 
-use NumberNine\Model\Shortcode\CacheableContent;
 use NumberNine\Theme\TemplateResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
@@ -64,18 +63,10 @@ final class ComponentRenderer
                 }
             }
 
-//            if (is_subclass_of($component, CacheableContent::class)) {
-//                return $this->cache->get(
-//                    $component->getCacheIdentifier(),
-//                    function () use ($component) {
-//                        return $component->render();
-//                    }
-//                );
-//            } else {
-//                return $component->render();
-//            }
-            
-            $this->twig->render($this->templateResolver->resolveComponent($component), $component->getExposedValues());
+            return $this->twig->render(
+                $this->templateResolver->resolveComponent($component),
+                $component->getExposedValues()
+            );
         }
 
         if ($this->authorizationChecker->isGranted('Administrator')) {
