@@ -14,14 +14,13 @@ namespace NumberNine\Shortcode\DividerShortcode;
 use NumberNine\Annotation\Form\Control;
 use NumberNine\Annotation\Shortcode;
 use NumberNine\Model\Shortcode\AbstractShortcode;
-use NumberNine\Model\Shortcode\CacheableContent;
 
 use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
 
 /**
  * @Shortcode(name="divider", label="Divider", editable=true, icon="remove")
  */
-final class DividerShortcode extends AbstractShortcode implements CacheableContent
+final class DividerShortcode extends AbstractShortcode
 {
     /**
      * @Control\OnOffSwitch(label="Full width")

@@ -16,14 +16,15 @@ use NumberNine\Annotation\ExtendedReader;
 use NumberNine\Annotation\Form\Responsive;
 use NumberNine\Entity\Preset;
 use NumberNine\Exception\InvalidShortcodeException;
-use NumberNine\Model\Shortcode\CacheableContent;
 use NumberNine\Model\Shortcode\ShortcodeInterface;
 use NumberNine\Repository\PresetRepository;
+use NumberNine\Shortcode\TextShortcode\TextShortcode;
 use NumberNine\Theme\PresetFinderInterface;
 use ReflectionException;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Thunder\Shortcode\Parser\ParserInterface;
 use Symfony\Component\Uid\Uuid;
+use Thunder\Shortcode\Shortcode\ParsedShortcodeInterface;
 
 final class ShortcodeProcessor
 {
@@ -38,6 +39,7 @@ final class ShortcodeProcessor
     private PresetRepository $presetRepository;
     private PresetFinderInterface $presetFinder;
     private ParserInterface $shortcodeParser;
+    private ShortcodeRenderer $shortcodeRenderer;
     private TagAwareCacheInterface $cache;
 
     public function __construct(
@@ -46,6 +48,7 @@ final class ShortcodeProcessor
         PresetRepository $templateRepository,
         PresetFinderInterface $presetFinder,
         ParserInterface $parser,
+        ShortcodeRenderer $shortcodeRenderer,
         TagAwareCacheInterface $cache
     ) {
         $this->shortcodeStore = $shortcodeStore;
@@ -53,6 +56,7 @@ final class ShortcodeProcessor
         $this->presetRepository = $templateRepository;
         $this->presetFinder = $presetFinder;
         $this->shortcodeParser = $parser;
+        $this->shortcodeRenderer = $shortcodeRenderer;
         $this->cache = $cache;
     }
 
@@ -63,12 +67,28 @@ final class ShortcodeProcessor
      */
     public function applyShortcodes(string $text): string
     {
-        $tree = $this->buildShortcodeTree($text, false, true);
+        $text = $this->insertTextShortcodes($text);
+
+        /** @var ParsedShortcodeInterface[] $parsedShortcodes */
+        $parsedShortcodes = $this->cache->get(md5($text), fn () => $this->shortcodeParser->parse($text));
 
         $renderedText = '';
 
-        foreach ($tree as $node) {
-            $renderedText .= $this->renderNode($node);
+        foreach ($parsedShortcodes as $parsedShortcode) {
+//            $renderedText .= $this->shortcodeRenderer->renderShortcode(
+//                $parsedShortcode->getName(),
+//                $parsedShortcode->getParameters()
+//            );
+
+            $shortcode = $this->shortcodeStore->getShortcode($parsedShortcode->getName());
+            $parameters = $parsedShortcode->getParameters();
+
+            if (!$shortcode instanceof TextShortcode && trim((string)$parsedShortcode->getContent())) {
+                $parameters['content'] = $this->applyShortcodes((string)$parsedShortcode->getContent());
+            }
+
+            $shortcode->setParameters($parameters);
+            $renderedText .= $shortcode->render();
         }
 
         return $renderedText;
@@ -94,15 +114,7 @@ final class ShortcodeProcessor
         $shortcode = $node['shortcode'];
         $shortcode->setParameters($node['parameters']);
 
-        if (is_subclass_of($shortcode, CacheableContent::class)) {
-            return $this->cache->get(
-                $shortcode->getCacheIdentifier(),
-                function () use ($shortcode) {
-                    return $shortcode->render();
-                }
-            );
-        }
-
+        //return $this->shortcodeRenderer->renderShortcode($shortcode, $node['parameters']);
         return $shortcode->render();
     }
 
@@ -122,7 +134,8 @@ final class ShortcodeProcessor
     ): array {
         $text = $this->insertTextShortcodes($text);
 
-        $parsedShortcodes = $this->shortcodeParser->parse($text);
+        /** @var ParsedShortcodeInterface[] $parsedShortcodes */
+        $parsedShortcodes = $this->cache->get(md5($text), fn () => $this->shortcodeParser->parse($text));
 
         $node = [];
         static $position = 0;
