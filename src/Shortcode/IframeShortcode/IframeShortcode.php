@@ -11,7 +11,6 @@
 
 namespace NumberNine\Shortcode\IframeShortcode;
 
-use NumberNine\Annotation\Form\Control;
 use NumberNine\Annotation\Shortcode;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 
@@ -20,18 +19,4 @@ use NumberNine\Model\Shortcode\AbstractShortcode;
  */
 final class IframeShortcode extends AbstractShortcode
 {
-    /**
-     * @Control\TextBox(label="Url")
-     */
-    public string $src = '';
-
-    /**
-     * @Control\TextBox(label="Width")
-     */
-    public string $width = '100%';
-
-    /**
-     * @Control\TextBox(label="Height")
-     */
-    public string $height = '500';
 }

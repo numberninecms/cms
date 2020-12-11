@@ -11,7 +11,6 @@
 
 namespace NumberNine\Shortcode\BlockShortcode;
 
-use NumberNine\Annotation\Form\Control;
 use NumberNine\Annotation\Shortcode;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Content\ContentEntityRenderer;
@@ -21,29 +20,27 @@ use NumberNine\Content\ContentEntityRenderer;
  */
 final class BlockShortcode extends AbstractShortcode
 {
-    /** @var ContentEntityRenderer */
-    private $contentEntityRenderer;
+    private ContentEntityRenderer $contentEntityRenderer;
 
-    /**
-     * @var string
-     * @Control\ContentEntity(label="Block", contentType="block")
-     */
-    public $id;
-
-    /**
-     * @param ContentEntityRenderer $contentEntityRenderer
-     */
     public function __construct(ContentEntityRenderer $contentEntityRenderer)
     {
         $this->contentEntityRenderer = $contentEntityRenderer;
     }
 
-    public function getBlockContent(): string
+    public function getBlockContent(BlockShortcodeData $data): string
     {
-        if (!$this->id) {
+        if (!$data->getId()) {
             return '[block]';
         }
 
-        return $this->contentEntityRenderer->renderBySlug($this->id, false);
+        return $this->contentEntityRenderer->renderBySlug($data->getId(), false);
+    }
+
+    /**
+     * @param BlockShortcodeData $data
+     */
+    public function process($data): void
+    {
+        $data->setBlockContent($this->getBlockContent($data));
     }
 }

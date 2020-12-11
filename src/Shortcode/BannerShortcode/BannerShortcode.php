@@ -11,7 +11,6 @@
 
 namespace NumberNine\Shortcode\BannerShortcode;
 
-use NumberNine\Annotation\Form\Control;
 use NumberNine\Annotation\Shortcode;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 
@@ -20,17 +19,4 @@ use NumberNine\Model\Shortcode\AbstractShortcode;
  */
 final class BannerShortcode extends AbstractShortcode
 {
-    /**
-     * @Control\TextBox(label="Link")
-     */
-    public string $link = '';
-
-    /**
-     * @Control\Color(label="Background color")
-     */
-    public string $backgroundColor = '';
-
-    public int $height = 0;
-    public int $heightMd = 0;
-    public int $heightSm = 0;
 }

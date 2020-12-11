@@ -11,7 +11,6 @@
 
 namespace NumberNine\Shortcode\GapShortcode;
 
-use NumberNine\Annotation\Form\Control;
 use NumberNine\Annotation\Shortcode;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 
@@ -20,8 +19,4 @@ use NumberNine\Model\Shortcode\AbstractShortcode;
  */
 final class GapShortcode extends AbstractShortcode
 {
-    /**
-     * @Control\SliderInput(label="Height", suffix="px")
-     */
-    public int $height = 30;
 }

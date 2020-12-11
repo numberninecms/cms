@@ -11,7 +11,6 @@
 
 namespace NumberNine\Shortcode\LogoShortcode;
 
-use NumberNine\Annotation\Form\Control;
 use NumberNine\Annotation\Shortcode;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 
@@ -24,33 +23,4 @@ use NumberNine\Model\Shortcode\AbstractShortcode;
  */
 final class LogoShortcode extends AbstractShortcode
 {
-    /**
-     * @Control\Image(label="Logo image")
-     */
-    private ?string $logoImage = '';
-
-    /**
-     * @Control\TextBox(label="Fallback text")
-     */
-    private ?string $fallbackText = '';
-
-    public function getLogoImage(): ?string
-    {
-        return $this->logoImage;
-    }
-
-    public function setLogoImage(?string $logoImage): void
-    {
-        $this->logoImage = $logoImage;
-    }
-
-    public function getFallbackText(): ?string
-    {
-        return $this->fallbackText;
-    }
-
-    public function setFallbackText(?string $fallbackText): void
-    {
-        $this->fallbackText = $fallbackText;
-    }
 }
