@@ -11,7 +11,6 @@
 
 namespace NumberNine\Shortcode\RecentPostsShortcode;
 
-use NumberNine\Annotation\Form\Control;
 use NumberNine\Annotation\Shortcode;
 use NumberNine\Annotation\Shortcode\Exclude;
 use NumberNine\Entity\Post;
@@ -31,16 +30,6 @@ final class RecentPostsShortcode extends AbstractShortcode
 {
     private PostRepository $postRepository;
 
-    /**
-     * @Control\TextBox(label="Title")
-     */
-    private string $title = 'Recent Posts';
-
-    /**
-     * @Control\TextBox(label="Number of posts to show")
-     */
-    private int $count = 10;
-
     public function __construct(PostRepository $postRepository)
     {
         $this->postRepository = $postRepository;
@@ -50,28 +39,16 @@ final class RecentPostsShortcode extends AbstractShortcode
      * @return Post[]
      * @Exclude("serialization")
      */
-    public function getPosts(): array
+    private function getPosts(int $count): array
     {
-        return $this->postRepository->getRecentPosts($this->count);
+        return $this->postRepository->getRecentPosts($count);
     }
 
-    public function getTitle(): string
+    /**
+     * @param RecentPostsShortcodeData $data
+     */
+    public function process($data): void
     {
-        return $this->title;
-    }
-
-    public function setTitle(string $title): void
-    {
-        $this->title = $title;
-    }
-
-    public function getCount(): int
-    {
-        return $this->count;
-    }
-
-    public function setCount(int $count): void
-    {
-        $this->count = $count;
+        $data->setPosts($this->getPosts($data->getCount()));
     }
 }

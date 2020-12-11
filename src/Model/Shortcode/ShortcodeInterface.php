@@ -11,14 +11,10 @@
 
 namespace NumberNine\Model\Shortcode;
 
-use NumberNine\Model\Component\OptionsAndSettingsInjectableInterface;
-use NumberNine\Model\Component\RenderableInterface;
-
-interface ShortcodeInterface extends RenderableInterface, OptionsAndSettingsInjectableInterface
+interface ShortcodeInterface
 {
-    public function renderPageBuilderTemplate(): string;
-
-    public function getParameters(bool $isSerialization = false): array;
-
-    public function setParameters(array $parameters, bool $isSerialization = false): ShortcodeInterface;
+    /**
+     * @param mixed $data
+     */
+    public function process($data): void;
 }

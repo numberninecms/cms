@@ -12,6 +12,7 @@
 namespace NumberNine\Twig\Extension;
 
 use Exception;
+use NumberNine\Content\ShortcodeRenderer;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\Term;
 use NumberNine\Exception\ThemeNotFoundException;
@@ -46,7 +47,7 @@ final class ThemeRuntime implements RuntimeExtensionInterface
     private ComponentRenderer $componentRenderer;
     private PermalinkGenerator $permalinkGenerator;
     private TemplateResolver $templateResolver;
-    private ShortcodeProcessor $shortcodeProcessor;
+    private ShortcodeRenderer $shortcodeRenderer;
     private ?Request $request;
     private RequestAnalyzer $requestAnalyzer;
     private UrlGeneratorInterface $urlGenerator;
@@ -60,7 +61,7 @@ final class ThemeRuntime implements RuntimeExtensionInterface
         ComponentRenderer $componentRenderer,
         PermalinkGenerator $permalinkGenerator,
         TemplateResolver $templateResolver,
-        ShortcodeProcessor $shortcodeProcessor,
+        ShortcodeRenderer $shortcodeRenderer,
         RequestStack $requestStack,
         RequestAnalyzer $requestAnalyzer,
         UrlGeneratorInterface $urlGenerator
@@ -72,7 +73,7 @@ final class ThemeRuntime implements RuntimeExtensionInterface
         $this->componentRenderer = $componentRenderer;
         $this->permalinkGenerator = $permalinkGenerator;
         $this->templateResolver = $templateResolver;
-        $this->shortcodeProcessor = $shortcodeProcessor;
+        $this->shortcodeRenderer = $shortcodeRenderer;
         $this->request = $requestStack->getMasterRequest();
         $this->requestAnalyzer = $requestAnalyzer;
         $this->urlGenerator = $urlGenerator;
@@ -105,7 +106,7 @@ final class ThemeRuntime implements RuntimeExtensionInterface
             []
         )[$areaName] ?? '';
 
-        return $this->shortcodeProcessor->applyShortcodes($areaContent);
+        return $this->shortcodeRenderer->applyShortcodes($areaContent);
     }
 
     /**

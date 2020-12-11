@@ -16,7 +16,6 @@ use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\Term;
 use NumberNine\Model\Component\ComponentInterface;
 use NumberNine\Model\Content\ContentType;
-use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\ShortcodeInterface;
 use NumberNine\Content\ContentService;
 use ReflectionClass;
@@ -26,7 +25,6 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Contracts\Cache\ItemInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\SyntaxError;
@@ -209,38 +207,38 @@ final class TemplateResolver implements TemplateResolverInterface
     }
 
     /**
-     * @param AbstractShortcode $shortcode
+     * @param ShortcodeInterface $shortcode
      * @return string
      * @throws LoaderError
      * @throws ReflectionException
      * @throws SyntaxError
      */
-    public function resolveShortcode(AbstractShortcode $shortcode): string
+    public function resolveShortcode(ShortcodeInterface $shortcode): string
     {
         return $this->resolveShortcodeTemplate($shortcode, 'html');
     }
 
     /**
-     * @param AbstractShortcode $shortcode
+     * @param ShortcodeInterface $shortcode
      * @return string
      * @throws LoaderError
      * @throws ReflectionException
      * @throws SyntaxError
      */
-    public function resolveShortcodePageBuilder(AbstractShortcode $shortcode): string
+    public function resolveShortcodePageBuilder(ShortcodeInterface $shortcode): string
     {
         return $this->resolveShortcodeTemplate($shortcode, 'vue');
     }
 
     /**
-     * @param AbstractShortcode $shortcode
+     * @param ShortcodeInterface $shortcode
      * @param string $type
      * @return string
      * @throws LoaderError
      * @throws ReflectionException
      * @throws SyntaxError
      */
-    private function resolveShortcodeTemplate(AbstractShortcode $shortcode, string $type): string
+    private function resolveShortcodeTemplate(ShortcodeInterface $shortcode, string $type): string
     {
         $templates = $this->getShortcodeTemplatesCandidates($shortcode, $type);
         return $this->twig->resolveTemplate($templates)->getTemplateName();

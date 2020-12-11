@@ -30,7 +30,16 @@ services:
 
     NumberNine\:
         resource: '../../../*'
-        exclude: '../../../{Annotation,Entity,Event,Exception,Pagination,Model,Util,Security/Capabilities.php}'
+        exclude:
+            - '../../../Annotation'
+            - '../../../Entity'
+            - '../../../Event'
+            - '../../../Exception'
+            - '../../../Pagination'
+            - '../../../Model'
+            - '../../../Util'
+            - '../../../Security/Capabilities.php'
+            - '../../../Shortcodes/*Data.php'
 
     NumberNine\Controller\:
         resource: '../../../Controller/*'

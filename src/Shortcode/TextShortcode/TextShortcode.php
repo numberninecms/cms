@@ -20,8 +20,4 @@ use NumberNine\Model\Shortcode\AbstractShortcode;
  */
 final class TextShortcode extends AbstractShortcode
 {
-    /**
-     * @Control\Editor(label="Content")
-     */
-    protected ?string $content;
 }
