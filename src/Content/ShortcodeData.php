@@ -22,7 +22,7 @@ abstract class ShortcodeData extends Event
     {
         $resolver = new OptionsResolver();
         $resolver->setDefined(array_keys($parameters));
-        $this->configureOptions($resolver);
+        $this->configureShortcodeParameters($resolver);
         $parameters = $resolver->resolve($parameters);
 
         foreach ($parameters as $key => $value) {
@@ -34,6 +34,6 @@ abstract class ShortcodeData extends Event
         }
     }
 
-    abstract public function configureOptions(OptionsResolver $resolver): void;
-    abstract public function toArray(): array;
+    abstract protected function configureShortcodeParameters(OptionsResolver $resolver): void;
+    abstract public function getTemplateParameters(): array;
 }

@@ -21,14 +21,14 @@ class TextShortcodeData extends ShortcodeData
      */
     protected string $content;
 
-    public function configureOptions(OptionsResolver $resolver): void
+    protected function configureShortcodeParameters(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'content' => ''
         ]);
     }
 
-    public function toArray(): array
+    public function getTemplateParameters(): array
     {
         return [
             'content' => $this->content,

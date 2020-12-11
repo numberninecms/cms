@@ -29,51 +29,51 @@ final class SectionShortcodeData extends ShortcodeData implements ResponsiveShor
     /**
      * @Control\OnOffSwitch(label="Centered container")
      */
-    private bool $container;
+    protected bool $container;
 
     /**
      * @Control\Image(label="Background image")
      */
-    private string $background;
+    protected string $background;
 
     /**
      * @Control\Select(label="Size", choices={
      *     {"label": "Original", "value": "original"},
      * })
      */
-    private string $backgroundSize;
+    protected string $backgroundSize;
 
     /**
      * @Control\Color(label="Background color")
      */
-    private string $backgroundColor;
+    protected string $backgroundColor;
 
     /**
      * @Control\TextBox(label="Background position")
      */
-    private string $backgroundPosition;
+    protected string $backgroundPosition;
 
     /**
      * @Control\Color(label="Background overlay")
      * @Responsive
      */
-    private array $backgroundOverlay;
+    protected array $backgroundOverlay;
 
-//    private string $backgroundOverlayMd = '';
-//    private string $backgroundOverlaySm = '';
-    private int $height;
-    private int $heightMd;
-    private int $heightSm;
+//    protected string $backgroundOverlayMd = '';
+//    protected string $backgroundOverlaySm = '';
+    protected int $height;
+    protected int $heightMd;
+    protected int $heightSm;
 
     /**
      * @Control\Borders(label="Margin")
      */
-    private string $margin;
+    protected string $margin;
 
     /**
      * @Control\Borders(label="Padding")
      */
-    private string $padding;
+    protected string $padding;
 
     /**
      * @Control\ButtonToggle(label="Color", choices={
@@ -81,14 +81,14 @@ final class SectionShortcodeData extends ShortcodeData implements ResponsiveShor
      *     {"label": "Dark", "value": "dark"},
      * })
      */
-    private string $color;
+    protected string $color;
 
-    private string $content;
+    protected string $content;
 
     /**
      * @Exclude("serialization")
      */
-    public function getClasses(): string
+    protected function getClasses(): string
     {
         $classes = array_merge(
             ['section', $this->color],
@@ -102,7 +102,7 @@ final class SectionShortcodeData extends ShortcodeData implements ResponsiveShor
     /**
      * @Exclude("serialization")
      */
-    public function getStyles(): string
+    protected function getStyles(): string
     {
         $styles = [];
 
@@ -115,7 +115,7 @@ final class SectionShortcodeData extends ShortcodeData implements ResponsiveShor
     /**
      * @Exclude("serialization")
      */
-    public function getBackgroundStyles(): string
+    protected function getBackgroundStyles(): string
     {
         $styles = [];
 
@@ -131,7 +131,7 @@ final class SectionShortcodeData extends ShortcodeData implements ResponsiveShor
         return sprintf(' style="%s"', array_implode_associative($styles, ';', ':'));
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    protected function configureShortcodeParameters(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'content' => '',
@@ -150,7 +150,7 @@ final class SectionShortcodeData extends ShortcodeData implements ResponsiveShor
         ]);
     }
 
-    public function toArray(): array
+    public function getTemplateParameters(): array
     {
         return [
             'color' => $this->color,

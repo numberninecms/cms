@@ -11,165 +11,42 @@
 
 namespace NumberNine\Shortcode\ImageShortcode;
 
-use NumberNine\Annotation\Form\Control;
 use NumberNine\Annotation\Shortcode;
-use NumberNine\Annotation\Shortcode\Exclude;
 use NumberNine\Entity\MediaFile;
 use NumberNine\Model\Shortcode\AbstractShortcode;
-use NumberNine\Model\Shortcode\CacheableContent;
 use NumberNine\Repository\MediaFileRepository;
-
-use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
-use function NumberNine\Common\Util\ArrayUtil\array_set_if_value_exists;
 
 /**
  * @Shortcode(name="image", label="Image", editable=true, icon="image")
  * @Shortcode\ExclusionPolicy("none")
  */
-final class ImageShortcode extends AbstractShortcode implements CacheableContent
+final class ImageShortcode extends AbstractShortcode
 {
     private MediaFileRepository $mediaFileRepository;
 
-    /**
-     * @Control\Image(label="Image")
-     */
-    private ?int $id = null;
-
-    private ?string $fromTitle = null;
-
-    /**
-     * @Exclude("serialization")
-     */
-    private ?MediaFile $image = null;
-
-    /**
-     * @Exclude("serialization")
-     */
-    private ?string $uploadPath = null;
-
-    /**
-     * @Control\SliderInput(label="Maximum width", max=1000, suffix="px")
-     */
-    private int $maxWidth = 400;
-
-    /**
-     * @Control\SliderInput(label="Maximum height", max=1000.0, suffix="px")
-     */
-    private int $maxHeight = 200;
-
-    /**
-     * @Control\TextBox(label="Alternative text")
-     */
-    private ?string $alt = null;
-
-    public function __construct(MediaFileRepository $mediaFileRepository, string $uploadPath)
+    public function __construct(MediaFileRepository $mediaFileRepository)
     {
         $this->mediaFileRepository = $mediaFileRepository;
-        $this->uploadPath = $uploadPath;
     }
 
-    public function getId(): ?int
+    private function getImage(ImageShortcodeData $data): ?MediaFile
     {
-        return $this->id;
-    }
-
-    public function setId(?int $id): void
-    {
-        $this->id = $id;
-    }
-
-    public function getFromTitle(): ?string
-    {
-        return $this->fromTitle;
-    }
-
-    public function setFromTitle(?string $fromTitle): void
-    {
-        if ($this->id) {
-            $this->fromTitle = null;
-            return;
-        }
-
-        $this->fromTitle = $fromTitle;
-    }
-
-    public function getImage(): ?MediaFile
-    {
-        if (!$this->id && !$this->fromTitle) {
+        if (!$data->getId() && !$data->getFromTitle()) {
             return null;
         }
 
-        if (!$this->image) {
-            if ($this->id) {
-                $this->image = $this->mediaFileRepository->find($this->id);
-            } else {
-                $this->image = $this->mediaFileRepository->findOneBy(['title' => $this->fromTitle]);
-            }
+        if ($data->getId()) {
+            return $this->mediaFileRepository->find($data->getId());
         }
 
-        return $this->image;
-    }
-
-    public function getUploadPath(): ?string
-    {
-        return $this->uploadPath;
+        return $this->mediaFileRepository->findOneBy(['title' => $data->getFromTitle()]);
     }
 
     /**
-     * @Exclude("serialization")
+     * @param ImageShortcodeData $data
      */
-    public function getStyles(): string
+    public function process($data): void
     {
-        $styles = [];
-
-        array_set_if_value_exists($styles, 'max-width', $this->maxWidth, sprintf('%dpx', $this->maxWidth));
-        array_set_if_value_exists($styles, 'max-height', $this->maxHeight, sprintf('%dpx', $this->maxHeight));
-
-        return array_implode_associative($styles, ';', ':');
-    }
-
-    public function getMaxWidth(): int
-    {
-        return $this->maxWidth;
-    }
-
-    public function setMaxWidth(int $maxWidth): void
-    {
-        $this->maxWidth = $maxWidth;
-    }
-
-    public function getMaxHeight(): int
-    {
-        return $this->maxHeight;
-    }
-
-    public function setMaxHeight(int $maxHeight): void
-    {
-        $this->maxHeight = $maxHeight;
-    }
-
-    public function getAlt(): ?string
-    {
-        return $this->alt;
-    }
-
-    public function setAlt(?string $alt): void
-    {
-        $this->alt = $alt;
-    }
-
-    /**
-     * @Shortcode\Exclude
-     */
-    public function getCacheIdentifier(): string
-    {
-        return sprintf(
-            'shortcode_image_%s_%s_%d_%d_%d',
-            $this->id,
-            $this->fromTitle,
-            $this->maxWidth,
-            $this->maxHeight,
-            $this->alt
-        );
+        $data->setImage($this->getImage($data));
     }
 }

@@ -93,7 +93,7 @@ final class DividerShortcodeData extends ShortcodeData
         }
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    protected function configureShortcodeParameters(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'fullWidth' => false,
@@ -105,7 +105,7 @@ final class DividerShortcodeData extends ShortcodeData
         ]);
     }
 
-    public function toArray(): array
+    public function getTemplateParameters(): array
     {
         return [
             'flexAlign' => $this->getFlexAlign(),

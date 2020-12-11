@@ -9,52 +9,41 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Shortcode\RecentPostsShortcode;
+namespace NumberNine\Shortcode\LinkShortcode;
 
 use NumberNine\Annotation\Form\Control;
 use NumberNine\Content\ShortcodeData;
-use NumberNine\Entity\Post;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class RecentPostsShortcodeData extends ShortcodeData
+final class LinkShortcodeData extends ShortcodeData
 {
     /**
-     * @Control\TextBox(label="Title")
+     * @Control\TextBox(label="URL")
+     */
+    protected string $href;
+
+    /**
+     * @Control\TextBox(label="Title tooltip text")
      */
     protected string $title;
 
-    /**
-     * @Control\TextBox(label="Number of posts to show")
-     */
-    protected int $count;
-
-    /** @var Post[] */
-    protected array $posts;
+    protected string $content;
 
     protected function configureShortcodeParameters(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'title' => 'Recent Posts',
-            'count' => 10,
-            'posts' => [],
+            'href' => '',
+            'title' => '',
+            'content' => '',
         ]);
     }
 
     public function getTemplateParameters(): array
     {
         return [
+            'href' => $this->href,
             'title' => $this->title,
-            'posts' => $this->posts,
+            'content' => $this->content,
         ];
-    }
-
-    public function getCount(): int
-    {
-        return $this->count;
-    }
-
-    public function setPosts(array $posts): void
-    {
-        $this->posts = $posts;
     }
 }

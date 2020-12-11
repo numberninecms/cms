@@ -12,10 +12,6 @@
 namespace NumberNine\Content;
 
 use Exception;
-use NumberNine\Model\Shortcode\ShortcodeInterface;
-use NumberNine\Shortcode\DividerShortcode\DividerShortcode;
-use NumberNine\Shortcode\PaginationShortcode\PaginationShortcodeData;
-use NumberNine\Shortcode\SectionShortcode\SectionShortcode;
 use NumberNine\Shortcode\TextShortcode\TextShortcode;
 use NumberNine\Theme\TemplateResolver;
 use Psr\Cache\InvalidArgumentException;
@@ -28,7 +24,6 @@ use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
-use function Symfony\Component\String\u;
 
 class ShortcodeRenderer
 {
@@ -64,7 +59,11 @@ class ShortcodeRenderer
     /**
      * @param string $text
      * @return string
+     * @throws Exception
      * @throws InvalidArgumentException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function applyShortcodes(string $text): string
     {
@@ -85,6 +84,7 @@ class ShortcodeRenderer
     /**
      * @param ParsedShortcodeInterface $parsedShortcode
      * @return string
+     * @throws Exception
      * @throws InvalidArgumentException
      * @throws LoaderError
      * @throws RuntimeError
@@ -101,10 +101,6 @@ class ShortcodeRenderer
             $parameters['content'] = trim((string)$parsedShortcode->getContent());
         }
 
-        if (!$shortcode instanceof TextShortcode && $parameters['content']) {
-            $parameters['content'] = $this->applyShortcodes((string)$parsedShortcode->getContent());
-        }
-
         $className = sprintf('%sData', get_class($shortcode));
         $data = null;
 
@@ -115,7 +111,7 @@ class ShortcodeRenderer
 
         return $this->twig->render(
             $this->templateResolver->resolveShortcode($shortcode),
-            $data ? $data->toArray() : [],
+            $data ? $data->getTemplateParameters() : [],
         );
     }
 }

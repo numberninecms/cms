@@ -11,7 +11,6 @@
 
 namespace NumberNine\Shortcode\MyAccountLinkShortcode;
 
-use NumberNine\Annotation\Form\Control;
 use NumberNine\Annotation\Shortcode;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 
@@ -20,33 +19,4 @@ use NumberNine\Model\Shortcode\AbstractShortcode;
  */
 final class MyAccountLinkShortcode extends AbstractShortcode
 {
-    /**
-     * @Control\TextBox(label="Logged out text")
-     */
-    private string $loggedOutText = 'Login / Register';
-
-    /**
-     * @Control\TextBox(label="Logged out text")
-     */
-    private string $loggedInText = 'My account';
-
-    public function getLoggedOutText(): string
-    {
-        return $this->loggedOutText;
-    }
-
-    public function setLoggedOutText(string $loggedOutText): void
-    {
-        $this->loggedOutText = $loggedOutText;
-    }
-
-    public function getLoggedInText(): string
-    {
-        return $this->loggedInText;
-    }
-
-    public function setLoggedInText(string $loggedInText): void
-    {
-        $this->loggedInText = $loggedInText;
-    }
 }

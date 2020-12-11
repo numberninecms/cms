@@ -9,32 +9,37 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Shortcode\PaginationShortcode;
+namespace NumberNine\Shortcode\MyAccountLinkShortcode;
 
+use NumberNine\Annotation\Form\Control;
 use NumberNine\Content\ShortcodeData;
-use NumberNine\Pagination\Paginator;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class PaginationShortcodeData extends ShortcodeData
+final class MyAccountLinkShortcodeData extends ShortcodeData
 {
-    protected ?Paginator $paginator;
+    /**
+     * @Control\TextBox(label="Logged out text")
+     */
+    protected string $loggedOutText;
+
+    /**
+     * @Control\TextBox(label="Logged out text")
+     */
+    protected string $loggedInText;
 
     protected function configureShortcodeParameters(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'paginator' => null,
+            'loggedOutText' => 'Login / Register',
+            'loggedInText' => 'My account',
         ]);
     }
 
     public function getTemplateParameters(): array
     {
         return [
-            'paginator' => $this->paginator,
+            'loggedOutText' => $this->loggedOutText,
+            'loggedInText' => $this->loggedInText,
         ];
-    }
-
-    public function setPaginator(?Paginator $paginator): void
-    {
-        $this->paginator = $paginator;
     }
 }

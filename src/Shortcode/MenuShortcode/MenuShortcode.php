@@ -32,11 +32,6 @@ final class MenuShortcode extends AbstractShortcode
     private ContentEntityRepository $contentEntityRepository;
     private PermalinkGenerator $permalinkGenerator;
 
-    /**
-     * @Control\Menu(label="Menu")
-     */
-    private ?int $id = null;
-
     private ?Menu $menu = null;
 
     /**
@@ -54,51 +49,25 @@ final class MenuShortcode extends AbstractShortcode
         $this->permalinkGenerator = $permalinkGenerator;
     }
 
-    public function getId(): ?int
+    public function getMenuItems(MenuShortcodeData $data): array
     {
-        return $this->id;
-    }
-
-    public function setId(?int $id): void
-    {
-        $this->id = $id;
-    }
-
-    public function getMenuItems(): array
-    {
-        if (!($menu = $this->getMenu())) {
+        if (!($menu = $this->getMenu($data->getId()))) {
             return [];
         }
 
-        if (!$this->menuItems) {
-            $entityIds = $this->getEntityIds($menu->getMenuItems());
-            $entities = $this->contentEntityRepository->findBy(['id' => $entityIds]);
+        $entityIds = $this->getEntityIds($menu->getMenuItems());
+        $entities = $this->contentEntityRepository->findBy(['id' => $entityIds]);
 
-            $this->menuItems = $this->prepareMenuItems($menu->getMenuItems(), $entities);
-        }
-
-        return $this->menuItems;
+        return $this->prepareMenuItems($menu->getMenuItems(), $entities);
     }
 
-    /**
-     * @Exclude("serialization")
-     */
-    public function getDepth(): int
+    private function getMenu(?int $id): ?Menu
     {
-        return array_depth($this->getMenuItems());
-    }
-
-    private function getMenu(): ?Menu
-    {
-        if (!$this->getId()) {
+        if (!$id) {
             return null;
         }
 
-        if (!$this->menu) {
-            $this->menu = $this->menuRepository->find($this->id);
-        }
-
-        return $this->menu;
+        return $this->menuRepository->find($id);
     }
 
     private function getEntityIds(array $menuItems): array
@@ -140,5 +109,13 @@ final class MenuShortcode extends AbstractShortcode
             },
             $menuItems
         );
+    }
+
+    /**
+     * @param MenuShortcodeData $data
+     */
+    public function process($data): void
+    {
+        $data->setMenuItems($this->getMenuItems($data));
     }
 }

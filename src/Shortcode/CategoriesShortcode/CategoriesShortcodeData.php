@@ -36,7 +36,7 @@ final class CategoriesShortcodeData extends ShortcodeData
     protected array $categories;
     protected ?Term $term;
 
-    public function configureOptions(OptionsResolver $resolver): void
+    protected function configureShortcodeParameters(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'title' => 'Categories',
@@ -46,7 +46,7 @@ final class CategoriesShortcodeData extends ShortcodeData
         ]);
     }
 
-    public function toArray(): array
+    public function getTemplateParameters(): array
     {
         return [
             'title' => $this->title,
