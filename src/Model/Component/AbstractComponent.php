@@ -23,7 +23,7 @@ abstract class AbstractComponent implements ComponentInterface
     use RenderTrait;
     use OptionsAndSettingsInjectionTrait;
 
-    public function getExposedValues(): array
+    public function getTemplateParameters(): array
     {
         return [];
     }

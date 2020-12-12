@@ -13,5 +13,5 @@ namespace NumberNine\Model\Component;
 
 interface ComponentInterface
 {
-    public function getExposedValues(): array;
+    public function getTemplateParameters(): array;
 }

@@ -65,7 +65,7 @@ final class ComponentRenderer
 
             return $this->twig->render(
                 $this->templateResolver->resolveComponent($component),
-                $component->getExposedValues()
+                $component->getTemplateParameters()
             );
         }
 
