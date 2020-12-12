@@ -12,18 +12,21 @@
 namespace NumberNine\Event;
 
 use Doctrine\ORM\QueryBuilder;
+use NumberNine\Model\Content\ContentType;
 use Symfony\Contracts\EventDispatcher\Event;
 
 final class MainLoopQueryEvent extends Event
 {
     private QueryBuilder $queryBuilder;
+    private ContentType $contentType;
 
     /**
      * @param QueryBuilder $queryBuilder
      */
-    public function __construct(QueryBuilder $queryBuilder)
+    public function __construct(QueryBuilder $queryBuilder, ContentType $contentType)
     {
         $this->queryBuilder = $queryBuilder;
+        $this->contentType = $contentType;
     }
 
     /**
@@ -34,11 +37,8 @@ final class MainLoopQueryEvent extends Event
         return $this->queryBuilder;
     }
 
-    /**
-     * @param QueryBuilder $queryBuilder
-     */
-    public function setQueryBuilder(QueryBuilder $queryBuilder): void
+    public function getContentType(): ContentType
     {
-        $this->queryBuilder = $queryBuilder;
+        return $this->contentType;
     }
 }
