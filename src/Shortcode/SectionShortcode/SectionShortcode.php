@@ -26,7 +26,4 @@ use NumberNine\Model\Shortcode\AbstractShortcode;
  */
 final class SectionShortcode extends AbstractShortcode
 {
-    public function process($data): void
-    {
-    }
 }

@@ -20,9 +20,6 @@ use NumberNine\Model\Component\Features\RenderTrait;
  */
 abstract class AbstractComponent implements ComponentInterface
 {
-    use RenderTrait;
-    use OptionsAndSettingsInjectionTrait;
-
     public function getTemplateParameters(): array
     {
         return [];
