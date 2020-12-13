@@ -13,7 +13,7 @@ namespace NumberNine\Content;
 
 use Exception;
 use NumberNine\Model\Shortcode\ShortcodeInterface;
-use NumberNine\Shortcode\TextShortcode\TextShortcode;
+use NumberNine\Shortcode\TextShortcode;
 use NumberNine\Theme\TemplateResolver;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

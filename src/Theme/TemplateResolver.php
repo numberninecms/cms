@@ -279,12 +279,19 @@ final class TemplateResolver implements TemplateResolverInterface
         $themeName = $this->themeStore->getCurrentThemeName();
         $shortcodeReflection = new ReflectionClass($shortcode);
 
-        $subNamespace = dirname(
-            str_replace(
-                '\\',
-                '/',
-                substr($shortcodeReflection->getName(), strpos($shortcodeReflection->getName(), '\\Shortcode\\') + 11)
-            )
+        $subNamespace = sprintf(
+            '%s/%s',
+            dirname(
+                str_replace(
+                    '\\',
+                    '/',
+                    substr(
+                        $shortcodeReflection->getName(),
+                        strpos($shortcodeReflection->getName(), '\\Shortcode\\') + 11
+                    )
+                )
+            ),
+            basename($shortcodeReflection->getShortName())
         );
 
         $templates = [
