@@ -65,7 +65,7 @@ class ShortcodeProcessorTest extends DotEnvAwareWebTestCase
         self::assertEquals(
             [
                 0 => [
-                    'type' => 'NumberNine\\Shortcode\\FlexRowShortcode\\FlexRowShortcode',
+                    'type' => 'NumberNine\\Shortcode\\FlexRowShortcode',
                     'name' => 'flex_row',
                     'parameters' => [
                         'justify' => 'center',
@@ -89,7 +89,7 @@ class ShortcodeProcessorTest extends DotEnvAwareWebTestCase
                     'icon' => 'view_stream',
                     'children' => [
                         0 => [
-                            'type' => 'NumberNine\\Shortcode\\LinkShortcode\\LinkShortcode',
+                            'type' => 'NumberNine\\Shortcode\\LinkShortcode',
                             'name' => 'link',
                             'parameters' => [
                                 'href' => 'http://numbernine/',
@@ -111,7 +111,7 @@ class ShortcodeProcessorTest extends DotEnvAwareWebTestCase
                             'icon' => 'link',
                             'children' => [
                                 0 => [
-                                    'type' => 'NumberNine\\Shortcode\\TextShortcode\\TextShortcode',
+                                    'type' => 'NumberNine\\Shortcode\\TextShortcode',
                                     'name' => 'text',
                                     'parameters' => [
                                     ],

@@ -14,7 +14,6 @@ namespace NumberNine\Controller\Admin\Api\PageBuilder;
 use NumberNine\Content\ShortcodeRenderer;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Content\ShortcodeProcessor;
-use NumberNine\Form\FormGenerator;
 use NumberNine\Http\ResponseFactory;
 use NumberNine\Content\ShortcodeStore;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilder;
@@ -27,20 +26,17 @@ abstract class AbstractPageBuilderGetAction implements AdminController
     private ShortcodeProcessor $shortcodeProcessor;
     private ShortcodeRenderer $shortcodeRenderer;
     private ShortcodeStore $shortcodeStore;
-    private FormGenerator $formGenerator;
 
     public function __construct(
         ResponseFactory $responseFactory,
         ShortcodeProcessor $shortcodeProcessor,
         ShortcodeRenderer $shortcodeRenderer,
-        ShortcodeStore $shortcodeStore,
-        FormGenerator $formGenerator
+        ShortcodeStore $shortcodeStore
     ) {
         $this->responseFactory = $responseFactory;
         $this->shortcodeProcessor = $shortcodeProcessor;
         $this->shortcodeRenderer = $shortcodeRenderer;
         $this->shortcodeStore = $shortcodeStore;
-        $this->formGenerator = $formGenerator;
     }
 
     protected function createPageBuilderResponseFromText(string $text): JsonResponse
@@ -56,7 +52,7 @@ abstract class AbstractPageBuilderGetAction implements AdminController
                 $formBuilder = new PageBuilderFormBuilder();
                 $shortcode->buildPageBuilderForm($formBuilder);
                 $controls[$name] = $formBuilder->all();
-                $components[$name] = $this->shortcodeProcessor->shortcodeToArray($name, null, 0, true);
+                $components[$name] = $this->shortcodeProcessor->shortcodeToArray($name, [], 0);
             }
         }
 

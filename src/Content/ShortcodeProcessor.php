@@ -31,10 +31,6 @@ use Thunder\Shortcode\Shortcode\ParsedShortcodeInterface;
 
 final class ShortcodeProcessor
 {
-    private const REGEX_ISOLATE_FULL_SHORTCODE = '@\[(\[?)(%shortcode%)(?![\w\-])([^\]/]*(?:/(?!\])[^\]/]*)*?)' .
-        '(?:(/)\]|\](?:([^\[]*(?:\[(?!/\2\])[^\[]*)*)(\[/\2\]))?)(\]?)@';
-    private const REGEX_ISOLATE_SHORTCODE_PARAMETER = '@([\w\-]+)\s*=\s*"([^"]*)"(?:\s|$)|([\w\-]+)\s*=\s*\'([^\']*)' .
-        '\'(?:\s|$)|([\w\-]+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|\'([^\']*)\'(?:\s|$)|(\S+)(?:\s|$)@';
     private const REGEX_HAS_IMAGE_EXTENSION = '@\.(?:jpe?g|png|gif|bmp|webp)$@i';
 
     private ShortcodeStore $shortcodeStore;
@@ -97,14 +93,12 @@ final class ShortcodeProcessor
                 continue;
             }
 
-            $shortcodeFullString = $parsedShortcode->getText();
             $child = array_merge(
                 $isSerialization ? [] : ['shortcode' => $shortcode],
                 $this->shortcodeToArray(
                     $parsedShortcode->getName(),
-                    $shortcodeFullString,
-                    $position++,
-                    $isSerialization
+                    $parsedShortcode->getParameters(),
+                    $position++
                 )
             );
 
@@ -133,17 +127,15 @@ final class ShortcodeProcessor
 
     /**
      * @param string $shortcodeName
-     * @param string|null $shortcodeFullString
+     * @param array $parameters
      * @param int $position
-     * @param bool $isSerialization
      * @return array
      * @throws ReflectionException
      */
     public function shortcodeToArray(
         string $shortcodeName,
-        string $shortcodeFullString = null,
-        int $position = 0,
-        bool $isSerialization = false
+        array $parameters = [],
+        int $position = 0
     ): array {
         $shortcode = $this->shortcodeStore->getShortcode($shortcodeName);
         $shortcodeMetadata = $this->shortcodeStore->getShortcodeMetadata($shortcodeName);
@@ -152,7 +144,7 @@ final class ShortcodeProcessor
 
         $resolver = new OptionsResolver();
         $shortcode->configureParameters($resolver);
-        $parameters = $resolver->resolve([]);
+        $parameters = $resolver->resolve($parameters);
 
         $array = [
             'type' => get_class($shortcode),
@@ -213,47 +205,6 @@ final class ShortcodeProcessor
         $text = preg_replace('@\[text]\s*(</\s*[a-zA-Z]+\s*>)@sim', '[text]', (string)$text);
 
         return (string)$text;
-    }
-
-    private function extractShortcodeData(string $shortcodeName, string $text): ?array
-    {
-        if (
-            !preg_match_all(str_replace(
-                '%shortcode%',
-                $shortcodeName,
-                self::REGEX_ISOLATE_FULL_SHORTCODE
-            ), $text, $matches, PREG_SET_ORDER)
-        ) {
-            return null;
-        }
-
-        return array_map(
-            function ($match) {
-                return [
-                    'full' => $match[0],
-                    'parameters' => array_merge(
-                        $this->getShortcodeParameters($match[3]),
-                        ['content' => trim($match[5])]
-                    )
-                ];
-            },
-            $matches
-        );
-    }
-
-    private function getShortcodeParameters(string $parameters): array
-    {
-        if (!preg_match_all(self::REGEX_ISOLATE_SHORTCODE_PARAMETER, $parameters, $matches, PREG_SET_ORDER)) {
-            return [];
-        }
-
-        return array_reduce(
-            $matches,
-            static function ($array, $value) {
-                $array[$value[1]] = $value[2];
-                return $array;
-            }
-        );
     }
 
     /**
