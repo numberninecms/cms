@@ -16,12 +16,14 @@ use NumberNine\Annotation\ExtendedReader;
 use NumberNine\Annotation\Form\Responsive;
 use NumberNine\Entity\Preset;
 use NumberNine\Exception\InvalidShortcodeException;
+use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use NumberNine\Model\Shortcode\ShortcodeInterface;
 use NumberNine\Repository\PresetRepository;
 use NumberNine\Shortcode\TextShortcode\TextShortcode;
 use NumberNine\Theme\PresetFinderInterface;
 use Psr\Cache\InvalidArgumentException;
 use ReflectionException;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Thunder\Shortcode\Parser\ParserInterface;
 use Symfony\Component\Uid\Uuid;
@@ -89,7 +91,9 @@ final class ShortcodeProcessor
                 continue;
             }
 
-            if ($onlyEditables && !$shortcodeMetadata->editable) {
+            $editable = is_subclass_of($shortcode, EditableShortcodeInterface::class);
+
+            if ($onlyEditables && !$editable) {
                 continue;
             }
 
@@ -104,7 +108,7 @@ final class ShortcodeProcessor
                 )
             );
 
-            if ($shortcodeMetadata->editable) {
+            if ($editable) {
                 $child['id'] = Uuid::v4()->toRfc4122();
             }
 
@@ -143,22 +147,20 @@ final class ShortcodeProcessor
     ): array {
         $shortcode = $this->shortcodeStore->getShortcode($shortcodeName);
         $shortcodeMetadata = $this->shortcodeStore->getShortcodeMetadata($shortcodeName);
-        $shortcodeData = $shortcodeFullString
-            ? $this->extractShortcodeData($shortcodeMetadata->name, $shortcodeFullString)
-            : null;
-
         $responsive = $this->getShortcodeResponsiveParameters($shortcode);
+        $editable = is_subclass_of($shortcode, EditableShortcodeInterface::class);
+
+        $resolver = new OptionsResolver();
+        $shortcode->configureParameters($resolver);
+        $parameters = $resolver->resolve([]);
 
         $array = [
             'type' => get_class($shortcode),
             'name' => $shortcodeMetadata->name,
-            'parameters' => $shortcode->setParameters(
-                is_array($shortcodeData) ? ($shortcodeData[0]['parameters'] ?? []) : [],
-                $isSerialization
-            )->getParameters($isSerialization),
+            'parameters' => $parameters,
             'responsive' => $responsive,
             'computed' => [],
-            'editable' => $shortcodeMetadata->editable,
+            'editable' => $editable,
             'container' => $shortcodeMetadata->container,
         ];
 
@@ -166,7 +168,7 @@ final class ShortcodeProcessor
             $array['leaf'] = true;
         }
 
-        if ($shortcodeMetadata->editable) {
+        if ($editable) {
             $array['id'] = null;
             $array['position'] = $position;
             $array['label'] = $shortcodeMetadata->label;

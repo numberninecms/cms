@@ -9,9 +9,8 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Annotation\Form\Control;
+namespace NumberNine\Model\PageBuilder\Control;
 
-abstract class AbstractFormControl implements FormControlInterface
+final class SliderInputControl extends SliderControl
 {
-    public string $label = '';
 }

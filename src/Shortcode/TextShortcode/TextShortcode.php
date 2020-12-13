@@ -11,13 +11,36 @@
 
 namespace NumberNine\Shortcode\TextShortcode;
 
-use NumberNine\Annotation\Form\Control;
 use NumberNine\Annotation\Shortcode;
+use NumberNine\Model\PageBuilder\Control\EditorControl;
+use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
+use NumberNine\Model\Shortcode\EditableShortcodeInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @Shortcode(name="text", editable=true, label="Text", icon="text_fields")
+ * @Shortcode(name="text", label="Text", icon="text_fields")
  */
-final class TextShortcode extends AbstractShortcode
+final class TextShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
+    public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void
+    {
+        $builder
+            ->add('content', EditorControl::class)
+        ;
+    }
+
+    public function configureParameters(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'content' => ''
+        ]);
+    }
+
+    public function processParameters(array $parameters): array
+    {
+        return [
+            'content' => $parameters['content'],
+        ];
+    }
 }

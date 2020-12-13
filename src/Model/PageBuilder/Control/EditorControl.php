@@ -9,14 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Annotation\Form\Control;
+namespace NumberNine\Model\PageBuilder\Control;
 
-use Doctrine\Common\Annotations\Annotation;
+use NumberNine\Model\PageBuilder\AbstractPageBuilderFormControl;
 
-/**
- * @Annotation
- * @Target("PROPERTY")
- */
-final class TextAlign extends AbstractFormControl
+class EditorControl extends AbstractPageBuilderFormControl
 {
 }

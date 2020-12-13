@@ -12,11 +12,39 @@
 namespace NumberNine\Shortcode\LinkShortcode;
 
 use NumberNine\Annotation\Shortcode;
+use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
+use NumberNine\Model\Shortcode\EditableShortcodeInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @Shortcode(name="link", label="Link", editable=true, container=true, icon="link")
+ * @Shortcode(name="link", label="Link", container=true, icon="link")
  */
-final class LinkShortcode extends AbstractShortcode
+final class LinkShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
+    public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void
+    {
+        $builder
+            ->add('href', null, ['label' => 'Url'])
+            ->add('title', null, ['label' => 'Title tooltip text'])
+        ;
+    }
+
+    public function configureParameters(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'href' => '',
+            'title' => '',
+            'content' => '',
+        ]);
+    }
+
+    public function processParameters(array $parameters): array
+    {
+        return [
+            'href' => $parameters['href'],
+            'title' => $parameters['title'],
+            'content' => $parameters['content'],
+        ];
+    }
 }

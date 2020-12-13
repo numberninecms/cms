@@ -12,10 +12,12 @@
 namespace NumberNine\Content;
 
 use Exception;
+use NumberNine\Model\Shortcode\ShortcodeInterface;
 use NumberNine\Shortcode\TextShortcode\TextShortcode;
 use NumberNine\Theme\TemplateResolver;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Thunder\Shortcode\Parser\ParserInterface;
@@ -101,17 +103,27 @@ class ShortcodeRenderer
             $parameters['content'] = trim((string)$parsedShortcode->getContent());
         }
 
-        $className = sprintf('%sData', get_class($shortcode));
-        $data = null;
-
-        if (class_exists($className) && is_subclass_of($className, ShortcodeData::class)) {
-            /** @var ShortcodeData $data */
-            $data = $this->eventDispatcher->dispatch(new $className($parameters));
-        }
+        $resolver = new OptionsResolver();
+        $resolver->setDefined(array_keys($parameters)); // @phpstan-ignore-line
+        $shortcode->configureParameters($resolver);
+        $parameters = $resolver->resolve($parameters);
+        $processedParameters = $shortcode->processParameters($parameters);
 
         return $this->twig->render(
             $this->templateResolver->resolveShortcode($shortcode),
-            $data ? $data->getTemplateParameters() : [],
+            $processedParameters,
         );
+    }
+
+    public function renderPageBuilderTemplate(ShortcodeInterface $shortcode): string
+    {
+        $template = $this->templateResolver->resolveShortcodePageBuilder($shortcode);
+
+        $template = $this->twig->createTemplate(sprintf(
+            '{%% apply spaceless %%}%s{%% endapply %%}',
+            file_get_contents($template->getSourceContext()->getPath()),
+        ));
+
+        return $this->twig->render($template);
     }
 }

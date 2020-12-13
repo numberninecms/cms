@@ -11,28 +11,34 @@
 
 namespace NumberNine\Controller\Admin\Api\PageBuilder;
 
+use NumberNine\Content\ShortcodeRenderer;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Content\ShortcodeProcessor;
 use NumberNine\Form\FormGenerator;
 use NumberNine\Http\ResponseFactory;
 use NumberNine\Content\ShortcodeStore;
+use NumberNine\Model\PageBuilder\PageBuilderFormBuilder;
+use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 abstract class AbstractPageBuilderGetAction implements AdminController
 {
     private ResponseFactory $responseFactory;
     private ShortcodeProcessor $shortcodeProcessor;
+    private ShortcodeRenderer $shortcodeRenderer;
     private ShortcodeStore $shortcodeStore;
     private FormGenerator $formGenerator;
 
     public function __construct(
         ResponseFactory $responseFactory,
         ShortcodeProcessor $shortcodeProcessor,
+        ShortcodeRenderer $shortcodeRenderer,
         ShortcodeStore $shortcodeStore,
         FormGenerator $formGenerator
     ) {
         $this->responseFactory = $responseFactory;
         $this->shortcodeProcessor = $shortcodeProcessor;
+        $this->shortcodeRenderer = $shortcodeRenderer;
         $this->shortcodeStore = $shortcodeStore;
         $this->formGenerator = $formGenerator;
     }
@@ -44,11 +50,12 @@ abstract class AbstractPageBuilderGetAction implements AdminController
         $components = [];
 
         foreach ($this->shortcodeStore->getShortcodes() as $name => $shortcode) {
-            $templates[$name] = $shortcode->renderPageBuilderTemplate();
-            $controls[$name] = $this->formGenerator->getFormControls($shortcode);
-            $metadata = $this->shortcodeStore->getShortcodeMetadata($name);
+            $templates[$name] = $this->shortcodeRenderer->renderPageBuilderTemplate($shortcode);
 
-            if ($metadata->editable === true) {
+            if (is_subclass_of($shortcode, EditableShortcodeInterface::class)) {
+                $formBuilder = new PageBuilderFormBuilder();
+                $shortcode->buildPageBuilderForm($formBuilder);
+                $controls[$name] = $formBuilder->all();
                 $components[$name] = $this->shortcodeProcessor->shortcodeToArray($name, null, 0, true);
             }
         }

@@ -11,10 +11,10 @@
 
 namespace NumberNine\Model\Shortcode;
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
 interface ShortcodeInterface
 {
-    /**
-     * @param mixed $data
-     */
-    public function process($data): void;
+    public function configureParameters(OptionsResolver $resolver): void;
+    public function processParameters(array $parameters): array;
 }

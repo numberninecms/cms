@@ -9,16 +9,8 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Annotation\Form\Control;
+namespace NumberNine\Model\PageBuilder\Control;
 
-use Doctrine\Common\Annotations\Annotation;
-
-/**
- * @Annotation
- * @Target("PROPERTY")
- */
-final class ContentEntity extends AbstractFormControl
+class SlidableInputControl extends SliderControl
 {
-    /** @var string */
-    public $contentType;
 }

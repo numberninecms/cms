@@ -12,17 +12,45 @@
 namespace NumberNine\Shortcode\ButtonShortcode;
 
 use NumberNine\Annotation\Shortcode;
+use NumberNine\Model\PageBuilder\Control\SelectControl;
+use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
+use NumberNine\Model\Shortcode\EditableShortcodeInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @Shortcode(name="button", label="Button", editable=true, icon="crop_7_5")
+ * @Shortcode(name="button", label="Button", icon="crop_7_5")
  */
-final class ButtonShortcode extends AbstractShortcode
+final class ButtonShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
-    public function process($data): void
+    public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void
     {
-        if ($data->getContent()) {
-            $data->setText($data->getContent());
-        }
+        $builder
+            ->add('text')
+            ->add('style', SelectControl::class, ['choices' => [
+                'default' => 'Default',
+                'outline' => 'Outline',
+            ]])
+            ->add('link')
+        ;
+    }
+
+    public function configureParameters(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'content' => '',
+            'text' => '',
+            'style' => 'default',
+            'link' => '',
+        ]);
+    }
+
+    public function processParameters(array $parameters): array
+    {
+        return [
+            'text' => $parameters['text'],
+            'style' => $parameters['style'],
+            'link' => $parameters['link'],
+        ];
     }
 }

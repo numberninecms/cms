@@ -12,13 +12,17 @@
 namespace NumberNine\Shortcode\BlockShortcode;
 
 use NumberNine\Annotation\Shortcode;
+use NumberNine\Model\PageBuilder\Control\ContentEntityControl;
+use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Content\ContentEntityRenderer;
+use NumberNine\Model\Shortcode\EditableShortcodeInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @Shortcode(name="block", label="Block", editable=true, icon="view_day")
+ * @Shortcode(name="block", label="Block", icon="view_day")
  */
-final class BlockShortcode extends AbstractShortcode
+final class BlockShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
     private ContentEntityRenderer $contentEntityRenderer;
 
@@ -27,20 +31,33 @@ final class BlockShortcode extends AbstractShortcode
         $this->contentEntityRenderer = $contentEntityRenderer;
     }
 
-    public function getBlockContent(BlockShortcodeData $data): string
+    public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void
     {
-        if (!$data->getId()) {
+        $builder
+            ->add('id', ContentEntityControl::class, ['contentType' => 'block'])
+        ;
+    }
+
+    public function configureParameters(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'id' => '',
+        ]);
+    }
+
+    public function processParameters(array $parameters): array
+    {
+        return [
+            'blockContent' => $this->getBlockContent($parameters),
+        ];
+    }
+
+    public function getBlockContent(array $parameters): string
+    {
+        if (!$parameters['id']) {
             return '[block]';
         }
 
-        return $this->contentEntityRenderer->renderBySlug($data->getId(), false);
-    }
-
-    /**
-     * @param BlockShortcodeData $data
-     */
-    public function process($data): void
-    {
-        $data->setBlockContent($this->getBlockContent($data));
+        return $this->contentEntityRenderer->renderBySlug($parameters['id'], false);
     }
 }

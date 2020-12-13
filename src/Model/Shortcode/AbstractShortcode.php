@@ -11,27 +11,16 @@
 
 namespace NumberNine\Model\Shortcode;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-abstract class AbstractShortcode implements ShortcodeInterface, EventSubscriberInterface
+abstract class AbstractShortcode implements ShortcodeInterface
 {
-    public static function getSubscribedEvents(): array
+    public function configureParameters(OptionsResolver $resolver): void
     {
-        $className = sprintf('%sData', static::class);
-
-        if (class_exists($className)) {
-            return [
-                $className => 'process',
-            ];
-        }
-
-        return [];
     }
 
-    /**
-     * @param mixed $data
-     */
-    public function process($data): void
+    public function processParameters(array $parameters): array
     {
+        return [];
     }
 }

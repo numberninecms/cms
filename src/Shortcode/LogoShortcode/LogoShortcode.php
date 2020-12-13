@@ -12,7 +12,11 @@
 namespace NumberNine\Shortcode\LogoShortcode;
 
 use NumberNine\Annotation\Shortcode;
+use NumberNine\Model\PageBuilder\Control\ImageControl;
+use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
+use NumberNine\Model\Shortcode\EditableShortcodeInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @Shortcode(
@@ -21,6 +25,29 @@ use NumberNine\Model\Shortcode\AbstractShortcode;
  *     description="Displays the site logo with dynamic header tag for better SEO."
  * )
  */
-final class LogoShortcode extends AbstractShortcode
+final class LogoShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
+    public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void
+    {
+        $builder
+            ->add('logoImage', ImageControl::class, ['label' => 'Logo image'])
+            ->add('fallbackText')
+        ;
+    }
+
+    public function configureParameters(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'logoImage' => '',
+            'fallbackText' => '',
+        ]);
+    }
+
+    public function processParameters(array $parameters): array
+    {
+        return [
+            'logoImage' => $parameters['logoImage'],
+            'fallbackText' => $parameters['fallbackText'],
+        ];
+    }
 }

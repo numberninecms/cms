@@ -9,9 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Annotation\Form\Control;
+namespace NumberNine\Model\PageBuilder\Control;
 
-interface FormControlInterface
+use NumberNine\Model\PageBuilder\AbstractPageBuilderFormControl;
+
+class TextBoxControl extends AbstractPageBuilderFormControl
 {
-
 }

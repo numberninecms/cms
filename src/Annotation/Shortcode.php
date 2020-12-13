@@ -21,7 +21,6 @@ use Doctrine\Common\Annotations\Annotation\Target;
  * @Target("CLASS")
  * @Attributes({
  *     @Attribute("name", type="string"),
- *     @Attribute("editable", type="bool"),
  *     @Attribute("container", type="bool"),
  *     @Attribute("label", type="string"),
  *     @Attribute("icon", type="string"),
@@ -37,7 +36,6 @@ final class Shortcode implements DescriptorAnnotation
      */
     public string $name;
     public string $label;
-    public bool $editable = false;
     public bool $container = false;
     public string $icon = 'dashboard';
     public string $description;

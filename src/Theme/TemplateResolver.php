@@ -210,22 +210,20 @@ final class TemplateResolver implements TemplateResolverInterface
      * @param ShortcodeInterface $shortcode
      * @return string
      * @throws LoaderError
-     * @throws ReflectionException
      * @throws SyntaxError
      */
     public function resolveShortcode(ShortcodeInterface $shortcode): string
     {
-        return $this->resolveShortcodeTemplate($shortcode, 'html');
+        return $this->resolveShortcodeTemplate($shortcode, 'html')->getTemplateName();
     }
 
     /**
      * @param ShortcodeInterface $shortcode
-     * @return string
+     * @return TemplateWrapper
      * @throws LoaderError
-     * @throws ReflectionException
      * @throws SyntaxError
      */
-    public function resolveShortcodePageBuilder(ShortcodeInterface $shortcode): string
+    public function resolveShortcodePageBuilder(ShortcodeInterface $shortcode): TemplateWrapper
     {
         return $this->resolveShortcodeTemplate($shortcode, 'vue');
     }
@@ -233,15 +231,14 @@ final class TemplateResolver implements TemplateResolverInterface
     /**
      * @param ShortcodeInterface $shortcode
      * @param string $type
-     * @return string
+     * @return TemplateWrapper
      * @throws LoaderError
-     * @throws ReflectionException
      * @throws SyntaxError
      */
-    private function resolveShortcodeTemplate(ShortcodeInterface $shortcode, string $type): string
+    private function resolveShortcodeTemplate(ShortcodeInterface $shortcode, string $type): TemplateWrapper
     {
         $templates = $this->getShortcodeTemplatesCandidates($shortcode, $type);
-        return $this->twig->resolveTemplate($templates)->getTemplateName();
+        return $this->twig->resolveTemplate($templates);
     }
 
     /**

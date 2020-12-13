@@ -28,7 +28,7 @@ interface TemplateResolverInterface
 
     public function resolveShortcode(AbstractShortcode $shortcode): string;
 
-    public function resolveShortcodePageBuilder(AbstractShortcode $shortcode): string;
+    public function resolveShortcodePageBuilder(AbstractShortcode $shortcode): TemplateWrapper;
 
     public function resolveBaseLayout(): string;
 

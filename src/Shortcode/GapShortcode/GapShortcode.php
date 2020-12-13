@@ -12,11 +12,35 @@
 namespace NumberNine\Shortcode\GapShortcode;
 
 use NumberNine\Annotation\Shortcode;
+use NumberNine\Model\PageBuilder\Control\SliderControl;
+use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
+use NumberNine\Model\Shortcode\EditableShortcodeInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @Shortcode(name="gap", editable=true, label="Gap", icon="height")
+ * @Shortcode(name="gap", label="Gap", icon="height")
  */
-final class GapShortcode extends AbstractShortcode
+final class GapShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
+    public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void
+    {
+        $builder
+            ->add('height', SliderControl::class, ['suffix' => 'px'])
+        ;
+    }
+
+    public function configureParameters(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'height' => 30,
+        ]);
+    }
+
+    public function processParameters(array $parameters): array
+    {
+        return [
+            'height' => $parameters['height'],
+        ];
+    }
 }

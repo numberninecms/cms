@@ -9,14 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Annotation\Form\Control;
+namespace NumberNine\Model\PageBuilder;
 
-use Doctrine\Common\Annotations\Annotation;
-
-/**
- * @Annotation
- * @Target("PROPERTY")
- */
-final class Menu extends AbstractFormControl
+interface PageBuilderFormControlInterface
 {
+    public function getOptions(): array;
 }

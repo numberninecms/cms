@@ -12,21 +12,21 @@
 namespace NumberNine\Shortcode\RecentPostsShortcode;
 
 use NumberNine\Annotation\Shortcode;
-use NumberNine\Annotation\Shortcode\Exclude;
-use NumberNine\Entity\Post;
+use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
+use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use NumberNine\Repository\PostRepository;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @Shortcode(
  *     name="recent_posts",
  *     label="Recent posts",
  *     description="Displays the most recent posts.",
- *     editable=true,
  *     icon="description"
  * )
  */
-final class RecentPostsShortcode extends AbstractShortcode
+final class RecentPostsShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
     private PostRepository $postRepository;
 
@@ -35,20 +35,33 @@ final class RecentPostsShortcode extends AbstractShortcode
         $this->postRepository = $postRepository;
     }
 
-    /**
-     * @return Post[]
-     * @Exclude("serialization")
-     */
+    public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void
+    {
+        $builder
+            ->add('title')
+            ->add('count', null, ['label' => 'Number of posts to show'])
+        ;
+    }
+
+    public function configureParameters(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'title' => 'Recent Posts',
+            'count' => 10,
+            'posts' => [],
+        ]);
+    }
+
+    public function processParameters(array $parameters): array
+    {
+        return [
+            'title' => $parameters['title'],
+            'posts' => $this->getPosts($parameters['count']),
+        ];
+    }
+
     private function getPosts(int $count): array
     {
         return $this->postRepository->getRecentPosts($count);
-    }
-
-    /**
-     * @param RecentPostsShortcodeData $data
-     */
-    public function process($data): void
-    {
-        $data->setPosts($this->getPosts($data->getCount()));
     }
 }

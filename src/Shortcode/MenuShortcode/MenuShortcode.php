@@ -11,33 +11,28 @@
 
 namespace NumberNine\Shortcode\MenuShortcode;
 
-use NumberNine\Annotation\Form\Control;
 use NumberNine\Annotation\Shortcode;
-use NumberNine\Annotation\Shortcode\Exclude;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\Menu;
+use NumberNine\Model\PageBuilder\Control\MenuControl;
+use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
+use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use NumberNine\Repository\ContentEntityRepository;
 use NumberNine\Repository\MenuRepository;
 use NumberNine\Content\PermalinkGenerator;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use function NumberNine\Common\Util\ArrayUtil\array_depth;
 
 /**
- * @Shortcode(name="menu", label="Menu", editable=true, icon="menu")
+ * @Shortcode(name="menu", label="Menu", icon="menu")
  */
-final class MenuShortcode extends AbstractShortcode
+final class MenuShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
     private MenuRepository $menuRepository;
     private ContentEntityRepository $contentEntityRepository;
     private PermalinkGenerator $permalinkGenerator;
-
-    private ?Menu $menu = null;
-
-    /**
-     * @Exclude("serialization")
-     */
-    private ?array $menuItems = null;
 
     public function __construct(
         MenuRepository $menuRepository,
@@ -49,9 +44,33 @@ final class MenuShortcode extends AbstractShortcode
         $this->permalinkGenerator = $permalinkGenerator;
     }
 
-    public function getMenuItems(MenuShortcodeData $data): array
+    public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void
     {
-        if (!($menu = $this->getMenu($data->getId()))) {
+        $builder
+            ->add('id', MenuControl::class, ['label' => 'Menu'])
+        ;
+    }
+
+    public function configureParameters(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'id' => null,
+        ]);
+    }
+
+    public function processParameters(array $parameters): array
+    {
+        $menuItems = $this->getMenuItems($parameters);
+
+        return [
+            'menuItems' => $menuItems,
+            'depth' => array_depth($menuItems),
+        ];
+    }
+
+    private function getMenuItems(array $parameters): array
+    {
+        if (!($menu = $this->getMenu($parameters['id']))) {
             return [];
         }
 
@@ -109,13 +128,5 @@ final class MenuShortcode extends AbstractShortcode
             },
             $menuItems
         );
-    }
-
-    /**
-     * @param MenuShortcodeData $data
-     */
-    public function process($data): void
-    {
-        $data->setMenuItems($this->getMenuItems($data));
     }
 }

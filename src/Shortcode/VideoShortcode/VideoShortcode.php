@@ -12,11 +12,51 @@
 namespace NumberNine\Shortcode\VideoShortcode;
 
 use NumberNine\Annotation\Shortcode;
+use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
+use NumberNine\Model\Shortcode\EditableShortcodeInterface;
+use Symfony\Component\Mime\MimeTypes;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @Shortcode(name="video", label="Video", editable=true, icon="movie")
+ * @Shortcode(name="video", label="Video", icon="movie")
  */
-final class VideoShortcode extends AbstractShortcode
+final class VideoShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
+    public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void
+    {
+        $builder
+            ->add('src', null, ['label' => 'Url'])
+            ->add('width')
+            ->add('height')
+        ;
+    }
+
+    public function configureParameters(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'src' => '',
+            'width' => '100%',
+            'height' => '',
+        ]);
+    }
+
+    public function processParameters(array $parameters): array
+    {
+        return [
+            'src' => $parameters['src'],
+            'width' => $parameters['width'],
+            'height' => $parameters['height'],
+            'mimeType' => $this->getMimeType($parameters),
+        ];
+    }
+
+    private function getMimeType(array $parameters): string
+    {
+        $mimeTypes = new MimeTypes();
+
+        return $parameters['src'] && file_exists($parameters['src'])
+            ? (string)$mimeTypes->guessMimeType($parameters['src'])
+            : '';
+    }
 }

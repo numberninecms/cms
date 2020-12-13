@@ -12,39 +12,70 @@
 namespace NumberNine\Shortcode\CategoriesShortcode;
 
 use NumberNine\Annotation\Shortcode;
-use NumberNine\Annotation\Shortcode\Exclude;
 use NumberNine\Entity\Term;
 use NumberNine\Event\CurrentRequestTermEvent;
+use NumberNine\Model\PageBuilder\Control\OnOffSwitchControl;
+use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
+use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use NumberNine\Repository\TermRepository;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @Shortcode(
  *     name="categories",
  *     label="Categories",
  *     description="Displays the posts categories.",
- *     editable=true,
  *     icon="category"
  * )
  */
-final class CategoriesShortcode extends AbstractShortcode
+final class CategoriesShortcode extends AbstractShortcode implements
+    EditableShortcodeInterface,
+    EventSubscriberInterface
 {
     private TermRepository $termRepository;
     private ?Term $term = null;
 
     public static function getSubscribedEvents(): array
     {
-        return array_merge(
-            parent::getSubscribedEvents(),
-            [
-                CurrentRequestTermEvent::class => 'setTerm',
-            ]
-        );
+        return [
+            CurrentRequestTermEvent::class => 'setTerm',
+        ];
     }
 
     public function __construct(TermRepository $termRepository)
     {
         $this->termRepository = $termRepository;
+    }
+
+    public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void
+    {
+        $builder
+            ->add('title')
+            ->add('showPostCounts', OnOffSwitchControl::class)
+            ->add('showIfEmpty', OnOffSwitchControl::class)
+        ;
+    }
+
+    public function configureParameters(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'title' => 'Categories',
+            'showPostCounts' => false,
+            'showIfEmpty' => false,
+        ]);
+    }
+
+    public function processParameters(array $parameters): array
+    {
+        return [
+            'title' => $parameters['title'],
+            'categories' => $this->getCategories(),
+            'showIfEmpty' => $parameters['showIfEmpty'],
+            'showPostCounts' => $parameters['showPostCounts'],
+            'term' => $this->term,
+        ];
     }
 
     public function setTerm(CurrentRequestTermEvent $event): void
@@ -58,14 +89,5 @@ final class CategoriesShortcode extends AbstractShortcode
     private function getCategories(): array
     {
         return $this->termRepository->findByTaxonomyName('category', true);
-    }
-
-    /**
-     * @param CategoriesShortcodeData $data
-     */
-    public function process($data): void
-    {
-        $data->setCategories($this->getCategories());
-        $data->setTerm($this->term);
     }
 }
