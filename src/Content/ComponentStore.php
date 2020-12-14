@@ -44,16 +44,6 @@ final class ComponentStore
             return;
         }
 
-        $relativePath = str_replace(
-            [$this->themeStore->getCurrentTheme()->getComponentPath(), '\\'],
-            ['', '/'],
-            dirname((string)$reflection->getFileName())
-        );
-
-        $twigPath = sprintf('@%sComponents/%s', $this->themeStore->getCurrentThemeName(), $relativePath);
-
-        $component->setTemplateName($twigPath . '/template.html.twig');
-
         $this->components[get_class($component)] = $component;
     }
 

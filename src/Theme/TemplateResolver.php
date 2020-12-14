@@ -14,15 +14,17 @@ namespace NumberNine\Theme;
 use InvalidArgumentException;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\Term;
+use NumberNine\Model\Component\ComponentInterface;
 use NumberNine\Model\Content\ContentType;
-use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\ShortcodeInterface;
 use NumberNine\Content\ContentService;
 use ReflectionClass;
 use ReflectionException;
 use RuntimeException;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Contracts\Cache\CacheInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\SyntaxError;
@@ -33,6 +35,8 @@ final class TemplateResolver implements TemplateResolverInterface
     private Environment $twig;
     private ThemeStore $themeStore;
     private ContentService $contentService;
+    private CacheInterface $cache;
+    private SluggerInterface $slugger;
     private array $bundles;
     private string $templatePath;
 
@@ -40,12 +44,16 @@ final class TemplateResolver implements TemplateResolverInterface
         Environment $twig,
         ThemeStore $themeStore,
         ContentService $contentService,
+        CacheInterface $cache,
+        SluggerInterface $slugger,
         array $bundles,
         string $templatePath
     ) {
         $this->twig = $twig;
         $this->themeStore = $themeStore;
         $this->contentService = $contentService;
+        $this->cache = $cache;
+        $this->slugger = $slugger;
         $this->bundles = $bundles;
         $this->templatePath = $templatePath;
     }
@@ -59,55 +67,60 @@ final class TemplateResolver implements TemplateResolverInterface
      */
     public function resolveSingle(ContentEntity $entity, array $extraTemplates = []): TemplateWrapper
     {
-        $themeName = $this->themeStore->getCurrentThemeName();
+        return $this->cache->get(
+            sprintf('single_%s_id_%d', $entity->getCustomType(), $entity->getId()),
+            function () use ($entity, $extraTemplates) {
+                $themeName = $this->themeStore->getCurrentThemeName();
 
-        $templates = array_merge(
-            $extraTemplates,
-            [
-                sprintf('theme/%s/single_%s.html.twig', $entity->getCustomType(), $entity->getSlug()),
-                sprintf('@%s/%s/single_%s.html.twig', $themeName, $entity->getCustomType(), $entity->getSlug()),
-                sprintf('theme/%s/single_%d.html.twig', $entity->getCustomType(), $entity->getId()),
-                sprintf('@%s/%s/single_%d.html.twig', $themeName, $entity->getCustomType(), $entity->getId()),
-                sprintf('theme/%s/single.html.twig', $entity->getCustomType()),
-                sprintf('@%s/%s/single.html.twig', $themeName, $entity->getCustomType()),
-                sprintf('theme/content/single.html.twig'),
-                sprintf('@%s/content/single.html.twig', $themeName),
-            ]
+                $templates = array_merge(
+                    $extraTemplates,
+                    [
+                        sprintf('theme/%s/single_%s.html.twig', $entity->getCustomType(), $entity->getSlug()),
+                        sprintf('@%s/%s/single_%s.html.twig', $themeName, $entity->getCustomType(), $entity->getSlug()),
+                        sprintf('theme/%s/single_%d.html.twig', $entity->getCustomType(), $entity->getId()),
+                        sprintf('@%s/%s/single_%d.html.twig', $themeName, $entity->getCustomType(), $entity->getId()),
+                        sprintf('theme/%s/single.html.twig', $entity->getCustomType()),
+                        sprintf('@%s/%s/single.html.twig', $themeName, $entity->getCustomType()),
+                        sprintf('theme/content/single.html.twig'),
+                        sprintf('@%s/content/single.html.twig', $themeName),
+                    ]
+                );
+
+                if ($pageTemplate = $entity->getCustomField('page_template')) {
+                    $candidates = $this->getContentEntitySingleTemplateCandidates(
+                        $this->contentService->getContentType((string)$entity->getCustomType())
+                    );
+                    $filename = array_search($pageTemplate, $candidates);
+
+                    if ($filename) {
+                        array_unshift(
+                            $templates,
+                            sprintf('theme/%s/%s', $entity->getCustomType(), $filename),
+                            sprintf('@%s/%s/%s', $themeName, $entity->getCustomType(), $filename),
+                            sprintf('theme/content/%s', $filename),
+                        );
+                    }
+                }
+
+                try {
+                    $template = $this->twig->resolveTemplate($templates);
+
+                    if ($this->hasFrontMatterBlock($template->getSourceContext()->getCode())) {
+                        $template = $this->createTwigTemplateFromFrontMatterAnnotatedFile(
+                            $template->getSourceContext()->getPath()
+                        );
+                    }
+                } catch (SyntaxError $e) {
+                    if (($context = $e->getSourceContext()) && $this->hasFrontMatterBlock($context->getCode())) {
+                        $template = $this->createTwigTemplateFromFrontMatterAnnotatedFile($context->getPath());
+                    } else {
+                        throw $e;
+                    }
+                }
+
+                return $template;
+            }
         );
-
-        if ($pageTemplate = $entity->getCustomField('page_template')) {
-            $candidates = $this->getContentEntitySingleTemplateCandidates(
-                $this->contentService->getContentType((string)$entity->getCustomType())
-            );
-            $filename = array_search($pageTemplate, $candidates);
-
-            if ($filename) {
-                array_unshift(
-                    $templates,
-                    sprintf('theme/%s/%s', $entity->getCustomType(), $filename),
-                    sprintf('@%s/%s/%s', $themeName, $entity->getCustomType(), $filename),
-                    sprintf('theme/content/%s', $filename),
-                );
-            }
-        }
-
-        try {
-            $template = $this->twig->resolveTemplate($templates);
-
-            if ($this->hasFrontMatterBlock($template->getSourceContext()->getCode())) {
-                $template = $this->createTwigTemplateFromFrontMatterAnnotatedFile(
-                    $template->getSourceContext()->getPath()
-                );
-            }
-        } catch (SyntaxError $e) {
-            if (($context = $e->getSourceContext()) && $this->hasFrontMatterBlock($context->getCode())) {
-                $template = $this->createTwigTemplateFromFrontMatterAnnotatedFile($context->getPath());
-            } else {
-                throw $e;
-            }
-        }
-
-        return $template;
     }
 
     /**
@@ -180,41 +193,52 @@ final class TemplateResolver implements TemplateResolverInterface
     }
 
     /**
-     * @param AbstractShortcode $shortcode
+     * @param ComponentInterface $component
      * @return string
      * @throws LoaderError
-     * @throws ReflectionException
      * @throws SyntaxError
      */
-    public function resolveShortcode(AbstractShortcode $shortcode): string
+    public function resolveComponent(ComponentInterface $component): string
     {
-        return $this->resolveShortcodeTemplate($shortcode, 'html');
+        return $this->cache->get($this->slugger->slug(get_class($component)), function () use ($component) {
+            $templates = $this->getComponentTemplatesCandidates($component);
+            return $this->twig->resolveTemplate($templates)->getTemplateName();
+        });
     }
 
     /**
-     * @param AbstractShortcode $shortcode
+     * @param ShortcodeInterface $shortcode
      * @return string
      * @throws LoaderError
-     * @throws ReflectionException
      * @throws SyntaxError
      */
-    public function resolveShortcodePageBuilder(AbstractShortcode $shortcode): string
+    public function resolveShortcode(ShortcodeInterface $shortcode): string
+    {
+        return $this->resolveShortcodeTemplate($shortcode, 'html')->getTemplateName();
+    }
+
+    /**
+     * @param ShortcodeInterface $shortcode
+     * @return TemplateWrapper
+     * @throws LoaderError
+     * @throws SyntaxError
+     */
+    public function resolveShortcodePageBuilder(ShortcodeInterface $shortcode): TemplateWrapper
     {
         return $this->resolveShortcodeTemplate($shortcode, 'vue');
     }
 
     /**
-     * @param AbstractShortcode $shortcode
+     * @param ShortcodeInterface $shortcode
      * @param string $type
-     * @return string
+     * @return TemplateWrapper
      * @throws LoaderError
-     * @throws ReflectionException
      * @throws SyntaxError
      */
-    private function resolveShortcodeTemplate(AbstractShortcode $shortcode, string $type): string
+    private function resolveShortcodeTemplate(ShortcodeInterface $shortcode, string $type): TemplateWrapper
     {
         $templates = $this->getShortcodeTemplatesCandidates($shortcode, $type);
-        return $this->twig->resolveTemplate($templates)->getTemplateName();
+        return $this->twig->resolveTemplate($templates);
     }
 
     /**
@@ -255,12 +279,19 @@ final class TemplateResolver implements TemplateResolverInterface
         $themeName = $this->themeStore->getCurrentThemeName();
         $shortcodeReflection = new ReflectionClass($shortcode);
 
-        $subNamespace = dirname(
-            str_replace(
-                '\\',
-                '/',
-                substr($shortcodeReflection->getName(), strpos($shortcodeReflection->getName(), '\\Shortcode\\') + 11)
-            )
+        $subNamespace = sprintf(
+            '%s/%s',
+            dirname(
+                str_replace(
+                    '\\',
+                    '/',
+                    substr(
+                        $shortcodeReflection->getName(),
+                        strpos($shortcodeReflection->getName(), '\\Shortcode\\') + 11
+                    )
+                )
+            ),
+            basename($shortcodeReflection->getShortName())
         );
 
         $templates = [
@@ -278,6 +309,35 @@ final class TemplateResolver implements TemplateResolverInterface
         }
 
         $templates[] = sprintf("@NumberNineShortcodes/%s/template.%s.twig", $subNamespace, $type);
+
+        return $templates;
+    }
+
+    public function getComponentTemplatesCandidates(ComponentInterface $component): array
+    {
+        $themeName = $this->themeStore->getCurrentThemeName();
+        $reflectionClass = new ReflectionClass($component);
+
+        $subNamespace = dirname(
+            str_replace(
+                '\\',
+                '/',
+                substr($reflectionClass->getName(), strpos($reflectionClass->getName(), '\\Component\\') + 11)
+            )
+        );
+
+        $templates = [
+            sprintf("@AppComponents/%s/template.html.twig", $subNamespace),
+            sprintf("@%sComponents/%s/template.html.twig", $themeName, $subNamespace),
+        ];
+
+        foreach ($this->bundles as $bundle => $fqcn) {
+            $templates[] = sprintf(
+                "@%sComponents/%s/template.html.twig",
+                str_replace('Bundle', '', $bundle),
+                $subNamespace
+            );
+        }
 
         return $templates;
     }

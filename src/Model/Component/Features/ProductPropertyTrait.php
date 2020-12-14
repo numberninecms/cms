@@ -15,7 +15,7 @@ use NumberNine\CommerceBundle\Entity\Product;
 
 trait ProductPropertyTrait
 {
-    private ?Product $product = null;
+    protected ?Product $product = null;
 
     public function getProduct(): ?Product
     {

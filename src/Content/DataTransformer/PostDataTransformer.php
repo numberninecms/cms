@@ -12,25 +12,25 @@
 namespace NumberNine\Content\DataTransformer;
 
 use Exception;
+use NumberNine\Content\ShortcodeRenderer;
 use NumberNine\Entity\Post;
 use NumberNine\Model\DataTransformer\DataTransformerInterface;
-use NumberNine\Content\ShortcodeProcessor;
 use NumberNine\Http\RequestAnalyzer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 final class PostDataTransformer implements DataTransformerInterface
 {
-    private ShortcodeProcessor $shortcodeProcessor;
+    private ShortcodeRenderer $shortcodeRenderer;
     private ?Request $request;
     private RequestAnalyzer $requestAnalyzer;
 
     public function __construct(
-        ShortcodeProcessor $shortcodeProcessor,
+        ShortcodeRenderer $shortcodeRenderer,
         RequestAnalyzer $requestAnalyzer,
         RequestStack $requestStack
     ) {
-        $this->shortcodeProcessor = $shortcodeProcessor;
+        $this->shortcodeRenderer = $shortcodeRenderer;
         $this->request = $requestStack->getMasterRequest();
         $this->requestAnalyzer = $requestAnalyzer;
     }
@@ -53,7 +53,7 @@ final class PostDataTransformer implements DataTransformerInterface
 
         $content = $isPreviewMode
             ? '<page-builder></page-builder>'
-            : $this->shortcodeProcessor->applyShortcodes((string)$object->getContent());
+            : $this->shortcodeRenderer->applyShortcodes((string)$object->getContent());
 
         $object->setContent($content);
 

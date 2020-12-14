@@ -11,15 +11,10 @@
 
 namespace NumberNine\Model\Component;
 
-use NumberNine\Model\Component\Features\OptionsAndSettingsInjectionTrait;
-use NumberNine\Model\Component\Features\RenderTrait;
-
-/**
- * Base component designed to create components faster.
- * Components are designed to be services so dependencies can be injected in constructor.
- */
 abstract class AbstractComponent implements ComponentInterface
 {
-    use RenderTrait;
-    use OptionsAndSettingsInjectionTrait;
+    public function getTemplateParameters(): array
+    {
+        return [];
+    }
 }

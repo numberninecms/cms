@@ -15,12 +15,7 @@ use NumberNine\Entity\Post;
 
 trait PagePropertyTrait
 {
-    private ?Post $page = null;
-
-    public function getPage(): ?Post
-    {
-        return $this->page;
-    }
+    protected ?Post $page = null;
 
     public function setPage(?Post $page): void
     {
