@@ -11,7 +11,9 @@
 
 namespace NumberNine\Content;
 
+use NumberNine\Event\ComponentProcessParametersEvent;
 use NumberNine\Theme\TemplateResolver;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Twig\Environment;
@@ -28,19 +30,22 @@ final class ComponentRenderer
     private ComponentStore $componentStore;
     private AuthorizationCheckerInterface $authorizationChecker;
     private TagAwareCacheInterface $cache;
+    private EventDispatcherInterface $eventDispatcher;
 
     public function __construct(
         Environment $twig,
         TemplateResolver $templateResolver,
         ComponentStore $componentStore,
         AuthorizationCheckerInterface $authorizationChecker,
-        TagAwareCacheInterface $cache
+        TagAwareCacheInterface $cache,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->twig = $twig;
         $this->templateResolver = $templateResolver;
         $this->componentStore = $componentStore;
         $this->authorizationChecker = $authorizationChecker;
         $this->cache = $cache;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -63,10 +68,12 @@ final class ComponentRenderer
                 }
             }
 
-            return $this->twig->render(
-                $this->templateResolver->resolveComponent($component),
-                $component->getTemplateParameters()
-            );
+            $parameters = $component->getTemplateParameters();
+            /** @var ComponentProcessParametersEvent $event */
+            $event = $this->eventDispatcher->dispatch(new ComponentProcessParametersEvent($component, $parameters));
+            $parameters = $event->getParameters();
+
+            return $this->twig->render($this->templateResolver->resolveComponent($component), $parameters);
         }
 
         if ($this->authorizationChecker->isGranted('Administrator')) {

@@ -37,9 +37,7 @@ services:
             - '../../../Exception'
             - '../../../Pagination'
             - '../../../Model'
-            - '../../../Util'
             - '../../../Security/Capabilities.php'
-            - '../../../Shortcodes/*Data.php'
 
     NumberNine\Controller\:
         resource: '../../../Controller/*'

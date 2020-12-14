@@ -12,6 +12,7 @@
 namespace NumberNine\Shortcode;
 
 use NumberNine\Annotation\Shortcode;
+use NumberNine\Model\PageBuilder\Control\ColorControl;
 use NumberNine\Model\PageBuilder\Control\OnOffSwitchControl;
 use NumberNine\Model\PageBuilder\Control\SliderControl;
 use NumberNine\Model\PageBuilder\Control\TextAlignControl;
@@ -51,7 +52,7 @@ final class DividerShortcode extends AbstractShortcode implements EditableShortc
                 'step' => 0.1,
                 'suffix' => 'em'
             ])
-            ->add('color', TextAlignControl::class, ['label' => 'Color'])
+            ->add('color', ColorControl::class, ['label' => 'Color'])
         ;
     }
 

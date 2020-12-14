@@ -12,6 +12,7 @@
 namespace NumberNine\Content;
 
 use Exception;
+use NumberNine\Event\ShortcodeProcessParametersEvent;
 use NumberNine\Model\Shortcode\ShortcodeInterface;
 use NumberNine\Shortcode\TextShortcode;
 use NumberNine\Theme\TemplateResolver;
@@ -108,6 +109,12 @@ class ShortcodeRenderer
         $shortcode->configureParameters($resolver);
         $parameters = $resolver->resolve($parameters);
         $processedParameters = $shortcode->processParameters($parameters);
+
+        /** @var ShortcodeProcessParametersEvent $event */
+        $event = $this->eventDispatcher->dispatch(
+            new ShortcodeProcessParametersEvent($shortcode, $processedParameters)
+        );
+        $processedParameters = $event->getParameters();
 
         return $this->twig->render(
             $this->templateResolver->resolveShortcode($shortcode),

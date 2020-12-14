@@ -93,11 +93,14 @@ final class ShortcodeProcessor
                 continue;
             }
 
+            $parameters = $parsedShortcode->getParameters();
+            $parameters['content'] = $parsedShortcode->getContent();
+
             $child = array_merge(
                 $isSerialization ? [] : ['shortcode' => $shortcode],
                 $this->shortcodeToArray(
                     $parsedShortcode->getName(),
-                    $parsedShortcode->getParameters(),
+                    $parameters,
                     $position++
                 )
             );
@@ -132,11 +135,8 @@ final class ShortcodeProcessor
      * @return array
      * @throws ReflectionException
      */
-    public function shortcodeToArray(
-        string $shortcodeName,
-        array $parameters = [],
-        int $position = 0
-    ): array {
+    public function shortcodeToArray(string $shortcodeName, array $parameters = [], int $position = 0): array
+    {
         $shortcode = $this->shortcodeStore->getShortcode($shortcodeName);
         $shortcodeMetadata = $this->shortcodeStore->getShortcodeMetadata($shortcodeName);
         $responsive = $this->getShortcodeResponsiveParameters($shortcode);

@@ -11,11 +11,11 @@
 
 namespace NumberNine\EventSubscriber;
 
-use NumberNine\Event\RenderEvent;
+use NumberNine\Event\ComponentProcessParametersEvent;
 use NumberNine\Content\DataTransformerProcessor;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-final class ComponentRenderEventSubscriber implements EventSubscriberInterface
+final class ShortcodeRenderEventSubscriber implements EventSubscriberInterface
 {
     private DataTransformerProcessor $dataTransformerProcessor;
 
@@ -27,18 +27,18 @@ final class ComponentRenderEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            RenderEvent::class => 'transformValues'
+            ComponentProcessParametersEvent::class => 'transformValues'
         ];
     }
 
-    public function transformValues(RenderEvent $event): void
+    public function transformValues(ComponentProcessParametersEvent $event): void
     {
         $values = [];
 
-        foreach ($event->getValues() as $key => $value) {
+        foreach ($event->getParameters() as $key => $value) {
             $values[$key] = $this->dataTransformerProcessor->transform($value);
         }
 
-        $event->setValues($values);
+        $event->setParameters($values);
     }
 }
