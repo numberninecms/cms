@@ -41,7 +41,7 @@ final class PageBuilderFormBuilder implements PageBuilderFormBuilderInterface
         $control = new $type($options);
 
         $this->children[$child] = [
-            'name' => $type,
+            'name' => preg_replace('/(.*)Control$/', '$1', basename(str_replace('\\', '/', $type))),
             'parameters' => $control->getOptions(),
         ];
 
