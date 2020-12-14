@@ -32,8 +32,7 @@ before_install:
 jobs:
     include:
         -
-            stage: Test
-            name: Bundle tests
+            stage: Bundle tests
             install:
                 - composer install --no-interaction
                 - |
@@ -51,7 +50,7 @@ jobs:
                 - docker-compose exec php vendor/bin/phpunit
 
         -
-            name: New project Docker installation
+            stage: New project Docker installation
             install:
                 - cd ..
                 - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/numberninecms/numbernine/master/installer | bash -s newproject -v"

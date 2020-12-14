@@ -22,11 +22,11 @@ interface RenderableInterface
 
     public function setTemplateName(string $templateName): void;
 
-    public function setTwig(Environment $twig): self;
-
-    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher): void;
-
-    public function setRenderableInspector(RenderableInspectorInterface $renderableInspector): self;
+//    public function setTwig(Environment $twig): self;
+//
+//    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher): void;
+//
+//    public function setRenderableInspector(RenderableInspectorInterface $renderableInspector): self;
 
     public function setTemplateResolver(TemplateResolverInterface $templateResolver): void;
 }

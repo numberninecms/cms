@@ -45,16 +45,8 @@ final class NumberNineBundle extends Bundle
         $container->registerForAutoconfiguration(DataTransformerInterface::class)
             ->addTag('numbernine.data_transformer');
         $container->registerForAutoconfiguration(ThemeInterface::class)->addTag('numbernine.theme');
-        $container->registerForAutoconfiguration(ComponentInterface::class)->addTag('numbernine.component')
-            ->addMethodCall('setTwig', [new Reference('twig')])
-            ->addMethodCall('setToolbox', [new Reference(ThemeToolbox::class)])
-            ->addMethodCall('setRenderableInspector', [new Reference(RenderableInspector::class)])
-            ->addMethodCall('setEventDispatcher', [new Reference(EventDispatcherInterface::class)]);
-        $container->registerForAutoconfiguration(ShortcodeInterface::class)->addTag('numbernine.shortcode')
-            ->addMethodCall('setTwig', [new Reference('twig')])
-            ->addMethodCall('setEventDispatcher', [new Reference(EventDispatcherInterface::class)])
-            ->addMethodCall('setRenderableInspector', [new Reference(RenderableInspectorInterface::class)])
-            ->addMethodCall('setTemplateResolver', [new Reference(TemplateResolver::class)]);
+        $container->registerForAutoconfiguration(ComponentInterface::class)->addTag('numbernine.component');
+        $container->registerForAutoconfiguration(ShortcodeInterface::class)->addTag('numbernine.shortcode');
 
         $container->addCompilerPass(new ComponentCompilerPass());
         $container->addCompilerPass(new ShortcodeCompilerPass());

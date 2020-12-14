@@ -125,7 +125,7 @@ final class ContentService
         );
 
         /** @var MainLoopQueryEvent $mainLoopQueryEvent */
-        $mainLoopQueryEvent = $this->eventDispatcher->dispatch(new MainLoopQueryEvent($queryBuilder));
+        $mainLoopQueryEvent = $this->eventDispatcher->dispatch(new MainLoopQueryEvent($queryBuilder, $contentType));
         $queryBuilder = $mainLoopQueryEvent->getQueryBuilder();
 
         $result = new Paginator($queryBuilder, true);

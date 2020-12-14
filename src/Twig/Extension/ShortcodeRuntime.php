@@ -12,22 +12,22 @@
 namespace NumberNine\Twig\Extension;
 
 use Exception;
-use NumberNine\Content\ShortcodeProcessor;
+use NumberNine\Content\ShortcodeRenderer;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
 final class ShortcodeRuntime implements RuntimeExtensionInterface
 {
-    private ShortcodeProcessor $shortcodeProcessor;
+    private ShortcodeRenderer $shortcodeRenderer;
     private AuthorizationCheckerInterface $authorizationChecker;
     private string $environment;
 
     public function __construct(
-        ShortcodeProcessor $shortcodeProcessor,
+        ShortcodeRenderer $shortcodeRenderer,
         AuthorizationCheckerInterface $authorizationChecker,
         string $environment
     ) {
-        $this->shortcodeProcessor = $shortcodeProcessor;
+        $this->shortcodeRenderer = $shortcodeRenderer;
         $this->authorizationChecker = $authorizationChecker;
         $this->environment = $environment;
     }
@@ -35,7 +35,7 @@ final class ShortcodeRuntime implements RuntimeExtensionInterface
     public function renderShortcode(string $text): string
     {
         try {
-            return $this->shortcodeProcessor->applyShortcodes($text);
+            return $this->shortcodeRenderer->applyShortcodes($text);
         } catch (Exception $e) {
             if ($this->environment === 'dev' && $this->authorizationChecker->isGranted('ROLE_ADMIN')) {
                 throw $e;
