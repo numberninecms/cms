@@ -9,12 +9,8 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Model\Component;
+namespace NumberNine\Model\PageBuilder\Control;
 
-abstract class AbstractComponent implements ComponentInterface
+final class SliderInputControl extends SliderControl
 {
-    public function getTemplateParameters(): array
-    {
-        return [];
-    }
 }

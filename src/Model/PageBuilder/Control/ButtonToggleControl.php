@@ -9,12 +9,8 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Model\Component;
+namespace NumberNine\Model\PageBuilder\Control;
 
-abstract class AbstractComponent implements ComponentInterface
+class ButtonToggleControl extends SelectControl
 {
-    public function getTemplateParameters(): array
-    {
-        return [];
-    }
 }

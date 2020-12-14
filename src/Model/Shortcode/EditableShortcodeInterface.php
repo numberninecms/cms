@@ -9,12 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Model\Component;
+namespace NumberNine\Model\Shortcode;
 
-abstract class AbstractComponent implements ComponentInterface
+use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
+
+interface EditableShortcodeInterface
 {
-    public function getTemplateParameters(): array
-    {
-        return [];
-    }
+    public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void;
 }

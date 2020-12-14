@@ -9,12 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Model\Component;
+namespace NumberNine\Model\PageBuilder;
 
-abstract class AbstractComponent implements ComponentInterface
+interface PageBuilderFormControlInterface
 {
-    public function getTemplateParameters(): array
-    {
-        return [];
-    }
+    public function getOptions(): array;
 }

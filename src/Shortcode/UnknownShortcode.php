@@ -9,12 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Model\Component;
+namespace NumberNine\Shortcode;
 
-abstract class AbstractComponent implements ComponentInterface
+use NumberNine\Annotation\Shortcode;
+use NumberNine\Model\Shortcode\AbstractShortcode;
+
+/**
+ * @Shortcode(name="unknown_shortcode")
+ */
+final class UnknownShortcode extends AbstractShortcode
 {
-    public function getTemplateParameters(): array
-    {
-        return [];
-    }
 }

@@ -21,7 +21,6 @@ use NumberNine\Model\Theme\ThemeInterface;
 use NumberNine\Repository\ContentEntityRepository;
 use NumberNine\Content\ComponentRenderer;
 use NumberNine\Content\PermalinkGenerator;
-use NumberNine\Content\ShortcodeProcessor;
 use NumberNine\Configuration\ConfigurationReadWriter;
 use NumberNine\Http\RequestAnalyzer;
 use NumberNine\Theme\TemplateResolver;
