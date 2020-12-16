@@ -9,13 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\DataFixtures\Content;
+namespace NumberNine\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use NumberNine\DataFixtures\BaseFixture;
-use NumberNine\DataFixtures\FixtureSettings;
 use NumberNine\Entity\Comment;
 use NumberNine\Entity\Post;
 use NumberNine\Entity\User;
@@ -49,6 +47,6 @@ final class CommentFixtures extends BaseFixture implements DependentFixtureInter
 
     public static function getGroups(): array
     {
-        return ['content'];
+        return ['numbernine_core'];
     }
 }
