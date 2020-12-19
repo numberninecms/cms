@@ -8,10 +8,6 @@ jobs:
 
         runs-on: ubuntu-20.04
 
-        strategy:
-            matrix:
-                php: [ 7.4, 8.0 ]
-
         steps:
             -   uses: actions/checkout@v2
 
@@ -19,7 +15,7 @@ jobs:
                 id: setup-php
                 uses: shivammathur/setup-php@v2
                 with:
-                    php-version: ${{ matrix.php }}
+                    php-version: 7.4
                     extensions: dom, curl, libxml, mbstring, zip
                     tools: composer:v2
                     coverage: none
@@ -42,8 +38,8 @@ jobs:
                 uses: actions/cache@v2
                 with:
                     path: ${{ steps.composer-cache.outputs.dir }}
-                    key: ${{ runner.os }}-${{ steps.setup-php.php-version }}-composer-${{ hashFiles('**/composer.lock') }}
-                    restore-keys: ${{ runner.os }}-${{ steps.setup-php.php-version }}-composer-
+                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: ${{ runner.os }}-composer-
 
             -   name: Install dependencies
                 run: composer install --prefer-dist --no-progress --no-interaction
