@@ -1,0 +1,94 @@
+name: CI
+
+on: [ push, pull_request ]
+
+jobs:
+    bundle_tests:
+        name: Bundle tests
+
+        runs-on: ubuntu-20.04
+
+        strategy:
+            matrix:
+                php: [ 7.4, 8.0 ]
+
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   name: Setup PHP
+                id: setup-php
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php }}
+                    extensions: dom, curl, libxml, mbstring, zip
+                    tools: composer:v2
+                    coverage: none
+
+            -   name: Validate composer.json and composer.lock
+                run: composer validate
+
+            -   name: Create temporary branch alias
+                if: !contains('
+                    refs/heads/master
+                    refs/heads/develop
+                    ', github.ref)
+                run: composer config extra.branch-alias.dev-${{ github.sha }} 0.1.x-dev
+
+            -   name: Get composer cache directory
+                id: composer-cache
+                run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+            -   name: Cache dependencies
+                uses: actions/cache@v2
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-${{ steps.setup-php.php-version }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: ${{ runner.os }}-${{ steps.setup-php.php-version }}-composer-
+
+            -   name: Install dependencies
+                run: composer install --prefer-dist --no-progress --no-interaction
+
+            -   name: Prepare folders and env files
+                run: |
+                    echo 'DATABASE_URL=mysql://test:test@mysql:3306/numbernine_test?serverVersion=5.7' > .env.test.local
+                    mkdir -p var/cache
+                    mkdir -p public/uploads
+                    chmod -R 0777 var
+                    chmod -R 0777 public
+
+            -   name: Run Docker containers
+                run: docker-compose up -d
+
+            -   name: Run code quality tests
+                run: composer run-script test
+
+            -   name: Run unit and functional tests
+                run: docker-compose exec -T php vendor/bin/phpunit
+
+    project:
+        name: New project Docker installation
+
+        needs: bundle_tests
+
+        runs-on: ubuntu-20.04
+
+        steps:
+            -   name: Install with installer
+                run: curl https://raw.githubusercontent.com/numberninecms/numbernine/master/installer | bash -s newproject -v
+
+            -   name: Remove numberninecms/cms vendor
+                run: rm -rf vendor/numberninecms/cms
+                working-directory: newproject
+
+            -   name: Replace numberninecms/cms vendor by current branch version
+                uses: actions/checkout@v2
+                with:
+                    path: newproject/vendor/numberninecms/cms
+
+            -   name: Install Docker development environment
+                run: bin/console numbernine:docker:install -v --no-interaction
+                working-directory: newproject
+
+            -   name: Check that website is up and running
+                run: wget --spider --no-check-certificate https://localhost:443/
+                working-directory: newproject
