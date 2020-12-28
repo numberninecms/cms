@@ -94,7 +94,10 @@ final class ShortcodeProcessor
             }
 
             $parameters = $parsedShortcode->getParameters();
-            $parameters['content'] = $parsedShortcode->getContent();
+
+            if ($parsedShortcode->getContent()) {
+                $parameters['content'] = $parsedShortcode->getContent();
+            }
 
             $child = array_merge(
                 $isSerialization ? [] : ['shortcode' => $shortcode],
