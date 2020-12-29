@@ -15,18 +15,12 @@ use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappi
 use NumberNine\Bundle\DependencyInjection\Compiler\ComponentCompilerPass;
 use NumberNine\Bundle\DependencyInjection\Compiler\ShortcodeCompilerPass;
 use NumberNine\Common\Bundle\BundleTrait;
-use NumberNine\Content\RenderableInspectorInterface;
 use NumberNine\Model\Component\ComponentInterface;
 use NumberNine\Model\Shortcode\ShortcodeInterface;
 use NumberNine\Model\Theme\ThemeInterface;
 use NumberNine\Model\DataTransformer\DataTransformerInterface;
-use NumberNine\Content\RenderableInspector;
 use NumberNine\Security\Capability\CapabilityInterface;
-use NumberNine\Theme\TemplateResolver;
-use NumberNine\Theme\ThemeToolbox;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 final class NumberNineBundle extends Bundle

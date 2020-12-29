@@ -9,13 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\DataFixtures\Content;
+namespace NumberNine\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Generator;
-use NumberNine\DataFixtures\BaseFixture;
 use NumberNine\Entity\User;
 use NumberNine\Entity\UserRole;
 use NumberNine\Security\UserFactory;
@@ -111,7 +110,7 @@ final class UserFixtures extends BaseFixture implements FixtureGroupInterface, D
 
     public static function getGroups(): array
     {
-        return ['content'];
+        return ['numbernine_core'];
     }
 
     public function getDependencies(): array

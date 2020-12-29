@@ -9,16 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\DataFixtures\Content;
+namespace NumberNine\DataFixtures;
 
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
-use NumberNine\DataFixtures\BaseFixture;
 use NumberNine\Entity\Taxonomy;
 
-final class TaxonomyFixtures extends BaseFixture implements FixtureGroupInterface
+final class TaxonomyFixtures extends Fixture implements FixtureGroupInterface
 {
-    public function loadData(ObjectManager $manager): void
+    public function load(ObjectManager $manager): void
     {
         $taxonomyCategory = (new Taxonomy())
             ->setName('category')
@@ -37,6 +37,6 @@ final class TaxonomyFixtures extends BaseFixture implements FixtureGroupInterfac
 
     public static function getGroups(): array
     {
-        return ['content'];
+        return ['numbernine_core'];
     }
 }
