@@ -21,6 +21,8 @@ before_install:
     - sudo mv docker-compose /usr/local/bin
     - |
         if [ "$TRAVIS_BRANCH" != "master" ] && [ "$TRAVIS_BRANCH" != "develop" ]; then
+            composer config --unset extra.branch-alias.dev-develop
+            composer config --unset extra.branch-alias.dev-master
             composer config extra.branch-alias.dev-$(git rev-parse HEAD) 0.1.x-dev
         fi
 
