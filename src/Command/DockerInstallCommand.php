@@ -11,10 +11,8 @@
 
 namespace NumberNine\Command;
 
-use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -233,9 +231,10 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
     {
         $process = Process::fromShellCommandline(
             sprintf(
-                'docker run --rm --name numbernine_installer -it -u "$(id -u):$(id -g)" ' .
+                'docker run --rm --name numbernine_installer %s -u "$(id -u):$(id -g)" ' .
                 '-v %s:/srv/app -w /srv/app numberninecms/php:7.4-fpm-dev ' .
                 'composer require numberninecms/redis%s',
+                Process::isTtySupported() ? '-it' : '',
                 $this->projectPath,
                 $this->verbosity <= OutputInterface::VERBOSITY_NORMAL ? ' --quiet' : ''
             )
@@ -327,8 +326,9 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
     private function installDatabase(): int
     {
         $php = sprintf(
-            'docker run --rm --name numbernine_installer -it -u "$(id -u):$(id -g)" -v %s:/srv/app ' .
+            'docker run --rm --name numbernine_installer %s -u "$(id -u):$(id -g)" -v %s:/srv/app ' .
             "--network %s_default -w /srv/app numberninecms/php:7.4-fpm-dev php",
+            Process::isTtySupported() ? '-it' : '',
             $this->projectPath,
             basename($this->projectPath),
         );
