@@ -246,7 +246,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
         try {
             $process->mustRun();
         } catch (ProcessFailedException $exception) {
-            $this->io->error("Unable to install numbernine/redis package.");
+            $this->io->error("Unable to install numberninecms/redis package.");
             return Command::FAILURE;
         }
 

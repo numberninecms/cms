@@ -82,7 +82,7 @@ jobs:
                     path: newproject/vendor/numberninecms/cms
 
             -   name: Install Docker development environment
-                run: bin/console numbernine:docker:install -v --no-interaction
+                run: bin/console numbernine:docker:install -vvv --no-interaction
                 working-directory: newproject
 
             -   name: Check that website is up and running
