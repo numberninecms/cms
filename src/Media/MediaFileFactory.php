@@ -37,15 +37,6 @@ final class MediaFileFactory
     private string $absoluteUploadPath;
     private string $datedAbsoluteUploadPath;
 
-    /**
-     * @param EntityManagerInterface $entityManager
-     * @param Security $security
-     * @param ExtendedSluggerInterface $slugger
-     * @param ImageProcessor $imageProcessor
-     * @param ImageSizeStore $imageSizeStore
-     * @param string $uploadPath
-     * @param string $publicPath
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         Security $security,
@@ -65,17 +56,9 @@ final class MediaFileFactory
         $this->datedAbsoluteUploadPath = $publicPath . $uploadPath . '/' . date('Y/m');
     }
 
-    /**
-     * @param string $filename
-     * @param UserInterface $user
-     * @param bool $move
-     * @param bool $overwrite
-     * @param bool $flush
-     * @return MediaFile
-     */
     public function createMediaFileFromFilename(
         string $filename,
-        UserInterface $user,
+        ?UserInterface $user,
         bool $move = false,
         bool $overwrite = true,
         bool $flush = true
@@ -86,14 +69,6 @@ final class MediaFileFactory
         return $this->createMediaFile($file, $user, $flush);
     }
 
-    /**
-     * @param FileDescriptor $file
-     * @param UserInterface $user
-     * @param bool $move
-     * @param bool $overwrite
-     * @param bool $flush
-     * @return MediaFile
-     */
     public function createMediaFileFromFileDescriptor(
         FileDescriptor $file,
         UserInterface $user,
@@ -106,10 +81,6 @@ final class MediaFileFactory
         return $this->createMediaFile($file, $user, $flush);
     }
 
-    /**
-     * @param UploadedFile $uploadedFile
-     * @return MediaFile
-     */
     public function createMediaFileFromUploadedFile(UploadedFile $uploadedFile): MediaFile
     {
         if (!$uploadedFile->isValid()) {
@@ -123,10 +94,6 @@ final class MediaFileFactory
         return $this->createMediaFile($file, $this->security->getUser());
     }
 
-    /**
-     * @param string $filename
-     * @return FileDescriptor
-     */
     private function getFileDescriptor(string $filename): FileDescriptor
     {
         if (
@@ -145,11 +112,6 @@ final class MediaFileFactory
             ->setOriginalFilename($filename);
     }
 
-    /**
-     * @param FileDescriptor $file
-     * @param bool $move
-     * @param bool $overwrite
-     */
     private function moveOrCopy(FileDescriptor $file, bool $move = false, bool $overwrite = true): void
     {
         if (!file_exists($file->getOriginalFilename())) {
@@ -174,12 +136,6 @@ final class MediaFileFactory
         }
     }
 
-    /**
-     * @param FileDescriptor $file
-     * @param UserInterface|null $user
-     * @param bool $flush
-     * @return MediaFile
-     */
     private function createMediaFile(FileDescriptor $file, ?UserInterface $user, bool $flush = true): MediaFile
     {
         $mimeTypes = new MimeTypes();

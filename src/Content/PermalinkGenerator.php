@@ -16,7 +16,6 @@ use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\Term;
 use NumberNine\Model\Content\PublishingStatusInterface;
 use Symfony\Cmf\Component\Routing\RouteProviderInterface;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -26,11 +25,6 @@ final class PermalinkGenerator
     private RouteProviderInterface $routeProvider;
     private SluggerInterface $slugger;
 
-    /**
-     * @param UrlGeneratorInterface $urlGenerator
-     * @param RouteProviderInterface $routeProvider
-     * @param SluggerInterface $slugger
-     */
     public function __construct(
         UrlGeneratorInterface $urlGenerator,
         RouteProviderInterface $routeProvider,
@@ -43,9 +37,6 @@ final class PermalinkGenerator
 
     /**
      * Generates a permalink for a given ContentEntity object
-     * @param ContentEntity $contentEntity
-     * @param bool $absolute
-     * @return string
      */
     public function generateContentEntityPermalink(ContentEntity $contentEntity, bool $absolute = false): string
     {
@@ -78,11 +69,6 @@ final class PermalinkGenerator
         );
     }
 
-    /**
-     * @param Term $term
-     * @param bool $absolute
-     * @return string
-     */
     public function generateTermPermalink(Term $term, bool $absolute = false): string
     {
         if (!($taxonomy = $term->getTaxonomy())) {
