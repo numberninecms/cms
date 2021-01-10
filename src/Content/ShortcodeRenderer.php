@@ -13,6 +13,7 @@ namespace NumberNine\Content;
 
 use Exception;
 use NumberNine\Event\ShortcodeProcessParametersEvent;
+use NumberNine\Exception\InvalidShortcodeException;
 use NumberNine\Model\Shortcode\ShortcodeInterface;
 use NumberNine\Shortcode\TextShortcode;
 use NumberNine\Theme\TemplateResolver;
@@ -95,7 +96,12 @@ class ShortcodeRenderer
      */
     private function renderShortcode(ParsedShortcodeInterface $parsedShortcode): string
     {
-        $shortcode = $this->shortcodeStore->getShortcode($parsedShortcode->getName());
+        try {
+            $shortcode = $this->shortcodeStore->getShortcode($parsedShortcode->getName());
+        } catch (InvalidShortcodeException $exception) {
+            return $parsedShortcode->getText();
+        }
+
         $parameters = $parsedShortcode->getParameters();
 
         if (!$shortcode instanceof TextShortcode && trim((string)$parsedShortcode->getContent())) {
