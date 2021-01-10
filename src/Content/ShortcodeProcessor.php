@@ -19,14 +19,13 @@ use NumberNine\Exception\InvalidShortcodeException;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use NumberNine\Model\Shortcode\ShortcodeInterface;
 use NumberNine\Repository\PresetRepository;
-use NumberNine\Shortcode\TextShortcode\TextShortcode;
 use NumberNine\Theme\PresetFinderInterface;
 use Psr\Cache\InvalidArgumentException;
 use ReflectionException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
-use Thunder\Shortcode\Parser\ParserInterface;
 use Symfony\Component\Uid\Uuid;
+use Thunder\Shortcode\Parser\ParserInterface;
 use Thunder\Shortcode\Shortcode\ParsedShortcodeInterface;
 
 final class ShortcodeProcessor
@@ -146,6 +145,7 @@ final class ShortcodeProcessor
         $editable = is_subclass_of($shortcode, EditableShortcodeInterface::class);
 
         $resolver = new OptionsResolver();
+        $resolver->setDefined(array_keys($parameters));
         $shortcode->configureParameters($resolver);
         $parameters = $resolver->resolve($parameters);
 
