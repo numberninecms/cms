@@ -71,7 +71,7 @@ final class MediaFileFactory
 
     public function createMediaFileFromFileDescriptor(
         FileDescriptor $file,
-        UserInterface $user,
+        ?UserInterface $user,
         bool $move = false,
         bool $overwrite = true,
         bool $flush = true
