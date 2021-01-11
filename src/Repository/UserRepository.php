@@ -71,7 +71,7 @@ final class UserRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('u')
             ->join('u.userRoles', 'r')
-            ->where('r.name = ?')
+            ->where('r.name = :role')
             ->setParameter('role', $role)
             ->getQuery()
             ->getResult();

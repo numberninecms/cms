@@ -26,8 +26,6 @@ trait FindByCustomFieldTrait
     {
         return $this->getByCustomFieldQueryBuilder($fieldName, $fieldValue)
             ->getQuery()
-            ->useQueryCache(true)
-            ->enableResultCache()
             ->getResult();
     }
 
@@ -41,8 +39,6 @@ trait FindByCustomFieldTrait
     {
         return $this->getByCustomFieldQueryBuilder($fieldName, $fieldValue)
             ->getQuery()
-            ->useQueryCache(true)
-            ->enableResultCache()
             ->getOneOrNullResult();
     }
 
