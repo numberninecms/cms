@@ -37,7 +37,7 @@ final class ShortcodeRuntime implements RuntimeExtensionInterface
         try {
             return $this->shortcodeRenderer->applyShortcodes($text);
         } catch (Exception $e) {
-            if ($this->environment === 'dev' && $this->authorizationChecker->isGranted('ROLE_ADMIN')) {
+            if ($this->environment === 'dev' && $this->authorizationChecker->isGranted('Administrator')) {
                 throw $e;
             }
 

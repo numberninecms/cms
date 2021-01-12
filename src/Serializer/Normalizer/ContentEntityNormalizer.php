@@ -41,7 +41,7 @@ final class ContentEntityNormalizer implements NormalizerInterface
         $data = $this->normalizer->normalize($object, $format, $context);
 
         if (is_array($data) && array_key_exists('publicUrl', $data)) {
-            $data['publicUrl'] = $this->permalinkGenerator->generateContentEntityPermalink($object, true);
+            $data['publicUrl'] = $this->permalinkGenerator->generateContentEntityPermalink($object, 1, true);
         }
 
         return $data;

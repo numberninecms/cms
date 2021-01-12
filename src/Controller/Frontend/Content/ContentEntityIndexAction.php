@@ -30,9 +30,10 @@ final class ContentEntityIndexAction extends AbstractController
         SerializerInterface $serializer,
         ContentService $contentService,
         ConfigurationReadWriter $configurationReadWriter,
-        TemplateResolver $templateResolver,
-        int $page = 1
+        TemplateResolver $templateResolver
     ): Response {
+        $page = $request->get('page', 1);
+
         $perPage = $configurationReadWriter->read(Settings::POSTS_PER_PAGE, 12);
 
         /** @var PaginationParameters $paginationParameters */

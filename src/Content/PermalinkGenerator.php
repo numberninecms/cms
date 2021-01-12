@@ -38,9 +38,17 @@ final class PermalinkGenerator
     /**
      * Generates a permalink for a given ContentEntity object
      */
-    public function generateContentEntityPermalink(ContentEntity $contentEntity, bool $absolute = false): string
-    {
-        $routeName = sprintf('numbernine_%s_show', $contentEntity->getCustomType());
+    public function generateContentEntityPermalink(
+        ContentEntity $contentEntity,
+        int $page = 1,
+        bool $absolute = false
+    ): string {
+        $routeName = sprintf(
+            'numbernine_%s_show%s',
+            $contentEntity->getCustomType(),
+            $page > 1 ? '_page' : ''
+        );
+
         $route = $this->routeProvider->getRouteByName($routeName);
 
         /** @var DateTime $date */
@@ -60,6 +68,10 @@ final class PermalinkGenerator
         }
         if (strpos($route->getPath(), '{slug}') !== false) {
             $parameters['slug'] = $contentEntity->getSlug();
+        }
+
+        if ($page > 1) {
+            $parameters['page'] = $page;
         }
 
         return $this->urlGenerator->generate(

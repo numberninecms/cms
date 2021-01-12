@@ -65,10 +65,10 @@ final class RouteRegistrationEventSubscriber implements EventSubscriberInterface
         $permalinks = $this->configurationReadWriter->read(Settings::PERMALINKS);
 
         // Homepage route
-        $route = new Route('/', ['_controller' => HomepageAction::class], [], [], '', [], ['GET'], '');
+        $route = new Route('/', ['_controller' => HomepageAction::class, 'page' => 1], [], [], '', [], ['GET'], '');
         $routePage = new Route(
             '/page/{page<\d+>}/',
-            ['_controller' => HomepageAction::class],
+            ['_controller' => HomepageAction::class, 'page' => 1],
             [],
             [],
             '',
@@ -89,13 +89,18 @@ final class RouteRegistrationEventSubscriber implements EventSubscriberInterface
                 ->setDefaults(
                     [
                         '_controller' => ContentEntityShowAction::class,
-                        '_content_type' => $contentType
+                        '_content_type' => $contentType,
+                        'page' => 1,
                     ]
                 )
                 ->setMethods(['GET', 'POST']);
 
             $routeName = sprintf('numbernine_%s_show', $contentType->getName());
             $event->addRoute($routeName, $route);
+
+            $routePage = clone $route;
+            $routePage->setPath($route->getPath() . '/page/{page<\d+>}/');
+            $event->addRoute($routeName . '_page', $routePage);
         }
 
         // Taxonomies routes

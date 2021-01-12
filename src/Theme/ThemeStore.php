@@ -13,6 +13,7 @@ namespace NumberNine\Theme;
 
 use NumberNine\Model\Theme\ThemeInterface;
 use NumberNine\Model\Theme\ThemeWrapper;
+use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
@@ -30,6 +31,7 @@ final class ThemeStore implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
+            ConsoleCommandEvent::class => ['loadThemeWrappers', 5000],
             RequestEvent::class => ['loadThemeWrappers', 5000],
         ];
     }

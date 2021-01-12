@@ -32,6 +32,7 @@ trait ForwardRequestTrait
 
         $path['_controller'] ??= $controller;
         $path['type'] ??= $event->getEntity()->getCustomType();
+        $path['page'] ??= $event->getRequest()->get('page', 1);
         $subRequest = $event->getRequest()->duplicate([], null, $path);
 
         return $this->httpKernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST);

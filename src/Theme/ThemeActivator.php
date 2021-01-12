@@ -12,10 +12,13 @@
 namespace NumberNine\Theme;
 
 use NumberNine\Configuration\ConfigurationReadWriter;
+use NumberNine\Event\ThemeActivationAbortEvent;
 use NumberNine\Exception\NoThemeFoundException;
 use NumberNine\Exception\ThemeNotFoundException;
 use NumberNine\Model\General\Settings;
 use NumberNine\Repository\ThemeOptionsRepository;
+use Symfony\Component\Console\Event\ConsoleCommandEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
@@ -24,10 +27,12 @@ final class ThemeActivator implements EventSubscriberInterface
     private ThemeStore $themeStore;
     private ConfigurationReadWriter $configurationReadWriter;
     private ThemeOptionsRepository $themeOptionsRepository;
+    private EventDispatcherInterface $eventDispatcher;
 
     public static function getSubscribedEvents(): array
     {
         return [
+            ConsoleCommandEvent::class => ['activateCurrentTheme', 4900],
             RequestEvent::class => ['activateCurrentTheme', 4900],
         ];
     }
@@ -35,15 +40,32 @@ final class ThemeActivator implements EventSubscriberInterface
     public function __construct(
         ThemeStore $themeStore,
         ConfigurationReadWriter $configurationReadWriter,
-        ThemeOptionsRepository $themeOptionsRepository
+        ThemeOptionsRepository $themeOptionsRepository,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->themeStore = $themeStore;
         $this->configurationReadWriter = $configurationReadWriter;
         $this->themeOptionsRepository = $themeOptionsRepository;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function activateCurrentTheme(): void
+    /**
+     * @param ConsoleCommandEvent|RequestEvent $event
+     */
+    public function activateCurrentTheme($event): void
     {
+        if ($event instanceof ConsoleCommandEvent && $event->getCommand() !== null) {
+            $abort = !preg_match('/^(?:numbernine|app):.*/', (string)$event->getCommand()->getName());
+
+            /** @var ThemeActivationAbortEvent $themeActivationAbortEvent */
+            $themeActivationAbortEvent = $this->eventDispatcher->dispatch(new ThemeActivationAbortEvent($abort));
+            $abort = $themeActivationAbortEvent->getAbort();
+
+            if ($abort) {
+                return;
+            }
+        }
+
         if (empty($this->themeStore->getThemes())) {
             throw new NoThemeFoundException();
         }
