@@ -50,6 +50,7 @@ final class TextBoxShortcode extends AbstractShortcode implements EditableShortc
     public function processParameters(array $parameters): array
     {
         return [
+            'content' => $parameters['content'],
             'margin' => $parameters['margin'],
             'padding' => $parameters['padding'],
             'width' => $parameters['width'],

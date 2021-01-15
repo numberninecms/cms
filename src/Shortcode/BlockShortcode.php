@@ -48,7 +48,7 @@ final class BlockShortcode extends AbstractShortcode implements EditableShortcod
     public function processParameters(array $parameters): array
     {
         return [
-            'blockContent' => $this->getBlockContent($parameters),
+            'content' => $this->getBlockContent($parameters),
         ];
     }
 
