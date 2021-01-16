@@ -14,6 +14,7 @@ namespace NumberNine\Repository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -49,6 +50,7 @@ final class UserRepository extends ServiceEntityRepository
      * @param mixed $fieldValue
      * @return User|null
      * @throws NonUniqueResultException
+     * @throws NoResultException
      */
     public function findOneByCustomField(string $fieldName, $fieldValue): ?User
     {
@@ -61,7 +63,7 @@ final class UserRepository extends ServiceEntityRepository
                 ]
             )
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getSingleResult();
     }
 
     /**
@@ -137,14 +139,12 @@ final class UserRepository extends ServiceEntityRepository
             ->where('u.id IN (:ids)')
             ->setParameter('ids', $ids)
             ->getQuery()
-            ->iterate();
+            ->toIterable();
 
         $counter = 0;
 
-        foreach ($users as $row) {
-            /** @var User $user */
-            $user = $row[0];
-
+        /** @var User $user */
+        foreach ($users as $user) {
             foreach ($user->getComments() as $comment) {
                 /** @var CommentRepository $commentRepository */
                 $commentRepository = $this->_em->getRepository(Comment::class);

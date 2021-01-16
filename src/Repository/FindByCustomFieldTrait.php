@@ -12,6 +12,7 @@
 namespace NumberNine\Repository;
 
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use NumberNine\Entity\ContentEntity;
 
@@ -34,12 +35,13 @@ trait FindByCustomFieldTrait
      * @param mixed $fieldValue
      * @return ContentEntity|null
      * @throws NonUniqueResultException
+     * @throws NoResultException
      */
     public function findOneByCustomField(string $fieldName, $fieldValue): ?ContentEntity
     {
         return $this->getByCustomFieldQueryBuilder($fieldName, $fieldValue)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getSingleResult();
     }
 
     /**
