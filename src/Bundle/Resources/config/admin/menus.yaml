@@ -46,12 +46,9 @@ menus:
                 route: /settings/permalinks/
     appearance:
         text: Appearance
-        route: admin_appearance_themes
+        route:
         icon: brush
         children:
-            themes:
-                text: Themes
-                route: admin_appearance_themes
             customize:
                 text: Customize
                 link: /customizer/
