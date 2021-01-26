@@ -11,12 +11,14 @@
 
 namespace NumberNine\Command;
 
+use NumberNine\Event\ThemeActivationAbortEvent;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
@@ -24,7 +26,9 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 use function NumberNine\Common\Util\ConfigUtil\file_put_env_variable;
 
-final class DockerInstallCommand extends Command implements ContentTypeAwareCommandInterface
+final class DockerInstallCommand extends Command implements
+    ContentTypeAwareCommandInterface,
+    EventSubscriberInterface
 {
     protected static $defaultName = 'numbernine:docker:install';
 
@@ -40,12 +44,24 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
     private int $port = 0;
     private int $verbosity;
 
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            ThemeActivationAbortEvent::class => 'abortThemeActivation',
+        ];
+    }
+
     public function __construct(SluggerInterface $slugger, string $projectPath, string $publicPath)
     {
         parent::__construct();
         $this->slugger = $slugger;
         $this->projectPath = $projectPath;
         $this->publicPath = $publicPath;
+    }
+
+    public function abortThemeActivation(ThemeActivationAbortEvent $event): void
+    {
+        $event->setAbort(true);
     }
 
     protected function configure(): void
