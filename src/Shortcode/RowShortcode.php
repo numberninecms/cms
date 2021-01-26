@@ -15,6 +15,7 @@ use NumberNine\Annotation\Shortcode;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @Shortcode(name="row", container=true, label="Row", icon="view_stream")
@@ -23,5 +24,19 @@ final class RowShortcode extends AbstractShortcode implements EditableShortcodeI
 {
     public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void
     {
+    }
+
+    public function configureParameters(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'content' => '',
+        ]);
+    }
+
+    public function processParameters(array $parameters): array
+    {
+        return [
+            'content' => $parameters['content'],
+        ];
     }
 }

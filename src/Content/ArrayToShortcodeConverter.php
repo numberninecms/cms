@@ -47,7 +47,7 @@ final class ArrayToShortcodeConverter
         return $text;
     }
 
-    private function purifyOutput(string $text): string
+    public function purifyOutput(string $text): string
     {
         $text = str_replace(['[text]', '[/text]'], ["\n", "\n\n"], $text);
 

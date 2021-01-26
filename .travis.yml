@@ -21,6 +21,8 @@ before_install:
     - sudo mv docker-compose /usr/local/bin
     - |
         if [ "$TRAVIS_BRANCH" != "master" ] && [ "$TRAVIS_BRANCH" != "develop" ]; then
+            composer config --unset extra.branch-alias.dev-develop
+            composer config --unset extra.branch-alias.dev-master
             composer config extra.branch-alias.dev-$(git rev-parse HEAD) 0.1.x-dev
         fi
 
@@ -54,5 +56,5 @@ jobs:
                 - cp -R ../cms vendor/numberninecms/cms
                 - sed -i "s/1000:1000/$(id -u):$(id -g)/" docker/docker-compose.yaml
             script:
-                - bin/console numbernine:docker:install -v --no-interaction
+                - bin/console numbernine:docker:install --app-name=newproject -v --no-interaction
                 - wget --spider --no-check-certificate https://localhost:443/

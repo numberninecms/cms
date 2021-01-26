@@ -11,12 +11,14 @@
 
 namespace NumberNine\Command;
 
+use NumberNine\Event\ThemeActivationAbortEvent;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
@@ -24,7 +26,9 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 use function NumberNine\Common\Util\ConfigUtil\file_put_env_variable;
 
-final class DockerInstallCommand extends Command implements ContentTypeAwareCommandInterface
+final class DockerInstallCommand extends Command implements
+    ContentTypeAwareCommandInterface,
+    EventSubscriberInterface
 {
     protected static $defaultName = 'numbernine:docker:install';
 
@@ -34,11 +38,18 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
 
     private OutputInterface $output;
     private SymfonyStyle $io;
-    private string $appName;
+    private ?string $appName;
     private bool $reset;
     private string $envFile;
     private int $port = 0;
     private int $verbosity;
+
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            ThemeActivationAbortEvent::class => 'abortThemeActivation',
+        ];
+    }
 
     public function __construct(SluggerInterface $slugger, string $projectPath, string $publicPath)
     {
@@ -46,6 +57,11 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
         $this->slugger = $slugger;
         $this->projectPath = $projectPath;
         $this->publicPath = $publicPath;
+    }
+
+    public function abortThemeActivation(ThemeActivationAbortEvent $event): void
+    {
+        $event->setAbort(true);
     }
 
     protected function configure(): void
@@ -57,6 +73,12 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
                 InputOption::VALUE_NONE,
                 'Remove all uploaded files and all existing migrations'
             )
+            ->addOption(
+                'app-name',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Application name'
+            )
             ->setDescription('Creates a ready-to-use Docker development environment');
     }
 
@@ -66,6 +88,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
         $this->io = new SymfonyStyle($input, $output);
         $this->envFile = $this->projectPath . '/.env.local';
         $this->reset = (bool)$input->getOption('reset');
+        $this->appName = $input->getOption('app-name'); // @phpstan-ignore-line
         $this->verbosity = $this->io->getVerbosity();
 
         $tasks = [
@@ -121,15 +144,17 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
 
     private function createBaseVariables(): int
     {
-        $this->io->title('General settings');
+        if (!$this->appName) {
+            $this->io->title('General settings');
 
-        $this->appName = $this->io->ask('Application name', 'numbernine', function ($appName) {
-            if (empty($appName)) {
-                throw new \RuntimeException('Application name cannot be empty.');
-            }
+            $this->appName = $this->io->ask('Application name', 'numbernine', function ($appName) {
+                if (empty($appName)) {
+                    throw new \RuntimeException('Application name cannot be empty.');
+                }
 
-            return $this->slugger->slug($appName, '_')->lower();
-        });
+                return $this->slugger->slug($appName, '_')->lower();
+            });
+        }
 
         if (file_put_env_variable($this->envFile, 'APP_NAME', $this->appName) === false) {
             $this->io->error("Unable to create file '.env.local'");

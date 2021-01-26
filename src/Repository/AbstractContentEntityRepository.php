@@ -16,9 +16,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
-use NumberNine\Entity\Comment;
 use NumberNine\Entity\ContentEntity;
-use NumberNine\Entity\ContentEntityTerm;
 use NumberNine\Entity\Term;
 use NumberNine\Model\Pagination\PaginationParameters;
 
@@ -30,13 +28,8 @@ use NumberNine\Model\Pagination\PaginationParameters;
  */
 abstract class AbstractContentEntityRepository extends ServiceEntityRepository
 {
-    /**
-     * @param string $contentType
-     * @param PaginationParameters $paginationParameters
-     * @param Criteria|null $criteria
-     * @return QueryBuilder
-     * @throws QueryException
-     */
+    use FindByCustomFieldTrait;
+
     public function getPaginatedCollectionQueryBuilder(
         string $contentType,
         PaginationParameters $paginationParameters,
@@ -114,12 +107,6 @@ abstract class AbstractContentEntityRepository extends ServiceEntityRepository
         return $queryBuilder;
     }
 
-    /**
-     * @param string $contentType
-     * @param int $startRow
-     * @param int $fetchCount
-     * @return QueryBuilder
-     */
     public function getSimplePaginatedCollectionQueryBuilder(
         string $contentType,
         int $startRow = 0,
@@ -134,10 +121,6 @@ abstract class AbstractContentEntityRepository extends ServiceEntityRepository
             ->setMaxResults($fetchCount);
     }
 
-    /**
-     * @param array $ids
-     * @throws ORMException
-     */
     public function removeCollection(array $ids): void
     {
         $this->_em->getFilters()->disable('softdeleteable');
@@ -148,10 +131,6 @@ abstract class AbstractContentEntityRepository extends ServiceEntityRepository
         }
     }
 
-    /**
-     * @param ContentEntity $entity
-     * @throws ORMException
-     */
     private function removeEntity(ContentEntity $entity): void
     {
         if ($entity->getDeletedAt() !== null) {

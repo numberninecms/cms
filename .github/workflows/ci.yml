@@ -28,7 +28,10 @@ jobs:
                     refs/heads/master
                     refs/heads/develop
                     ', github.ref) == false
-                run: composer config extra.branch-alias.dev-${{ github.sha }} 0.1.x-dev
+                run: |
+                    composer config --unset extra.branch-alias.dev-develop
+                    composer config --unset extra.branch-alias.dev-master
+                    composer config extra.branch-alias.dev-${{ github.sha }} 0.1.x-dev
 
             -   name: Get composer cache directory
                 id: composer-cache

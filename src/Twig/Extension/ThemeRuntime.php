@@ -79,20 +79,11 @@ final class ThemeRuntime implements RuntimeExtensionInterface
         $this->inflector = new EnglishInflector();
     }
 
-    /**
-     * @return ThemeInterface
-     * @throws ThemeNotFoundException
-     */
     public function getCurrentTheme(): ThemeInterface
     {
         return $this->themeStore->getCurrentTheme();
     }
 
-    /**
-     * @param string $areaName
-     * @return string
-     * @throws Exception
-     */
     public function renderArea(string $areaName): string
     {
         if ($this->request && $this->requestAnalyzer->isPreviewMode() && $this->request->get('area') === $areaName) {
@@ -108,14 +99,6 @@ final class ThemeRuntime implements RuntimeExtensionInterface
         return $this->shortcodeRenderer->applyShortcodes($areaContent);
     }
 
-    /**
-     * @param string $componentName
-     * @param array $args
-     * @return string
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
     public function renderComponent(string $componentName, array $args = []): string
     {
         return $this->componentRenderer->renderComponent($componentName, $args);
@@ -138,8 +121,7 @@ final class ThemeRuntime implements RuntimeExtensionInterface
     }
 
     /**
-     * @param string $settingName
-     * @param null $default
+     * @param mixed $default
      * @return mixed|null
      */
     public function getSetting(string $settingName, $default = null)
@@ -156,21 +138,11 @@ final class ThemeRuntime implements RuntimeExtensionInterface
         return $settings[$settingName] ?? null;
     }
 
-    /**
-     * @param ContentEntity $contentEntity
-     * @return string
-     */
     public function getEntityUrl(ContentEntity $contentEntity): string
     {
         return $this->permalinkGenerator->generateContentEntityPermalink($contentEntity);
     }
 
-    /**
-     * @param ContentEntity $contentEntity
-     * @param array $attributes
-     * @param string|null $linkText
-     * @return string
-     */
     public function getEntityLink(ContentEntity $contentEntity, array $attributes = [], string $linkText = null): string
     {
         $attributesAsString = array_implode_associative($attributes, ' ', '=', '', '"');
@@ -183,10 +155,6 @@ final class ThemeRuntime implements RuntimeExtensionInterface
         );
     }
 
-    /**
-     * @param ContentEntity $contentEntity
-     * @return string
-     */
     public function getEntityAdminUrl(ContentEntity $contentEntity): string
     {
         return sprintf(
@@ -197,13 +165,6 @@ final class ThemeRuntime implements RuntimeExtensionInterface
         );
     }
 
-    /**
-     * @param ContentEntity $contentEntity
-     * @param string $taxonomyName
-     * @param string $separator
-     * @param array $attributes
-     * @return string
-     */
     public function getTermsLinkList(
         ContentEntity $contentEntity,
         string $taxonomyName,
@@ -213,12 +174,6 @@ final class ThemeRuntime implements RuntimeExtensionInterface
         return implode($separator, $this->getTermsLinkArray($contentEntity, $taxonomyName, $attributes));
     }
 
-    /**
-     * @param ContentEntity $contentEntity
-     * @param string $taxonomyName
-     * @param array $attributes
-     * @return array
-     */
     private function getTermsLinkArray(
         ContentEntity $contentEntity,
         string $taxonomyName,
@@ -230,11 +185,6 @@ final class ThemeRuntime implements RuntimeExtensionInterface
         );
     }
 
-    /**
-     * @param Term $term
-     * @param array $attributes
-     * @return string
-     */
     public function getTermLink(Term $term, array $attributes = []): string
     {
         return sprintf(

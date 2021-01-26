@@ -12,6 +12,8 @@
 namespace NumberNine\Tests\Functional\Controller\Admin;
 
 use NumberNine\Repository\UserRepository;
+use NumberNine\Repository\UserRoleRepository;
+use NumberNine\Security\UserFactory;
 use NumberNine\Tests\DotEnvAwareWebTestCase;
 
 class AdminIndexActionWebTest extends DotEnvAwareWebTestCase
@@ -24,8 +26,15 @@ class AdminIndexActionWebTest extends DotEnvAwareWebTestCase
 
     public function testAdminLoginIsSuccessful(): void
     {
-        $userRepository = self::$container->get(UserRepository::class);
-        $adminUser = $userRepository->findOneByUsername('admin');
+        $userRoleRepository = self::$container->get(UserRoleRepository::class);
+        $userFactory = self::$container->get(UserFactory::class);
+
+        $adminUser = $userFactory->createUser(
+            'admin',
+            'admin@numbernine-fakedomain.com',
+            'password',
+            [$userRoleRepository->findOneBy(['name' => 'Administrator'])],
+        );
 
         $this->client->loginUser($adminUser);
 
@@ -36,8 +45,15 @@ class AdminIndexActionWebTest extends DotEnvAwareWebTestCase
 
     public function testSubscriberCantAccessAdmin(): void
     {
-        $userRepository = self::$container->get(UserRepository::class);
-        $subscriberUser = $userRepository->findOneByUsername('subscriber');
+        $userRoleRepository = self::$container->get(UserRoleRepository::class);
+        $userFactory = self::$container->get(UserFactory::class);
+
+        $subscriberUser = $userFactory->createUser(
+            'subscriber',
+            'subscriber@numbernine-fakedomain.com',
+            'password',
+            [$userRoleRepository->findOneBy(['name' => 'Subscriber'])],
+        );
 
         $this->client->loginUser($subscriberUser);
 

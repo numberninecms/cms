@@ -20,7 +20,7 @@ final class ShortcodeTwigLoader extends FilesystemLoader implements EventSubscri
 {
     private ThemeStore $themeStore;
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             RequestEvent::class => ['load', 4700],

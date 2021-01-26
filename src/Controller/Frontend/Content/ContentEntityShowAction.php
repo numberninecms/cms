@@ -82,11 +82,18 @@ final class ContentEntityShowAction extends AbstractController
 
     private function validateUrl(Request $request, ContentEntity $entity, PermalinkGenerator $permalinkGenerator): void
     {
-        if ($request->getPathInfo() === $this->generateUrl('numbernine_homepage')) {
+        if (
+            $request->getPathInfo() === $this->generateUrl('numbernine_homepage')
+            || $request->getPathInfo() === $this->generateUrl('numbernine_homepage_page', [
+                'page' => $request->get('page', 1)
+            ])
+        ) {
             return;
         }
 
-        if ($permalinkGenerator->generateContentEntityPermalink($entity) !== $request->getPathInfo()) {
+        $url = $permalinkGenerator->generateContentEntityPermalink($entity, $request->get('page', 1));
+
+        if ($url !== $request->getPathInfo()) {
             throw new NotFoundHttpException();
         }
     }

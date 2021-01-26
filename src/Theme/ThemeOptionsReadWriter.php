@@ -14,19 +14,28 @@ namespace NumberNine\Theme;
 use Doctrine\ORM\EntityManagerInterface;
 use NumberNine\Entity\ThemeOptions;
 use NumberNine\Model\Theme\ThemeInterface;
+use NumberNine\Repository\ThemeOptionsRepository;
 
 final class ThemeOptionsReadWriter
 {
     private EntityManagerInterface $entityManager;
+    private ThemeOptionsRepository $themeOptionsRepository;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, ThemeOptionsRepository $themeOptionsRepository)
     {
         $this->entityManager = $entityManager;
+        $this->themeOptionsRepository = $themeOptionsRepository;
     }
 
     public function readAll(ThemeInterface $theme, bool $draft = false, bool $merged = false): array
     {
-        $themeOptions = $theme->getThemeOptions() ?? (new ThemeOptions())->setTheme((string)$theme->getName());
+        $themeOptions = $this->themeOptionsRepository->findOneBy(['theme' => $theme->getName()]);
+
+        if (!$themeOptions instanceof ThemeOptions) {
+            $themeOptions = (new ThemeOptions())->setTheme((string)$theme->getName());
+        }
+
+        $theme->setThemeOptions($themeOptions);
 
         if ($merged) {
             return $themeOptions->getMergedOptions();
@@ -41,7 +50,11 @@ final class ThemeOptionsReadWriter
 
     public function writeAll(ThemeInterface $theme, array $options, bool $draft = false, bool $flush = true): void
     {
-        $themeOptions = $theme->getThemeOptions() ?? (new ThemeOptions())->setTheme((string)$theme->getName());
+        $themeOptions = $this->themeOptionsRepository->findOneBy(['theme' => $theme->getName()]);
+
+        if (!$themeOptions instanceof ThemeOptions) {
+            $themeOptions = (new ThemeOptions())->setTheme((string)$theme->getName());
+        }
 
         if (!$draft) {
             $themeOptions->setOptions($options);
