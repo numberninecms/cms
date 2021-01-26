@@ -34,7 +34,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
 
     private OutputInterface $output;
     private SymfonyStyle $io;
-    private string $appName;
+    private ?string $appName;
     private bool $reset;
     private string $envFile;
     private int $port = 0;
@@ -57,6 +57,12 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
                 InputOption::VALUE_NONE,
                 'Remove all uploaded files and all existing migrations'
             )
+            ->addOption(
+                'app-name',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Application name'
+            )
             ->setDescription('Creates a ready-to-use Docker development environment');
     }
 
@@ -66,6 +72,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
         $this->io = new SymfonyStyle($input, $output);
         $this->envFile = $this->projectPath . '/.env.local';
         $this->reset = (bool)$input->getOption('reset');
+        $this->appName = $input->getOption('app-name'); // @phpstan-ignore-line
         $this->verbosity = $this->io->getVerbosity();
 
         $tasks = [
@@ -121,15 +128,17 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
 
     private function createBaseVariables(): int
     {
-        $this->io->title('General settings');
+        if (!$this->appName) {
+            $this->io->title('General settings');
 
-        $this->appName = $this->io->ask('Application name', 'numbernine', function ($appName) {
-            if (empty($appName)) {
-                throw new \RuntimeException('Application name cannot be empty.');
-            }
+            $this->appName = $this->io->ask('Application name', 'numbernine', function ($appName) {
+                if (empty($appName)) {
+                    throw new \RuntimeException('Application name cannot be empty.');
+                }
 
-            return $this->slugger->slug($appName, '_')->lower();
-        });
+                return $this->slugger->slug($appName, '_')->lower();
+            });
+        }
 
         if (file_put_env_variable($this->envFile, 'APP_NAME', $this->appName) === false) {
             $this->io->error("Unable to create file '.env.local'");
