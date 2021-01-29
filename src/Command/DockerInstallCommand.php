@@ -238,13 +238,34 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
 
     private function requireRedisBundle(): int
     {
-        $process = Process::fromShellCommandline(
+        $composerBaseCmd = sprintf(
+            'docker run --rm --name numbernine_installer %s -u "$(id -u):$(id -g)" ' .
+            '-v %s:/srv/app -w /srv/app numberninecms/php:7.4-fpm-dev composer ',
+            Process::isTtySupported() ? '-it' : '',
+            $this->projectPath
+        );
+
+        $composerRequire = Process::fromShellCommandline(
             sprintf(
-                'docker run --rm --name numbernine_installer %s -u "$(id -u):$(id -g)" ' .
-                '-v %s:/srv/app -w /srv/app numberninecms/php:7.4-fpm-dev ' .
-                'composer require numberninecms/redis%s',
-                Process::isTtySupported() ? '-it' : '',
-                $this->projectPath,
+                $composerBaseCmd . 'require numberninecms/redis --no-scripts%s',
+                $this->verbosity <= OutputInterface::VERBOSITY_NORMAL ? ' --quiet' : ''
+            )
+        )
+            ->setTimeout(null)
+            ->setTty(Process::isTtySupported());
+
+        $clearCache = Process::fromShellCommandline(
+            sprintf(
+                'php bin/console cache:clear%s',
+                $this->verbosity <= OutputInterface::VERBOSITY_NORMAL ? ' --quiet' : ''
+            )
+        )
+            ->setTimeout(null)
+            ->setTty(Process::isTtySupported());
+
+        $composerDumpautoload = Process::fromShellCommandline(
+            sprintf(
+                $composerBaseCmd . 'dumpautoload%s',
                 $this->verbosity <= OutputInterface::VERBOSITY_NORMAL ? ' --quiet' : ''
             )
         )
@@ -252,7 +273,9 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
             ->setTty(Process::isTtySupported());
 
         try {
-            $process->mustRun();
+            $composerRequire->mustRun();
+            $clearCache->mustRun();
+            $composerDumpautoload->mustRun();
         } catch (ProcessFailedException $exception) {
             $this->io->error("Unable to install numberninecms/redis package.");
             return Command::FAILURE;
