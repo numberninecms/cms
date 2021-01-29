@@ -358,11 +358,8 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
     private function installDatabase(): int
     {
         $php = sprintf(
-            'docker run --rm --name numbernine_installer %s -u "$(id -u):$(id -g)" -v %s:/srv/app ' .
-            "--network %s_default -w /srv/app numberninecms/php:7.4-fpm-dev php",
-            Process::isTtySupported() ? '-it' : '',
-            $this->projectPath,
-            basename($this->projectPath),
+            'docker-compose exec %sphp php',
+            Process::isTtySupported() ? '' : '-T ',
         );
         $symfony = "$php bin/console";
         $command = "$php -r 'set_time_limit(30); for(;;) { if(@fsockopen(\"mysql:\".(3306))) { break; } }'";
