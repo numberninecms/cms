@@ -47,6 +47,13 @@ jobs:
             -   name: Install dependencies
                 run: composer install --prefer-dist --no-progress --no-interaction
 
+            -   name: Update composer.lock file
+                if: contains('
+                    refs/heads/master
+                    refs/heads/develop
+                    ', github.ref) == false
+                run: composer update --lock
+
             -   name: Prepare folders and env files
                 run: |
                     echo 'DATABASE_URL=mysql://test:test@mysql:3306/numbernine_test?serverVersion=5.7' > .env.test.local
@@ -55,11 +62,11 @@ jobs:
                     chmod -R 0777 var
                     chmod -R 0777 public
 
-            -   name: Run Docker containers
-                run: docker-compose up -d
-
             -   name: Run code quality tests
                 run: composer run-script test
+
+            -   name: Run Docker containers
+                run: docker-compose up -d
 
             -   name: Run unit and functional tests
                 run: docker-compose exec -T php vendor/bin/phpunit
@@ -85,7 +92,7 @@ jobs:
                     path: newproject/vendor/numberninecms/cms
 
             -   name: Install Docker development environment
-                run: bin/console numbernine:docker:install -vvv --no-interaction
+                run: bin/console numbernine:docker:install --app-name=newproject -vvv --no-interaction
                 working-directory: newproject
 
             -   name: Check that website is up and running

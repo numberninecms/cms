@@ -11,8 +11,8 @@
 
 namespace NumberNine\Theme;
 
+use NumberNine\Command\ThemeAwareCommandInterface;
 use NumberNine\Configuration\ConfigurationReadWriter;
-use NumberNine\Event\ThemeActivationAbortEvent;
 use NumberNine\Exception\NoThemeFoundException;
 use NumberNine\Exception\ThemeNotFoundException;
 use NumberNine\Model\General\Settings;
@@ -54,16 +54,8 @@ final class ThemeActivator implements EventSubscriberInterface
      */
     public function activateCurrentTheme($event): void
     {
-        if ($event instanceof ConsoleCommandEvent && $event->getCommand() !== null) {
-            $abort = !preg_match('/^(?:numbernine|app):.*/', (string)$event->getCommand()->getName());
-
-            /** @var ThemeActivationAbortEvent $themeActivationAbortEvent */
-            $themeActivationAbortEvent = $this->eventDispatcher->dispatch(new ThemeActivationAbortEvent($abort));
-            $abort = $themeActivationAbortEvent->getAbort();
-
-            if ($abort) {
-                return;
-            }
+        if ($event instanceof ConsoleCommandEvent && !$event->getCommand() instanceof ThemeAwareCommandInterface) {
+            return;
         }
 
         if (empty($this->themeStore->getThemes())) {

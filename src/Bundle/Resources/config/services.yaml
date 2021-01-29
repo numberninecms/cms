@@ -63,7 +63,6 @@ services:
     NumberNine\Theme\PresetFinderInterface: '@NumberNine\Theme\PresetFinder'
     NumberNine\Theme\CssFramework\CssFrameworkInterface: '@NumberNine\Theme\CssFramework\TailwindCss'
     NumberNine\Theme\TemplateResolverInterface: '@NumberNine\Theme\TemplateResolver'
-    NumberNine\Content\RenderableInspectorInterface: '@NumberNine\Content\RenderableInspector'
 
     Twig\Extension\StringLoaderExtension: ~
 
