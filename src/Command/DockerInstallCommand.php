@@ -366,6 +366,11 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
         $quiet = $this->verbosity <= OutputInterface::VERBOSITY_NORMAL ? ' --quiet' : '';
 
         try {
+            $process = Process::fromShellCommandline("$symfony cache:clear$quiet")
+                ->setTimeout(300)
+                ->setTty(Process::isTtySupported());
+            $this->getHelper('process')->mustRun($this->output, $process);
+
             $process = Process::fromShellCommandline($command)
                 ->setTimeout(30)
                 ->setTty(Process::isTtySupported());
