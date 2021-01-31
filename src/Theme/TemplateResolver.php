@@ -264,7 +264,7 @@ final class TemplateResolver implements TemplateResolverInterface
         $templates = [
             sprintf('theme/%s', $path),
             sprintf('@%s/%s', $themeName, $path),
-            sprintf('@NumberNine/frontend/%s', $path),
+            sprintf('@NumberNine/%s', $path),
         ];
 
         return $this->twig->resolveTemplate($templates);

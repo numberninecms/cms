@@ -14,8 +14,12 @@ namespace NumberNine\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use NumberNine\Model\Content\Features\CustomFieldsTrait;
 use NumberNine\Model\User\User as BaseUser;
+use Serializable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -23,8 +27,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @UniqueEntity(fields={"username"}, message="This username is already taken.")
  * @UniqueEntity(fields={"email"}, message="A user is already registered with this email.")
  */
-class User extends BaseUser
+class User implements UserInterface, Serializable
 {
+    use CustomFieldsTrait;
+    use TimestampableEntity;
+
+    public const DISPLAY_NAME_USERNAME = 'username';
+    public const DISPLAY_NAME_FIRST_ONLY = 'first_only';
+    public const DISPLAY_NAME_LAST_ONLY = 'last_only';
+    public const DISPLAY_NAME_FIRST_LAST = 'first_last';
+    public const DISPLAY_NAME_LAST_FIRST = 'last_first';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -53,6 +66,42 @@ class User extends BaseUser
      */
     private Collection $comments;
 
+    /**
+     * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"user_get", "author_get"})
+     */
+    private ?string $username = null;
+
+    /**
+     * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"user_get"})
+     */
+    private ?string $email = null;
+
+    /**
+     * @var ?string The hashed password
+     * @ORM\Column(type="string")
+     */
+    private ?string $password = null;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Groups({"user_get"})
+     */
+    private ?string $firstName = null;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Groups({"user_get"})
+     */
+    private ?string $lastName = null;
+
+    /**
+     * @ORM\Column(type="string")
+     * @Groups({"user_get"})
+     */
+    private ?string $displayNameFormat = self::DISPLAY_NAME_USERNAME;
+
     public function __construct()
     {
         $this->userRoles = new ArrayCollection();
@@ -63,6 +112,161 @@ class User extends BaseUser
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUsername(): string
+    {
+        return (string)$this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail(): string
+    {
+        return (string)$this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getRoles(): array
+    {
+        $userRoles = $this->getUserRoles();
+
+        if ($userRoles instanceof Collection) {
+            $userRoles = $userRoles->toArray();
+        }
+
+        return array_map(fn(UserRole $userRole) => $userRole->getName(), $userRoles);
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
+    {
+        return (string)$this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     * return null
+     */
+    public function getSalt()
+    {
+        // not needed when using the "bcrypt" algorithm in security.yaml
+        return null;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(?string $firstName): self
+    {
+        $this->firstName = $firstName;
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(?string $lastName): self
+    {
+        $this->lastName = $lastName;
+        return $this;
+    }
+
+    public function getDisplayNameFormat(): ?string
+    {
+        return $this->displayNameFormat;
+    }
+
+    public function setDisplayNameFormat(?string $displayName): self
+    {
+        $this->displayNameFormat = $displayName;
+        return $this;
+    }
+
+    /**
+     * @Groups({"user_get", "author_get"})
+     * @return string
+     */
+    public function getDisplayName(): string
+    {
+        switch ($this->displayNameFormat) {
+            case self::DISPLAY_NAME_FIRST_ONLY:
+                return (string)$this->getFirstName();
+            case self::DISPLAY_NAME_LAST_ONLY:
+                return (string)$this->getLastName();
+            case self::DISPLAY_NAME_FIRST_LAST:
+                return trim(sprintf('%s %s', $this->getFirstName(), $this->getLastName()));
+            case self::DISPLAY_NAME_LAST_FIRST:
+                return trim(sprintf('%s %s', $this->getLastName(), $this->getFirstName()));
+            case self::DISPLAY_NAME_USERNAME:
+            default:
+                return $this->getUsername();
+        }
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+        return serialize(
+            [
+                $this->id,
+                $this->username,
+                $this->password,
+            ]
+        );
+    }
+
+    /** @param string $serialized
+     * @see \Serializable::unserialize()
+     */
+    public function unserialize($serialized): void
+    {
+        [
+            $this->id,
+            $this->username,
+            $this->password,
+        ] = unserialize($serialized, ['allowed_classes' => []]);
     }
 
     /**
@@ -147,7 +351,7 @@ class User extends BaseUser
         return $this;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getDisplayName();
     }

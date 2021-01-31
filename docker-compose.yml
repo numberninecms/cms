@@ -31,5 +31,14 @@ services:
         volumes:
             - mysql_data:/var/lib/mysql
 
+    node:
+        container_name: cms_node
+        image: node:latest
+        user: '1000:1000'
+        restart: 'no'
+        working_dir: /srv/app
+        volumes:
+            - ./:/srv/app
+
 volumes:
     mysql_data:

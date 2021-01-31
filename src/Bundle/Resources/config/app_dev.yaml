@@ -1,0 +1,2 @@
+symfonycasts_reset_password:
+    throttle_limit: 0

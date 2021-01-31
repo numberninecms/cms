@@ -3,7 +3,7 @@
     "adminbar": {
       "js": [
         "/bundles/numbernine/build/runtime.js",
-        "/bundles/numbernine/build/vendors~adminbar.js",
+        "/bundles/numbernine/build/vendors-node_modules_core-js_modules_es_object_define-property_js.js",
         "/bundles/numbernine/build/adminbar.js"
       ],
       "css": [
@@ -12,21 +12,17 @@
     },
     "adminpreviewmode": {
       "js": [
-        "/bundles/numbernine/build/runtime.js",
-        "/bundles/numbernine/build/vendors~adminpreviewmode~security.js"
+        "/bundles/numbernine/build/runtime.js"
       ],
       "css": [
-        "/bundles/numbernine/build/vendors~adminpreviewmode~security.css",
         "/bundles/numbernine/build/adminpreviewmode.css"
       ]
     },
     "security": {
       "js": [
-        "/bundles/numbernine/build/runtime.js",
-        "/bundles/numbernine/build/vendors~adminpreviewmode~security.js"
+        "/bundles/numbernine/build/runtime.js"
       ],
       "css": [
-        "/bundles/numbernine/build/vendors~adminpreviewmode~security.css",
         "/bundles/numbernine/build/security.css"
       ]
     }

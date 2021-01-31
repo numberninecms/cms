@@ -23,4 +23,6 @@ interface Settings
     public const ACTIVE_THEME = 'active_theme';
     public const PERMALINKS = 'permalinks';
     public const CUSTOMIZER_DRAFT_SETTINGS = 'customizer_draft_settings';
+    public const MAILER_SENDER_ADDRESS = 'mailer_sender_address';
+    public const MAILER_SENDER_NAME = 'mailer_sender_name';
 }

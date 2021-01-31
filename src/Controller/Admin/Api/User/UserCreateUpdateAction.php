@@ -65,7 +65,7 @@ final class UserCreateUpdateAction extends AbstractController implements AdminCo
         $data = $request->request->get('user');
         $user = (new User())->setUsername($data['username']);
         $user->setPassword($passwordEncoder->encodePassword($user, $data['password']));
-        $this->setFields($user, $data); /* @phpstan-ignore-line */
+        $this->setFields($user, $data);
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
