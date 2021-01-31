@@ -152,6 +152,8 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
         );
         file_put_env_variable($this->envFile, 'REDIS_URL', 'redis://redis:6379');
 
+        file_put_env_variable($this->envFile, 'MAILER_DSN', 'smtp://maildev:25');
+
         return Command::SUCCESS;
     }
 
@@ -366,7 +368,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
         $quiet = $this->verbosity <= OutputInterface::VERBOSITY_NORMAL ? ' --quiet' : '';
 
         try {
-            $process = Process::fromShellCommandline("$symfony cache:clear$quiet")
+            $process = Process::fromShellCommandline("rm -rf var/cache && mkdir -pm 0755 var/cache")
                 ->setTimeout(300)
                 ->setTty(Process::isTtySupported());
             $this->getHelper('process')->mustRun($this->output, $process);
