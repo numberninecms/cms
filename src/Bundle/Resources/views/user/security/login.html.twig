@@ -15,7 +15,9 @@
 
     <form method="post">
         {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            <div class="n9-alert-danger" role="alert">
+                <p>{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+            </div>
         {% endif %}
 
         <div class="n9-mb-4">
@@ -42,7 +44,7 @@
             <button type="submit">
                 Sign In
             </button>
-            <a href="#">
+            <a href="{{ path('numbernine_forgot_password_request') }}">
                 Forgot Password?
             </a>
         </div>

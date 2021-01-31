@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Controller\Frontend\Security;
+namespace NumberNine\Controller\Admin\Security;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
- * @Route("/admin/login", name="numbernine_login")
+ * @Route("/login", name="numbernine_login")
  */
 final class LoginAction extends AbstractController
 {

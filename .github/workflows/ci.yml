@@ -91,6 +91,10 @@ jobs:
                 with:
                     path: newproject/vendor/numberninecms/cms
 
+            -   name: Alter docker-compose.yml for current user
+                run: sed -i "s/1000:1000/$(id -u):$(id -g)/" docker/docker-compose.yaml
+                working-directory: newproject
+
             -   name: Install Docker development environment
                 run: bin/console numbernine:docker:install --app-name=newproject -vvv --no-interaction
                 working-directory: newproject

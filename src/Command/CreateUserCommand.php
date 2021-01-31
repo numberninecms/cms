@@ -71,7 +71,8 @@ final class CreateUserCommand extends Command
 
         $isAdmin = $input->getOption('admin');
         $adminRole = $this->userRoleRepository->findOneBy(['name' => 'Administrator']);
-        $roles = ($isAdmin && $adminRole) ? [$adminRole] : [];
+        $subscriberRole = $this->userRoleRepository->findOneBy(['name' => 'Subscriber']);
+        $roles = ($isAdmin && $adminRole) ? [$adminRole] : [$subscriberRole];
 
         try {
             $this->userFactory->createUser($username, $email, $password, $roles);

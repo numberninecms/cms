@@ -27,6 +27,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 use Symfony\WebpackEncoreBundle\WebpackEncoreBundle;
+use SymfonyCasts\Bundle\ResetPassword\SymfonyCastsResetPasswordBundle;
 
 class NumberNineBundleKernel extends Kernel
 {
@@ -52,6 +53,7 @@ class NumberNineBundleKernel extends Kernel
             new NumberNineBundle(),
             new NumberNineChapterOneBundle(),
             new NumberNineFakerBundle(),
+            new SymfonyCastsResetPasswordBundle(),
         ];
     }
 

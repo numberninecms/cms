@@ -1,0 +1,22 @@
+{% extends '@NumberNine/user/base.html.twig' %}
+
+{% block title %}Reset your password{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('security', 'numbernine', 'numbernine') }}
+{% endblock %}
+
+{% block body_classes %}n9-login{% endblock %}
+
+{% block body %}
+    <h1 class="n9-small">Reset your password</h1>
+    <a href="{{ path('numbernine_login') }}" class="n9-back-to-front"><i class="n9-fa n9-fa-arrow-left"></i> Back to login page</a>
+
+    {{ form_start(resetForm) }}
+        {{ form_row(resetForm.plainPassword) }}
+        <div class="n9-form-footer n9-mt-5">
+            <button type="submit">Reset password</button>
+        </div>
+    {{ form_end(resetForm) }}
+{% endblock %}
