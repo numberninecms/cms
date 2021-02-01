@@ -17,12 +17,12 @@ use ReflectionClass;
 use Symfony\Component\Config\Exception\FileLocatorFileNotFoundException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 use Symfony\Component\Yaml\Yaml;
 
-final class NumberNineExtension extends Extension implements PrependExtensionInterface
+final class NumberNineExtension extends ConfigurableExtension implements PrependExtensionInterface
 {
     use MergeConfigurationTrait;
 
@@ -79,7 +79,7 @@ final class NumberNineExtension extends Extension implements PrependExtensionInt
         }
     }
 
-    public function load(array $configs, ContainerBuilder $container): void
+    protected function loadInternal(array $mergedConfig, ContainerBuilder $container): void
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
@@ -90,5 +90,10 @@ final class NumberNineExtension extends Extension implements PrependExtensionInt
         } catch (FileLocatorFileNotFoundException $e) {
             // ignore
         }
+
+        $container->setParameter(
+            'numbernine.config.components_path',
+            $container->getParameter('kernel.project_dir') . '/' . $mergedConfig['components_path']
+        );
     }
 }

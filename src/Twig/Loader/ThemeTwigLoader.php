@@ -20,7 +20,7 @@ final class ThemeTwigLoader extends FilesystemLoader implements EventSubscriberI
 {
     private ThemeStore $themeStore;
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             RequestEvent::class => ['load', 4800],

@@ -13,44 +13,31 @@ namespace NumberNine\Content;
 
 use NumberNine\Model\Component\ComponentInterface;
 use NumberNine\Theme\ThemeStore;
-use ReflectionClass;
-use ReflectionException;
 
 final class ComponentStore
 {
     private ThemeStore $themeStore;
+    private string $appComponentsNamespace;
 
     /** @var ComponentInterface[] */
     private array $components = [];
 
-    public function __construct(ThemeStore $themeStore)
+    public function __construct(ThemeStore $themeStore, string $projectPath, string $componentsPath)
     {
         $this->themeStore = $themeStore;
+
+        $this->appComponentsNamespace = trim('App\\' . str_replace(
+            [$projectPath . '/src/', '//', '/'],
+            ['', '/', '\\'],
+            $componentsPath,
+        ), '\\');
     }
 
-    /**
-     * Only current theme components are loaded
-     *
-     * @param ComponentInterface $component
-     * @throws ReflectionException
-     */
     public function addComponent(ComponentInterface $component): void
     {
-        $reflection = new ReflectionClass($component);
-        $currentThemeNamespace = $this->themeStore->getCurrentTheme()->getNamespace();
-        $isCurrentThemeComponent = strpos($reflection->getNamespaceName(), $currentThemeNamespace) !== false;
-
-        if (!$isCurrentThemeComponent) {
-            return;
-        }
-
         $this->components[get_class($component)] = $component;
     }
 
-    /**
-     * @param string $componentName
-     * @return ComponentInterface|null
-     */
     public function getComponent(string $componentName): ?ComponentInterface
     {
         $theme = $this->themeStore->getCurrentTheme();
@@ -58,8 +45,8 @@ final class ComponentStore
         foreach ($this->components as $componentFqcn => $component) {
             if (
                 trim(dirname(str_replace(
-                    [$theme->getComponentNamespace(), '\\'],
-                    ['', '/'],
+                    [$theme->getComponentNamespace(), $this->appComponentsNamespace, '\\'],
+                    ['', '', '/'],
                     $componentFqcn
                 )), '/') === str_replace('\\', '/', $componentName)
             ) {
