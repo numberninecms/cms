@@ -37,6 +37,8 @@ final class ComponentTwigLoader extends FilesystemLoader implements EventSubscri
 
     public function load(): void
     {
-        $this->addPath($this->componentsPath, 'AppComponents');
+        if (file_exists($this->componentsPath)) {
+            $this->addPath($this->componentsPath, 'AppComponents');
+        }
     }
 }
