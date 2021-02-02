@@ -86,14 +86,20 @@ final class NumberNineExtension extends ConfigurableExtension implements Prepend
 
         $env = $container->getParameter('kernel.environment');
         try {
-            $loader->load("services_$env.yaml");
+            $loader->load("services_$env.yaml"); // @phpstan-ignore-line
         } catch (FileLocatorFileNotFoundException $e) {
             // ignore
         }
 
         $container->setParameter(
             'numbernine.config.components_path',
+            // @phpstan-ignore-next-line
             $container->getParameter('kernel.project_dir') . '/' . $mergedConfig['components_path']
+        );
+        $container->setParameter(
+            'numbernine.config.shortcodes_path',
+            // @phpstan-ignore-next-line
+            $container->getParameter('kernel.project_dir') . '/' . $mergedConfig['shortcodes_path']
         );
     }
 }

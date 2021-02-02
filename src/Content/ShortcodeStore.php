@@ -15,11 +15,13 @@ use NumberNine\Annotation\Shortcode;
 use NumberNine\Exception\InvalidShortcodeException;
 use NumberNine\Model\Shortcode\ShortcodeInterface;
 use NumberNine\Annotation\ExtendedReader;
-use ReflectionException;
+use NumberNine\Theme\ThemeStore;
 
 final class ShortcodeStore
 {
     private ExtendedReader $annotationReader;
+    private ThemeStore $themeStore;
+    private string $appShortcodesNamespace;
 
     /** @var ShortcodeInterface[] */
     private array $shortcodes = [];
@@ -27,9 +29,20 @@ final class ShortcodeStore
     /** @var Shortcode[] */
     private array $shortcodesMetadata = [];
 
-    public function __construct(ExtendedReader $annotationReader)
-    {
+    public function __construct(
+        ExtendedReader $annotationReader,
+        ThemeStore $themeStore,
+        string $projectPath,
+        string $shortcodesPath
+    ) {
         $this->annotationReader = $annotationReader;
+        $this->themeStore = $themeStore;
+
+        $this->appShortcodesNamespace = trim('App\\' . str_replace(
+            [$projectPath . '/src/', '//', '/'],
+            ['', '/', '\\'],
+            $shortcodesPath,
+        ), '\\');
     }
 
     /**
@@ -68,7 +81,6 @@ final class ShortcodeStore
 
     /**
      * @param ShortcodeInterface $shortcode
-     * @throws ReflectionException
      */
     public function addShortcode(ShortcodeInterface $shortcode): void
     {
@@ -80,7 +92,23 @@ final class ShortcodeStore
 
     public function hasShortcode(string $shortcodeName): bool
     {
-        return array_key_exists($shortcodeName, $this->shortcodes);
+        if (!array_key_exists($shortcodeName, $this->shortcodes)) {
+            return false;
+        }
+
+        $theme = $this->themeStore->getCurrentTheme();
+
+        foreach ($this->shortcodes as $name => $shortcode) {
+            if (
+                strpos(get_class($shortcode), 'NumberNine\\Shortcode\\') === 0
+                || strpos(get_class($shortcode), $theme->getShortcodeNamespace()) === 0
+                || strpos(get_class($shortcode), $this->appShortcodesNamespace) === 0
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function hasShortcodeMetadata(string $shortcodeName): bool

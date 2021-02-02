@@ -16,7 +16,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('numbernine');
 
@@ -24,6 +24,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder->getRootNode()
             ->children()
             ->scalarNode('components_path')->defaultValue('src/Component/')->end()
+            ->scalarNode('shortcodes_path')->defaultValue('src/Shortcode/')->end()
             ->end()
         ;
 

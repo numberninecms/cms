@@ -187,6 +187,7 @@ class Term
      */
     public function getContentEntities(): Collection
     {
+        // @phpstan-ignore-next-line
         return $this->contentEntityTerms->map(
             static function (ContentEntityTerm $item) {
                 return $item->getContentEntity();

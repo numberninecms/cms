@@ -250,6 +250,6 @@ final class ContentType
             $defaultCapabilities
         );
 
-        return array_combine($defaultCapabilities, $mappedCapabilities) ?: [];
+        return array_combine($defaultCapabilities, $mappedCapabilities);
     }
 }

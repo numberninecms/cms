@@ -53,5 +53,7 @@ interface ThemeInterface
 
     public function getShortcodePath(): string;
 
+    public function getShortcodeNamespace(): string;
+
     public function getFilePath(string $relativeFilename): string;
 }
