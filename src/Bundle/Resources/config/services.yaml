@@ -19,6 +19,8 @@ services:
             string $publicPath: '%numbernine.config.public_path%'
             string $templatePath: '%twig.default_path%'
             string $adminMenuConfigPath: '%numbernine.config.admin_config_path%'
+            string $componentsPath: '%numbernine.config.components_path%'
+            string $shortcodesPath: '%numbernine.config.shortcodes_path%'
             $entrypointLookupCollection: '@webpack_encore.entrypoint_lookup_collection'
             string $uploadPath: '%numbernine.config.base_upload_path%'
             array $bundles: '%kernel.bundles%'

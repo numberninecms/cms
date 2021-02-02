@@ -30,11 +30,7 @@ final class ComponentCompilerPass implements CompilerPassInterface
         $taggedComponents = $container->findTaggedServiceIds('numbernine.component');
 
         foreach ($taggedComponents as $componentServiceId => $componentTags) {
-            $componentClass = new ReflectionClass((string)$componentServiceId);
-
-            if (!$componentClass->implementsInterface(ShortcodeInterface::class)) {
-                $definition->addMethodCall('addComponent', [new Reference($componentServiceId)]);
-            }
+            $definition->addMethodCall('addComponent', [new Reference($componentServiceId)]);
         }
     }
 }

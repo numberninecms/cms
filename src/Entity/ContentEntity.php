@@ -177,6 +177,7 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
             }
         );
 
+        /** @var Term[] $terms */
         $terms = array_map(
             static function (ContentEntityTerm $item) {
                 return $item->getTerm();

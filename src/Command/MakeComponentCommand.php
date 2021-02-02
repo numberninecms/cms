@@ -12,15 +12,10 @@
 namespace NumberNine\Command;
 
 use Exception;
-use NumberNine\Exception\ThemeNotFoundException;
-use NumberNine\Model\Theme\ThemeInterface;
-use NumberNine\Theme\ThemeStore;
-use ReflectionClass;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -28,12 +23,14 @@ final class MakeComponentCommand extends Command
 {
     protected static $defaultName = 'numbernine:make:component';
 
-    private ThemeStore $themeStore;
+    private string $componentsPath;
+    private string $projectPath;
 
-    public function __construct(ThemeStore $themeStore)
+    public function __construct(string $componentsPath, string $projectPath)
     {
         parent::__construct();
-        $this->themeStore = $themeStore;
+        $this->componentsPath = $componentsPath;
+        $this->projectPath = $projectPath;
     }
 
     protected function configure(): void
@@ -43,44 +40,31 @@ final class MakeComponentCommand extends Command
             ->setHelp(
                 'This command allows you to create a component in the current theme, or in the theme your choose.'
             )
-            ->addArgument('component-name', InputArgument::OPTIONAL, 'Component name')
-            ->addOption('theme', 't', InputOption::VALUE_OPTIONAL, 'Theme to create component into');
+            ->addArgument('component-name', InputArgument::OPTIONAL, 'Component name');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $componentName = $input->getArgument('component-name');
-        /** @var string $themeName */
-        $themeName = $input->getOption('theme');
 
-        try {
-            $theme = !$themeName
-                ? $this->themeStore->getCurrentTheme()
-                : $this->themeStore->getTheme((string)$themeName);
-        } catch (ThemeNotFoundException $e) {
-            $io->error($e->getMessage());
-            return 1;
-        }
-
-        if (!$theme instanceof ThemeInterface) {
-            $io->error('No theme found. Specify a theme for component creation with --theme option.');
-            return 1;
-        }
-
-        if (!empty($componentName)) {
+        if (empty($componentName)) {
             $io->title('Create a new component');
 
             if (!$componentName) {
-                $componentName = $io->ask('Choose a component name', 'FeaturedProducts');
+                $componentName = $io->ask('Choose a component name', 'Testimonials');
             }
         }
 
         try {
-            $reflection = new ReflectionClass($theme);
-            $namespace = $reflection->getNamespaceName();
-            $path = $theme->getComponentPath();
+            $path = $this->componentsPath;
             $componentPath = $path . $componentName . '/';
+            $relativeComponentPath = substr($componentPath, (int)strpos($componentPath, 'src/'));
+            $namespace = trim('App\\' . str_replace(
+                [$this->projectPath . '/src/', '//', '/'],
+                ['', '/', '\\'],
+                $componentPath,
+            ), '\\');
 
             if (!mkdir($componentPath, 0755, true) && !is_dir($componentPath)) {
                 throw new RuntimeException("Unable to create directory $componentPath.");
@@ -94,12 +78,20 @@ final class MakeComponentCommand extends Command
                 <<<COMPONENT
 <?php
 
-namespace $namespace\\Component\\$componentName;
+declare(strict_types=1);
 
-use NumberNine\\Model\\Component\\AbstractComponent;
+namespace $namespace;
 
-final class $componentBasename extends AbstractComponent
+use NumberNine\Model\Component\ComponentInterface;
+
+final class $componentBasename implements ComponentInterface
 {
+    public function getTemplateParameters(): array
+    {
+        return [
+            'name' => '$componentBasename',
+        ];
+    }
 }
 COMPONENT
             );
@@ -107,25 +99,25 @@ COMPONENT
             file_put_contents(
                 $componentPath . 'template.html.twig',
                 <<<TEMPLATE
-<p>I'm a component. My name is $componentBasename.</p>
+<p>I'm a component. My name is {{ name }}.</p>
 TEMPLATE
             );
         } catch (Exception $e) {
             $io->error('Component cannot be created.');
             $io->writeln($e->getMessage());
 
-            return 1;
+            return Command::FAILURE;
         }
 
         $io->success("Component $componentName has been created.");
-        $io->writeln("<info>$componentPath$componentClassFilename</info>");
-        $io->writeln("<info>{$componentPath}template.html.twig</info>");
+        $io->writeln("<info>$relativeComponentPath$componentClassFilename</info>");
+        $io->writeln("<info>{$relativeComponentPath}template.html.twig</info>");
         $io->newLine();
         $componentName = str_replace('\\', '/', $componentName);
-        $io->writeln("Use it in your template with the following twig command: ' .
-            '<comment>{{ N9_component('$componentName') }}</comment>");
+        $io->writeln('Use it in your template with the following twig command: ' .
+            "<comment>{{ N9_component('$componentName') }}</comment>");
         $io->newLine();
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

@@ -137,4 +137,13 @@ abstract class AbstractTheme implements ThemeInterface
     {
         return $this->getRootPath() . 'Shortcode' . DIRECTORY_SEPARATOR;
     }
+
+    public function getShortcodeNamespace(): string
+    {
+        return $this->getNamespace() . '\\' . trim(str_replace(
+            $this->getRootPath(),
+            '',
+            $this->getShortcodePath()
+        ), '/');
+    }
 }

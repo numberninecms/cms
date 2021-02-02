@@ -16,7 +16,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use NumberNine\Model\Content\Features\CustomFieldsTrait;
-use NumberNine\Model\User\User as BaseUser;
 use Serializable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -154,7 +153,7 @@ class User implements UserInterface, Serializable
             $userRoles = $userRoles->toArray();
         }
 
-        return array_map(fn(UserRole $userRole) => $userRole->getName(), $userRoles);
+        return array_map(fn(UserRole $userRole) => (string)$userRole->getName(), $userRoles);
     }
 
     /**
