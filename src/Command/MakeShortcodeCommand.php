@@ -75,7 +75,7 @@ final class MakeShortcodeCommand extends Command
             $io->title('Create a new shortcode');
 
             if (!$shortcodeClassName) {
-                $shortcodeClassName = $io->ask('Choose a shortcode class name', 'MyShortcode');
+                $shortcodeClassName = $io->ask('Choose a shortcode class name', 'TurtleShortcode');
             }
 
             if (!$shortcodeName) {
@@ -96,7 +96,7 @@ final class MakeShortcodeCommand extends Command
             if ($editable && !$icon) {
                 $icon = $io->ask(
                     'Choose an icon name (see material.io or materialdesignicons.com for full list)',
-                    'create'
+                    'mdi-tortoise'
                 );
             }
         }
