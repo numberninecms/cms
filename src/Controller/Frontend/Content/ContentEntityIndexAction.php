@@ -33,6 +33,8 @@ final class ContentEntityIndexAction extends AbstractController
         TemplateResolver $templateResolver
     ): Response {
         $page = $request->get('page', 1);
+        $type = $request->attributes->get('type', 'post');
+        $template = $request->attributes->get('template');
 
         $perPage = $configurationReadWriter->read(Settings::POSTS_PER_PAGE, 12);
 
@@ -54,16 +56,13 @@ final class ContentEntityIndexAction extends AbstractController
             ->andWhere((Criteria::expr())->eq('c.status', 'publish'));
 
         $contentEntities = $contentService->getEntitiesOfType(
-            $contentService->getContentType('post'),
+            $contentService->getContentType($type),
             $paginationParameters,
             $criteria
         );
 
-        return $this->render(
-            $templateResolver->resolveIndex('post'),
-            [
+        return $this->render($template ?? $templateResolver->resolveIndex($type), [
                 'entities' => $contentEntities,
-            ]
-        );
+        ]);
     }
 }

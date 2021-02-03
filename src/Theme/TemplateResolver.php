@@ -14,12 +14,12 @@ namespace NumberNine\Theme;
 use InvalidArgumentException;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\Term;
+use NumberNine\Exception\ContentTypeNotFoundException;
 use NumberNine\Model\Component\ComponentInterface;
 use NumberNine\Model\Content\ContentType;
 use NumberNine\Model\Shortcode\ShortcodeInterface;
 use NumberNine\Content\ContentService;
 use ReflectionClass;
-use ReflectionException;
 use RuntimeException;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -29,6 +29,8 @@ use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\SyntaxError;
 use Twig\TemplateWrapper;
+
+use function Symfony\Component\String\u;
 
 final class TemplateResolver implements TemplateResolverInterface
 {
@@ -87,18 +89,30 @@ final class TemplateResolver implements TemplateResolverInterface
                 );
 
                 if ($pageTemplate = $entity->getCustomField('page_template')) {
-                    $candidates = $this->getContentEntitySingleTemplateCandidates(
-                        $this->contentService->getContentType((string)$entity->getCustomType())
+                    $candidates = array_merge(
+                        $this->getContentEntitySingleTemplateCandidates(
+                            $this->contentService->getContentType((string)$entity->getCustomType())
+                        ),
+                        $this->getContentEntityIndexTemplateCandidates(),
                     );
+
                     $filename = array_search($pageTemplate, $candidates);
 
-                    if ($filename) {
-                        array_unshift(
-                            $templates,
-                            sprintf('theme/%s/%s', $entity->getCustomType(), $filename),
-                            sprintf('@%s/%s/%s', $themeName, $entity->getCustomType(), $filename),
-                            sprintf('theme/content/%s', $filename),
-                        );
+                    if (is_string($filename) && $filename) {
+                        if (preg_match('/^index\./', basename($filename))) {
+                            array_unshift(
+                                $templates,
+                                sprintf('theme/%s', $filename),
+                                sprintf('@%s/%s', $themeName, $filename),
+                            );
+                        } else {
+                            array_unshift(
+                                $templates,
+                                sprintf('theme/%s/%s', $entity->getCustomType(), $filename),
+                                sprintf('@%s/%s/%s', $themeName, $entity->getCustomType(), $filename),
+                                sprintf('theme/content/%s', $filename),
+                            );
+                        }
                     }
                 }
 
@@ -381,6 +395,48 @@ final class TemplateResolver implements TemplateResolverInterface
 
         return $templatesNames;
     }
+
+    public function getContentEntityIndexTemplateCandidates(): array
+    {
+        $directoriesForIndexPages = [
+            sprintf('%s/theme/', $this->templatePath),
+            sprintf('%s/', $this->themeStore->getCurrentTheme()->getTemplatePath()),
+        ];
+
+        $templateFiles = [];
+        $templatesNames = [];
+
+        foreach ($directoriesForIndexPages as $directory) {
+            if (!file_exists($directory) || !is_dir($directory)) {
+                continue;
+            }
+
+            $finder = new Finder();
+            $finder->in($directory)->files()->name('index.*.twig');
+            $templateFiles[] = array_keys(iterator_to_array($finder));
+        }
+
+        $templateFiles = array_unique(array_merge([], ...$templateFiles));
+
+        foreach ($templateFiles as $templateFile) {
+            if (!preg_match('@/([\w_-]+)/(index\.[\w_-]+\.twig$)@', $templateFile, $matches)) {
+                continue;
+            }
+
+            try {
+                $contentType = $this->contentService->getContentType($matches[1]);
+
+                $templatesNames[trim($matches[0], '/')] = sprintf(
+                    '%s index page',
+                    u($contentType->getLabels()->getPluralName())->title(),
+                );
+            } catch (ContentTypeNotFoundException $e) {
+            }
+        }
+
+        return $templatesNames;
+    }
+
 
     private function hasFrontMatterBlock(string $template, array &$matches = null): bool
     {
