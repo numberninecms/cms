@@ -11,6 +11,7 @@
 
 namespace NumberNine\Controller\Admin\Api\Settings;
 
+use NumberNine\Content\ContentService;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Model\General\Settings;
 use NumberNine\Configuration\ConfigurationReadWriter;
@@ -28,7 +29,8 @@ final class SettingsGetAction extends AbstractController implements AdminControl
     public function __invoke(
         UrlGeneratorInterface $urlGenerator,
         ResponseFactory $responseFactory,
-        ConfigurationReadWriter $configurationReadWriter
+        ConfigurationReadWriter $configurationReadWriter,
+        ContentService $contentService
     ): JsonResponse {
         $settings = $configurationReadWriter->readMany(
             [
@@ -38,6 +40,16 @@ final class SettingsGetAction extends AbstractController implements AdminControl
             ],
             false
         );
+
+        $permalinks = $settings[2]['value'] ?? [];
+
+        foreach ($contentService->getContentTypes() as $contentType) {
+            if (!array_key_exists($contentType->getName(), $permalinks)) {
+                $permalinks[$contentType->getName()] = $contentType->getPermalink();
+            }
+        }
+
+        $settings[2]['value'] = $permalinks;
 
         $settings[] = [
             'name' => 'root_absolute_url',
