@@ -1,0 +1,10 @@
+<h1>Welcome to {{ app_name }}!</h1>
+
+<p>We'd like to thank you for creating an account with us.</p>
+
+{% set url = N9_path(PAGE_FOR_MY_ACCOUNT, 1, true) %}
+<p>You can access your account at <a href="{{ url }}">{{ url }}</a></p>
+
+<p>You will need your email address and the password you chose during signup to login.</p>
+
+<p>Thanks!</p>
