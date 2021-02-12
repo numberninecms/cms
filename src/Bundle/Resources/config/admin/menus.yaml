@@ -43,7 +43,10 @@ menus:
                 link: /settings/general/
             permalinks:
                 text: Permalinks
-                route: /settings/permalinks/
+                link: /settings/permalinks/
+            email:
+                text: Emails
+                link: /settings/emails/
     appearance:
         text: Appearance
         route:
