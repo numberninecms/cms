@@ -64,7 +64,7 @@ final class ConfigurationReadWriter
                     // this wasn't a json string
                 }
 
-                $item->tag($optionName);
+                $item->tag([$optionName, 'settings']);
 
                 return $value;
             }
@@ -127,7 +127,7 @@ final class ConfigurationReadWriter
                         ];
                     }
 
-                    $item->tag($optionName);
+                    $item->tag([$optionName, 'settings']);
                 }
 
                 return $finalArray;
