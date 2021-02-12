@@ -15,4 +15,6 @@ interface SettingsDefaultValues
 {
     public const MAILER_SENDER_ADDRESS = 'no-reply@numberninecms.com';
     public const MAILER_SENDER_NAME = 'NumberNine CMS';
+    public const SITE_TITLE = 'My awesome website';
+    public const SITE_DESCRIPTION = 'Powered by NumberNine CMS';
 }

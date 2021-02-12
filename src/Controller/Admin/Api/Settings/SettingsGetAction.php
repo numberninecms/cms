@@ -41,6 +41,8 @@ final class SettingsGetAction extends AbstractController implements AdminControl
 
         $settings = $configurationReadWriter->readMany(
             [
+                Settings::SITE_TITLE => SettingsDefaultValues::SITE_TITLE,
+                Settings::SITE_DESCRIPTION => SettingsDefaultValues::SITE_DESCRIPTION,
                 Settings::PAGE_FOR_FRONT,
                 Settings::PAGE_FOR_POSTS,
                 Settings::PAGE_FOR_PRIVACY,
@@ -50,8 +52,8 @@ final class SettingsGetAction extends AbstractController implements AdminControl
                     UrlGeneratorInterface::ABSOLUTE_URL
                 ),
                 Settings::PERMALINKS => $defaultPermalinks,
-                Settings::MAILER_SENDER_NAME => SettingsDefaultValues::MAILER_SENDER_ADDRESS,
-                Settings::MAILER_SENDER_ADDRESS => SettingsDefaultValues::MAILER_SENDER_NAME,
+                Settings::MAILER_SENDER_NAME => SettingsDefaultValues::MAILER_SENDER_NAME,
+                Settings::MAILER_SENDER_ADDRESS => SettingsDefaultValues::MAILER_SENDER_ADDRESS,
             ],
             false
         );
