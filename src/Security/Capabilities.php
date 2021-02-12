@@ -28,17 +28,6 @@ final class Capabilities
     public const DELETE_OTHERS_POSTS = 'delete_others_posts';
     public const DELETE_PUBLISHED_POSTS = 'delete_published_posts';
 
-//    public const READ_PRIVATE_PAGES = 'read_private_pages';
-//    public const EDIT_PAGES = 'edit_pages';
-//    public const EDIT_PRIVATE_PAGES = 'edit_private_pages';
-//    public const EDIT_OTHERS_PAGES = 'edit_others_pages';
-//    public const PUBLISH_PAGES = 'publish_pages';
-//    public const DELETE_PAGES = 'delete_pages';
-//    public const DELETE_PRIVATE_PAGES = 'delete_private_pages';
-//    public const DELETE_OTHERS_PAGES = 'delete_others_pages';
-//    public const DELETE_PUBLISHED_PAGES = 'delete_published_pages';
-//    public const EDIT_PUBLISHED_PAGES = 'edit_published_pages';
-
     public const MANAGE_CATEGORIES = 'manage_categories';
     public const MODERATE_COMMENTS = 'moderate_comments';
     public const UPLOAD_FILES = 'upload_files';

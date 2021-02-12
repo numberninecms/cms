@@ -19,6 +19,7 @@ interface Settings
     public const PAGE_FOR_PRIVACY = 'page_for_privacy';
     public const SITE_TITLE = 'site_title';
     public const SITE_DESCRIPTION = 'site_description';
+    public const ROOT_ABSOLUTE_URL = 'root_absolute_url';
     public const POSTS_PER_PAGE = 'posts_per_page';
     public const ACTIVE_THEME = 'active_theme';
     public const PERMALINKS = 'permalinks';

@@ -14,7 +14,7 @@ namespace NumberNine\Controller\Admin\Api\ContentEntity;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Content\ContentService;
 use NumberNine\Http\ResponseFactory;
-use NumberNine\Theme\TemplateResolver;
+use NumberNine\Theme\TemplateResolverInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,11 +35,14 @@ final class ContentEntityTemplatesGetAction extends AbstractController implement
         Request $request,
         ResponseFactory $responseFactory,
         ContentService $contentService,
-        TemplateResolver $templateResolver,
+        TemplateResolverInterface $templateResolver,
         string $type
     ): JsonResponse {
         $contentType = $contentService->getContentType($type);
-        $candidates = $templateResolver->getContentEntitySingleTemplateCandidates($contentType);
+        $candidates = array_merge(
+            $templateResolver->getContentEntitySingleTemplateCandidates($contentType),
+            $templateResolver->getContentEntityIndexTemplateCandidates(),
+        );
 
         return $responseFactory->createSerializedJsonResponse(array_values($candidates));
     }

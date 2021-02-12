@@ -1,13 +1,13 @@
 <?php
 
 /*
- * This file is part of the NumberNine package.
- *
- * (c) William Arin <williamarin.dev@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+* This file is part of the NumberNine package.
+*
+* (c) William Arin <williamarin.dev@gmail.com>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
 
 namespace NumberNine\Controller\Frontend\Content;
 
@@ -29,9 +29,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * The route of this action is dynamically generated
- * @see RouteRegistrationEventSubscriber
- */
+* The route of this action is dynamically generated
+* @see RouteRegistrationEventSubscriber
+*/
 final class ContentEntityShowAction extends AbstractController
 {
     public function __invoke(
@@ -76,6 +76,15 @@ final class ContentEntityShowAction extends AbstractController
         $templateToRenderEvent = $eventDispatcher->dispatch(
             new TemplateToRenderEvent($request, $entity, $templateResolver->resolveSingle($entity))
         );
+
+        $template = $templateToRenderEvent->getTemplate();
+
+        if (preg_match('@/([\w_-]+)/index\.@', $template->getTemplateName(), $matches)) {
+            return $forwardResponse ?? $this->forward(ContentEntityIndexAction::class, [
+                'type' => $matches[1],
+                'template' => $template->getTemplateName(),
+            ]);
+        }
 
         return $forwardResponse ?? new Response($templateToRenderEvent->getTemplate()->render(['entity' => $entity]));
     }

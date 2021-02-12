@@ -54,7 +54,6 @@ jobs:
                 - cd newproject
                 - rm -rf vendor/numberninecms/cms
                 - cp -R ../cms vendor/numberninecms/cms
-                - sed -i "s/1000:1000/$(id -u):$(id -g)/" docker/docker-compose.yaml
             script:
                 - bin/console numbernine:docker:install --app-name=newproject -vvv --no-interaction
                 - wget --spider --no-check-certificate https://localhost:443/

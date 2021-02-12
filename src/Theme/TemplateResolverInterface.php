@@ -37,4 +37,6 @@ interface TemplateResolverInterface
     public function getShortcodeTemplatesCandidates(ShortcodeInterface $shortcode, string $type): array;
 
     public function getContentEntitySingleTemplateCandidates(ContentType $type): array;
+
+    public function getContentEntityIndexTemplateCandidates(): array;
 }

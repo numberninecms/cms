@@ -200,7 +200,7 @@ final class ThemeRuntime implements RuntimeExtensionInterface
         return $this->templateResolver->resolveBaseLayout();
     }
 
-    public function getPath(string $settingName): string
+    public function getPath(string $settingName, int $page = 1, bool $absolute = false): string
     {
         if (!($id = (int)$this->configurationReadWriter->read($settingName))) {
             return '';
@@ -208,7 +208,7 @@ final class ThemeRuntime implements RuntimeExtensionInterface
 
         $entity = $this->contentEntityRepository->find($id);
 
-        return $entity ? $this->permalinkGenerator->generateContentEntityPermalink($entity) : '';
+        return $entity ? $this->permalinkGenerator->generateContentEntityPermalink($entity, $page, $absolute) : '';
     }
 
     public function getCurrentRoutePagePath(int $page): string

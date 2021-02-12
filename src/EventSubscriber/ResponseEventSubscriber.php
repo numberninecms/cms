@@ -11,6 +11,7 @@
 
 namespace NumberNine\EventSubscriber;
 
+use NumberNine\Content\ContentService;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Event\CurrentContentEntityEvent;
 use NumberNine\Asset\TagRenderer;
@@ -34,6 +35,7 @@ final class ResponseEventSubscriber implements EventSubscriberInterface
     private bool $alreadyRendered = false;
     private ?Request $request;
     private ?ContentEntity $currentContentEntity = null;
+    private ContentService $contentService;
 
     /**
      * @param RequestStack $requestStack
@@ -47,13 +49,15 @@ final class ResponseEventSubscriber implements EventSubscriberInterface
         AuthorizationCheckerInterface $authorizationChecker,
         TokenStorageInterface $tokenStorage,
         Environment $twig,
-        TagRenderer $tagRenderer
+        TagRenderer $tagRenderer,
+        ContentService $contentService
     ) {
         $this->request = $requestStack->getMasterRequest();
         $this->authorizationChecker = $authorizationChecker;
         $this->tokenStorage = $tokenStorage;
         $this->twig = $twig;
         $this->tagRenderer = $tagRenderer;
+        $this->contentService = $contentService;
     }
 
     public static function getSubscribedEvents(): array
@@ -86,7 +90,12 @@ final class ResponseEventSubscriber implements EventSubscriberInterface
         $response = $event->getResponse();
         $navtop = $this->twig->render(
             '@NumberNine/partials/navtop.html.twig',
-            ['entity' => $this->currentContentEntity]
+            [
+                'entity' => $this->currentContentEntity,
+                'content_type' => $this->currentContentEntity
+                    ? $this->contentService->getContentType($this->currentContentEntity->getType())
+                    : null,
+            ]
         );
         $navtopScript = '';
 

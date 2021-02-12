@@ -11,11 +11,10 @@
 
 namespace NumberNine\Controller\Admin\Security;
 
-use NumberNine\Configuration\ConfigurationReadWriter;
 use NumberNine\Entity\User;
 use NumberNine\Form\User\ChangePasswordFormType;
 use NumberNine\Form\User\ResetPasswordRequestFormType;
-use NumberNine\Model\General\Settings;
+use NumberNine\Mailer\AddressFactory;
 use NumberNine\Theme\TemplateResolverInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,7 +22,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
@@ -39,16 +37,16 @@ final class ResetPasswordController extends AbstractController
 
     private ResetPasswordHelperInterface $resetPasswordHelper;
     private TemplateResolverInterface $templateResolver;
-    private ConfigurationReadWriter $configurationReadWriter;
+    private AddressFactory $addressFactory;
 
     public function __construct(
         ResetPasswordHelperInterface $resetPasswordHelper,
         TemplateResolverInterface $templateResolver,
-        ConfigurationReadWriter $configurationReadWriter
+        AddressFactory $addressFactory
     ) {
         $this->resetPasswordHelper = $resetPasswordHelper;
         $this->templateResolver = $templateResolver;
-        $this->configurationReadWriter = $configurationReadWriter;
+        $this->addressFactory = $addressFactory;
     }
 
     /**
@@ -189,10 +187,7 @@ final class ResetPasswordController extends AbstractController
         }
 
         $email = (new TemplatedEmail())
-            ->from(new Address(
-                $this->configurationReadWriter->read(Settings::MAILER_SENDER_ADDRESS, 'no-reply@numberninecms.com'),
-                $this->configurationReadWriter->read(Settings::MAILER_SENDER_NAME, 'NumberNine CMS')
-            ))
+            ->from($this->addressFactory->createApplicationAddress())
             ->to($user->getEmail())
             ->subject('Your password reset request')
             ->htmlTemplate(

@@ -162,21 +162,43 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
         $finalFilename = "{$this->projectPath}/docker-compose.yml";
         $recipeFilename = "{$this->projectPath}/docker/docker-compose.yaml";
 
-        if (file_exists($finalFilename)) {
-            return Command::SUCCESS;
-        }
+        if (!file_exists($finalFilename)) {
+            $result = false;
 
-        if (file_exists($recipeFilename)) {
-            $result = rename($recipeFilename, $finalFilename);
+            if (file_exists($recipeFilename)) {
+                $result = rename($recipeFilename, $finalFilename);
 
-            if ($result) {
-                return Command::SUCCESS;
+                if (!$result) {
+                    $this->io->error('Unable to move docker-compose.yml in project directory.');
+
+                    return Command::FAILURE;
+                }
+            }
+
+            if (!$result) {
+                $this->io->error('File docker/docker-compose.yaml not found. Consider reinstalling recipe.');
+
+                return Command::FAILURE;
             }
         }
 
-        $this->io->error('File docker-compose.yml not found. Consider reinstalling recipe.');
+        $result = false;
 
-        return Command::FAILURE;
+        if ($content = file_get_contents($finalFilename)) {
+            $result = file_put_contents($finalFilename, str_replace(
+                '1000:1000',
+                getmyuid() . ':' . getmygid(),
+                $content
+            ));
+        }
+
+        if ($result === false) {
+            $this->io->error('File docker-compose.yml not found. Consider reinstalling recipe.');
+
+            return Command::FAILURE;
+        }
+
+        return Command::SUCCESS;
     }
 
     private function symlinkAdmin(): int

@@ -21,8 +21,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
-use function NumberNine\Common\Util\ArrayUtil\is_associative_array;
-
 final class ConfigurationReadWriter
 {
     private EntityManagerInterface $entityManager;
@@ -54,7 +52,7 @@ final class ConfigurationReadWriter
     public function read(string $optionName, $default = null)
     {
         return $this->cache->get(
-            sprintf('coreoption_value_%s', $optionName),
+            sprintf('coreoption_value_%s_default_%s', $optionName, md5(serialize($default))),
             function (ItemInterface $item) use ($optionName, $default) {
                 $value = ($option = $this->coreOptionRepository->findOneBy(['name' => $optionName]))
                     ? ($option->getValue() ?? $default)
@@ -66,7 +64,7 @@ final class ConfigurationReadWriter
                     // this wasn't a json string
                 }
 
-                $item->tag($optionName);
+                $item->tag([$optionName, 'settings']);
 
                 return $value;
             }
@@ -74,6 +72,13 @@ final class ConfigurationReadWriter
     }
 
     /**
+     * Reads multiple configuration settings in one SQL request.
+     *
+     * Example:
+     *
+     * - ['option1', 'option2'] (null default values)
+     * - ['option1' => 'default_for_option1', 'option2' => 'default_for_option2']
+     *
      * @param array $options Use numeric array for null default values, or associative for custom default values
      * @param bool $resultAsAssociativeArray
      * @return mixed
@@ -82,20 +87,30 @@ final class ConfigurationReadWriter
      */
     public function readMany(array $options, bool $resultAsAssociativeArray = true)
     {
-        $isAssociative = is_associative_array($options);
-        $defaults = $isAssociative ? $options : null;
-        $optionNames = $isAssociative ? array_keys($options) : $options;
+        foreach ($options as $key => $value) {
+            if (is_numeric($key)) {
+                $options[$value] = null;
+                unset($options[$key]);
+            }
+        }
+
+        $defaults = $options;
+        $optionNames = array_keys($options);
 
         return $this->cache->get(
-            sprintf('coreoption_batch_%s', implode('_', $optionNames)),
+            sprintf(
+                'coreoption_batch_%s_assoc_%s',
+                md5(serialize($options)),
+                $resultAsAssociativeArray ? 'true' : 'false',
+            ),
             function (ItemInterface $item) use ($resultAsAssociativeArray, $optionNames, $defaults) {
                 $result = $this->coreOptionRepository->findBy(['name' => $optionNames]);
                 $finalArray = [];
 
                 foreach ($optionNames as $optionName) {
                     $coreOption = current(array_filter($result, fn(CoreOption $i) => $i->getName() === $optionName));
-                    $default = is_array($defaults) ? $defaults[$optionName] : null;
-                    $value = $coreOption ? $coreOption->getValue() : $default;
+                    $default = array_key_exists($optionName, $defaults) ? $defaults[$optionName] : null;
+                    $value = $coreOption && $coreOption->getValue() ? $coreOption->getValue() : $default;
 
                     try {
                         $value = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
@@ -112,7 +127,7 @@ final class ConfigurationReadWriter
                         ];
                     }
 
-                    $item->tag($optionName);
+                    $item->tag([$optionName, 'settings']);
                 }
 
                 return $finalArray;

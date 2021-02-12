@@ -11,8 +11,10 @@
 
 namespace NumberNine\Controller\Admin\Api\User;
 
+use NumberNine\Content\ContentService;
 use NumberNine\Event\CapabilitiesListEvent;
 use NumberNine\Model\Admin\AdminController;
+use NumberNine\Model\Content\ContentType;
 use NumberNine\Security\Capabilities;
 use NumberNine\Http\ResponseFactory;
 use NumberNine\Security\CapabilityGenerator;
@@ -34,7 +36,8 @@ final class UserCapabilitiesGetAction extends AbstractController implements Admi
     public function __invoke(
         ResponseFactory $responseFactory,
         EventDispatcherInterface $eventDispatcher,
-        CapabilityGenerator $capabilityGenerator
+        CapabilityGenerator $capabilityGenerator,
+        ContentService $contentService
     ): JsonResponse {
         $this->denyAccessUnlessGranted(Capabilities::MANAGE_ROLES);
 
@@ -59,6 +62,13 @@ final class UserCapabilitiesGetAction extends AbstractController implements Admi
             ...$capabilityGenerator->generateMappedEditorCapabilities('block'),
             ...$capabilityGenerator->generateMappedEditorCapabilities('media_file'),
         ];
+
+        $newCapabilities = array_map(
+            fn (ContentType $contentType) => array_values($contentType->getCapabilities()),
+            $contentService->getContentTypes()
+        );
+
+        $capabilities = array_unique(array_merge($capabilities, ...$newCapabilities));
 
         /** @var CapabilitiesListEvent $capabilitiesListEvent */
         $capabilitiesListEvent = $eventDispatcher->dispatch(new CapabilitiesListEvent($capabilities));
