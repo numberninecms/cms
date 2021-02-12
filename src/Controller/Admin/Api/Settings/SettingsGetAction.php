@@ -16,6 +16,7 @@ use NumberNine\Model\Admin\AdminController;
 use NumberNine\Model\General\Settings;
 use NumberNine\Configuration\ConfigurationReadWriter;
 use NumberNine\Http\ResponseFactory;
+use NumberNine\Model\General\SettingsDefaultValues;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -42,14 +43,15 @@ final class SettingsGetAction extends AbstractController implements AdminControl
             [
                 Settings::PAGE_FOR_FRONT,
                 Settings::PAGE_FOR_POSTS,
+                Settings::PAGE_FOR_PRIVACY,
                 Settings::ROOT_ABSOLUTE_URL => $urlGenerator->generate(
                     'numbernine_homepage',
                     [],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 ),
                 Settings::PERMALINKS => $defaultPermalinks,
-                Settings::MAILER_SENDER_NAME => 'no-reply@numberninecms.com',
-                Settings::MAILER_SENDER_ADDRESS => 'NumberNine CMS',
+                Settings::MAILER_SENDER_NAME => SettingsDefaultValues::MAILER_SENDER_ADDRESS,
+                Settings::MAILER_SENDER_ADDRESS => SettingsDefaultValues::MAILER_SENDER_NAME,
             ],
             false
         );
