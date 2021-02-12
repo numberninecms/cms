@@ -32,29 +32,27 @@ final class SettingsGetAction extends AbstractController implements AdminControl
         ConfigurationReadWriter $configurationReadWriter,
         ContentService $contentService
     ): JsonResponse {
+        $defaultPermalinks = [];
+
+        foreach ($contentService->getContentTypes() as $contentType) {
+            $defaultPermalinks[$contentType->getName()] = $contentType->getPermalink();
+        }
+
         $settings = $configurationReadWriter->readMany(
             [
                 Settings::PAGE_FOR_FRONT,
                 Settings::PAGE_FOR_POSTS,
-                Settings::PERMALINKS,
+                Settings::ROOT_ABSOLUTE_URL => $urlGenerator->generate(
+                    'numbernine_homepage',
+                    [],
+                    UrlGeneratorInterface::ABSOLUTE_URL
+                ),
+                Settings::PERMALINKS => $defaultPermalinks,
+                Settings::MAILER_SENDER_NAME => 'no-reply@numberninecms.com',
+                Settings::MAILER_SENDER_ADDRESS => 'NumberNine CMS',
             ],
             false
         );
-
-        $permalinks = $settings[2]['value'] ?? [];
-
-        foreach ($contentService->getContentTypes() as $contentType) {
-            if (!array_key_exists($contentType->getName(), $permalinks)) {
-                $permalinks[$contentType->getName()] = $contentType->getPermalink();
-            }
-        }
-
-        $settings[2]['value'] = $permalinks;
-
-        $settings[] = [
-            'name' => 'root_absolute_url',
-            'value' => $urlGenerator->generate('numbernine_homepage', [], UrlGeneratorInterface::ABSOLUTE_URL)
-        ];
 
         return $responseFactory->createSerializedJsonResponse($settings);
     }
