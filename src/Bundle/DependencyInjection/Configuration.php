@@ -20,7 +20,6 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('numbernine');
 
-        /** @phpstan-ignore-next-line */
         $treeBuilder->getRootNode()
             ->children()
             ->scalarNode('components_path')->defaultValue('src/Component/')->end()
