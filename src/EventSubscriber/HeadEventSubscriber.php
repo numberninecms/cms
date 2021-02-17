@@ -22,6 +22,7 @@ use NumberNine\Exception\ThemeNotFoundException;
 use NumberNine\Model\General\Settings;
 use NumberNine\Configuration\ConfigurationReadWriter;
 use NumberNine\Http\RequestAnalyzer;
+use NumberNine\Model\General\SettingsDefaultValues;
 use NumberNine\Theme\ThemeOptionsReadWriter;
 use NumberNine\Theme\ThemeStore;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -77,9 +78,14 @@ final class HeadEventSubscriber implements EventSubscriberInterface
 
     public function title(HeadEvent $event): void
     {
-        $titleEvent = $this->eventDispatcher->dispatch(
-            new HeadTitleEvent($this->configurationReadWriter->read(Settings::SITE_TITLE))
+        $title = sprintf(
+            '%s | %s',
+            $this->configurationReadWriter->read(Settings::SITE_TITLE, SettingsDefaultValues::SITE_TITLE),
+            $this->configurationReadWriter->read(Settings::SITE_DESCRIPTION, SettingsDefaultValues::SITE_DESCRIPTION),
         );
+
+        $titleEvent = $this->eventDispatcher->dispatch(new HeadTitleEvent($title));
+
         $event->setObject($event . $titleEvent);
     }
 
