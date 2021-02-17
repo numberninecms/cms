@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */.mediafile[data-v-25b537c6]{width:150px;height:150px;cursor:pointer}.selected[data-v-25b537c6]{outline:3px solid #46a6e9}.translucent[data-v-25b537c6]{opacity:0.75}.text-mini[data-v-25b537c6]{font-size:0.65rem}.invisible-overlay[data-v-a5c15e22]{pointer-events:all;cursor:ew-resize;position:fixed;top:0;bottom:0;left:0;right:0;z-index:5000;margin-left:-100vw}
-
 /*!
  * This file is part of the NumberNine package.
  *
@@ -15,7 +14,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */.uploadable-file{max-width:250px}.square{position:relative;width:250px;height:250px}.slidable-input.q-field--filled{cursor:ew-resize}.slidable-input.q-field--filled .q-field__control{height:30px}.slidable-input.q-field--filled .q-field__control:after{height:0;display:none}.slidable-input.q-field--filled .q-field__control:before{border-bottom:none}.slidable-input.q-field--filled *{cursor:ew-resize}.slidable-input .q-field__suffix{line-height:0px}
-
 /*!
  * This file is part of the NumberNine package.
  *
@@ -23,4 +21,4 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */.drop-area{position:relative;overflow:hidden}.drop-area:not(.no-style){border:1px dashed #ddd;background-color:#eceff1}.drop-area.no-style label{margin-bottom:0}.drop-area.dragover{border:1px solid #42a5f5;background-color:#cfd8dc;color:#212544}.drop-area input[type=file]{position:absolute;opacity:0;top:0;left:0;width:100%;height:100%;z-index:-1}.q-hoverable.highlighted>.q-focus-helper{background:currentColor;opacity:.15}.middle-section[data-v-4808d023]{height:calc(100vh - 214px)}.middle-section.no-actions[data-v-4808d023]{height:calc(100vh - 161px)}.tree-node-inner-back{margin-bottom:0!important}
+ */.drop-area{position:relative;overflow:hidden}.drop-area:not(.no-style){border:1px dashed #ddd;background-color:#eceff1}.drop-area.no-style label{margin-bottom:0}.drop-area.dragover{border:1px solid #42a5f5;background-color:#cfd8dc;color:#212544}.drop-area input[type=file]{position:absolute;opacity:0;top:0;left:0;width:100%;height:100%;z-index:-1}.q-hoverable.highlighted>.q-focus-helper{background:currentColor;opacity:0.15}.middle-section[data-v-4808d023]{height:calc(100vh - 214px)}.middle-section.no-actions[data-v-4808d023]{height:calc(100vh - 161px)}.tree-node-inner-back{margin-bottom:0!important}
