@@ -12,6 +12,8 @@
 namespace NumberNine\Shortcode;
 
 use NumberNine\Annotation\Shortcode;
+use NumberNine\Model\PageBuilder\Control\ButtonToggleControl;
+use NumberNine\Model\PageBuilder\Control\OnOffSwitchControl;
 use NumberNine\Model\PageBuilder\Control\SelectControl;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
@@ -27,11 +29,30 @@ final class ButtonShortcode extends AbstractShortcode implements EditableShortco
     {
         $builder
             ->add('text')
+            ->add('case', ButtonToggleControl::class, ['choices' => [
+                'uppercase' => 'ABC',
+                'normal' => 'Abc',
+            ]])
+            ->add('color', SelectControl::class, ['choices' => [
+                'primary' => 'Primary',
+                'secondary' => 'Secondary',
+                'white' => 'White',
+            ]])
             ->add('style', SelectControl::class, ['choices' => [
                 'default' => 'Default',
                 'outline' => 'Outline',
             ]])
+            ->add('size', SelectControl::class, ['choices' => [
+                'xsmall' => 'X-Small',
+                'small' => 'Small',
+                'normal' => 'Normal',
+                'large' => 'Large',
+                'xlarge' => 'X-Large',
+                'xxlarge' => 'XX-Large',
+            ]])
+            ->add('expand', OnOffSwitchControl::class)
             ->add('link')
+            ->add('custom_class', null, ['label' => 'Custom CSS classes'])
         ;
     }
 
@@ -39,9 +60,14 @@ final class ButtonShortcode extends AbstractShortcode implements EditableShortco
     {
         $resolver->setDefaults([
             'content' => '',
-            'text' => '',
+            'text' => 'View more...',
+            'case' => 'normal',
+            'color' => 'primary',
             'style' => 'default',
+            'size' => 'normal',
+            'expand' => false,
             'link' => '',
+            'custom_class' => '',
         ]);
     }
 
@@ -49,8 +75,13 @@ final class ButtonShortcode extends AbstractShortcode implements EditableShortco
     {
         return [
             'text' => $parameters['text'],
+            'case' => $parameters['case'],
+            'color' => $parameters['color'],
             'style' => $parameters['style'],
+            'size' => $parameters['size'],
+            'expand' => $parameters['expand'],
             'link' => $parameters['link'],
+            'custom_class' => $parameters['custom_class'],
         ];
     }
 }
