@@ -12,9 +12,10 @@
 namespace NumberNine\Shortcode;
 
 use NumberNine\Annotation\Shortcode;
+use NumberNine\Model\PageBuilder\Control\BordersControl;
 use NumberNine\Model\PageBuilder\Control\ColorControl;
 use NumberNine\Model\PageBuilder\Control\OnOffSwitchControl;
-use NumberNine\Model\PageBuilder\Control\SliderControl;
+use NumberNine\Model\PageBuilder\Control\SliderInputControl;
 use NumberNine\Model\PageBuilder\Control\TextAlignControl;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
@@ -22,6 +23,7 @@ use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
+use function NumberNine\Common\Util\ArrayUtil\array_set_if_value_exists;
 
 /**
  * @Shortcode(name="divider", label="Divider", icon="remove")
@@ -33,25 +35,19 @@ final class DividerShortcode extends AbstractShortcode implements EditableShortc
         $builder
             ->add('fullWidth', OnOffSwitchControl::class, ['label' => 'Full width'])
             ->add('align', TextAlignControl::class, ['label' => 'Align'])
-            ->add('width', SliderControl::class, [
+            ->add('width', SliderInputControl::class, [
                 'label' => 'Width',
                 'min' => 30,
                 'max' => 200,
                 'suffix' => 'px'
             ])
-            ->add('height', SliderControl::class, [
+            ->add('height', SliderInputControl::class, [
                 'label' => 'Height',
                 'min' => 1,
                 'max' => 10,
                 'suffix' => 'px'
             ])
-            ->add('margin', SliderControl::class, [
-                'label' => 'Margin',
-                'min' => 0,
-                'max' => 10,
-                'step' => 0.1,
-                'suffix' => 'em'
-            ])
+            ->add('margin', BordersControl::class, ['borders' => ['top', 'bottom']])
             ->add('color', ColorControl::class, ['label' => 'Color'])
         ;
     }
@@ -63,7 +59,7 @@ final class DividerShortcode extends AbstractShortcode implements EditableShortc
             'align' => 'left',
             'width' => 30,
             'height' => 3,
-            'margin' => 1.0,
+            'margin' => '20px 0',
             'color' => 'secondary',
         ]);
     }
@@ -90,10 +86,7 @@ final class DividerShortcode extends AbstractShortcode implements EditableShortc
             $styles['max-width'] = $parameters['width'] . 'px';
         }
 
-        if ($parameters['margin'] !== 1.0) {
-            $styles['margin-top'] = $parameters['margin'] . 'em';
-            $styles['margin-bottom'] = $parameters['margin'] . 'em';
-        }
+        array_set_if_value_exists($styles, 'margin', $parameters['margin']);
 
         if ($parameters['color'] !== 'secondary') {
             if (preg_match('/^#(?:[0-9a-fA-F]{3}){1,2}$/', $parameters['color'])) {
