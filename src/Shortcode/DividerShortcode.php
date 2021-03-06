@@ -22,9 +22,6 @@ use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
-use function NumberNine\Common\Util\ArrayUtil\array_set_if_value_exists;
-
 /**
  * @Shortcode(name="divider", label="Divider", icon="remove")
  */
@@ -60,56 +57,19 @@ final class DividerShortcode extends AbstractShortcode implements EditableShortc
             'width' => 30,
             'height' => 3,
             'margin' => '20px 0',
-            'color' => 'secondary',
+            'color' => null,
         ]);
     }
 
     public function processParameters(array $parameters): array
     {
         return [
-            'flexAlign' => $this->getFlexAlign($parameters),
-            'attributes' => $this->getAttributes($parameters),
+            'align' => $parameters['align'],
+            'height' => $parameters['height'],
+            'width' => $parameters['width'],
+            'full_width' => $parameters['fullWidth'],
+            'margin' => $parameters['margin'],
+            'color' => $parameters['color'],
         ];
-    }
-
-    private function getAttributes(array $parameters): string
-    {
-        $styles = [];
-
-        if ($parameters['height'] !== 3) {
-            $styles['height'] = $parameters['height'] . 'px';
-        }
-
-        if ($parameters['fullWidth']) {
-            $styles['max-width'] = '100%';
-        } elseif ($parameters['width'] !== 30) {
-            $styles['max-width'] = $parameters['width'] . 'px';
-        }
-
-        array_set_if_value_exists($styles, 'margin', $parameters['margin']);
-
-        if ($parameters['color'] !== 'secondary') {
-            if (preg_match('/^#(?:[0-9a-fA-F]{3}){1,2}$/', $parameters['color'])) {
-                $styles['background-color'] = $parameters['color'];
-            } else {
-                $styles['background-color'] = sprintf('var(--%s)', $parameters['color']);
-            }
-        }
-
-        return count($styles) > 0 ? sprintf(' style="%s"', array_implode_associative($styles, ';', ':')) : '';
-    }
-
-    private function getFlexAlign(array $parameters): string
-    {
-        switch ($parameters['align']) {
-            case 'center':
-                return 'justify-center';
-
-            case 'right':
-                return 'justify-end';
-
-            default:
-                return 'justify-start';
-        }
     }
 }
