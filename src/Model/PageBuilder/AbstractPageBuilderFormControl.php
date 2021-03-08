@@ -22,6 +22,7 @@ abstract class AbstractPageBuilderFormControl implements PageBuilderFormControlI
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
         $resolver->setRequired('label');
+        $resolver->setDefined('default');
         $this->options = $resolver->resolve($options);
     }
 
