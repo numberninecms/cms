@@ -21,6 +21,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
+use function NumberNine\Common\Util\ArrayUtil\array_merge_recursive_fixed;
+
 final class ConfigurationReadWriter
 {
     private EntityManagerInterface $entityManager;
@@ -114,6 +116,10 @@ final class ConfigurationReadWriter
 
                     try {
                         $value = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+
+                        if (is_array($default)) {
+                            $value = array_merge_recursive_fixed($default, $value);
+                        }
                     } catch (Exception $e) {
                         // this wasn't a json string
                     }
