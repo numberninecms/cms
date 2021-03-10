@@ -13,7 +13,6 @@ namespace NumberNine\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Faker\Generator;
 use NumberNine\Content\ContentService;
 use RuntimeException;
 
@@ -22,16 +21,13 @@ abstract class BaseFixture extends Fixture
     private ObjectManager $manager;
     private ContentService $contentService;
     private array $referencesIndex = [];
-    protected Generator $faker;
 
     /**
      * @param ContentService $contentService
-     * @param Generator $faker
      */
-    public function __construct(ContentService $contentService, Generator $faker)
+    public function __construct(ContentService $contentService)
     {
         $this->contentService = $contentService;
-        $this->faker = $faker;
     }
 
     abstract protected function loadData(ObjectManager $manager): void;
@@ -93,7 +89,7 @@ abstract class BaseFixture extends Fixture
 
         $references = array_diff($this->referencesIndex[$className], $excludedReferences);
 
-        $randomReferenceKey = $this->faker->randomElement($references);
+        $randomReferenceKey = $references[array_rand($references)];
         return $this->getReference($randomReferenceKey);
     }
 }

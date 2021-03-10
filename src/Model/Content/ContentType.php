@@ -29,6 +29,7 @@ final class ContentType
     private bool $shownInMenu;
     private ContentTypeLabels $labels;
     private array $capabilities;
+    private ?string $editorExtension;
 
     public function __construct(array $options)
     {
@@ -127,6 +128,11 @@ final class ContentType
         return $result;
     }
 
+    public function getEditorExtension(): ?string
+    {
+        return $this->editorExtension;
+    }
+
     private function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
@@ -137,6 +143,7 @@ final class ContentType
                 'public' => true,
                 'shown_in_menu' => true,
                 'capabilities' => [],
+                'editor_extension' => null,
             ]
         );
 
@@ -150,7 +157,8 @@ final class ContentType
             ->setAllowedTypes('icon', 'string')
             ->setAllowedTypes('public', 'bool')
             ->setAllowedTypes('shown_in_menu', 'bool')
-            ->setAllowedTypes('capabilities', 'string[]');
+            ->setAllowedTypes('capabilities', 'string[]')
+            ->setAllowedTypes('editor_extension', ['null', 'string']);
 
         $this->configureOptionsNormalizers($resolver);
     }

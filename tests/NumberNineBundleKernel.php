@@ -16,7 +16,6 @@ use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle;
 use NumberNine\Bundle\NumberNineBundle;
 use NumberNine\ChapterOne\NumberNineChapterOneBundle;
-use NumberNine\FakerBundle\NumberNineFakerBundle;
 use Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
@@ -52,7 +51,6 @@ class NumberNineBundleKernel extends Kernel
             new DAMADoctrineTestBundle(),
             new NumberNineBundle(),
             new NumberNineChapterOneBundle(),
-            new NumberNineFakerBundle(),
             new SymfonyCastsResetPasswordBundle(),
         ];
     }

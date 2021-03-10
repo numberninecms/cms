@@ -12,6 +12,7 @@
 namespace NumberNine\Shortcode;
 
 use NumberNine\Annotation\Shortcode;
+use NumberNine\Model\PageBuilder\Control\BordersControl;
 use NumberNine\Model\PageBuilder\Control\ColorControl;
 use NumberNine\Model\PageBuilder\Control\SelectControl;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
@@ -35,12 +36,22 @@ final class TitleShortcode extends AbstractShortcode implements EditableShortcod
                 'h4' => 'Header 4',
                 'h5' => 'Header 5',
                 'h6' => 'Header 6',
+                'div' => 'Standard',
+            ]])
+            ->add('size', SelectControl::class, ['choices' => [
+                'xsmall' => 'X-Small',
+                'small' => 'Small',
+                'normal' => 'Normal',
+                'large' => 'Large',
+                'xlarge' => 'X-Large',
+                'xxlarge' => 'XX-Large',
             ]])
             ->add('color', ColorControl::class)
             ->add('style', SelectControl::class, ['choices' => [
                 'center' => 'Center',
                 'left' => 'Left',
             ]])
+            ->add('margin', BordersControl::class)
         ;
     }
 
@@ -48,10 +59,12 @@ final class TitleShortcode extends AbstractShortcode implements EditableShortcod
     {
         $resolver->setDefaults([
             'content' => '',
-            'text' => '',
+            'text' => 'Title',
             'tag' => 'h2',
             'color' => null,
             'style' => 'center',
+            'size' => 'normal',
+            'margin' => '30px 0px',
         ]);
     }
 
@@ -60,9 +73,12 @@ final class TitleShortcode extends AbstractShortcode implements EditableShortcod
         return [
             'tag' => $parameters['tag'],
             'color' => $parameters['color'],
+            'style' => $parameters['style'],
             'text' => !$parameters['text'] && trim($parameters['content'])
                 ? trim($parameters['content'])
                 : $parameters['text'],
+            'size' => $parameters['size'],
+            'margin' => $parameters['margin'],
         ];
     }
 }
