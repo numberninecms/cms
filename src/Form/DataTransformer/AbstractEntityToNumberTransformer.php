@@ -27,29 +27,37 @@ abstract class AbstractEntityToNumberTransformer implements DataTransformerInter
         $this->className = $className;
     }
 
-    public function transform($entity)
+    /**
+     * @param mixed $value
+     * @return int|string
+     */
+    public function transform($value)
     {
-        if ($entity === null) {
+        if ($value === null || !is_object($value)) {
             return '';
         }
 
-        if (!method_exists($entity, 'getId')) {
-            throw new InvalidArgumentException(sprintf("Method getId() doesn't exist on class %s", get_class($entity)));
+        if (!method_exists($value, 'getId')) {
+            throw new InvalidArgumentException(sprintf("Method getId() doesn't exist on class %s", get_class($value)));
         }
 
-        return $entity->getId();
+        return $value->getId();
     }
 
-    public function reverseTransform($id)
+    /**
+     * @param mixed $value
+     * @return mixed|null
+     */
+    public function reverseTransform($value)
     {
-        if (!$id) {
+        if (!$value) {
             return null;
         }
 
-        $entity = $this->entityManager->getRepository($this->className)->find($id);
+        $entity = $this->entityManager->getRepository($this->className)->find($value);
 
         if ($entity === null) {
-            throw new TransformationFailedException(sprintf('An entity with ID "%s" does not exist!', $id));
+            throw new TransformationFailedException(sprintf('An entity with ID "%s" does not exist!', $value));
         }
 
         return $entity;
