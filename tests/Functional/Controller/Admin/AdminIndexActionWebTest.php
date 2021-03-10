@@ -11,7 +11,6 @@
 
 namespace NumberNine\Tests\Functional\Controller\Admin;
 
-use NumberNine\Repository\UserRepository;
 use NumberNine\Repository\UserRoleRepository;
 use NumberNine\Security\UserFactory;
 use NumberNine\Tests\DotEnvAwareWebTestCase;
