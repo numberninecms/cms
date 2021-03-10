@@ -2,7 +2,6 @@
 
 <br>
 
-[![Travis](https://travis-ci.com/numberninecms/cms.svg?branch=master)](https://travis-ci.com/numberninecms/cms)
 [![Github Workflow](https://github.com/numberninecms/cms/workflows/CI/badge.svg)](https://github.com/numberninecms/cms/actions)
 
 # Introduction
@@ -15,7 +14,7 @@ Visit https://numberninecms.github.io/ for user and developer documentation.
 
 # Contributions
 Feel free to submit issues and pull requests.
-This project uses Git Flow workflow.
+This project uses Git Flow workflow (PR on `develop` branch).
 
 # Credits
 Login page photo by [Nicolas Becker](https://www.pexels.com/photo/stack-of-stones-in-dry-valley-5530229/)
@@ -23,4 +22,4 @@ Login page photo by [Nicolas Becker](https://www.pexels.com/photo/stack-of-stone
 # License
 [MIT](LICENSE)
 
-Copyright (c) 2020, William Arin
+Copyright (c) 2020-2021, William Arin
