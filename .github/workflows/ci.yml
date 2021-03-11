@@ -69,6 +69,12 @@ jobs:
             -   name: Run code quality tests
                 run: composer run-script test
 
+            -   name: Setup Docker PHP version
+                if: ${{ matrix.php }} == 8.0
+                run: |
+                    sed -i 's/7.4-fpm/8.0-fpm/' docker-compose.yml
+                    sed -i 's/php7/php8/' docker-compose.yml
+
             -   name: Run Docker containers
                 run: docker-compose up -d
 
