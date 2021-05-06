@@ -7,7 +7,7 @@ version: "3.8"
 services:
     php:
         container_name: cms_php
-        image: numberninecms/php:8.0-fpm-dev
+        image: numberninecms/php:7.4-fpm-dev
         working_dir: /srv/app
         user: '1000:1000'
         restart: unless-stopped
@@ -16,7 +16,7 @@ services:
             - .env.test.local
         volumes:
             - ./:/srv/app
-            - ./docker/symfony.ini:/etc/php8/conf.d/symfony.ini
+            - ./docker/symfony.ini:/etc/php7/conf.d/symfony.ini
 
     mysql:
         container_name: cms_mysql

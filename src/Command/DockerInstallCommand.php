@@ -160,7 +160,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
     private function prepareDockerComposeFile(): int
     {
         $finalFilename = "{$this->projectPath}/docker-compose.yml";
-        $recipeFilename = "{$this->projectPath}/docker/docker-compose.yaml";
+        $recipeFilename = "{$this->projectPath}/docker/docker-compose.yml";
 
         if (!file_exists($finalFilename)) {
             $result = false;
@@ -176,7 +176,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
             }
 
             if (!$result) {
-                $this->io->error('File docker/docker-compose.yaml not found. Consider reinstalling recipe.');
+                $this->io->error('File docker/docker-compose.yml not found. Consider reinstalling recipe.');
 
                 return Command::FAILURE;
             }
