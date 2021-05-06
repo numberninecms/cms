@@ -115,10 +115,12 @@ final class ConfigurationReadWriter
                     $value = $coreOption && $coreOption->getValue() ? $coreOption->getValue() : $default;
 
                     try {
-                        $value = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+                        if (is_string($value)) {
+                            $value = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
 
-                        if (is_array($default)) {
-                            $value = array_merge_recursive_fixed($default, $value);
+                            if (is_array($default)) {
+                                $value = array_merge_recursive_fixed($default, $value);
+                            }
                         }
                     } catch (Exception $e) {
                         // this wasn't a json string
@@ -197,7 +199,9 @@ final class ConfigurationReadWriter
         }
 
         try {
-            $value = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+            if (is_string($value)) {
+                $value = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+            }
         } catch (Exception $e) {
             // this wasn't a json string
         }
