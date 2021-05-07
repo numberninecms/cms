@@ -6,6 +6,7 @@
         "cms",
         "publishing"
     ],
+    "version": "0.1.20",
     "license": "MIT",
     "authors": [
         {
