@@ -6,6 +6,7 @@
         "cms",
         "publishing"
     ],
+    "version": "0.1.20",
     "license": "MIT",
     "authors": [
         {
@@ -67,7 +68,7 @@
         "ergebnis/composer-normalize": "^2.11",
         "friendsoftwig/twigcs": "^5.0",
         "nikic/php-parser": "^4.10",
-        "numberninecms/chapterone": "*@dev",
+        "numberninecms/chapterone": "^0.1.8",
         "php-parallel-lint/php-parallel-lint": "^1.2",
         "phpro/grumphp": "^1.0",
         "phpstan/phpstan": "^0.12.25",

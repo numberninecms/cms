@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "368ba82896d75c17c30accdb194cb427",
+    "content-hash": "f79708b2dfd8d359410386378190a7b9",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -8560,71 +8560,6 @@
             "time": "2020-08-30T12:17:03+00:00"
         },
         {
-            "name": "fakerphp/faker",
-            "version": "v1.14.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/FakerPHP/Faker.git",
-                "reference": "ed22aee8d17c7b396f74a58b1e7fefa4f90d5ef1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/ed22aee8d17c7b396f74a58b1e7fefa4f90d5ef1",
-                "reference": "ed22aee8d17c7b396f74a58b1e7fefa4f90d5ef1",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1 || ^8.0",
-                "psr/container": "^1.0",
-                "symfony/deprecation-contracts": "^2.2"
-            },
-            "conflict": {
-                "fzaninotto/faker": "*"
-            },
-            "require-dev": {
-                "bamarni/composer-bin-plugin": "^1.4.1",
-                "ext-intl": "*",
-                "symfony/phpunit-bridge": "^4.4 || ^5.2"
-            },
-            "suggest": {
-                "ext-curl": "Required by Faker\\Provider\\Image to download images.",
-                "ext-dom": "Required by Faker\\Provider\\HtmlLorem for generating random HTML.",
-                "ext-iconv": "Required by Faker\\Provider\\ru_RU\\Text::realText() for generating real Russian text.",
-                "ext-mbstring": "Required for multibyte Unicode string functionality."
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-main": "v1.15-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Faker\\": "src/Faker/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "François Zaninotto"
-                }
-            ],
-            "description": "Faker is a PHP library that generates fake data for you.",
-            "keywords": [
-                "data",
-                "faker",
-                "fixtures"
-            ],
-            "support": {
-                "issues": "https://github.com/FakerPHP/Faker/issues",
-                "source": "https://github.com/FakerPHP/Faker/tree/v.1.14.1"
-            },
-            "time": "2021-03-30T06:27:33+00:00"
-        },
-        {
             "name": "friendsoftwig/twigcs",
             "version": "v5.0.0",
             "source": {
@@ -9085,25 +9020,25 @@
         },
         {
             "name": "numberninecms/chapterone",
-            "version": "0.1.0",
+            "version": "0.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/numberninecms/chapterone.git",
-                "reference": "ddc2692877c5e0ab644bfd1281ff1a43733e21fa"
+                "reference": "fff68680302cea0ae11f5792e5162dadbb900a2b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/numberninecms/chapterone/zipball/ddc2692877c5e0ab644bfd1281ff1a43733e21fa",
-                "reference": "ddc2692877c5e0ab644bfd1281ff1a43733e21fa",
+                "url": "https://api.github.com/repos/numberninecms/chapterone/zipball/fff68680302cea0ae11f5792e5162dadbb900a2b",
+                "reference": "fff68680302cea0ae11f5792e5162dadbb900a2b",
                 "shasum": ""
             },
             "require": {
                 "doctrine/doctrine-bundle": "^2.0",
                 "doctrine/doctrine-fixtures-bundle": "^3.3",
                 "doctrine/orm": "^2.7",
-                "numberninecms/cms": "*@dev",
-                "numberninecms/faker": "*@dev",
-                "php": "^7.4",
+                "numberninecms/cms": "^0.1.20",
+                "numberninecms/common": "^0.1",
+                "php": "^7.4 || ^8.0",
                 "symfony/event-dispatcher": "^5.1",
                 "symfony/form": "^5.1",
                 "symfony/http-foundation": "^5.1",
@@ -9112,15 +9047,25 @@
                 "symfony/security-http": "^5.1"
             },
             "require-dev": {
-                "friendsoftwig/twigcs": "^3.2",
-                "phpro/grumphp": "^0.18.0",
+                "ergebnis/composer-normalize": "^2.11",
+                "friendsoftwig/twigcs": "^5.0",
+                "nikic/php-parser": "^4.10",
+                "php-parallel-lint/php-parallel-lint": "^1.2",
+                "phpro/grumphp": "^1.0.0",
                 "phpstan/phpstan": "^0.12.25",
                 "phpstan/phpstan-doctrine": "^0.12.13",
                 "phpstan/phpstan-phpunit": "^0.12.8",
                 "phpstan/phpstan-symfony": "^0.12.6",
-                "roave/security-advisories": "dev-latest"
+                "phpunit/phpunit": "^9.4",
+                "roave/security-advisories": "dev-latest",
+                "squizlabs/php_codesniffer": "^3.5"
             },
             "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "0.1.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "NumberNine\\ChapterOne\\": "src/"
@@ -9137,80 +9082,19 @@
                 }
             ],
             "description": "ChapterOne is a full-featured starter theme for NumberNine CMS",
-            "support": {
-                "issues": "https://github.com/numberninecms/chapterone/issues",
-                "source": "https://github.com/numberninecms/chapterone/tree/0.1.0"
-            },
-            "time": "2020-10-20T16:59:23+00:00"
-        },
-        {
-            "name": "numberninecms/faker",
-            "version": "0.1.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/numberninecms/faker.git",
-                "reference": "747e1c9d9b8310934e2ef2dbaeb5c753e53bd068"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/numberninecms/faker/zipball/747e1c9d9b8310934e2ef2dbaeb5c753e53bd068",
-                "reference": "747e1c9d9b8310934e2ef2dbaeb5c753e53bd068",
-                "shasum": ""
-            },
-            "require": {
-                "fakerphp/faker": "^1.12.0",
-                "numberninecms/common": "^0.1",
-                "php": "^7.4 || ^8.0",
-                "symfony/config": "^5.1",
-                "symfony/dependency-injection": "^5.1",
-                "symfony/finder": "^5.1",
-                "symfony/http-kernel": "^5.1",
-                "symfony/yaml": "^5.1"
-            },
-            "require-dev": {
-                "ergebnis/composer-normalize": "^2.11",
-                "nikic/php-parser": "^4.10",
-                "php-parallel-lint/php-parallel-lint": "^1.2",
-                "phpro/grumphp": "^1.0",
-                "phpstan/phpstan": "^0.12.25",
-                "phpstan/phpstan-doctrine": "^0.12.13",
-                "phpstan/phpstan-phpunit": "^0.12.8",
-                "phpstan/phpstan-symfony": "^0.12.6",
-                "phpunit/phpunit": "^9.2",
-                "roave/security-advisories": "dev-latest",
-                "squizlabs/php_codesniffer": "^3.5"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-develop": "0.1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "NumberNine\\FakerBundle\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "William Arin",
-                    "email": "williamarin.dev@gmail.com"
-                }
-            ],
-            "description": "Faker provider for NumberNine CMS",
             "keywords": [
                 "blog",
-                "faker"
+                "blogging",
+                "cms",
+                "numbernine",
+                "symfony",
+                "theme"
             ],
             "support": {
-                "issues": "https://github.com/numberninecms/faker/issues",
-                "source": "https://github.com/numberninecms/faker/tree/0.1.3"
+                "issues": "https://github.com/numberninecms/chapterone/issues",
+                "source": "https://github.com/numberninecms/chapterone/tree/0.1.8"
             },
-            "time": "2021-03-10T09:48:25+00:00"
+            "time": "2021-03-11T01:30:41+00:00"
         },
         {
             "name": "ondram/ci-detector",
@@ -12436,7 +12320,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "numberninecms/chapterone": 20,
         "roave/security-advisories": 20
     },
     "prefer-stable": true,
