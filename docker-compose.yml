@@ -33,7 +33,7 @@ services:
 
     node:
         container_name: cms_node
-        image: node:latest
+        image: node:15-alpine
         user: '1000:1000'
         restart: 'no'
         working_dir: /srv/app

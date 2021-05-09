@@ -36,10 +36,6 @@ Encore
                 require('postcss-import'),
                 require('tailwindcss'),
                 require('autoprefixer'),
-                require('postcss-prefixer')({
-                    prefix: 'n9-',
-                    ignore: [/desktop/, /q-/]
-                })
             ]
         }
     })
