@@ -1,21 +1,20 @@
 <!DOCTYPE html>
-<html class="n9-h-full">
+<html class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <title>{% block title %}{% endblock %}</title>
 
     {% block stylesheets %}
-        {{ encore_entry_link_tags('adminbar', 'numbernine', 'numbernine') }}
     {% endblock %}
 
     {% block javascripts_head %}
     {% endblock %}
 </head>
-<body class="n9-h-full {% block body_classes %}{% endblock %}">
-<div class="n9-container n9-mx-auto n9-h-full">
-    <div class="n9-flex n9-flex-row n9-justify-center n9-items-center n9-h-full n9-p-5">
-        <div class="n9-card">
+<body class="h-full {% block body_classes %}{% endblock %}">
+<div class="container mx-auto h-full">
+    <div class="flex flex-row justify-center items-center h-full p-5">
+        <div class="card">
             {% block body %}{% endblock %}
         </div>
     </div>

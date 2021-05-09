@@ -2,28 +2,27 @@
   "entrypoints": {
     "adminbar": {
       "js": [
-        "/bundles/numbernine/build/runtime.js",
-        "/bundles/numbernine/build/vendors-node_modules_core-js_modules_es_object_define-property_js.js",
-        "/bundles/numbernine/build/adminbar.js"
+        "/bundles/numbernine/build/runtime.7e38cb2f.js",
+        "/bundles/numbernine/build/adminbar.59535ba2.js"
       ],
       "css": [
-        "/bundles/numbernine/build/adminbar.css"
+        "/bundles/numbernine/build/adminbar.b1b8787b.css"
       ]
     },
     "adminpreviewmode": {
       "js": [
-        "/bundles/numbernine/build/runtime.js"
+        "/bundles/numbernine/build/runtime.7e38cb2f.js"
       ],
       "css": [
-        "/bundles/numbernine/build/adminpreviewmode.css"
+        "/bundles/numbernine/build/adminpreviewmode.6a7ccdeb.css"
       ]
     },
     "security": {
       "js": [
-        "/bundles/numbernine/build/runtime.js"
+        "/bundles/numbernine/build/runtime.7e38cb2f.js"
       ],
       "css": [
-        "/bundles/numbernine/build/security.css"
+        "/bundles/numbernine/build/security.40884d51.css"
       ]
     }
   }

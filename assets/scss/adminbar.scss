@@ -7,14 +7,100 @@
  * file that was distributed with this source code.
  */
 
-@import "~tailwindcss/base";
-
 @import "page_builder/colors";
 
-@import "typography";
+.n9-topbar {
+    background-color: var(--n9-quaternary);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    position: sticky;
+    top: 0;
+    color: #FFFFFF;
+    z-index: 50;
 
-@import "~tailwindcss/components";
+    .n9-topbar-title {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        margin-right: 1.5rem;
 
-@import "components";
+        a {
+            font-weight: 600;
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+            color: #FFFFFF;
+            letter-spacing: -0.025em;
+        }
+    }
 
-@import "~tailwindcss/utilities";
+    .n9-topbar-burger-wrapper {
+        display: block;
+
+        .n9-topbar-burger {
+            border-color: rgba(156, 163, 175, 1);
+            border-radius: 0.25rem;
+            border-width: 1px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            color: rgba(229, 231, 235, 1);
+
+            &:hover {
+                border-color: #FFFFFF;
+                color: #FFFFFF;
+            }
+
+            .n9-topbar-burger-svg {
+                height: 0.75rem;
+                width: 0.75rem;
+                fill: currentColor;
+            }
+        }
+    }
+
+    .n9-topbar-menu {
+        display: none;
+        width: 100%;
+
+        a {
+            display: block;
+            margin-top: 1rem;
+            margin-right: 1rem;
+            color: rgba(229, 231, 235, 1);
+
+            &:hover {
+                color: #FFFFFF;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .n9-topbar {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+
+
+        .n9-topbar-burger-wrapper {
+            display: none;
+        }
+
+        .n9-topbar-menu {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            flex-grow: 1;
+            width: auto;
+            display: flex !important;
+
+            a {
+                display: inline-block;
+                margin-top: 0;
+            }
+        }
+    }
+}
