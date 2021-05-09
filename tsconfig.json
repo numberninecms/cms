@@ -13,12 +13,18 @@
         "strictPropertyInitialization": false,
         "paths": {
             "src/*": [
-                "assets/ts/*"
+                "assets/ts/*",
+                "assets/*"
             ]
-        }
+        },
+        "types": [
+            "node",
+            "webpack-env"
+        ]
     },
     "include": [
-        "assets/ts/**/*"
+        "assets/ts/**/*",
+        "assets/**/*"
     ],
     "exclude": [
         "/build",

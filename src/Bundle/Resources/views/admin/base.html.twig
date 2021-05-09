@@ -1,0 +1,47 @@
+{% trans_default_domain 'numbernine' %}
+<!DOCTYPE html>
+<html class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>{% block title %}{% endblock %}</title>
+
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('admin', 'numbernine', 'numbernine') }}
+    {% endblock %}
+
+    {% block javascripts_head %}
+        {{ encore_entry_script_tags('admin', 'numbernine', 'numbernine') }}
+    {% endblock %}
+</head>
+
+<body class="h-full">
+    <nav class="topbar">
+        <div class="topbar-title">
+            <a href="{{ path('numbernine_admin_index') }}">
+                <img src="{{ preload(asset('bundles/numbernine/build/images/NumberNineWithoutText.png', 'numbernine'), {as: 'image'}) }}" alt="Homepage" width="25">
+            </a>
+        </div>
+        <div class="topbar-burger-wrapper">
+            <button class="topbar-burger">
+                <svg class="topbar-burger-svg" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title>
+                    <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/>
+                </svg>
+            </button>
+        </div>
+        <div class="topbar-menu">
+            <div>
+                <a href="{{ path('numbernine_admin_index') }}">{{ 'Dashboard'|trans }}</a>
+                <a href="{{ path('numbernine_homepage') }}" target="_blank">{{ 'Visit site'|trans }}</a>
+            </div>
+            <div>
+                <a href="{{ path('numbernine_logout') }}">{{ 'Logout'|trans }}</a>
+            </div>
+        </div>
+    </nav>
+
+    <div data-controller="hello"></div>
+
+{% block javascripts_footer %}{% endblock %}
+</body>
+</html>

@@ -103,9 +103,10 @@ final class ResponseEventSubscriber implements EventSubscriberInterface
             $this->request
             && (
                 $this->request->attributes->get('_route') === 'numbernine_admin_index'
-                || $this->request->get('n9') === 'admin')
+                || $this->request->get('n9') === 'admin'
+            )
         ) {
-            $navtopStyles = $this->tagRenderer->renderWebpackLinkTags('adminpreviewmode', 'numbernine');
+            $navtopStyles = ''; // $this->tagRenderer->renderWebpackLinkTags('adminpreviewmode', 'numbernine');
         } else {
             $navtopStyles = $this->tagRenderer->renderWebpackLinkTags('adminbar', 'numbernine');
             $navtopScript = $this->tagRenderer->renderWebpackScriptTags('adminbar', 'numbernine', true);

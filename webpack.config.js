@@ -10,8 +10,11 @@ Encore
     .setManifestKeyPrefix('bundles/numbernine/build/')
 
     .addEntry('adminbar', './assets/ts/adminbar.ts')
+    .addEntry('admin', './assets/ts/admin/admin.ts')
     .addStyleEntry('adminpreviewmode', './assets/scss/page_builder.scss')
     .addStyleEntry('security', './assets/scss/security.scss')
+
+    .enableStimulusBridge('./assets/ts/admin/controllers.json')
 
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
