@@ -3,11 +3,11 @@ menus:
     dashboard:
         text: Dashboard
         link: /
-        icon: dashboard
+        icon: tachometer-alt
     media_library:
         text: Media Library
         link: /media/
-        icon: photo_library
+        icon: photo-video
     #    forms:
     #        text: Forms
     #        route:
@@ -22,7 +22,7 @@ menus:
     users:
         text: Users
         route:
-        icon: person
+        icon: users
         children:
             all:
                 text: All users
@@ -36,7 +36,7 @@ menus:
     settings:
         text: Settings
         route:
-        icon: settings_applications
+        icon: cogs
         children:
             general:
                 text: General
@@ -50,7 +50,7 @@ menus:
     appearance:
         text: Appearance
         route:
-        icon: brush
+        icon: paint-brush
         children:
             customize:
                 text: Customize
