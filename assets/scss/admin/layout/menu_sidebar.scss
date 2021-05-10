@@ -7,10 +7,11 @@
  * file that was distributed with this source code.
  */
 
-import { Controller } from 'stimulus';
+.menu-sidebar {
+    @apply
+        flex-shrink
+        hidden lg:block
+        text-light bg-quaternary;
 
-export default class extends Controller {
-    public connect(): void {
-        this.element.textContent = 'Hello Stimulus! Edit me in assets/controllers/hello_controller.js';
-    }
+    width: 250px;
 }
