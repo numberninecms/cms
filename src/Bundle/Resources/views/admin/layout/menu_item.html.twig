@@ -1,4 +1,8 @@
-<a href="{{ item.route ? path(item.route) : item.link ? item.link }}" class="menu-item-level-{{ level }}">
+{% set attributes = (attr ?? {})|merge({
+    href: item.route ? path(item.route) : item.link ? item.link,
+    class: 'menu-item-level-' ~ level,
+}) %}
+<a {{ N9_create_attributes(attributes) }}>
     <div class="space-x-3">
         {% if item.icon %}
             <i class="fa fa-{{ item.icon }}"></i>

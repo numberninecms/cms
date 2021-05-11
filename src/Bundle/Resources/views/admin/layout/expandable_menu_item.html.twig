@@ -1,5 +1,5 @@
-<div data-controller="toggle-visibility" data-action="click->toggle-visibility#toggle">
-    {% include '@NumberNine/admin/layout/menu_item.html.twig' %}
+<div data-controller="toggle-visibility">
+    {% include '@NumberNine/admin/layout/menu_item.html.twig' with {attr: {'data-action': 'click->toggle-visibility#toggle'}} %}
 
     <div class="hidden" data-toggle-visibility-target="item">
         {% for child in item.children %}
