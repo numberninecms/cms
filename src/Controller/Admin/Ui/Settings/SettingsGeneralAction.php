@@ -9,20 +9,25 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Controller\Admin\Ui\Dashboard;
+namespace NumberNine\Controller\Admin\Ui\Settings;
 
+use NumberNine\Form\Admin\Settings\AdminSettingsGeneralFormType;
 use NumberNine\Model\Admin\AdminController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/", name="numbernine_admin_index", methods={"GET"})
+ * @Route("/settings/general/", name="numbernine_admin_settings_general", methods={"GET"})
  */
-final class AdminDashboardIndexAction extends AbstractController implements AdminController
+final class SettingsGeneralAction extends AbstractController implements AdminController
 {
     public function __invoke(string $publicPath): Response
     {
-        return $this->render('@NumberNine/admin/dashboard/index.html.twig');
+        $form = $this->createForm(AdminSettingsGeneralFormType::class);
+
+        return $this->render('@NumberNine/admin/settings/general.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

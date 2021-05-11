@@ -35,6 +35,7 @@ security:
 twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+    form_themes: ['@NumberNine/form/tailwind_layout.html.twig']
 
 cmf_routing:
     chain:

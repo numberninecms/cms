@@ -1,0 +1,9 @@
+{% extends '@NumberNine/admin/base.html.twig' %}
+
+{% block content %}
+    <div class="flex flex-col">
+        {% include '@NumberNine/admin/layout/toolbar.html.twig' with {title: 'General settings'} %}
+
+        {{ form(form) }}
+    </div>
+{% endblock %}

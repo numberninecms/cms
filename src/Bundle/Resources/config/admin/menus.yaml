@@ -2,7 +2,7 @@
 menus:
     dashboard:
         text: Dashboard
-        link: /
+        route: numbernine_admin_index
         icon: tachometer-alt
     media_library:
         text: Media Library
@@ -40,7 +40,7 @@ menus:
         children:
             general:
                 text: General
-                link: /settings/general/
+                route: numbernine_admin_settings_general
             permalinks:
                 text: Permalinks
                 link: /settings/permalinks/

@@ -41,7 +41,8 @@ Encore
     })
     .addPlugin(new WatchExternalFilesPlugin({
         files: [
-            '/src/Bundle/Resources/views',
+            './src/Bundle/Resources/views',
+            './assets/scss/purge_safelist.txt',
         ],
         verbose: true
     }))

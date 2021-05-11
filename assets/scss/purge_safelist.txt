@@ -1,0 +1,16 @@
+mt-1
+mt-2
+mb-6
+mr-2
+mr-2
+w-full
+text-gray-500
+text-gray-600
+text-red-700
+text-gray-800
+border-red-700
+border-gray-300
+block
+flex
+inline-flex
+items-center
