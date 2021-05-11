@@ -1,7 +1,7 @@
-<div>
+<div data-controller="toggle-visibility" data-action="click->toggle-visibility#toggle">
     {% include '@NumberNine/admin/layout/menu_item.html.twig' %}
 
-    <div>
+    <div class="hidden" data-toggle-visibility-target="item">
         {% for child in item.children %}
             {% include '@NumberNine/admin/layout/menu_item.html.twig' with {item: child, level: level + 1} %}
         {% endfor %}

@@ -11,11 +11,11 @@ import { Controller } from 'stimulus';
 
 export default class extends Controller {
     public static targets = ['item'];
-    public static classes = ['visible'];
 
     private readonly itemTargets: HTMLElement[];
 
-    public toggle(): void {
+    public toggle(event: Event): void {
+        event.preventDefault();
         this.itemTargets.forEach((item) => {
             item.style.display = item.style.display !== 'block' ? 'block' : 'none';
         });
