@@ -102,7 +102,7 @@ final class ResponseEventSubscriber implements EventSubscriberInterface
         if (
             $this->request
             && (
-                $this->request->attributes->get('_route') === 'numbernine_admin_index'
+                strpos($this->request->attributes->get('_route'), 'numbernine_admin_') === 0
                 || $this->request->get('n9') === 'admin'
             )
         ) {
