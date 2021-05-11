@@ -1,0 +1,11 @@
+<a href="{{ item.route ? path(item.route) : item.link ? item.link }}" class="menu-item-level-{{ level }}">
+    <div class="space-x-3">
+        {% if item.icon %}
+            <i class="fa fa-{{ item.icon }}"></i>
+        {% endif %}
+        <span>{{ item.text }}</span>
+    </div>
+    {% if item.children|length > 0 %}
+        <i class="fa fa-sort-down"></i>
+    {% endif %}
+</a>

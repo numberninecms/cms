@@ -1,0 +1,9 @@
+<div>
+    {% include '@NumberNine/admin/layout/menu_item.html.twig' %}
+
+    <div>
+        {% for child in item.children %}
+            {% include '@NumberNine/admin/layout/menu_item.html.twig' with {item: child, level: level + 1} %}
+        {% endfor %}
+    </div>
+</div>

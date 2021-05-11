@@ -1,13 +1,11 @@
 <aside class="menu-sidebar">
     <nav>
         {% for item in N9_admin_menu_items() %}
-            <a href="" class="p-3 flex items-center justify-between hover:bg-quaternary-500 transition-all duration-200 ease-in-out">
-                <div>
-                    <i class="fa fa-{{ item.icon }} px-3"></i>
-                    <span>{{ item.text }}</span>
-                </div>
-                <i class="fa fa-chevron-down px-3"></i>
-            </a>
+            {% if item.children|length > 0 %}
+                {% include '@NumberNine/admin/layout/expandable_menu_item.html.twig' with {level: 1} %}
+            {% else %}
+                {% include '@NumberNine/admin/layout/menu_item.html.twig' with {level: 1} %}
+            {% endif %}
         {% endfor %}
     </nav>
 </aside>

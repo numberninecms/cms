@@ -64,11 +64,8 @@
             @apply
                 block lg:inline-block
                 mt-4 mr-4 lg:mt-0
-                text-gray-200;
-
-            &:hover {
-                @apply text-white;
-            }
+                text-gray-200
+                hover:text-white;
         }
     }
 }
