@@ -21,7 +21,8 @@
         "stimulus": "^2.0.0",
         "tailwindcss": "^2.0.2",
         "ts-loader": "^9.1.2",
-        "typescript": "^4.1.3"
+        "typescript": "^4.1.3",
+        "webpack-watch-files-plugin": "^1.1.0"
     },
     "scripts": {
         "dev-server": "NODE_ENV=development encore dev-server",

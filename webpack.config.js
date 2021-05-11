@@ -1,4 +1,5 @@
 const Encore = require('@symfony/webpack-encore');
+const WatchExternalFilesPlugin = require('webpack-watch-files-plugin').default;
 
 if (!Encore.isRuntimeEnvironmentConfigured()) {
     Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
@@ -38,6 +39,12 @@ Encore
             ]
         }
     })
+    .addPlugin(new WatchExternalFilesPlugin({
+        files: [
+            '/src/Bundle/Resources/views',
+        ],
+        verbose: true
+    }))
 ;
 
 module.exports = Encore.getWebpackConfig();
