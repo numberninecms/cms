@@ -10,7 +10,11 @@ text-red-700
 text-gray-800
 border-red-700
 border-gray-300
+font-semibold
 block
 flex
+flex-col
 inline-flex
 items-center
+btn
+btn-color-primary

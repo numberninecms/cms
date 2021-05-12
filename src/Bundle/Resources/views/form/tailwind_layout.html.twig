@@ -1,11 +1,17 @@
-{% use '@NumberNine/form/tailwind_layout_base.html.twig' %}
+{% use 'form_div_layout.html.twig' %}
 
-{% block form_row %}
-    {% set row_class = row_class|default('mt-2 px-3 ...') %}
-    {{ parent() }}
-{% endblock form_row %}
+{%- block form_row -%}
+    {%- set row_attr = row_attr|merge({class: row_attr.class|default(row_class|default('flex flex-col px-3 mt-2'))}) -%}
+    {{- parent() -}}
+{%- endblock form_row -%}
 
 {% block form_label %}
-    {% set label_class = label_class|default('font-semibold text-gray-600 ...') %}
+    {%- set label_attr = label_attr|merge({class: label_attr.class|default(label_class|default('font-semibold text-quaternary'))}) -%}
     {{ parent() }}
 {% endblock form_label %}
+
+{%- block button_row -%}
+    <div{% with {attr: row_attr|merge({class: row_attr.class|default(row_class|default('btn btn-color-primary'))})} %}{{ block('attributes') }}{% endwith %}>
+        {{- form_widget(form) -}}
+    </div>
+{%- endblock button_row -%}

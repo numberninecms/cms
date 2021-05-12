@@ -11,13 +11,13 @@
 
 namespace NumberNine\Form\Admin\Settings;
 
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use NumberNine\Content\ContentService;
 use NumberNine\Model\Content\PublishingStatusInterface;
 use NumberNine\Model\Pagination\PaginationParameters;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 final class AdminSettingsGeneralFormType extends AbstractType
@@ -38,17 +38,26 @@ final class AdminSettingsGeneralFormType extends AbstractType
             ->add('page_for_front', ChoiceType::class, [
                 'choices' => $this->getPages()
             ])
+            ->add('submit', SubmitType::class)
         ;
     }
 
-    private function getPages(): Paginator
+    private function getPages(): array
     {
-        return $this->contentService->getEntitiesOfType(
+        $entities = $this->contentService->getEntitiesOfType(
             'page',
             (new PaginationParameters())
                 ->setStatus(PublishingStatusInterface::STATUS_PUBLISH)
                 ->setOrderBy('title')
                 ->setOrder('asc')
         );
+
+        $pages = [];
+
+        foreach ($entities as $entity) {
+            $pages[$entity->getTitle()] = $entity->getId();
+        }
+
+        return $pages;
     }
 }

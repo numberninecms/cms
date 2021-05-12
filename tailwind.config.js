@@ -83,5 +83,7 @@ module.exports = {
         },
     },
     variants: {},
-    plugins: [],
+    plugins: [
+        require('@tailwindcss/forms'),
+    ],
 }
