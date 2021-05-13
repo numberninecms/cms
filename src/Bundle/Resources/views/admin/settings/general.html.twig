@@ -5,7 +5,7 @@
         {% include '@NumberNine/admin/layout/toolbar.html.twig' with {title: 'General settings'} %}
         {% include '@NumberNine/admin/util/flashes.html.twig' %}
 
-        {{ form_start(form, {attr: {'data-controller': 'settings--general'}}) }}
+        {{ form_start(form, {attr: {'data-controller': 'settings--general', class: 'lg:max-w-md'}}) }}
             {{ form_row(form.site_title) }}
             {{ form_row(form.site_description) }}
             {{ form_row(form.blog_as_homepage, {

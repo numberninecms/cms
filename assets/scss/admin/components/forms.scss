@@ -10,5 +10,9 @@
 [type='text'], [type='email'], [type='url'], [type='password'], [type='number'], [type='date'],
 [type='datetime-local'], [type='month'], [type='search'], [type='tel'], [type='time'], [type='week'],
 [multiple], textarea, select {
-    @apply rounded border-secondary-100;
+    @apply rounded border-secondary-100 focus:border-primary focus:ring-primary focus:ring-offset-white;
+}
+
+[type='checkbox'], [type='radio'] {
+    @apply text-primary border-secondary-100 focus:text-primary focus:ring-primary focus:ring-offset-white;
 }

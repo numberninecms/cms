@@ -2,7 +2,7 @@
     href: item.route ? path(item.route) : item.link ? item.link,
     class: 'menu-item-level-' ~ level,
 }) %}
-<a {{ N9_create_attributes(attributes) }}>
+<a {{ N9_create_attributes(attributes) }} data-layout--menu-target="menuItem">
     <div class="space-x-3">
         {% if item.icon %}
             <i class="fa fa-{{ item.icon }}"></i>

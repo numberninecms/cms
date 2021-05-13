@@ -4,6 +4,7 @@ mt-4
 mb-6
 mr-2
 mr-2
+ml-1
 w-full
 text-gray-500
 text-gray-600
