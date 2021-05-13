@@ -16,6 +16,10 @@ export default class extends Controller {
     private readonly itemTargets: HTMLSelectElement[];
     private readonly blogAsHomepageTarget: HTMLInputElement;
 
+    public connect(): void {
+        this.toggleBlogAsHomepage();
+    }
+
     public toggleBlogAsHomepage(): void {
         if (this.blogAsHomepageTarget.checked) {
             this.itemTargets.forEach((item) => {

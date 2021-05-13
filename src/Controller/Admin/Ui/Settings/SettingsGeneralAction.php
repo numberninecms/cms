@@ -43,7 +43,10 @@ final class SettingsGeneralAction extends AbstractController implements AdminCon
             ]
         );
 
-        $form = $this->createForm(AdminSettingsGeneralFormType::class, $settings);
+        $form = $this->createForm(AdminSettingsGeneralFormType::class, array_merge(
+            $settings,
+            ['blog_as_homepage' => !(bool)$settings[Settings::PAGE_FOR_FRONT]],
+        ));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
