@@ -1,5 +1,6 @@
 mt-1
 mt-2
+mt-4
 mb-6
 mr-2
 mr-2
@@ -14,7 +15,9 @@ font-semibold
 block
 flex
 flex-col
+flex-row
 inline-flex
 items-center
+space-x-3
 btn
 btn-color-primary

@@ -31,13 +31,19 @@ final class AdminSettingsGeneralFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $pages = $this->getPages();
+
         $builder
-            ->add('title')
-            ->add('tagline')
-            ->add('blog_homepage', CheckboxType::class, ['label' => 'Use posts archive as homepage'])
-            ->add('page_for_front', ChoiceType::class, [
-                'choices' => $this->getPages()
+            ->add('site_title')
+            ->add('site_description', null, ['label' => 'Tagline', 'required' => false])
+            ->add('blog_as_homepage', CheckboxType::class, [
+                'label' => 'Use posts archive as homepage',
+                'required' => false
             ])
+            ->add('page_for_front', ChoiceType::class, ['choices' => $pages, 'required' => false])
+            ->add('page_for_posts', ChoiceType::class, ['choices' => $pages, 'required' => false])
+            ->add('page_for_my_account', ChoiceType::class, ['choices' => $pages, 'required' => false])
+            ->add('page_for_privacy', ChoiceType::class, ['choices' => $pages, 'required' => false])
             ->add('submit', SubmitType::class)
         ;
     }
