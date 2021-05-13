@@ -4,5 +4,21 @@
     <div class="flex flex-col">
         {% include '@NumberNine/admin/layout/toolbar.html.twig' with {title: 'Permalinks'} %}
         {% include '@NumberNine/admin/util/flashes.html.twig' %}
+
+        <div class="flex flex-col space-y-3 mt-3 px-3">
+            <div class="flex flex-row items-center space-x-3">
+                <span>Available placeholders:</span>
+                {% include '@NumberNine/admin/util/badge.html.twig' with {text: '{year}'} %}
+                {% include '@NumberNine/admin/util/badge.html.twig' with {text: '{month}'} %}
+                {% include '@NumberNine/admin/util/badge.html.twig' with {text: '{day}'} %}
+                {% include '@NumberNine/admin/util/badge.html.twig' with {text: '{slug}'} %}
+            </div>
+            <div class="flex flex-row items-center space-x-3">
+                <span>Example:</span>
+                <code class="rounded-lg bg-gray-600 text-gray-100 p-2">/{year}/{month}/{day}/{slug}</code>
+                <span>will give an url like</span>
+                <code class="rounded-lg bg-gray-600 text-gray-100 p-2">/2020/08/03/title-of-my-post</code>
+            </div>
+        </div>
     </div>
 {% endblock %}
