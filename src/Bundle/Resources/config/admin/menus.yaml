@@ -43,7 +43,7 @@ menus:
                 route: numbernine_admin_settings_general
             permalinks:
                 text: Permalinks
-                link: /settings/permalinks/
+                route: numbernine_admin_settings_permalinks
             email:
                 text: Emails
                 link: /settings/emails/

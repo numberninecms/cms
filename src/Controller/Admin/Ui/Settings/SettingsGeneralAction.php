@@ -28,7 +28,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class SettingsGeneralAction extends AbstractController implements AdminController
 {
     public function __invoke(
-        UrlGeneratorInterface $urlGenerator,
         ConfigurationReadWriter $configurationReadWriter,
         Request $request
     ): Response {
