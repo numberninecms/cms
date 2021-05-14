@@ -1,0 +1,10 @@
+{% extends '@NumberNine/admin/base.html.twig' %}
+
+{% block content %}
+    <div class="flex flex-col">
+        {% include '@NumberNine/admin/layout/toolbar.html.twig' with {title: 'Email settings'} %}
+        {% include '@NumberNine/admin/util/flashes.html.twig' %}
+
+        {{ form(form, {attr: {class: 'lg:max-w-md'}}) }}
+    </div>
+{% endblock %}

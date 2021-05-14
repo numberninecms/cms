@@ -46,7 +46,7 @@ menus:
                 route: numbernine_admin_settings_permalinks
             email:
                 text: Emails
-                link: /settings/emails/
+                route: numbernine_admin_settings_emails
     appearance:
         text: Appearance
         route:
