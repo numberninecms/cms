@@ -13,7 +13,7 @@ namespace NumberNine\Controller\Admin\Ui\Settings;
 
 use NumberNine\Configuration\ConfigurationReadWriter;
 use NumberNine\Content\ContentService;
-use NumberNine\Form\Admin\Settings\AdminSettingsGeneralFormType;
+use NumberNine\Form\Admin\Settings\AdminSettingsPermalinksFormType;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Model\General\Settings;
 use NumberNine\Model\General\SettingsDefaultValues;
@@ -29,7 +29,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class SettingsPermalinksAction extends AbstractController implements AdminController
 {
     public function __invoke(
-        UrlGeneratorInterface $urlGenerator,
         ConfigurationReadWriter $configurationReadWriter,
         ContentService $contentService,
         Request $request
@@ -41,9 +40,23 @@ final class SettingsPermalinksAction extends AbstractController implements Admin
         }
 
         $settings = $configurationReadWriter->readMany([
-            Settings::PERMALINKS => $defaultPermalinks
+            Settings::PERMALINKS => $defaultPermalinks,
         ]);
 
-        return $this->render('@NumberNine/admin/settings/permalinks.html.twig');
+        $form = $this->createForm(AdminSettingsPermalinksFormType::class, $settings['permalinks']);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $configurationReadWriter->writeMany([
+                Settings::PERMALINKS => $form->getData(),
+            ]);
+
+            $this->addFlash('success', 'Permalinks successfully saved.');
+            return $this->redirectToRoute('numbernine_admin_settings_permalinks');
+        }
+
+        return $this->render('@NumberNine/admin/settings/permalinks.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

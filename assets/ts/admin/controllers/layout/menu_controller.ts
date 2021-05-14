@@ -15,9 +15,7 @@ export default class extends Controller {
     private readonly menuItemTargets: HTMLAnchorElement[];
 
     public connect(): void {
-        console.log(window.location.pathname);
         this.menuItemTargets.forEach((menuItem) => {
-            console.log(menuItem.getAttribute('href'));
             if (window.location.pathname === menuItem.getAttribute('href')) {
                 menuItem.classList.add('active');
 
