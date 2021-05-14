@@ -19,6 +19,10 @@
 
 @import "~tailwindcss/utilities";
 
+@import "components/buttons";
+@import "components/forms";
+@import "components/flashes";
+
 @import "layout/ui_area";
 @import "layout/topbar";
 @import "layout/menu_sidebar";

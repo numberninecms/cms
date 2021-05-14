@@ -1,0 +1,18 @@
+/*
+ * This file is part of the NumberNine package.
+ *
+ * (c) William Arin <williamarin.dev@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+[type='text'], [type='email'], [type='url'], [type='password'], [type='number'], [type='date'],
+[type='datetime-local'], [type='month'], [type='search'], [type='tel'], [type='time'], [type='week'],
+[multiple], textarea, select {
+    @apply rounded border-secondary-100 focus:border-primary focus:ring-primary focus:ring-offset-white;
+}
+
+[type='checkbox'], [type='radio'] {
+    @apply text-primary border-secondary-100 focus:text-primary focus:ring-primary focus:ring-offset-white;
+}

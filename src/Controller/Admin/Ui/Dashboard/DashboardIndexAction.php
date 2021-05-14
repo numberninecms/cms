@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/", name="numbernine_admin_index", methods={"GET"})
  */
-final class AdminDashboardIndexAction extends AbstractController implements AdminController
+final class DashboardIndexAction extends AbstractController implements AdminController
 {
     public function __invoke(string $publicPath): Response
     {

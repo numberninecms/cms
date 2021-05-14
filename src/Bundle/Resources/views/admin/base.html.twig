@@ -1,6 +1,6 @@
 {% trans_default_domain 'numbernine' %}
 <!DOCTYPE html>
-<html class="h-full">
+<html class="h-full" lang="{{ app.request.locale }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
@@ -20,8 +20,8 @@
 
     <div class="ui-area">
         {% include '@NumberNine/admin/layout/menu.html.twig' %}
-        <main class="flex-grow bg-gray-200">
-
+        <main class="flex-grow bg-gray-100">
+            {% block content %}{% endblock %}
         </main>
     </div>
 {% block javascripts_footer %}{% endblock %}

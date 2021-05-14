@@ -13,6 +13,7 @@ function dynamicHsl(h, s, l) {
 module.exports = {
     mode: 'jit',
     purge: [
+        './assets/scss/purge_safelist.txt',
         './src/Bundle/Resources/views/admin/**/*.twig',
         './assets/ts/admin/**/*.{js,jsx,ts,tsx,vue}',
     ],
@@ -82,5 +83,7 @@ module.exports = {
         },
     },
     variants: {},
-    plugins: [],
+    plugins: [
+        require('@tailwindcss/forms'),
+    ],
 }
