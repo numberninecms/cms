@@ -51,7 +51,7 @@ final class SettingsGeneralAction extends AbstractController implements AdminCon
         if ($form->isSubmitted() && $form->isValid()) {
             $configurationReadWriter->writeMany($form->getData());
 
-            $this->addFlash('success', 'Settings successfully saved.');
+            $this->addFlash('success', 'General settings successfully saved.');
             return $this->redirectToRoute('numbernine_admin_settings_general');
         }
 
