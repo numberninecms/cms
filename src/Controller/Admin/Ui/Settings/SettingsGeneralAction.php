@@ -51,11 +51,13 @@ final class SettingsGeneralAction extends AbstractController implements AdminCon
             $configurationReadWriter->writeMany($form->getData());
 
             $this->addFlash('success', 'General settings successfully saved.');
-            return $this->redirectToRoute('numbernine_admin_settings_general');
+            return $this->redirectToRoute('numbernine_admin_settings_general', [], Response::HTTP_SEE_OTHER);
         }
+
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK);
 
         return $this->render('@NumberNine/admin/settings/general.html.twig', [
             'form' => $form->createView(),
-        ]);
+        ], $response);
     }
 }

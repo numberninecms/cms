@@ -42,11 +42,13 @@ final class SettingsEmailsAction extends AbstractController implements AdminCont
             $configurationReadWriter->writeMany($form->getData());
 
             $this->addFlash('success', 'Email settings successfully saved.');
-            return $this->redirectToRoute('numbernine_admin_settings_emails');
+            return $this->redirectToRoute('numbernine_admin_settings_emails', [], Response::HTTP_SEE_OTHER);
         }
+
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK);
 
         return $this->render('@NumberNine/admin/settings/emails.html.twig', [
             'form' => $form->createView(),
-        ]);
+        ], $response);
     }
 }
