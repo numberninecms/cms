@@ -80,6 +80,11 @@ webpack_encore:
     preload: true
     builds:
         numbernine: '%kernel.project_dir%/public/bundles/numbernine/build/'
+    script_attributes:
+        defer: true
+        'data-turbo-track': reload
+    link_attributes:
+        'data-turbo-track': reload
 
 doctrine:
     orm:

@@ -50,11 +50,13 @@ final class SettingsPermalinksAction extends AbstractController implements Admin
             ]);
 
             $this->addFlash('success', 'Permalinks successfully saved.');
-            return $this->redirectToRoute('numbernine_admin_settings_permalinks');
+            return $this->redirectToRoute('numbernine_admin_settings_permalinks', [], Response::HTTP_SEE_OTHER);
         }
+
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK);
 
         return $this->render('@NumberNine/admin/settings/permalinks.html.twig', [
             'form' => $form->createView(),
-        ]);
+        ], $response);
     }
 }
