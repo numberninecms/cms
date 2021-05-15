@@ -14,6 +14,7 @@
             title: content_type.labels.pluralName|capitalize,
             tools: tools
         } %}
+
         {% include '@NumberNine/admin/util/flashes.html.twig' %}
 
         <div class="tabs-toolbar">
@@ -34,29 +35,31 @@
             </div>
         </div>
 
-        <div>
-            <table class="w-full">
-                <tr>
-                    <th></th>
-                    <th>{{ 'Title'|trans }}</th>
-                    <th>{{ 'Author'|trans }}</th>
-                    <th>{{ 'Categories'|trans }}</th>
-                    <th>{{ 'Tags'|trans }}</th>
-                    <th>{{ 'Comments'|trans }}</th>
-                    <th>{{ 'Date'|trans }}</th>
-                </tr>
-                {% for entity in entities %}
+        <turbo-frame id="numbernine_admin_content_entity_index">
+            <div>
+                <table class="w-full">
                     <tr>
-                        <td></td>
-                        <td>{{ entity.title }}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <th></th>
+                        <th>{{ 'Title'|trans }}</th>
+                        <th>{{ 'Author'|trans }}</th>
+                        <th>{{ 'Categories'|trans }}</th>
+                        <th>{{ 'Tags'|trans }}</th>
+                        <th>{{ 'Comments'|trans }}</th>
+                        <th>{{ 'Date'|trans }}</th>
                     </tr>
-                {% endfor %}
-            </table>
-        </div>
+                    {% for entity in entities %}
+                        <tr>
+                            <td></td>
+                            <td>{{ entity.title }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </turbo-frame>
     </div>
 {% endblock %}
