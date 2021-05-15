@@ -19,6 +19,10 @@ export default class extends Controller {
             if (window.location.pathname + window.location.search === tab.getAttribute('href')) {
                 tab.classList.add('active', 'font-semibold');
             }
+
+            tab.onclick = () => {
+                window.history.pushState(null, tab.innerText, tab.getAttribute('href') as string);
+            };
         });
     }
 }
