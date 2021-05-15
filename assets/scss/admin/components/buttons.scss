@@ -63,7 +63,7 @@
     }
 
     &.btn-size-xsmall {
-        @apply text-xs;
+        @apply text-xs py-1 px-2;
     }
 
     &.btn-size-small {

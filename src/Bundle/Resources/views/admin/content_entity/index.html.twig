@@ -3,16 +3,28 @@
 
 {% block content %}
     <div class="flex flex-col">
-        {% include '@NumberNine/admin/layout/toolbar.html.twig' with {title: content_type.labels.pluralName|capitalize} %}
+        {% set tools %}
+            <a href="{{ path('numbernine_admin_content_entity_create', {type: type_slug}) }}"
+               class="btn btn-color-white btn-size-xsmall">
+                {{ content_type.labels.addNewItem }}
+            </a>
+        {% endset %}
+
+        {% include '@NumberNine/admin/layout/toolbar.html.twig' with {
+            title: content_type.labels.pluralName|capitalize,
+            tools: tools
+        } %}
         {% include '@NumberNine/admin/util/flashes.html.twig' %}
 
         <div class="tabs-toolbar">
-            <div class="tabs">
-                <a href="{{ path('numbernine_admin_content_entity_index', {type: type_slug}) }}" class="active">
+            <div class="tabs" data-controller="tabs">
+                <a href="{{ path('numbernine_admin_content_entity_index', {type: type_slug}) }}" data-tabs-target="tab">
                     <span>{{ 'All'|trans }}</span>
                 </a>
-                <a href=""><span>{{ 'Published'|trans }}</span></a>
-                <a href=""><span>{{ 'Trash'|trans }}</span></a>
+                <a href="{{ path('numbernine_admin_content_entity_index', {type: type_slug, status: 'publish'}) }}" data-tabs-target="tab">
+                    <span>{{ 'Published'|trans }}</span>
+                </a>
+                <a href="" data-tabs-target="tab"><span>{{ 'Trash'|trans }}</span></a>
             </div>
             <div>
                 <label class="border border-color-secondary border-0 border-bottom">
@@ -22,8 +34,29 @@
             </div>
         </div>
 
-        {% for entity in entities %}
-            {{ entity.title }}
-        {% endfor %}
+        <div>
+            <table class="w-full">
+                <tr>
+                    <th></th>
+                    <th>{{ 'Title'|trans }}</th>
+                    <th>{{ 'Author'|trans }}</th>
+                    <th>{{ 'Categories'|trans }}</th>
+                    <th>{{ 'Tags'|trans }}</th>
+                    <th>{{ 'Comments'|trans }}</th>
+                    <th>{{ 'Date'|trans }}</th>
+                </tr>
+                {% for entity in entities %}
+                    <tr>
+                        <td></td>
+                        <td>{{ entity.title }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
     </div>
 {% endblock %}

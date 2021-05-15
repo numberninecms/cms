@@ -116,11 +116,11 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
 
             $linkIndex = $this->urlGenerator->generate('numbernine_admin_content_entity_index', [
                 'type' => $this->slugger->slug((string)$contentType->getLabels()->getPluralName())
-            ], UrlGeneratorInterface::RELATIVE_PATH);
+            ]);
 
             $linkNew = $this->urlGenerator->generate('numbernine_admin_content_entity_create', [
                 'type' => $this->slugger->slug((string)$contentType->getLabels()->getPluralName())
-            ], UrlGeneratorInterface::RELATIVE_PATH);
+            ]);
 
             $builder->insertAfter(
                 'media_library',
