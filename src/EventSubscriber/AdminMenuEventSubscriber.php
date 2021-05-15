@@ -114,7 +114,13 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
 
             $taxonomiesMenus = $this->getContentTypeTaxonomiesMenus($contentType);
 
-            $linkIndex = sprintf('/%s/', $this->slugger->slug((string)$contentType->getLabels()->getPluralName()));
+            $linkIndex = $this->urlGenerator->generate('numbernine_admin_content_entity_index', [
+                'type' => $this->slugger->slug((string)$contentType->getLabels()->getPluralName())
+            ], UrlGeneratorInterface::RELATIVE_PATH);
+
+            $linkNew = $this->urlGenerator->generate('numbernine_admin_content_entity_create', [
+                'type' => $this->slugger->slug((string)$contentType->getLabels()->getPluralName())
+            ], UrlGeneratorInterface::RELATIVE_PATH);
 
             $builder->insertAfter(
                 'media_library',
@@ -131,7 +137,7 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
                             ],
                             'add_new' => [
                                 'text' => $this->__($contentType->getLabels()->getAddNew()),
-                                'link' => sprintf('%snew/', $linkIndex),
+                                'link' => $linkNew,
                             ]
                         ],
                         $taxonomiesMenus

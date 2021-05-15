@@ -35,6 +35,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
+
+use function Symfony\Component\String\u;
 
 final class ContentService
 {
@@ -43,29 +46,25 @@ final class ContentService
     private Reader $annotationReader;
     private TokenStorageInterface $tokenStorage;
     private EventDispatcherInterface $eventDispatcher;
+    private SluggerInterface $slugger;
 
     /** @var ContentType[] */
     private array $contentTypes = [];
 
-    /**
-     * @param EntityManagerInterface $entityManager
-     * @param FormFactoryInterface $formFactory
-     * @param Reader $annotationReader
-     * @param TokenStorageInterface $tokenStorage
-     * @param EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         FormFactoryInterface $formFactory,
         Reader $annotationReader,
         TokenStorageInterface $tokenStorage,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        SluggerInterface $slugger
     ) {
         $this->entityManager = $entityManager;
         $this->formFactory = $formFactory;
         $this->annotationReader = $annotationReader;
         $this->tokenStorage = $tokenStorage;
         $this->eventDispatcher = $eventDispatcher;
+        $this->slugger = $slugger;
     }
 
     /**
@@ -76,7 +75,11 @@ final class ContentService
     public function getContentType(string $contentType): ContentType
     {
         foreach ($this->contentTypes as $type) {
-            if ($type->getName() === $contentType) {
+            if (
+                $type->getName() === $contentType
+                || u($type->getLabels()->getPluralName())->snake()->toString() === $contentType
+                || $this->slugger->slug((string)$type->getLabels()->getPluralName())->toString() === $contentType
+            ) {
                 return $type;
             }
         }

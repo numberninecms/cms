@@ -1,0 +1,31 @@
+/*
+ * This file is part of the NumberNine package.
+ *
+ * (c) William Arin <williamarin.dev@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+.tabs-toolbar {
+    @apply
+        h-12
+        flex justify-between items-center
+        text-primary bg-gray-200;
+
+    .tabs {
+        @apply h-full flex items-center;
+
+        a {
+            @apply
+                h-full px-4
+                flex flex-col justify-center
+                focus:bg-gray-300 hover:bg-gray-300
+                focus:outline-none;
+
+            &.active {
+                @apply border-b-2 border-primary;
+            }
+        }
+    }
+}
