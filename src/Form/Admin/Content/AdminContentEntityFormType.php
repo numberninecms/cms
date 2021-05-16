@@ -18,6 +18,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use function NumberNine\Common\Util\ArrayUtil\array_merge_recursive_fixed;
@@ -28,11 +30,12 @@ final class AdminContentEntityFormType extends AbstractType
     {
         $builder
             ->add('title', TextType::class)
-            ->add('content')
-            ->add('seoTitle')
-            ->add('seoDescription', TextareaType::class)
+            ->add('content', null, ['required' => false])
+            ->add('seoTitle', null, ['required' => false])
+            ->add('seoDescription', TextareaType::class, ['required' => false])
             ->add('customFields', KeyValueCollectionType::class, [
-                'add_new_label' => 'Add new custom field'
+                'add_new_label' => 'Add new custom field',
+                'required' => false,
             ])
             ->add('submit', SubmitType::class)
         ;
@@ -44,6 +47,16 @@ final class AdminContentEntityFormType extends AbstractType
         ]);
 
         $builder->add($customFields->getName(), KeyValueCollectionType::class, $customFieldsOptions);
+
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+            $form = $event->getForm();
+
+            /** @var ContentEntity $entity */
+            $entity = $form->getData();
+
+            $entity->setSeoTitle($form['seoTitle']->getData());
+            $entity->setSeoDescription($form['seoTitle']->getData());
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void
