@@ -22,3 +22,30 @@
         <span>{{- label -}}</span>
     </label>
 {%- endblock checkbox_widget -%}
+
+{%- block key_value_row -%}
+    {%- set row_attr = row_attr|merge({class: row_attr.class|default('') ~ ' flex mt-2 space-x-3'}) -%}
+    <div{% with {attr: row_attr} %} {{ block('attributes') }}{% endwith %}>
+        {{- form_row(form.children['key'], {row_attr: {class: 'flex flex-col flex-grow'}}) -}}
+        {{- form_row(form.children['value'], {row_attr: {class: 'flex flex-col flex-grow'}}) -}}
+        {% if delete_button %}
+            <button
+                type="button"
+                class="h-10 btn btn-color-red self-end mb-1"
+                data-action="collection#delete"
+            >
+                <i class="fa fa-trash"></i>
+            </button>
+        {% endif %}
+    </div>
+{%- endblock key_value_row -%}
+
+{%- block key_value_collection_row -%}
+    <div class="flex flex-col" data-controller="collection">
+        {{ form_row(form) }}
+        <button type="button"
+                class="btn btn-color-primary btn-style-outline btn-size-xsmall self-start m-3"
+                data-action="collection#add"
+                data-list-selector="#admin_content_entity_form_customFields">{{ add_new_label }}</button>
+    </div>
+{%- endblock key_value_collection_row -%}

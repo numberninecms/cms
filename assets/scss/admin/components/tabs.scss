@@ -29,4 +29,8 @@
             }
         }
     }
+
+    .tab-panel {
+        @apply hidden;
+    }
 }

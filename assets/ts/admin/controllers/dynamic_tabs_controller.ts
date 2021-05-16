@@ -16,32 +16,26 @@ export default class extends Controller {
     private readonly panelTargets: HTMLElement[];
 
     public connect(): void {
-        this.panelTargets.forEach((panel) => {
-            panel.classList.remove('hidden');
-            panel.style.display = 'none';
-        });
+        this.activateTab(this.tabTargets[0].dataset.tabId);
     }
 
     public activate(event: MouseEvent): void {
         event.preventDefault();
+        this.activateTab((event.currentTarget as HTMLElement).dataset.tabId);
+    }
+
+    private activateTab(tabId: string | undefined): void {
         this.tabTargets.forEach((tab) => {
             tab.classList.remove('active', 'font-semibold');
         });
-        (event.currentTarget as HTMLElement).classList.add('active', 'font-semibold');
-    }
 
-    public showTab(event: MouseEvent): void {
-        event.preventDefault();
-        const tabId = (event.currentTarget as HTMLElement).dataset.tabId;
+        this.panelTargets.forEach((panel) => {
+            panel.style.display = 'none';
+        });
 
-        const panel = this.panelTargets.find((panel) => panel.dataset.tabId === tabId);
-
-        if (panel) {
-            this.panelTargets.forEach((panel) => {
-                panel.style.display = 'none';
-            });
-
-            panel.style.display = 'block';
+        if (tabId) {
+            this.tabTargets.find((tab) => tab.dataset.tabId === tabId)?.classList.add('active', 'font-semibold');
+            this.panelTargets.find((panel) => panel.dataset.tabId === tabId)!.style.display = 'block';
         }
     }
 }

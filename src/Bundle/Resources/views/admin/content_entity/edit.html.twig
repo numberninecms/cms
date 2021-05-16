@@ -7,13 +7,27 @@
             {% include '@NumberNine/admin/layout/toolbar.html.twig' with {title: entity.title} %}
             {% include '@NumberNine/admin/util/flashes.html.twig' %}
 
+            {{ form_start(form) }}
+
             <div class="tabs-toolbar">
                 <div class="tabs">
-                    <a href="#" data-dynamic-tabs-target="tab" data-action="dynamic-tabs#showTab dynamic-tabs#activate" data-tab-id="content">
-                        <span>{{ 'Content'|trans }}</span>
+                    <a href="#" data-dynamic-tabs-target="tab" data-action="dynamic-tabs#activate" data-tab-id="content">
+                        <span>
+                            <i class="fa fa-edit"></i>
+                            <span>{{ 'Content'|trans }}</span>
+                        </span>
                     </a>
-                    <a href="#" data-dynamic-tabs-target="tab" data-action="dynamic-tabs#showTab dynamic-tabs#activate" data-tab-id="seo">
-                        <span>{{ 'SEO'|trans }}</span>
+                    <a href="#" data-dynamic-tabs-target="tab" data-action="dynamic-tabs#activate" data-tab-id="seo">
+                        <span>
+                            <i class="fa fa-search"></i>
+                            <span>{{ 'SEO'|trans }}</span>
+                        </span>
+                    </a>
+                    <a href="#" data-dynamic-tabs-target="tab" data-action="dynamic-tabs#activate" data-tab-id="custom-fields">
+                        <span>
+                            <i class="fa fa-wrench"></i>
+                            <span>{{ 'Custom fields'|trans }}</span>
+                        </span>
                     </a>
                 </div>
                 <div>
@@ -24,13 +38,21 @@
                 </div>
             </div>
 
-            <div data-dynamic-tabs-target="panel" data-tab-id="content" class="hidden">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. A corporis ea, libero nesciunt nihil numquam praesentium unde veniam! Assumenda aut consectetur dignissimos distinctio dolorum fugiat, fugit optio porro quia quis?
+            <div data-dynamic-tabs-target="panel" data-tab-id="content" class="tab-panel">
+                {{ form_row(form.title) }}
+                {{ form_row(form.content) }}
             </div>
 
-            <div data-dynamic-tabs-target="panel" data-tab-id="seo" class="hidden">
-                seo blabla
+            <div data-dynamic-tabs-target="panel" data-tab-id="seo" class="tab-panel">
+                {{ form_row(form.seoTitle) }}
+                {{ form_row(form.seoDescription) }}
             </div>
+
+            <div data-dynamic-tabs-target="panel" data-tab-id="custom-fields" class="tab-panel">
+                {{ form_row(form.customFields) }}
+            </div>
+
+            {{ form_end(form) }}
         </div>
     </turbo-frame>
 {% endblock %}
