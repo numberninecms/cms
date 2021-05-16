@@ -2,9 +2,7 @@
 
 {% block content %}
     <div class="flex flex-col">
-        {% include '@NumberNine/admin/layout/toolbar.html.twig' with {title: content_type.labels.plural} %}
+        {% include '@NumberNine/admin/layout/toolbar.html.twig' with {title: 'Dashboard'} %}
         {% include '@NumberNine/admin/util/flashes.html.twig' %}
-
-        {{ form(form, {attr: {class: 'lg:max-w-md'}}) }}
     </div>
 {% endblock %}

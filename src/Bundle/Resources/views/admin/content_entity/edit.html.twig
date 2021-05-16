@@ -1,0 +1,37 @@
+{% trans_default_domain 'numbernine' %}
+{% extends '@NumberNine/admin/base.html.twig' %}
+
+{% block content %}
+    <turbo-frame id="numbernine_admin_content_entity_create">
+        <div class="flex flex-col" data-controller="dynamic-tabs">
+            {% include '@NumberNine/admin/layout/toolbar.html.twig' with {title: entity.title} %}
+            {% include '@NumberNine/admin/util/flashes.html.twig' %}
+
+            <div class="tabs-toolbar">
+                <div class="tabs">
+                    <a href="#" data-dynamic-tabs-target="tab" data-action="dynamic-tabs#showTab dynamic-tabs#activate" data-tab-id="content">
+                        <span>{{ 'Content'|trans }}</span>
+                    </a>
+                    <a href="#" data-dynamic-tabs-target="tab" data-action="dynamic-tabs#showTab dynamic-tabs#activate" data-tab-id="seo">
+                        <span>{{ 'SEO'|trans }}</span>
+                    </a>
+                </div>
+                <div>
+                    <label class="border border-color-secondary border-0 border-bottom">
+                        <input type="text" placeholder="Filter">
+                        <i class="fa fa-search" class=""></i>
+                    </label>
+                </div>
+            </div>
+
+            <div data-dynamic-tabs-target="panel" data-tab-id="content" class="hidden">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. A corporis ea, libero nesciunt nihil numquam praesentium unde veniam! Assumenda aut consectetur dignissimos distinctio dolorum fugiat, fugit optio porro quia quis?
+            </div>
+
+            <div data-dynamic-tabs-target="panel" data-tab-id="seo" class="hidden">
+                seo blabla
+            </div>
+        </div>
+    </turbo-frame>
+{% endblock %}
+

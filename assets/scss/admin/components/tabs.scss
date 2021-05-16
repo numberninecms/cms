@@ -20,6 +20,7 @@
             @apply
                 h-full px-4
                 flex flex-col justify-center
+                border-b-2 border-transparent
                 focus:bg-gray-300 hover:bg-gray-300
                 focus:outline-none;
 
