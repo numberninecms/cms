@@ -14,6 +14,7 @@ namespace NumberNine\Form\Admin\Content;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Form\Type\KeyValueCollectionType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -48,6 +49,43 @@ final class AdminContentEntityFormType extends AbstractType
 
         $builder->add($customFields->getName(), KeyValueCollectionType::class, $customFieldsOptions);
 
+        $builder
+            ->get('customFields')
+            ->addModelTransformer(new CallbackTransformer(
+                fn (array $customFieldsAsAssociativeArray) => $customFieldsAsAssociativeArray,
+                function (array $customFieldsAsKeyValuePairArray) {
+                    $customFields = [];
+
+                    foreach ($customFieldsAsKeyValuePairArray as $keyValuePair) {
+                        $customFields[$keyValuePair['key']] = $keyValuePair['value'];
+                    }
+
+                    return $customFields;
+                }
+            ));
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            /** @var ContentEntity $entity */
+            $entity = $event->getData();
+
+            $customFields = [];
+
+            foreach (($entity->getCustomFields() ?? []) as $key => $value) {
+                if (is_array($value)) {
+                    continue;
+                }
+
+                $customFields[] = [
+                    'key' => $key,
+                    'value' => $value,
+                ];
+            }
+
+            $entity->setCustomFields($customFields);
+
+            $event->setData($entity);
+        });
+
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $form = $event->getForm();
 
@@ -56,6 +94,8 @@ final class AdminContentEntityFormType extends AbstractType
 
             $entity->setSeoTitle($form['seoTitle']->getData());
             $entity->setSeoDescription($form['seoTitle']->getData());
+
+            $form->setData($entity);
         });
     }
 
