@@ -12,6 +12,7 @@
 namespace NumberNine\Form\Admin\Content;
 
 use NumberNine\Entity\ContentEntity;
+use NumberNine\Form\DataTransformer\AssociativeArrayToKeyValueCollectionTransformer;
 use NumberNine\Form\Type\KeyValueCollectionType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
@@ -27,6 +28,13 @@ use function NumberNine\Common\Util\ArrayUtil\array_merge_recursive_fixed;
 
 final class AdminContentEntityFormType extends AbstractType
 {
+    private AssociativeArrayToKeyValueCollectionTransformer $associativeArrayToKeyValueCollectionTransformer;
+
+    public function __construct(AssociativeArrayToKeyValueCollectionTransformer $transformer)
+    {
+        $this->associativeArrayToKeyValueCollectionTransformer = $transformer;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -51,52 +59,10 @@ final class AdminContentEntityFormType extends AbstractType
 
         $builder
             ->get('customFields')
-            ->addModelTransformer(new CallbackTransformer(
-                fn (array $customFieldsAsAssociativeArray) => $customFieldsAsAssociativeArray,
-                function (array $customFieldsAsKeyValuePairArray) {
-                    $customFields = [];
+            ->addModelTransformer($this->associativeArrayToKeyValueCollectionTransformer);
 
-                    foreach ($customFieldsAsKeyValuePairArray as $keyValuePair) {
-                        $customFields[$keyValuePair['key']] = $keyValuePair['value'];
-                    }
-
-                    return $customFields;
-                }
-            ));
-
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-            /** @var ContentEntity $entity */
-            $entity = $event->getData();
-
-            $customFields = [];
-
-            foreach (($entity->getCustomFields() ?? []) as $key => $value) {
-                if (is_array($value)) {
-                    continue;
-                }
-
-                $customFields[] = [
-                    'key' => $key,
-                    'value' => $value,
-                ];
-            }
-
-            $entity->setCustomFields($customFields);
-
-            $event->setData($entity);
-        });
-
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
-            $form = $event->getForm();
-
-            /** @var ContentEntity $entity */
-            $entity = $form->getData();
-
-            $entity->setSeoTitle($form['seoTitle']->getData());
-            $entity->setSeoDescription($form['seoTitle']->getData());
-
-            $form->setData($entity);
-        });
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'transformCustomFields']);
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'transformSeo']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -104,5 +70,41 @@ final class AdminContentEntityFormType extends AbstractType
         $resolver->setDefaults([
             'data_class' => ContentEntity::class,
         ]);
+    }
+
+    public function transformCustomFields(FormEvent $event): void
+    {
+        /** @var ContentEntity $entity */
+        $entity = $event->getData();
+
+        $customFields = [];
+
+        foreach (($entity->getCustomFields() ?? []) as $key => $value) {
+            if (is_array($value)) {
+                continue;
+            }
+
+            $customFields[] = [
+                'key' => $key,
+                'value' => $value,
+            ];
+        }
+
+        $entity->setCustomFields($customFields);
+
+        $event->setData($entity);
+    }
+
+    public function transformSeo(FormEvent $event): void
+    {
+        $form = $event->getForm();
+
+        /** @var ContentEntity $entity */
+        $entity = $form->getData();
+
+        $entity->setSeoTitle($form['seoTitle']->getData());
+        $entity->setSeoDescription($form['seoTitle']->getData());
+
+        $form->setData($entity);
     }
 }
