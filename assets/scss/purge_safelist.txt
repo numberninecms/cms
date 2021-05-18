@@ -9,6 +9,7 @@ mr-2
 ml-1
 mx-3
 w-full
+max-w-xs
 text-gray-500
 text-gray-600
 text-red-700

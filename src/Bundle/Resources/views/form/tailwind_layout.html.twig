@@ -26,16 +26,18 @@
 {%- block key_value_row -%}
     {%- set row_attr = row_attr|merge({class: row_attr.class|default('') ~ ' flex mt-2 space-x-3'}) -%}
     <div{% with {attr: row_attr} %} {{ block('attributes') }}{% endwith %}>
-        {{- form_row(form.children['key'], {row_attr: {class: 'flex flex-col flex-grow'}}) -}}
+        {{- form_row(form.children['key'], {row_attr: {class: 'flex flex-col flex-grow max-w-xs'}}) -}}
         {{- form_row(form.children['value'], {row_attr: {class: 'flex flex-col flex-grow'}}) -}}
         {% if delete_button %}
-            <button
-                type="button"
-                class="h-10 btn btn-color-red self-end mb-1"
-                data-action="collection#delete"
-            >
-                <i class="fa fa-trash"></i>
-            </button>
+            <div class="self-end">
+                <button
+                    type="button"
+                    class="btn btn-color-red"
+                    data-action="collection#delete"
+                >
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
         {% endif %}
     </div>
 {%- endblock key_value_row -%}

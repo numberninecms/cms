@@ -1,0 +1,13 @@
+{% trans_default_domain 'numbernine' %}
+<div class="tabs-toolbar">
+    <div class="tabs">
+        {% for tab in tabs %}
+            <a href="#" data-dynamic-tabs-target="tab" data-action="dynamic-tabs#activate" data-tab-id="{{ tab.tab ?? '' }}">
+                <span class="space-x-1">
+                    <i class="fa fa-{{ tab.icon ?? 'question-circle' }}"></i>
+                    <span class="hidden md:inline">{{ (tab.text ?? 'Missing title')|trans }}</span>
+                </span>
+            </a>
+        {% endfor %}
+    </div>
+</div>
