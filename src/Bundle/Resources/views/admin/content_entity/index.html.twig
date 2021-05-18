@@ -50,12 +50,14 @@
                     {% for entity in entities %}
                         <tr>
                             <td></td>
-                            <td>{{ entity.title }}</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td>
+                                <a href="{{ N9_entity_admin_url(entity) }}" data-turbo-frame="_top">{{ entity.title }}</a>
+                            </td>
+                            <td>{{ entity.author }}</td>
+                            <td>{{ N9_terms_links(entity, 'category') }}</td>
+                            <td>{{ N9_terms_links(entity, 'tag') }}</td>
+                            <td>{{ entity.comments|length }}</td>
+                            <td>{{ (entity.publishedAt ?? entity.updatedAt)|date('d/m/Y H:i:s') }}</td>
                         </tr>
                     {% endfor %}
                 </table>

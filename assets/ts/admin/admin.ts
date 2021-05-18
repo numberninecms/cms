@@ -8,6 +8,7 @@
  */
 
 import '../../scss/admin/admin.scss';
+import '../../images/NumberNineWithoutText.png';
 import { startStimulusApp } from '@symfony/stimulus-bridge';
 
 export const app = startStimulusApp(

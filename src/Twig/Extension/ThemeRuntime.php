@@ -12,6 +12,7 @@
 namespace NumberNine\Twig\Extension;
 
 use Exception;
+use NumberNine\Content\ContentService;
 use NumberNine\Content\ShortcodeRenderer;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\Term;
@@ -30,6 +31,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\String\Inflector\EnglishInflector;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -50,7 +52,8 @@ final class ThemeRuntime implements RuntimeExtensionInterface
     private ?Request $request;
     private RequestAnalyzer $requestAnalyzer;
     private UrlGeneratorInterface $urlGenerator;
-    private EnglishInflector $inflector;
+    private ContentService $contentService;
+    private SluggerInterface $slugger;
 
     public function __construct(
         ContentEntityRepository $contentEntityRepository,
@@ -63,7 +66,9 @@ final class ThemeRuntime implements RuntimeExtensionInterface
         ShortcodeRenderer $shortcodeRenderer,
         RequestStack $requestStack,
         RequestAnalyzer $requestAnalyzer,
-        UrlGeneratorInterface $urlGenerator
+        UrlGeneratorInterface $urlGenerator,
+        ContentService $contentService,
+        SluggerInterface $slugger
     ) {
         $this->contentEntityRepository = $contentEntityRepository;
         $this->themeStore = $themeStore;
@@ -76,7 +81,8 @@ final class ThemeRuntime implements RuntimeExtensionInterface
         $this->request = $requestStack->getMasterRequest();
         $this->requestAnalyzer = $requestAnalyzer;
         $this->urlGenerator = $urlGenerator;
-        $this->inflector = new EnglishInflector();
+        $this->contentService = $contentService;
+        $this->slugger = $slugger;
     }
 
     public function getCurrentTheme(): ThemeInterface
@@ -157,12 +163,12 @@ final class ThemeRuntime implements RuntimeExtensionInterface
 
     public function getEntityAdminUrl(ContentEntity $contentEntity): string
     {
-        return sprintf(
-            '%s#/%s/%d/',
-            $this->urlGenerator->generate('numbernine_admin_index'),
-            current($this->inflector->pluralize($contentEntity->getType())),
-            $contentEntity->getId()
-        );
+        return $this->urlGenerator->generate('numbernine_admin_content_entity_edit', [
+            'type' => $this->slugger->slug(
+                (string)$this->contentService->getContentType($contentEntity->getType())->getLabels()->getPluralName(),
+            ),
+            'id' => $contentEntity->getId(),
+        ]);
     }
 
     public function getTermsLinkList(

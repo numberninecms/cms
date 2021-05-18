@@ -14,8 +14,10 @@ namespace NumberNine\Form\Admin\Content;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Form\DataTransformer\AssociativeArrayToKeyValueCollectionTransformer;
 use NumberNine\Form\Type\KeyValueCollectionType;
+use NumberNine\Model\Content\PublishingStatusInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -46,6 +48,12 @@ final class AdminContentEntityFormType extends AbstractType
                 'add_new_label' => 'Add new custom field',
                 'required' => false,
             ])
+            ->add('status', ChoiceType::class, ['choices' => [
+                'Draft' => PublishingStatusInterface::STATUS_DRAFT,
+                'Private' => PublishingStatusInterface::STATUS_PRIVATE,
+                'Pending review' => PublishingStatusInterface::STATUS_PENDING_REVIEW,
+                'Publish' => PublishingStatusInterface::STATUS_PUBLISH,
+            ]])
             ->add('submit', SubmitType::class)
         ;
 
