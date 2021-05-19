@@ -22,6 +22,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -38,6 +39,8 @@ final class AdminContentEntityFormType extends AbstractType
     private ContentService $contentService;
     private TemplateResolver $templateResolver;
     private EventDispatcherInterface $eventDispatcher;
+    private HiddenCustomFieldsEvent $hiddenCustomFieldsEvent;
+    private ContentEntity $originalEntity;
 
     public function __construct(
         AssociativeArrayToKeyValueCollectionTransformer $transformer,
@@ -83,8 +86,17 @@ final class AdminContentEntityFormType extends AbstractType
             ->get('customFields')
             ->addModelTransformer($this->associativeArrayToKeyValueCollectionTransformer);
 
+        /** @var HiddenCustomFieldsEvent $hiddenCustomFieldsEvent */
+        $hiddenCustomFieldsEvent = $this->eventDispatcher->dispatch(new HiddenCustomFieldsEvent([
+            'page_template',
+        ]));
+        $this->hiddenCustomFieldsEvent = $hiddenCustomFieldsEvent;
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'backupData']);
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'addTemplateField']);
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'addHiddenCustomFields']);
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'transformCustomFields']);
-        $builder->addEventListener(FormEvents::POST_SET_DATA, [$this, 'addTemplateField']);
+        $builder->addEventListener(FormEvents::POST_SET_DATA, [$this, 'setUnmappedData']);
         $builder->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'transformSeo']);
         $builder->addEventListener(FormEvents::SUBMIT, [$this, 'transformTemplate']);
     }
@@ -96,6 +108,11 @@ final class AdminContentEntityFormType extends AbstractType
         ]);
     }
 
+    public function backupData(FormEvent $event): void
+    {
+        $this->originalEntity = clone $event->getData();
+    }
+
     public function transformCustomFields(FormEvent $event): void
     {
         /** @var ContentEntity $entity */
@@ -103,13 +120,8 @@ final class AdminContentEntityFormType extends AbstractType
 
         $customFields = [];
 
-        /** @var HiddenCustomFieldsEvent $hiddenCustomFieldsEvent */
-        $hiddenCustomFieldsEvent = $this->eventDispatcher->dispatch(new HiddenCustomFieldsEvent([
-            'page_template',
-        ]));
-
         foreach (($entity->getCustomFields() ?? []) as $key => $value) {
-            if (is_array($value) || in_array($key, $hiddenCustomFieldsEvent->getFieldsToHide())) {
+            if (is_array($value) || in_array($key, $this->hiddenCustomFieldsEvent->getFieldsToHide())) {
                 continue;
             }
 
@@ -122,6 +134,34 @@ final class AdminContentEntityFormType extends AbstractType
         $entity->setCustomFields($customFields);
 
         $event->setData($entity);
+    }
+
+    public function addHiddenCustomFields(FormEvent $event): void
+    {
+        $form = $event->getForm();
+
+        foreach ($this->hiddenCustomFieldsEvent->getFieldsToHide() as $fieldName) {
+            if (in_array($fieldName, ['page_template'])) {
+                continue;
+            }
+
+            $form->add($fieldName, HiddenType::class, ['mapped' => false]);
+        }
+    }
+
+    public function setUnmappedData(FormEvent $event): void
+    {
+        $form = $event->getForm();
+
+        foreach ($this->hiddenCustomFieldsEvent->getFieldsToHide() as $fieldName) {
+            if (in_array($fieldName, ['page_template'])) {
+                continue;
+            }
+
+            $form[$fieldName]->setData($this->originalEntity->getCustomField($fieldName));
+        }
+
+        $form['customTemplate']->setData($this->originalEntity->getCustomField('page_template'));
     }
 
     public function transformSeo(FormEvent $event): void
