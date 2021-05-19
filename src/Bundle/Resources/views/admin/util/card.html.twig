@@ -2,7 +2,10 @@
 <div class="shadow-md rounded-lg p-3 mr-3 mt-3 bg-white">
     <div class="text-xl font-semibold border-b border-gray-300 pb-3">{{ (title ?? 'Missing title')|trans }}</div>
     {% block content %}{% endblock %}
-    <div class="flex justify-between mt-3">
-        {% block footer %}{% endblock %}
-    </div>
+    {% set footer = block('footer') ?? '' %}
+    {% if footer is not empty %}
+        <div class="flex justify-between mt-3">
+            {{ footer|raw }}
+        </div>
+    {% endif %}
 </div>

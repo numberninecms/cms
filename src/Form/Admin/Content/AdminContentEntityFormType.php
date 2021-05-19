@@ -11,10 +11,14 @@
 
 namespace NumberNine\Form\Admin\Content;
 
+use NumberNine\Content\ContentService;
 use NumberNine\Entity\ContentEntity;
+use NumberNine\Event\HiddenCustomFieldsEvent;
 use NumberNine\Form\DataTransformer\AssociativeArrayToKeyValueCollectionTransformer;
 use NumberNine\Form\Type\KeyValueCollectionType;
 use NumberNine\Model\Content\PublishingStatusInterface;
+use NumberNine\Theme\TemplateResolver;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -31,10 +35,20 @@ use function NumberNine\Common\Util\ArrayUtil\array_merge_recursive_fixed;
 final class AdminContentEntityFormType extends AbstractType
 {
     private AssociativeArrayToKeyValueCollectionTransformer $associativeArrayToKeyValueCollectionTransformer;
+    private ContentService $contentService;
+    private TemplateResolver $templateResolver;
+    private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(AssociativeArrayToKeyValueCollectionTransformer $transformer)
-    {
+    public function __construct(
+        AssociativeArrayToKeyValueCollectionTransformer $transformer,
+        ContentService $contentService,
+        TemplateResolver $templateResolver,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->associativeArrayToKeyValueCollectionTransformer = $transformer;
+        $this->contentService = $contentService;
+        $this->templateResolver = $templateResolver;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -70,7 +84,9 @@ final class AdminContentEntityFormType extends AbstractType
             ->addModelTransformer($this->associativeArrayToKeyValueCollectionTransformer);
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'transformCustomFields']);
+        $builder->addEventListener(FormEvents::POST_SET_DATA, [$this, 'addTemplateField']);
         $builder->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'transformSeo']);
+        $builder->addEventListener(FormEvents::SUBMIT, [$this, 'transformTemplate']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -87,8 +103,13 @@ final class AdminContentEntityFormType extends AbstractType
 
         $customFields = [];
 
+        /** @var HiddenCustomFieldsEvent $hiddenCustomFieldsEvent */
+        $hiddenCustomFieldsEvent = $this->eventDispatcher->dispatch(new HiddenCustomFieldsEvent([
+            'page_template',
+        ]));
+
         foreach (($entity->getCustomFields() ?? []) as $key => $value) {
-            if (is_array($value)) {
+            if (is_array($value) || in_array($key, $hiddenCustomFieldsEvent->getFieldsToHide())) {
                 continue;
             }
 
@@ -114,5 +135,33 @@ final class AdminContentEntityFormType extends AbstractType
         $entity->setSeoDescription($form['seoTitle']->getData());
 
         $form->setData($entity);
+    }
+
+    public function addTemplateField(FormEvent $event): void
+    {
+        $form = $event->getForm();
+        /** @var ContentEntity $entity */
+        $entity = $event->getData();
+        $contentType = $this->contentService->getContentType((string)$entity->getCustomType());
+
+        $candidates = array_merge(
+            $this->templateResolver->getContentEntitySingleTemplateCandidates($contentType),
+            $this->templateResolver->getContentEntityIndexTemplateCandidates(),
+        );
+
+        $form->add('customTemplate', ChoiceType::class, [
+            'choices' => array_flip($candidates),
+            'mapped' => false,
+        ]);
+    }
+
+    public function transformTemplate(FormEvent $event): void
+    {
+        $form = $event->getForm();
+
+        /** @var ContentEntity $entity */
+        $entity = $form->getData();
+
+        $entity->addCustomField('page_template', $form['customTemplate']->getData());
     }
 }

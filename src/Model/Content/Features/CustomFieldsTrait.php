@@ -43,4 +43,28 @@ trait CustomFieldsTrait
     {
         return $this->customFields ? ($this->customFields[$fieldName] ?? null) : null;
     }
+
+    /**
+     * @param string $fieldName
+     * @param mixed|null $value
+     */
+    public function addCustomField(string $fieldName, $value): self
+    {
+        if (!is_array($this->customFields)) {
+            $this->customFields = [];
+        }
+
+        $this->customFields[$fieldName] = $value;
+
+        return $this;
+    }
+
+    public function removeCustomField(string $fieldName): self
+    {
+        if (is_array($this->customFields) && array_key_exists($fieldName, $this->customFields)) {
+            unset($this->customFields[$fieldName]);
+        }
+
+        return $this;
+    }
 }

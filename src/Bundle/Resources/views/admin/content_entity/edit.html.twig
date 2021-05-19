@@ -50,6 +50,12 @@
                             {{ form_row(form.submit) }}
                         {% endblock %}
                     {% endembed %}
+
+                    {% embed '@NumberNine/admin/util/card.html.twig' with {title: 'Template'} %}
+                        {% block content %}
+                            {{ form_row(form.customTemplate) }}
+                        {% endblock %}
+                    {% endembed %}
                 </div>
             </div>
 
