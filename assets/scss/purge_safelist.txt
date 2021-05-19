@@ -21,11 +21,16 @@ block
 flex
 flex-col
 flex-row
+md:flex-row
+sm:flex-row
 flex-initial
 flex-shrink
 inline-flex
 items-center
 space-x-3
+md:space-x-3
+space-y-2
+md:space-y-0
 btn
 btn-color-primary
 h-9

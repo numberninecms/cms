@@ -24,9 +24,9 @@
 {%- endblock checkbox_widget -%}
 
 {%- block key_value_row -%}
-    {%- set row_attr = row_attr|merge({class: row_attr.class|default('') ~ ' flex mt-2 space-x-3'}) -%}
+    {%- set row_attr = row_attr|merge({class: row_attr.class|default('') ~ ' flex mt-2 space-y-2 md:space-y-0 md:space-x-3 flex-col md:flex-row'}) -%}
     <div{% with {attr: row_attr} %} {{ block('attributes') }}{% endwith %}>
-        {{- form_row(form.children['key'], {row_attr: {class: 'flex flex-col flex-grow max-w-xs'}}) -}}
+        {{- form_row(form.children['key'], {row_attr: {class: 'flex flex-col flex-grow md:max-w-xs'}}) -}}
         {{- form_row(form.children['value'], {row_attr: {class: 'flex flex-col flex-grow'}}) -}}
         {% if delete_button %}
             <div class="self-end">
