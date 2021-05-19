@@ -10,26 +10,32 @@
             {{ form_start(form) }}
 
             {% include '@NumberNine/admin/util/dynamic_tabs.html.twig' with {tabs: [
-                {tab: 'content', icon: 'edit', text: 'Content'},
-                {tab: 'seo', icon: 'search', text: 'SEO'},
-                {tab: 'custom-fields', icon: 'wrench', text: 'Custom fields'},
+                {id: 'content', icon: 'edit', text: 'Content'},
+                {id: 'seo', icon: 'search', text: 'SEO'},
+                {id: 'custom-fields', icon: 'wrench', text: 'Custom fields'},
             ]} %}
 
             <div class="grid lg:grid-cols-3 grid-cols-5 gap-3">
                 <div class="col-span-5 md:col-span-3 lg:col-span-2">
-                    <div data-dynamic-tabs-target="panel" data-tab-id="content" class="tab-panel">
-                        {{ form_row(form.title) }}
-                        {{ form_row(form.content) }}
-                    </div>
+                    {% embed '@NumberNine/admin/util/dynamic_tabs_panel.html.twig' with {id: 'content'} %}
+                        {% block content %}
+                            {{ form_row(form.title) }}
+                            {{ form_row(form.content) }}
+                        {% endblock %}
+                    {% endembed %}
 
-                    <div data-dynamic-tabs-target="panel" data-tab-id="seo" class="tab-panel">
-                        {{ form_row(form.seoTitle) }}
-                        {{ form_row(form.seoDescription) }}
-                    </div>
+                    {% embed '@NumberNine/admin/util/dynamic_tabs_panel.html.twig' with {id: 'seo'} %}
+                        {% block content %}
+                            {{ form_row(form.seoTitle) }}
+                            {{ form_row(form.seoDescription) }}
+                        {% endblock %}
+                    {% endembed %}
 
-                    <div data-dynamic-tabs-target="panel" data-tab-id="custom-fields" class="tab-panel">
-                        {{ form_row(form.customFields) }}
-                    </div>
+                    {% embed '@NumberNine/admin/util/dynamic_tabs_panel.html.twig' with {id: 'custom-fields'} %}
+                        {% block content %}
+                            {{ form_row(form.customFields) }}
+                        {% endblock %}
+                    {% endembed %}
                 </div>
 
                 <div class="col-span-5 md:col-span-2 lg:col-span-1">
