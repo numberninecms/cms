@@ -1,0 +1,30 @@
+{% trans_default_domain 'numbernine' %}
+{% extends '@NumberNine/admin/base.html.twig' %}
+
+{% block title %}{{ 'Media Library'|trans }}{% endblock %}
+
+{% block content %}
+    <turbo-frame id="numbernine_admin_media_library">
+        <div class="flex flex-col" data-controller="dynamic-tabs">
+            {% include '@NumberNine/admin/layout/toolbar.html.twig' with {title: 'Media library'} %}
+            {% include '@NumberNine/admin/util/flashes.html.twig' %}
+
+            {% include '@NumberNine/admin/util/dynamic_tabs.html.twig' with {tabs: [
+                {id: 'browse', icon: 'images', text: 'Browse'},
+                {id: 'upload', icon: 'upload', text: 'Upload'},
+            ]} %}
+
+            {% embed '@NumberNine/admin/util/dynamic_tabs_panel.html.twig' with {id: 'browse'} %}
+                {% block content %}
+                    {% include '@NumberNine/admin/media/index_panel_browse.html.twig' %}
+                {% endblock %}
+            {% endembed %}
+
+            {% embed '@NumberNine/admin/util/dynamic_tabs_panel.html.twig' with {id: 'upload'} %}
+                {% block content %}
+                    {% include '@NumberNine/admin/media/index_panel_upload.html.twig' %}
+                {% endblock %}
+            {% endembed %}
+        </div>
+    </turbo-frame>
+{% endblock %}

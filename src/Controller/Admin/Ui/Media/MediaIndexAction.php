@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Controller\Admin\Ui\ContentEntity;
+namespace NumberNine\Controller\Admin\Ui\Media;
 
 use NumberNine\Content\ContentService;
 use NumberNine\Model\Admin\AdminController;
@@ -22,18 +22,15 @@ use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * @Route("/{type}/", name="numbernine_admin_content_entity_index", methods={"GET"}, priority="-1000")
+ * @Route("/media/", name="numbernine_admin_media_library_index", methods={"GET"})
  */
-final class ContentEntityIndexAction extends AbstractController implements AdminController
+final class MediaIndexAction extends AbstractController implements AdminController
 {
     public function __invoke(
-        SerializerInterface $serializer,
-        ContentService $contentService,
         Request $request,
-        string $type
+        ContentService $contentService,
+        SerializerInterface $serializer
     ): Response {
-        $contentType = $contentService->getContentType($type);
-
         /** @var PaginationParameters $paginationParameters */
         $paginationParameters = $serializer->denormalize(
             $request->query->all(),
@@ -42,12 +39,10 @@ final class ContentEntityIndexAction extends AbstractController implements Admin
             [AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]
         );
 
-        $entities = $contentService->getEntitiesOfType($type, $paginationParameters);
+        $mediaFiles = $contentService->getEntitiesOfType('media_file', $paginationParameters);
 
-        return $this->render('@NumberNine/admin/content_entity/index.html.twig', [
-            'content_type' => $contentType,
-            'type_slug' => $type,
-            'entities' => $entities,
+        return $this->render('@NumberNine/admin/media/index.html.twig', [
+            'media_files' => $mediaFiles,
         ]);
     }
 }

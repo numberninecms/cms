@@ -1,8 +1,8 @@
 {
     "devDependencies": {
         "@fortawesome/fontawesome-free": "^5.15.2",
-        "@symfony/ux-turbo": "file:vendor/symfony/ux-turbo/Resources/assets",
         "@symfony/stimulus-bridge": "^2.1.0",
+        "@symfony/ux-turbo": "file:vendor/symfony/ux-turbo/Resources/assets",
         "@symfony/webpack-encore": "^1.0.2",
         "@tailwindcss/forms": "^0.3.2",
         "@types/webpack-env": "^1.16.0",
@@ -13,6 +13,7 @@
         "eslint-config-prettier": "^7.2.0",
         "eslint-loader": "^4.0.2",
         "eslint-plugin-prettier": "^3.3.1",
+        "exif-js": "^2.3.0",
         "node-sass": "^5.0.0",
         "postcss": "^8.2.4",
         "postcss-import": "^14.0.0",

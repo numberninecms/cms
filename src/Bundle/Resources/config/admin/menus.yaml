@@ -6,7 +6,7 @@ menus:
         icon: tachometer-alt
     media_library:
         text: Media Library
-        link: /media/
+        route: numbernine_admin_media_library_index
         icon: photo-video
     #    forms:
     #        text: Forms

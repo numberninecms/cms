@@ -1,0 +1,24 @@
+{% trans_default_domain 'numbernine' %}
+<div data-controller="media--uploader" class="p-3">
+    <div class="dropzone h-24"
+        data-action="
+            dragover->media--uploader#onDragOver
+            dragenter->media--uploader#onDragEnter
+            dragleave->media--uploader#onDragLeave
+            drop->media--uploader#onDrop
+        ">
+        {#<label :class="{'q-pa-md': !noStyle}" class="full-width row">
+            <span v-if="files.length === 0 && !noStyle" class="full-width text-center">Drop your files here or click to select</span>
+            <input type="file" multiple @change="onDrop" ref="fileInput">
+            <slot>
+                <component :is="containerType" v-if="files.length !== 0" class="flex wrap q-gutter-md" :list="files" group="files">
+                    <MediaUploadableFile v-for="(file, index) in files" :key="file.file.name" :file="file" @remove="removeFile(index)" :default-thumbnail="defaultThumbnail" class="p-2 m-1" />
+                </component>
+            </slot>
+        </label>
+#}
+        <button type="button" class="btn btn-color-primary" data-action="media--uploader#uploadAll" data-media--uploader-target="submit">
+            {{ 'Start upload'|trans }}
+        </button>
+    </div>
+</div>
