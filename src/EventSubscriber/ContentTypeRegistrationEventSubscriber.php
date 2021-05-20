@@ -53,7 +53,7 @@ final class ContentTypeRegistrationEventSubscriber implements EventSubscriberInt
                     'name' => 'block',
                     'entity_class_name' => Post::class,
                     'permalink' => '/blocks/{slug}',
-                    'icon' => 'view_day',
+                    'icon' => 'puzzle-piece',
                     'public' => false,
                 ]
             )
@@ -65,7 +65,7 @@ final class ContentTypeRegistrationEventSubscriber implements EventSubscriberInt
                     'name' => 'media_file',
                     'entity_class_name' => MediaFile::class,
                     'permalink' => '/media/{slug}',
-                    'icon' => 'photo_library',
+                    'icon' => 'images',
                     'shown_in_menu' => false,
                 ]
             )

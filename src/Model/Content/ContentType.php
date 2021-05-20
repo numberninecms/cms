@@ -139,7 +139,7 @@ final class ContentType
             [
                 'labels' => null,
                 'permalink' => '/{slug}',
-                'icon' => 'create',
+                'icon' => 'pen-nib',
                 'public' => true,
                 'shown_in_menu' => true,
                 'capabilities' => [],

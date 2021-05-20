@@ -1,0 +1,71 @@
+/*
+ * This file is part of the NumberNine package.
+ *
+ * (c) William Arin <williamarin.dev@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+.topbar {
+    @apply
+        sticky top-0
+        px-2 py-2 z-50 lg:px-6
+        text-white bg-quaternary
+        shadow-lg
+        flex flex-wrap items-center justify-between;
+
+    .topbar-title {
+        @apply
+            flex flex-shrink-0 items-center
+            mr-6;
+
+        a {
+            @apply
+                font-semibold text-xl tracking-tight
+                text-white;
+        }
+
+        > div {
+            @apply text-sm;
+        }
+    }
+
+    .topbar-burger-wrapper {
+        @apply block lg:hidden;
+
+        .topbar-burger {
+            @apply
+                flex items-center
+                px-3 py-2
+                text-gray-200 border-gray-400
+                border rounded
+                cursor-pointer;
+
+            &:hover {
+                @apply text-white border-white;
+            }
+
+            .topbar-burger-svg {
+                @apply
+                    fill-current
+                    h-3 w-3;
+            }
+        }
+    }
+
+    .topbar-menu {
+        @apply
+            w-full hidden lg:w-auto
+            lg:flex-grow lg:flex-row lg:items-center lg:justify-between;
+        @apply lg:flex #{!important};
+
+        a {
+            @apply
+                block lg:inline-block
+                mt-4 mr-4 lg:mt-0
+                text-gray-200
+                hover:text-white;
+        }
+    }
+}

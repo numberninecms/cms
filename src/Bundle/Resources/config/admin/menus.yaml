@@ -2,12 +2,12 @@
 menus:
     dashboard:
         text: Dashboard
-        link: /
-        icon: dashboard
+        route: numbernine_admin_index
+        icon: tachometer-alt
     media_library:
         text: Media Library
         link: /media/
-        icon: photo_library
+        icon: photo-video
     #    forms:
     #        text: Forms
     #        route:
@@ -22,7 +22,7 @@ menus:
     users:
         text: Users
         route:
-        icon: person
+        icon: users
         children:
             all:
                 text: All users
@@ -36,21 +36,21 @@ menus:
     settings:
         text: Settings
         route:
-        icon: settings_applications
+        icon: cogs
         children:
             general:
                 text: General
-                link: /settings/general/
+                route: numbernine_admin_settings_general
             permalinks:
                 text: Permalinks
-                link: /settings/permalinks/
+                route: numbernine_admin_settings_permalinks
             email:
                 text: Emails
-                link: /settings/emails/
+                route: numbernine_admin_settings_emails
     appearance:
         text: Appearance
         route:
-        icon: brush
+        icon: paint-brush
         children:
             customize:
                 text: Customize

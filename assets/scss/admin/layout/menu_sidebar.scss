@@ -1,0 +1,44 @@
+/*
+ * This file is part of the NumberNine package.
+ *
+ * (c) William Arin <williamarin.dev@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+.menu-sidebar {
+    @apply
+        flex-shrink
+        hidden lg:block
+        text-light bg-quaternary;
+
+    width: 250px;
+
+    a {
+        @apply
+            flex items-center justify-between
+            p-3
+            hover:transition-colors hover:duration-300;
+
+        @for $i from 1 to 3 {
+            $background-value: 600 - ($i - 1) * 100;
+            $background-hover-value: $background-value - 100;
+            &.menu-item-level-#{$i} {
+                @apply bg-quaternary-#{$background-value} hover:bg-quaternary-#{$background-hover-value};
+
+                &.active {
+                    @apply bg-quaternary-#{$background-hover-value};
+                }
+
+                > div > span {
+                    margin-left: #{25 * $i}px;
+                }
+            }
+        }
+
+        &.active {
+            @apply font-semibold text-white;
+        }
+    }
+}

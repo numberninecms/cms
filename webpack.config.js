@@ -1,4 +1,5 @@
 const Encore = require('@symfony/webpack-encore');
+const WatchExternalFilesPlugin = require('webpack-watch-files-plugin').default;
 
 if (!Encore.isRuntimeEnvironmentConfigured()) {
     Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
@@ -10,18 +11,17 @@ Encore
     .setManifestKeyPrefix('bundles/numbernine/build/')
 
     .addEntry('adminbar', './assets/ts/adminbar.ts')
+    .addEntry('admin', './assets/ts/admin/admin.ts')
     .addStyleEntry('adminpreviewmode', './assets/scss/page_builder.scss')
     .addStyleEntry('security', './assets/scss/security.scss')
+
+    .enableStimulusBridge('./assets/ts/admin/controllers.json')
 
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
     .cleanupOutputBeforeBuild()
     .enableSourceMaps(!Encore.isProduction())
     .enableVersioning(Encore.isProduction())
-    .configureBabelPresetEnv((config) => {
-        config.useBuiltIns = 'usage';
-        config.corejs = 3;
-    })
     .enableSassLoader()
     .enableTypeScriptLoader()
     .addRule({
@@ -39,6 +39,13 @@ Encore
             ]
         }
     })
+    .addPlugin(new WatchExternalFilesPlugin({
+        files: [
+            './src/Bundle/Resources/views',
+            './assets/scss/purge_safelist.txt',
+        ],
+        verbose: true
+    }))
 ;
 
 module.exports = Encore.getWebpackConfig();

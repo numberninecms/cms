@@ -1,0 +1,30 @@
+/*!
+ * This file is part of the NumberNine package.
+ *
+ * (c) William Arin <williamarin.dev@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/brands';
+
+@import "~tailwindcss/base";
+@import "~tailwindcss/components";
+
+@import "colors";
+
+@import "~tailwindcss/utilities";
+
+@import "components/buttons";
+@import "components/forms";
+@import "components/flashes";
+@import "components/tabs";
+@import "components/tables";
+
+@import "layout/ui_area";
+@import "layout/topbar";
+@import "layout/menu_sidebar";

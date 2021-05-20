@@ -1,0 +1,100 @@
+/*
+ * This file is part of the NumberNine package.
+ *
+ * (c) William Arin <williamarin.dev@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+.btn {
+    @apply
+        py-2 px-4
+        normal-case
+        text-white text-center text-base font-semibold
+        shadow-md rounded-lg
+        transition ease-in duration-200
+        focus:outline-none focus:ring-2 focus:ring-offset-2;
+
+    &.btn-color-primary {
+        @apply
+            bg-primary
+            hover:bg-primary-700
+            focus:ring-primary-500 focus:ring-offset-primary-200;
+
+        &.btn-style-outline {
+            @apply
+                text-primary
+                bg-transparent
+                border-2 border-primary
+                hover:bg-primary-700 hover:text-white focus:outline-none;
+        }
+    }
+
+    &.btn-color-secondary {
+        @apply
+            bg-secondary
+            hover:bg-secondary-700
+            focus:ring-secondary-500 focus:ring-offset-secondary-200;
+
+        &.btn-style-outline {
+            @apply
+                text-secondary
+                bg-transparent
+                border-2 border-secondary
+                hover:bg-secondary-700 hover:text-white focus:outline-none;
+        }
+    }
+
+    &.btn-color-white {
+        @apply
+            text-gray-700
+            bg-white
+            hover:bg-gray-100
+            focus:ring-gray-100 focus:ring-offset-white focus:ring-opacity-50;
+
+        &.btn-style-outline {
+            @apply border-2 border-gray-700;
+        }
+    }
+
+    &.btn-color-red {
+        @apply
+            text-light
+            bg-red-600
+            hover:bg-red-700
+            focus:ring-red-500 focus:ring-offset-red-200;
+
+        &.btn-style-outline {
+            @apply border-2 border-red-700;
+        }
+    }
+
+    &.btn-case-uppercase {
+        @apply uppercase;
+    }
+
+    &.btn-size-xsmall {
+        @apply text-xs py-1 px-2;
+    }
+
+    &.btn-size-small {
+        @apply text-sm;
+    }
+
+    &.btn-size-large {
+        @apply text-lg;
+    }
+
+    &.btn-size-xlarge {
+        @apply text-xl;
+    }
+
+    &.btn-size-xxlarge {
+        @apply text-2xl;
+    }
+
+    &.btn-width-expand {
+        @apply w-full;
+    }
+}

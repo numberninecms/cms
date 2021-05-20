@@ -9,20 +9,20 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Controller\Admin;
+namespace NumberNine\Controller\Admin\Ui\Dashboard;
 
 use NumberNine\Model\Admin\AdminController;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/", name="numbernine_admin_index", methods={"GET"})
  */
-final class AdminIndexAction implements AdminController
+final class DashboardIndexAction extends AbstractController implements AdminController
 {
     public function __invoke(string $publicPath): Response
     {
-        return (new Response())
-            ->setContent((string)file_get_contents($publicPath . '/admin/index.html'));
+        return $this->render('@NumberNine/admin/dashboard/index.html.twig');
     }
 }

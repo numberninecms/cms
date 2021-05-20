@@ -1,0 +1,23 @@
+<nav class="topbar" data-controller="toggle-visibility">
+    <div class="topbar-title">
+        <a href="{{ path('numbernine_admin_index') }}">
+            <img src="{{ preload(asset('bundles/numbernine/build/images/NumberNineWithoutText.png', 'numbernine'), {as: 'image'}) }}" alt="Homepage" width="25">
+        </a>
+    </div>
+    <div class="topbar-burger-wrapper">
+        <button class="topbar-burger" data-action="click->toggle-visibility#toggle">
+            <svg class="topbar-burger-svg" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title>
+                <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/>
+            </svg>
+        </button>
+    </div>
+    <div class="topbar-menu" data-toggle-visibility-target="item">
+        <div>
+            <a href="{{ path('numbernine_admin_index') }}">{{ 'Dashboard'|trans }}</a>
+            <a href="{{ path('numbernine_homepage') }}" target="_blank">{{ 'Visit site'|trans }}</a>
+        </div>
+        <div>
+            <a href="{{ path('numbernine_logout') }}">{{ 'Logout'|trans }}</a>
+        </div>
+    </div>
+</nav>

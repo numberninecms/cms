@@ -1,27 +1,33 @@
 {
     "compilerOptions": {
-        "rootDir": ".",
-        "allowJs": true,
-        "baseUrl": ".",
-        "esModuleInterop": true,
+        "strict": true,
+        "target": "esnext",
         "module": "esnext",
         "moduleResolution": "node",
+        "strictPropertyInitialization": false,
+        "noImplicitAny": false,
         "resolveJsonModule": true,
         "sourceMap": true,
-        "strict": true,
-        "target": "es2018",
-        "strictPropertyInitialization": false,
+        "esModuleInterop": true,
+        "allowJs": true,
+        "rootDir": ".",
+        "baseUrl": ".",
         "paths": {
             "src/*": [
-                "assets/ts/*"
+                "assets/ts/*",
+                "assets/*"
             ]
-        }
+        },
+        "types": [
+            "node",
+            "webpack-env"
+        ],
+        "lib": ["esnext", "dom"]
     },
     "include": [
         "assets/ts/**/*"
     ],
     "exclude": [
-        "/build",
         "node_modules"
     ]
 }
