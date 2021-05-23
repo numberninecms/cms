@@ -16,7 +16,14 @@ export default class extends Controller {
     private readonly panelTargets: HTMLElement[];
 
     public connect(): void {
-        this.activateTab(this.tabTargets[0].dataset.tabId);
+        this.tabTargets.forEach((tab) => {
+            tab.onclick = () => {
+                window.history.replaceState(null, document.title, `#${tab.dataset.tabId as string}`);
+            };
+        });
+
+        const currentTab = window.location.hash.substr(1);
+        this.activateTab(currentTab ? currentTab : this.tabTargets[0].dataset.tabId);
     }
 
     public activate(event: MouseEvent): void {
