@@ -13,9 +13,8 @@
         "rootDir": ".",
         "baseUrl": ".",
         "paths": {
-            "src/*": [
-                "assets/ts/*",
-                "assets/*"
+            "admin/*": [
+                "assets/ts/admin/*",
             ]
         },
         "types": [

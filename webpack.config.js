@@ -1,5 +1,6 @@
 const Encore = require('@symfony/webpack-encore');
 const WatchExternalFilesPlugin = require('webpack-watch-files-plugin').default;
+const path = require('path');
 
 if (!Encore.isRuntimeEnvironmentConfigured()) {
     Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
@@ -23,7 +24,11 @@ Encore
     .enableSourceMaps(!Encore.isProduction())
     .enableVersioning(Encore.isProduction())
     .enableSassLoader()
+    .enableVueLoader(() => {}, { runtimeCompilerBuild: false })
     .enableTypeScriptLoader()
+    .addAliases({
+        'admin': path.resolve(__dirname, 'assets/ts/admin/'),
+    })
     .addRule({
         enforce: 'pre',
         test: /\.ts$/,
@@ -46,6 +51,10 @@ Encore
         ],
         verbose: true
     }))
+    .configureBabelPresetEnv((config) => {
+        config.useBuiltIns = 'usage';
+        config.corejs = 3;
+    })
 ;
 
 module.exports = Encore.getWebpackConfig();

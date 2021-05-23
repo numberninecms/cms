@@ -8,8 +8,8 @@
  */
 
 import EXIF from 'exif-js/exif';
-import ResizeOptions from 'src/admin/interfaces/ResizeOptions';
-import ExifDescriptor from 'src/admin/interfaces/ExifDescriptor';
+import ResizeOptions from 'admin/interfaces/ResizeOptions';
+import ExifDescriptor from 'admin/interfaces/ExifDescriptor';
 
 export default class ImageResizer {
     /**
