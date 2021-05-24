@@ -11,7 +11,9 @@
     <div class="uploadable-file" draggable="true" @click.prevent>
         <div class="relative">
             <img v-if="imageSource" :src="imageSource" class="square object-contain" alt="Loading..." />
-            <i v-else class="square fa fa-file text-primary text-8xl" />
+            <div v-else class="square flex items-center justify-center">
+                <i class="fa fa-file text-primary text-9xl" />
+            </div>
         </div>
 
         <div class="flex flex-col mt-3">

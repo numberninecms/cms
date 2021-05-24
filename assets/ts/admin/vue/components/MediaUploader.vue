@@ -17,14 +17,14 @@
         @drop.stop.prevent="onDrop"
     >
         <label class="w-full flex p-3">
-            <span v-if="files.length === 0" class="flex-grow w-full text-center">
+            <span v-if="files.length === 0" class="flex-grow w-full text-center text-gray-800 text-md md:text-xl">
                 Drop your files here or click to select
             </span>
             <input ref="fileInput" type="file" multiple @change="onDrop" />
             <slot>
                 <draggable
                     v-if="files.length !== 0"
-                    class="flex flex-wrap align-top space-x-3"
+                    class="flex flex-wrap align-top gap-3"
                     :list="files"
                     :item-key="(file) => file.name"
                     group="files"
@@ -35,7 +35,12 @@
                 </draggable>
             </slot>
         </label>
-        <button v-if="!autoUpload && files.length > 0" type="button" class="btn btn-color-primary m-3 self-end" @click="startUpload">
+        <button
+            v-if="!autoUpload && files.length > 0"
+            type="button"
+            class="btn btn-color-primary m-3 self-start"
+            @click="startUpload"
+        >
             Start upload
         </button>
     </div>
@@ -126,7 +131,7 @@ export default defineComponent({
     @apply flex-grow flex flex-col items-center;
 
     &:not(.no-style) {
-        @apply border border-dashed border-gray-500 bg-gray-300;
+        @apply border border-dashed border-gray-300 bg-gray-100;
     }
 
     &.no-style {
@@ -136,7 +141,7 @@ export default defineComponent({
     }
 
     &.dragover {
-        @apply text-primary border border-solid border-gray-700;
+        @apply text-primary border-2 border-solid border-gray-200;
     }
 
     input[type='file'] {

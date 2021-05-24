@@ -93,7 +93,8 @@ export default class ImageResizer {
 
         if (context) {
             context.drawImage(image, 0, 0);
-            return ImageResizer.downscaleCanvas(canvas, context, scale);
+
+            return scale >= 1 ? canvas : ImageResizer.downscaleCanvas(canvas, context, scale);
         }
 
         throw new Error('Error while resizing image.');
