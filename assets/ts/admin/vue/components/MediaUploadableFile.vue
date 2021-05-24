@@ -8,7 +8,7 @@
   -->
 
 <template>
-    <div class="uploadable-file" draggable="true" @click.prevent>
+    <div class="uploadable-file" :class="{ error: file.error }" draggable="true" @click.prevent>
         <div class="relative">
             <img v-if="imageSource" :src="imageSource" class="square object-contain" alt="Loading..." />
             <div v-else class="square flex items-center justify-center">
@@ -39,9 +39,10 @@
                     <i class="fa fa-times text-red-600"></i>
                 </button>
             </div>
-            <div v-if="file.error === 'file_too_big'" class="column text-negative">
-                <span>File is too big!</span>
-                <span v-if="file.image">Consider resizing it before upload.</span>
+            <div v-if="file.error" class="flex flex-col">
+                <span v-if="file.error === 'file_too_big'" class="text-red-600 font-semibold">File is too big!</span>
+                <span v-if="file.error === 'upload_error'" class="text-red-600 font-semibold">Upload failed!</span>
+                <span v-if="file.image" class="text-gray-800 text-sm">Consider resizing before upload.</span>
             </div>
         </div>
     </div>
@@ -79,6 +80,10 @@ $square-size: 250px;
     @apply cursor-move shadow-md p-3 flex flex-col bg-white;
     min-height: 20rem;
     max-width: $square-size;
+
+    &.error {
+        @apply ring-2 ring-red-600 ring-inset;
+    }
 
     .square {
         position: relative;

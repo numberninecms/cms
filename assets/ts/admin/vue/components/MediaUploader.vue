@@ -52,6 +52,7 @@ import draggable from 'vuedraggable';
 import useDropzone from '../functions/dropzone';
 import useFileUpload from '../functions/fileUpload';
 import MediaUploadableFile from 'admin/vue/components/MediaUploadableFile.vue';
+import ParsedFile from 'admin/interfaces/ParsedFile';
 
 interface MediaUploaderProps {
     uploadUrl: string;
@@ -84,9 +85,7 @@ export default defineComponent({
             maxUploadSize: props.maxUploadSize,
             sequential: props.sequential ?? false,
             autoUpload: props.autoUpload ?? true,
-            onFileUploaded: (file, data) => {
-                console.log('file uploaded');
-            },
+            onFileUploaded,
         });
 
         function onDrop(event: DragEvent): void {
@@ -110,6 +109,13 @@ export default defineComponent({
             files.value.splice(index, 1);
         }
 
+        function onFileUploaded({ file }: { file: ParsedFile }) {
+            files.value.splice(
+                files.value.findIndex((f) => f.file.name === file.file.name),
+                1,
+            );
+        }
+
         return {
             fileInput,
             files,
@@ -131,7 +137,7 @@ export default defineComponent({
     @apply flex-grow flex flex-col items-center;
 
     &:not(.no-style) {
-        @apply border border-dashed border-gray-300 bg-gray-100;
+        @apply border border-2 border-dashed border-primary-300 bg-gray-100;
     }
 
     &.no-style {
@@ -141,7 +147,7 @@ export default defineComponent({
     }
 
     &.dragover {
-        @apply text-primary border-2 border-solid border-gray-200;
+        @apply text-primary border-solid border-primary ring-8 ring-inset ring-primary bg-gray-200;
     }
 
     input[type='file'] {

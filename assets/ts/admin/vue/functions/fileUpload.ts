@@ -19,7 +19,7 @@ interface Options {
     autoUpload?: boolean;
     resizeOptions?: ResizeOptions;
     sequential?: boolean;
-    onFileUploaded?: (file: ParsedFile, data: any) => void;
+    onFileUploaded?: (payload: { file: ParsedFile; data: any }) => void;
 }
 
 interface FileUpload {
@@ -65,7 +65,7 @@ export default function useFileUpload(options: Options): FileUpload {
     }
 
     async function startUpload(): Promise<void> {
-        for (const file of files.value) {
+        for (const file of [...files.value]) {
             if (
                 file.image &&
                 options.resizeOptions &&
@@ -76,31 +76,49 @@ export default function useFileUpload(options: Options): FileUpload {
 
                 if (ImageResizer.getImageFileSize(file.image) >= options.maxUploadSize) {
                     file.error = 'file_too_big';
+
+                    if (options.sequential) {
+                        return;
+                    }
+
                     continue;
                 }
-            } else {
-                if (file.file.size >= options.maxUploadSize) {
-                    file.error = 'file_too_big';
-                    continue;
+            } else if (file.file.size >= options.maxUploadSize) {
+                file.error = 'file_too_big';
+
+                if (options.sequential) {
+                    return;
                 }
+
+                continue;
             }
 
             if (!options.sequential) {
-                void asyncUploadFile(file).then((response) => {
-                    if (response && options.onFileUploaded) {
-                        options.onFileUploaded(file, response.data);
-                    }
-                });
+                void asyncUploadFile(file)
+                    .then((response) => {
+                        if (response && options.onFileUploaded) {
+                            options.onFileUploaded({ file, data: response.data });
+                        }
+                    })
+                    .catch(() => {
+                        file.error = 'upload_error';
+                    });
             } else {
-                const response = await asyncUploadFile(file);
-                if (response && options.onFileUploaded) {
-                    options.onFileUploaded(file, response.data);
+                try {
+                    const response = await asyncUploadFile(file);
+
+                    if (response && options.onFileUploaded) {
+                        options.onFileUploaded({ file, data: response.data });
+                    }
+                } catch (e) {
+                    file.error = 'upload_error';
+                    return;
                 }
             }
         }
     }
 
-    function asyncUploadFile(file: ParsedFile): AxiosPromise<any> {
+    function asyncUploadFile(file: ParsedFile): AxiosPromise {
         const formData = new FormData();
 
         if (file.image) {
