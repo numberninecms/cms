@@ -5,7 +5,7 @@
 
 {% block content %}
     <turbo-frame id="numbernine_admin_media_library">
-        <div class="flex flex-col" data-controller="dynamic-tabs">
+        <div class="flex flex-col min-h-full" data-controller="dynamic-tabs">
             {% include '@NumberNine/admin/layout/toolbar.html.twig' with {title: 'Media library'} %}
             {% include '@NumberNine/admin/util/flashes.html.twig' %}
 
@@ -20,7 +20,10 @@
                 {% endblock %}
             {% endembed %}
 
-            {% embed '@NumberNine/admin/util/dynamic_tabs_panel.html.twig' with {id: 'upload'} %}
+            {% embed '@NumberNine/admin/util/dynamic_tabs_panel.html.twig' with {
+                id: 'upload',
+                class: 'flex flex-col flex-grow',
+            } %}
                 {% block content %}
                     {% include '@NumberNine/admin/media/index_panel_upload.html.twig' %}
                 {% endblock %}

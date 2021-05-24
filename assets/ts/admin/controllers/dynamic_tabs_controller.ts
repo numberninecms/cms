@@ -42,7 +42,7 @@ export default class extends Controller {
 
         if (tabId) {
             this.tabTargets.find((tab) => tab.dataset.tabId === tabId)?.classList.add('active', 'font-semibold');
-            this.panelTargets.find((panel) => panel.dataset.tabId === tabId)!.style.display = 'block';
+            this.panelTargets.find((panel) => panel.dataset.tabId === tabId)!.style.display = 'inherit';
         }
     }
 }

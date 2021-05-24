@@ -1,8 +1,10 @@
 {% trans_default_domain 'numbernine' %}
-<div data-controller="media--uploader" class="p-3">
+<div data-controller="media--uploader" class="p-3 flex-grow flex flex-col">
     <div id="media-uploader"
+         class="flex-grow flex flex-col"
          data-media--uploader-target="uploader"
          data-upload-url="{{ path('numbernine_admin_media_files_upload') }}"
          data-max-upload-size="{{ N9_max_upload_size() }}"
+         data-auto-upload="false"
     ></div>
 </div>

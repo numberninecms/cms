@@ -9,8 +9,8 @@
 
 <template>
     <div
-        class="dropzone h-24"
-        :class="{ dragover: isDraggingOver }"
+        class="dropzone"
+        :class="{ dragover: isDraggingOver, 'justify-center': files.length === 0, 'justify-between': files.length > 0 }"
         @dragover.prevent
         @dragenter.prevent="onDragEnter"
         @dragleave.prevent="onDragLeave"
@@ -24,20 +24,18 @@
             <slot>
                 <draggable
                     v-if="files.length !== 0"
-                    class="flex flex-wrap space-x-3 space-y-3"
+                    class="flex flex-wrap align-top space-x-3"
                     :list="files"
+                    :item-key="(file) => file.name"
                     group="files"
                 >
-                    <!--                    <MediaUploadableFile v-for="(file, index) in files" :key="file.file.name" :file="file" @remove="removeFile(index)" :default-thumbnail="defaultThumbnail" class="p-2 m-1" />-->
+                    <template #item="{ element, index }">
+                        <MediaUploadableFile :file="element" @remove="removeFile(index)" />
+                    </template>
                 </draggable>
             </slot>
         </label>
-        <button
-            v-if="!autoUpload && files.length > 0"
-            type="button"
-            class="btn btn-color-primary"
-            @click="startUpload"
-        >
+        <button v-if="!autoUpload && files.length > 0" type="button" class="btn btn-color-primary m-3 self-end" @click="startUpload">
             Start upload
         </button>
     </div>
@@ -48,6 +46,7 @@ import { defineComponent, Ref, ref } from 'vue';
 import draggable from 'vuedraggable';
 import useDropzone from '../functions/dropzone';
 import useFileUpload from '../functions/fileUpload';
+import MediaUploadableFile from 'admin/vue/components/MediaUploadableFile.vue';
 
 interface MediaUploaderProps {
     uploadUrl: string;
@@ -58,7 +57,19 @@ interface MediaUploaderProps {
 
 export default defineComponent({
     name: 'MediaUploader',
-    components: { draggable },
+    components: { MediaUploadableFile, draggable },
+    props: {
+        uploadUrl: {
+            type: String,
+            required: true,
+        },
+        maxUploadSize: {
+            type: Number,
+            required: true,
+        },
+        sequential: Boolean,
+        autoUpload: Boolean,
+    },
     setup(props: MediaUploaderProps) {
         const fileInput: Ref<HTMLInputElement> | Ref<null> = ref(null);
 
@@ -67,7 +78,7 @@ export default defineComponent({
             uploadUrl: props.uploadUrl,
             maxUploadSize: props.maxUploadSize,
             sequential: props.sequential ?? false,
-            autoUpload: props.autoUpload ?? false,
+            autoUpload: props.autoUpload ?? true,
             onFileUploaded: (file, data) => {
                 console.log('file uploaded');
             },
@@ -82,16 +93,19 @@ export default defineComponent({
                     (event.target as HTMLInputElement).files!.length > 0) ||
                 (event.dataTransfer && Object.keys(event.dataTransfer.files).length > 0)
             ) {
-                const files: File[] | FileList =
+                const droppedFiles: File[] | FileList =
                     (event.target as HTMLInputElement)?.files || event.dataTransfer?.files || [];
-                void queueFilesForUpload(files as File[]);
+                void queueFilesForUpload(droppedFiles as File[]);
             }
 
             fileInput.value!.value = '';
         }
 
+        function removeFile(index) {
+            files.value.splice(index, 1);
+        }
+
         return {
-            autoUpload: props.autoUpload,
             fileInput,
             files,
             isDraggingOver,
@@ -99,6 +113,7 @@ export default defineComponent({
             onDragLeave,
             onDrop,
             startUpload,
+            removeFile,
         };
     },
 });
@@ -107,6 +122,8 @@ export default defineComponent({
 .dropzone {
     position: relative;
     overflow: hidden;
+
+    @apply flex-grow flex flex-col items-center;
 
     &:not(.no-style) {
         @apply border border-dashed border-gray-500 bg-gray-300;

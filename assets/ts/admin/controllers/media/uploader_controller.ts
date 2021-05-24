@@ -19,7 +19,13 @@ export default class extends Controller {
     public connect(): void {
         createApp(MediaUploader, {
             uploadUrl: this.uploaderTarget.dataset.uploadUrl,
-            maxUploadSize: this.uploaderTarget.dataset.maxUploadSize,
+            maxUploadSize: parseInt(this.uploaderTarget.dataset.maxUploadSize as string),
+            autoUpload: this.uploaderTarget.dataset.autoUpload
+                ? this.uploaderTarget.dataset.autoUpload === 'true'
+                : undefined,
+            sequential: this.uploaderTarget.dataset.sequential
+                ? this.uploaderTarget.dataset.sequential === 'true'
+                : undefined,
         }).mount('#media-uploader');
     }
 }

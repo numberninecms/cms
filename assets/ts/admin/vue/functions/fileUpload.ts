@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { reactive } from 'vue';
+import { Ref, ref } from 'vue';
 import ImageResizer from '../../services/ImageResizer';
 import ParsedFile from '../../interfaces/ParsedFile';
 import ResizeOptions from '../../interfaces/ResizeOptions';
@@ -23,19 +23,19 @@ interface Options {
 }
 
 interface FileUpload {
-    files: ParsedFile[];
+    files: Ref<ParsedFile[]>;
     queueFilesForUpload: (files: File[]) => Promise<void>;
     startUpload: () => Promise<void>;
 }
 
 export default function useFileUpload(options: Options): FileUpload {
-    const files: ParsedFile[] = reactive([]);
+    const files: Ref<ParsedFile[]> = ref([]);
 
     async function queueFilesForUpload(filesToQueue: File[]): Promise<void> {
         const parsedFiles: ParsedFile[] = [];
 
         for (const file of filesToQueue) {
-            if (files.find((f) => f.file.name === file.name)) {
+            if (files.value.find((f) => f.file.name === file.name)) {
                 continue;
             }
 
@@ -46,7 +46,7 @@ export default function useFileUpload(options: Options): FileUpload {
             }
         }
 
-        files.push(...parsedFiles);
+        files.value.push(...parsedFiles);
 
         if (options.autoUpload) {
             await startUpload();
@@ -65,7 +65,7 @@ export default function useFileUpload(options: Options): FileUpload {
     }
 
     async function startUpload(): Promise<void> {
-        for (const file of files) {
+        for (const file of files.value) {
             if (
                 file.image &&
                 options.resizeOptions &&
@@ -118,7 +118,7 @@ export default function useFileUpload(options: Options): FileUpload {
             },
             maxContentLength: options.maxUploadSize,
             onUploadProgress: (progressEvent: ProgressEvent) => {
-                files[files.indexOf(file)].uploadProgress = progressEvent.loaded / progressEvent.total;
+                files.value[files.value.indexOf(file)].uploadProgress = progressEvent.loaded / progressEvent.total;
             },
         });
     }

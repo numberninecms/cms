@@ -15,7 +15,7 @@ module.exports = {
     purge: [
         './assets/scss/purge_safelist.txt',
         './src/Bundle/Resources/views/admin/**/*.twig',
-        './assets/ts/admin/**/*.{js,jsx,ts,tsx,vue}',
+        './assets/ts/**/*.{js,jsx,ts,tsx,vue}',
     ],
     theme: {
         screens: {
