@@ -18,22 +18,24 @@
             :class="{
                 dragover: isDraggingOver,
                 'justify-center': files.length === 0,
-                'justify-between': files.length > 0,
+                'justify-around': files.length > 0,
             }"
             @dragover.prevent
             @dragenter.prevent="onDragEnter"
             @dragleave.prevent="onDragLeave"
             @drop.stop.prevent="onDrop"
         >
-            <label class="w-full flex p-3">
-                <span v-if="files.length === 0" class="flex-grow w-full text-center text-gray-800 text-md md:text-xl">
-                    Drop your files here or click to select
+            <label class="w-full h-full flex flex-col flex-grow p-3">
+                <span v-if="files.length === 0" class="flex-grow flex items-center justify-center">
+                    <span class="text-center text-gray-800 text-md md:text-xl">
+                        Drop your files here or click to select
+                    </span>
                 </span>
                 <input ref="fileInput" type="file" multiple @change="onDrop" />
                 <slot>
                     <draggable
                         v-if="files.length !== 0"
-                        class="flex flex-wrap align-top gap-3"
+                        class="flex flex-wrap gap-3"
                         :list="files"
                         :item-key="(file) => file.name"
                         group="files"
