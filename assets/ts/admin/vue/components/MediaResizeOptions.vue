@@ -9,7 +9,7 @@
 
 <template>
     <div class="flex flex-col md:flex-row justify-start items-start gap-2 md:gap-5">
-        <label class="flex items-center gap-3">
+        <label class="resize-checkbox" :class="{ enabled: resizeOptions.enabled }">
             <input v-model="resizeOptions.enabled" type="checkbox" />
             <span>Resize before upload</span>
         </label>
@@ -76,6 +76,19 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.resize-checkbox {
+    @apply text-sm
+        flex items-center
+        gap-3 p-3
+        bg-white bg-opacity-90
+        shadow-md rounded-br-lg
+        border border-primary;
+
+    &.enabled {
+        @apply border-transparent rounded-none shadow-none bg-transparent;
+    }
+}
+
 .resize-options {
     @apply text-gray-800 gap-3 mt-0 flex justify-start items-center flex-wrap;
 

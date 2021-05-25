@@ -11,7 +11,7 @@
     <div class="flex-grow flex flex-col relative">
         <MediaResizeOptions
             v-model="resizeOptions"
-            :class="{ 'absolute left-4 top-3 z-10': !resizeOptions.enabled, 'my-3 ml-4': resizeOptions.enabled }"
+            :class="{ 'absolute left-0 top-0 z-10': !resizeOptions.enabled, 'mb-3': resizeOptions.enabled }"
         />
         <div
             class="dropzone"
