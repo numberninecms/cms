@@ -33,7 +33,10 @@ final class MediaIndexAction extends AbstractController implements AdminControll
     ): Response {
         /** @var PaginationParameters $paginationParameters */
         $paginationParameters = $serializer->denormalize(
-            $request->query->all(),
+            array_merge($request->query->all(), [
+                'orderBy' => 'updatedAt',
+                'order' => 'desc',
+            ]),
             PaginationParameters::class,
             null,
             [AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]

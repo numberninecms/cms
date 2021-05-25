@@ -8,51 +8,63 @@
   -->
 
 <template>
-    <div
-        class="dropzone"
-        :class="{ dragover: isDraggingOver, 'justify-center': files.length === 0, 'justify-between': files.length > 0 }"
-        @dragover.prevent
-        @dragenter.prevent="onDragEnter"
-        @dragleave.prevent="onDragLeave"
-        @drop.stop.prevent="onDrop"
-    >
-        <label class="w-full flex p-3">
-            <span v-if="files.length === 0" class="flex-grow w-full text-center text-gray-800 text-md md:text-xl">
-                Drop your files here or click to select
-            </span>
-            <input ref="fileInput" type="file" multiple @change="onDrop" />
-            <slot>
-                <draggable
-                    v-if="files.length !== 0"
-                    class="flex flex-wrap align-top gap-3"
-                    :list="files"
-                    :item-key="(file) => file.name"
-                    group="files"
-                >
-                    <template #item="{ element, index }">
-                        <MediaUploadableFile :file="element" @remove="removeFile(index)" />
-                    </template>
-                </draggable>
-            </slot>
-        </label>
-        <button
-            v-if="!autoUpload && files.length > 0"
-            type="button"
-            class="btn btn-color-primary m-3 self-start"
-            @click="startUpload"
+    <div class="flex-grow flex flex-col relative">
+        <MediaResizeOptions
+            v-model="resizeOptions"
+            :class="{ 'absolute left-4 top-3 z-10': !resizeOptions.enabled, 'my-3 ml-4': resizeOptions.enabled }"
+        />
+        <div
+            class="dropzone"
+            :class="{
+                dragover: isDraggingOver,
+                'justify-center': files.length === 0,
+                'justify-between': files.length > 0,
+            }"
+            @dragover.prevent
+            @dragenter.prevent="onDragEnter"
+            @dragleave.prevent="onDragLeave"
+            @drop.stop.prevent="onDrop"
         >
-            Start upload
-        </button>
+            <label class="w-full flex p-3">
+                <span v-if="files.length === 0" class="flex-grow w-full text-center text-gray-800 text-md md:text-xl">
+                    Drop your files here or click to select
+                </span>
+                <input ref="fileInput" type="file" multiple @change="onDrop" />
+                <slot>
+                    <draggable
+                        v-if="files.length !== 0"
+                        class="flex flex-wrap align-top gap-3"
+                        :list="files"
+                        :item-key="(file) => file.name"
+                        group="files"
+                    >
+                        <template #item="{ element, index }">
+                            <MediaUploadableFile :file="element" @remove="removeFile(index)" />
+                        </template>
+                    </draggable>
+                </slot>
+            </label>
+            <button
+                v-if="!autoUpload && files.length > 0"
+                type="button"
+                class="btn btn-color-primary m-3 self-start"
+                @click="startUpload"
+            >
+                Start upload
+            </button>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, ref } from 'vue';
+import { defineComponent, reactive, Ref, ref } from 'vue';
 import draggable from 'vuedraggable';
-import useDropzone from '../functions/dropzone';
-import useFileUpload from '../functions/fileUpload';
+import useDropzone from 'admin/vue/functions/dropzone';
+import useFileUpload from 'admin/vue/functions/fileUpload';
 import MediaUploadableFile from 'admin/vue/components/MediaUploadableFile.vue';
+import MediaResizeOptions from 'admin/vue/components/MediaResizeOptions.vue';
 import ParsedFile from 'admin/interfaces/ParsedFile';
+import ResizeOptions from 'admin/interfaces/ResizeOptions';
 
 interface MediaUploaderProps {
     uploadUrl: string;
@@ -63,7 +75,7 @@ interface MediaUploaderProps {
 
 export default defineComponent({
     name: 'MediaUploader',
-    components: { MediaUploadableFile, draggable },
+    components: { MediaUploadableFile, MediaResizeOptions, draggable },
     props: {
         uploadUrl: {
             type: String,
@@ -78,6 +90,13 @@ export default defineComponent({
     },
     setup(props: MediaUploaderProps) {
         const fileInput: Ref<HTMLInputElement> | Ref<null> = ref(null);
+        const resizeOptions: ResizeOptions = reactive({
+            enabled: false,
+            width: 800,
+            height: 800,
+            quality: 75,
+            mimeType: 'image/jpeg',
+        });
 
         const { isDraggingOver, onDragEnter, onDragLeave } = useDropzone();
         const { files, queueFilesForUpload, startUpload } = useFileUpload({
@@ -85,6 +104,7 @@ export default defineComponent({
             maxUploadSize: props.maxUploadSize,
             sequential: props.sequential ?? false,
             autoUpload: props.autoUpload ?? true,
+            resizeOptions,
             onFileUploaded,
         });
 
@@ -118,6 +138,7 @@ export default defineComponent({
 
         return {
             fileInput,
+            resizeOptions,
             files,
             isDraggingOver,
             onDragEnter,
@@ -134,7 +155,7 @@ export default defineComponent({
     position: relative;
     overflow: hidden;
 
-    @apply flex-grow flex flex-col items-center;
+    @apply flex-1 flex flex-col items-center;
 
     &:not(.no-style) {
         @apply border border-2 border-dashed border-primary-300 bg-gray-100;

@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const Encore = require('@symfony/webpack-encore');
 const WatchExternalFilesPlugin = require('webpack-watch-files-plugin').default;
 const path = require('path');
@@ -51,6 +52,12 @@ Encore
         ],
         verbose: true
     }))
+    .addPlugin(
+        new webpack.DefinePlugin({
+            __VUE_OPTIONS_API__: false,
+            __VUE_PROD_DEVTOOLS__: false
+        })
+    )
     .configureBabelPresetEnv((config) => {
         config.useBuiltIns = 'usage';
         config.corejs = 3;
