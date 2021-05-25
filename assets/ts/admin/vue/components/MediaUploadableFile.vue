@@ -22,7 +22,7 @@
                 <div class="relative flex-grow">
                     <div class="overflow-hidden h-2 text-xs flex rounded bg-primary-100">
                         <div
-                            :style="{ width: file.uploadProgress + '%' }"
+                            :style="{ width: file.uploadProgress * 100 + '%' }"
                             class="
                                 shadow-none
                                 flex flex-col
