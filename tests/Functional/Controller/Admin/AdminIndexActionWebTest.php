@@ -25,7 +25,9 @@ class AdminIndexActionWebTest extends DotEnvAwareWebTestCase
 
     public function testAdminLoginIsSuccessful(): void
     {
+        /** @var UserRoleRepository $userRoleRepository */
         $userRoleRepository = self::$container->get(UserRoleRepository::class);
+        /** @var UserFactory $userFactory */
         $userFactory = self::$container->get(UserFactory::class);
 
         $adminUser = $userFactory->createUser(
@@ -39,12 +41,14 @@ class AdminIndexActionWebTest extends DotEnvAwareWebTestCase
 
         $this->client->request('GET', '/admin/');
         self::assertResponseIsSuccessful();
-        self::assertSelectorExists('div#q-app');
+        self::assertSelectorExists('div.ui-area');
     }
 
     public function testSubscriberCantAccessAdmin(): void
     {
+        /** @var UserRoleRepository $userRoleRepository */
         $userRoleRepository = self::$container->get(UserRoleRepository::class);
+        /** @var UserFactory $userFactory */
         $userFactory = self::$container->get(UserFactory::class);
 
         $subscriberUser = $userFactory->createUser(
