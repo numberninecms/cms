@@ -1,6 +1,7 @@
 {
     "devDependencies": {
         "@fortawesome/fontawesome-free": "^5.15.2",
+        "@hotwired/turbo": "^7.0.0-beta.5",
         "@symfony/stimulus-bridge": "^2.1.0",
         "@symfony/ux-turbo": "file:vendor/symfony/ux-turbo/Resources/assets",
         "@symfony/webpack-encore": "^1.0.2",
