@@ -64,7 +64,7 @@ jobs:
                     refs/heads/develop
                     refs/tags/
                     ', github.ref) == false
-                run: yarn install && yarn build
+                run: yarn install --force && yarn build
 
             -   name: Prepare folders and env files
                 run: |
