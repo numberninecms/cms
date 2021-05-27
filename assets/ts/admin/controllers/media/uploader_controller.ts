@@ -12,20 +12,26 @@ import { createApp } from 'vue';
 import MediaUploader from '../../vue/components/MediaUploader.vue';
 
 export default class extends Controller {
-    public static targets = ['uploader'];
+    public static values = {
+        uploadUrl: String,
+        maxUploadSize: Number,
+        autoUpload: Boolean,
+        sequential: Boolean,
+    };
 
-    private readonly uploaderTarget: HTMLElement;
+    private readonly uploadUrlValue: string;
+    private readonly maxUploadSizeValue: number;
+    private readonly autoUploadValue: boolean;
+    private readonly hasAutoUploadValue: boolean;
+    private readonly sequentialValue: boolean;
+    private readonly hasSequentialValue: boolean;
 
     public connect(): void {
         createApp(MediaUploader, {
-            uploadUrl: this.uploaderTarget.dataset.uploadUrl,
-            maxUploadSize: parseInt(this.uploaderTarget.dataset.maxUploadSize as string),
-            autoUpload: this.uploaderTarget.dataset.autoUpload
-                ? this.uploaderTarget.dataset.autoUpload === 'true'
-                : undefined,
-            sequential: this.uploaderTarget.dataset.sequential
-                ? this.uploaderTarget.dataset.sequential === 'true'
-                : undefined,
+            uploadUrl: this.uploadUrlValue,
+            maxUploadSize: this.maxUploadSizeValue,
+            autoUpload: this.hasAutoUploadValue ? this.autoUploadValue : undefined,
+            sequential: this.hasSequentialValue ? this.sequentialValue : undefined,
         }).mount('#media-uploader');
     }
 }
