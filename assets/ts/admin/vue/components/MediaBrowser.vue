@@ -93,10 +93,17 @@ export default defineComponent({
 <style lang="scss" scoped>
 .mediafile {
     @apply cursor-pointer;
-    width: 150px;
-    height: 150px;
+    width: 105px;
+    height: 105px;
 }
 .selected {
     @apply ring-2 ring-primary;
+}
+
+@screen md {
+    .mediafile {
+        width: 150px;
+        height: 150px;
+    }
 }
 </style>
