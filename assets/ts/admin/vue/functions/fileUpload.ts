@@ -11,6 +11,7 @@ import { Ref, ref } from 'vue';
 import ImageResizer from '../../services/ImageResizer';
 import ParsedFile from '../../interfaces/ParsedFile';
 import ResizeOptions from '../../interfaces/ResizeOptions';
+import MediaFile from 'admin/interfaces/MediaFile';
 import axios, { AxiosPromise } from 'axios';
 
 interface Options {
@@ -19,7 +20,7 @@ interface Options {
     autoUpload?: boolean;
     resizeOptions?: ResizeOptions;
     sequential?: boolean;
-    onFileUploaded?: (payload: { file: ParsedFile; data: any }) => void;
+    onFileUploaded?: (payload: { parsedFile: ParsedFile; mediaFile: MediaFile }) => void;
 }
 
 interface FileUpload {
@@ -97,7 +98,7 @@ export default function useFileUpload(options: Options): FileUpload {
                 void asyncUploadFile(file)
                     .then((response) => {
                         if (response && options.onFileUploaded) {
-                            options.onFileUploaded({ file, data: response.data });
+                            options.onFileUploaded({ parsedFile: file, mediaFile: response.data });
                         }
                     })
                     .catch(() => {
@@ -108,7 +109,7 @@ export default function useFileUpload(options: Options): FileUpload {
                     const response = await asyncUploadFile(file);
 
                     if (response && options.onFileUploaded) {
-                        options.onFileUploaded({ file, data: response.data });
+                        options.onFileUploaded({ parsedFile: file, mediaFile: response.data });
                     }
                 } catch (e) {
                     file.error = 'upload_error';

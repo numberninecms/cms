@@ -29,6 +29,8 @@ Encore
     .enableTypeScriptLoader()
     .addAliases({
         'admin': path.resolve(__dirname, 'assets/ts/admin/'),
+        'styles': path.resolve(__dirname, 'assets/scss/'),
+        'images': path.resolve(__dirname, 'assets/images/'),
     })
     .addRule({
         enforce: 'pre',
@@ -52,12 +54,13 @@ Encore
         ],
         verbose: true
     }))
-    .addPlugin(
-        new webpack.DefinePlugin({
-            __VUE_OPTIONS_API__: true,
-            __VUE_PROD_DEVTOOLS__: false,
-        })
-    )
+    .addPlugin(new webpack.DefinePlugin({
+        __VUE_OPTIONS_API__: true,
+        __VUE_PROD_DEVTOOLS__: false,
+    }))
+    .addPlugin(new webpack.ProvidePlugin({
+        process: 'process/browser',
+    }))
     .configureBabelPresetEnv((config) => {
         config.useBuiltIns = 'usage';
         config.corejs = 3;

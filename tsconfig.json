@@ -15,6 +15,12 @@
         "paths": {
             "admin/*": [
                 "assets/ts/admin/*",
+            ],
+            "styles/*": [
+                "assets/scss/*",
+            ],
+            "images/*": [
+                "assets/images/*",
             ]
         },
         "types": [

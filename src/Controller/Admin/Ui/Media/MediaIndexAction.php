@@ -31,21 +31,21 @@ final class MediaIndexAction extends AbstractController implements AdminControll
         ContentService $contentService,
         SerializerInterface $serializer
     ): Response {
-        /** @var PaginationParameters $paginationParameters */
-        $paginationParameters = $serializer->denormalize(
-            array_merge($request->query->all(), [
-                'orderBy' => 'updatedAt',
-                'order' => 'desc',
-            ]),
-            PaginationParameters::class,
-            null,
-            [AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]
-        );
+//        /** @var PaginationParameters $paginationParameters */
+//        $paginationParameters = $serializer->denormalize(
+//            array_merge($request->query->all(), [
+//                'orderBy' => 'updatedAt',
+//                'order' => 'desc',
+//            ]),
+//            PaginationParameters::class,
+//            null,
+//            [AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]
+//        );
 
-        $mediaFiles = $contentService->getEntitiesOfType('media_file', $paginationParameters);
+//        $mediaFiles = $contentService->getEntitiesOfType('media_file', $paginationParameters);
 
         return $this->render('@NumberNine/admin/media/index.html.twig', [
-            'media_files' => $mediaFiles,
+//            'media_files' => $mediaFiles,
         ]);
     }
 }

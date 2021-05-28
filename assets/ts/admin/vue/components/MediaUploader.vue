@@ -67,6 +67,9 @@ import MediaUploadableFile from 'admin/vue/components/MediaUploadableFile.vue';
 import MediaResizeOptions from 'admin/vue/components/MediaResizeOptions.vue';
 import ParsedFile from 'admin/interfaces/ParsedFile';
 import ResizeOptions from 'admin/interfaces/ResizeOptions';
+import { EventBus } from 'admin/admin';
+import { EVENT_MEDIA_UPLOADER_FILE_UPLOADED } from 'admin/events/events';
+import MediaFile from 'admin/interfaces/MediaFile';
 
 interface MediaUploaderProps {
     uploadUrl: string;
@@ -131,11 +134,17 @@ export default defineComponent({
             files.value.splice(index, 1);
         }
 
-        function onFileUploaded({ file }: { file: ParsedFile }) {
+        function onFileUploaded({ parsedFile, mediaFile }: { parsedFile: ParsedFile; mediaFile: MediaFile }) {
             files.value.splice(
-                files.value.findIndex((f) => f.file.name === file.file.name),
+                files.value.findIndex((f) => f.file.name === parsedFile.file.name),
                 1,
             );
+
+            EventBus.emit(EVENT_MEDIA_UPLOADER_FILE_UPLOADED, {
+                parsedFile,
+                mediaFile,
+                remainingCount: files.value.length,
+            });
         }
 
         return {

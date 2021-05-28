@@ -1,7 +1,6 @@
-<div class="flex flex-wrap gap-3 p-3">
-{% for media_file in media_files %}
-    <div class="shadow-lg">
-        {{ N9_image(media_file, 'thumbnail') }}
-    </div>
-{% endfor %}
+<div class="p-3 flex-grow flex flex-col"
+     data-controller="media--browser"
+     data-media--browser-media-url-value="{{ path('numbernine_admin_contententity_get_collection', {type: 'media_file'}) }}"
+>
+    <div id="media-browser"></div>
 </div>
