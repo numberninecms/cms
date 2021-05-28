@@ -10,12 +10,10 @@
 <template>
     <div>
         <div class="flex flex-wrap gap-3">
-            <div v-for="mediaFile in mediaFiles" :key="mediaFile.id" class="shadow-lg">
-                <div class="mediafile">
-                    <img v-if="thumbnail(mediaFile)" :src="thumbnail(mediaFile)" :alt="mediaFile.title" />
-                    <div v-else class="flex items-center justify-center">
-                        <i class="fa fa-file text-primary text-7xl" />
-                    </div>
+            <div v-for="mediaFile in mediaFiles" :key="mediaFile.id" class="mediafile shadow-lg">
+                <img v-if="thumbnail(mediaFile)" :src="thumbnail(mediaFile)" :alt="mediaFile.title" />
+                <div v-else class="flex items-center justify-center">
+                    <i class="fa fa-file text-primary text-7xl" />
                 </div>
             </div>
         </div>
@@ -31,7 +29,6 @@ import path from 'path';
 import { useElementVisibility } from '@vueuse/core';
 import { EVENT_MEDIA_UPLOADER_FILE_UPLOADED } from 'admin/events/events';
 import { EventBus } from 'admin/admin';
-import ParsedFile from 'admin/interfaces/ParsedFile';
 
 interface MediaBrowserProps {
     mediaUrl: string;

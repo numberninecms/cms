@@ -13,12 +13,10 @@ namespace NumberNine\Controller\Admin\Ui\Media;
 
 use NumberNine\Content\ContentService;
 use NumberNine\Model\Admin\AdminController;
-use NumberNine\Model\Pagination\PaginationParameters;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -31,21 +29,6 @@ final class MediaIndexAction extends AbstractController implements AdminControll
         ContentService $contentService,
         SerializerInterface $serializer
     ): Response {
-//        /** @var PaginationParameters $paginationParameters */
-//        $paginationParameters = $serializer->denormalize(
-//            array_merge($request->query->all(), [
-//                'orderBy' => 'updatedAt',
-//                'order' => 'desc',
-//            ]),
-//            PaginationParameters::class,
-//            null,
-//            [AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]
-//        );
-
-//        $mediaFiles = $contentService->getEntitiesOfType('media_file', $paginationParameters);
-
-        return $this->render('@NumberNine/admin/media/index.html.twig', [
-//            'media_files' => $mediaFiles,
-        ]);
+        return $this->render('@NumberNine/admin/media/index.html.twig');
     }
 }
