@@ -45,12 +45,13 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, watch, watchEffect } from 'vue';
-import useMediaStore from 'admin/vue/functions/mediaStore';
 import MediaFile from 'admin/interfaces/MediaFile';
 import path from 'path';
 import { useElementVisibility } from '@vueuse/core';
 import { EVENT_MEDIA_UPLOADER_FILE_UPLOADED } from 'admin/events/events';
 import { EventBus } from 'admin/admin';
+import useMediaBrowserSelection from 'admin/vue/functions/mediaBrowserSelection';
+import useMediaBrowserFilesLoader from 'admin/vue/functions/mediaBrowserFilesLoader';
 
 interface MediaBrowserProps {
     mediaUrl: string;
@@ -68,19 +69,18 @@ export default defineComponent({
         const endOfList = ref(null);
         let endOfListIsVisible = useElementVisibility(endOfList);
 
+        const { mediaFiles, mediaFilesFilter, loadMoreMediaFiles } = useMediaBrowserFilesLoader({
+            mediaUrl: props.mediaUrl,
+        });
+
         const {
-            mediaFiles,
             selectedMediaFiles,
-            mediaFilesFilter,
-            loadMoreMediaFiles,
             isMediaFileSelected,
             setBulkSelectFirstIndex,
             bulkMediaSelect,
             selectMultipleMediaFiles,
             clearMediaFilesSelection,
-        } = useMediaStore({
-            mediaUrl: props.mediaUrl,
-        });
+        } = useMediaBrowserSelection({ mediaFiles });
 
         onMounted(() => {
             EventBus.on(EVENT_MEDIA_UPLOADER_FILE_UPLOADED, ({ mediaFile }) => {
