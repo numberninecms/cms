@@ -21,7 +21,14 @@ interface MediaStoreOptions {
 interface MediaStore {
     mediaFiles: Ref<MediaFile[]>;
     mediaFilesFilter: Ref<string>;
+    selectedMediaFiles: Ref<MediaFile[]>;
     loadMoreMediaFiles: () => void;
+    isMediaFileSelected: (mediaFile: MediaFile) => boolean;
+    selectMediaFile: (file: MediaFile) => void;
+    clearMediaFilesSelection: () => void;
+    setBulkSelectFirstIndex: (index: number) => void;
+    bulkMediaSelect: (index: number) => void;
+    selectMultipleMediaFiles: Ref<boolean>;
 }
 
 interface Pagination {
@@ -35,12 +42,15 @@ interface Pagination {
 
 export default function useMediaStore(options: MediaStoreOptions): MediaStore {
     const mediaFiles: Ref<MediaFile[]> = ref([]);
+    const selectedMediaFiles: Ref<MediaFile[]> = ref([]);
     const filter = ref('');
+    const selectMultiple = ref(false);
     const ROWS_PER_PAGE = 20;
     const queue: Function[] = [];
     let page = 1;
     let maxPages = 1;
     let isFetching = false;
+    const selectionFirstIndex = ref(0);
 
     async function getMediaFiles(page = 1): Promise<PaginatedCollectionResponse<MediaFile>> {
         const pagination: Pagination = {
@@ -86,9 +96,61 @@ export default function useMediaStore(options: MediaStoreOptions): MediaStore {
         void fetch();
     }
 
+    function isMediaFileSelected(mediaFile: MediaFile): boolean {
+        return !!selectedMediaFiles.value.find((f) => f.id === mediaFile.id);
+    }
+
+    function setBulkSelectFirstIndex(index: number): void {
+        if (!selectMultiple.value) {
+            const isToggle = !!selectedMediaFiles.value.find((f) => f.id === mediaFiles.value[index].id);
+            clearMediaFilesSelection();
+
+            if (!isToggle) {
+                selectMediaFile(mediaFiles.value[index]);
+            }
+        } else {
+            selectMediaFile(mediaFiles.value[index]);
+        }
+
+        selectionFirstIndex.value = index;
+    }
+
+    function bulkMediaSelect(index: number): void {
+        if (selectMultiple.value) {
+            const files = mediaFiles.value.slice(selectionFirstIndex.value, index + 1);
+            files.forEach((file) => {
+                if (!selectedMediaFiles.value.find((f) => f.id === file.id)) {
+                    selectedMediaFiles.value.push(file);
+                }
+            });
+        }
+    }
+
+    function selectMediaFile(file: MediaFile): void {
+        if (!selectedMediaFiles.value.find((f) => f.id === file.id)) {
+            selectedMediaFiles.value.push(file);
+        } else {
+            selectedMediaFiles.value.splice(
+                selectedMediaFiles.value.findIndex((f) => f.id === file.id),
+                1,
+            );
+        }
+    }
+
+    function clearMediaFilesSelection(): void {
+        selectedMediaFiles.value.splice(0, selectedMediaFiles.value.length);
+    }
+
     return {
         mediaFiles,
         mediaFilesFilter: filter,
+        selectedMediaFiles,
         loadMoreMediaFiles,
+        isMediaFileSelected,
+        selectMediaFile,
+        clearMediaFilesSelection,
+        setBulkSelectFirstIndex,
+        bulkMediaSelect,
+        selectMultipleMediaFiles: selectMultiple,
     };
 }

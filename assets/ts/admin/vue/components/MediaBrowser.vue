@@ -8,9 +8,31 @@
   -->
 
 <template>
-    <div>
+    <div class="flex flex-col">
+        <div class="flex items-center space-x-5 pb-3">
+            <label class="space-x-3" title="Hold SHIFT to select a range of files">
+                <input v-model="selectMultipleMediaFiles" type="checkbox" />
+                <span>Select multiple files</span>
+            </label>
+
+            <button
+                v-if="selectedMediaFilesCount > 0"
+                class="btn btn-color-red btn-size-xsmall"
+                type="button"
+                @click="clearMediaFilesSelection"
+            >
+                Clear selection
+            </button>
+        </div>
         <div class="flex flex-wrap gap-3">
-            <div v-for="mediaFile in mediaFiles" :key="mediaFile.id" class="mediafile shadow-lg">
+            <div
+                v-for="(mediaFile, index) in mediaFiles"
+                :key="mediaFile.id"
+                class="mediafile shadow-lg"
+                :class="{ selected: isMediaFileSelected(mediaFile) }"
+                @click.exact="setBulkSelectFirstIndex(index)"
+                @click.shift.exact="bulkMediaSelect(index)"
+            >
                 <img v-if="thumbnail(mediaFile)" :src="thumbnail(mediaFile)" :alt="mediaFile.title" />
                 <div v-else class="flex items-center justify-center">
                     <i class="fa fa-file text-primary text-7xl" />
@@ -22,7 +44,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch, watchEffect } from 'vue';
+import { computed, defineComponent, onMounted, ref, watch, watchEffect } from 'vue';
 import useMediaStore from 'admin/vue/functions/mediaStore';
 import MediaFile from 'admin/interfaces/MediaFile';
 import path from 'path';
@@ -46,7 +68,17 @@ export default defineComponent({
         const endOfList = ref(null);
         let endOfListIsVisible = useElementVisibility(endOfList);
 
-        const { mediaFiles, mediaFilesFilter, loadMoreMediaFiles } = useMediaStore({
+        const {
+            mediaFiles,
+            selectedMediaFiles,
+            mediaFilesFilter,
+            loadMoreMediaFiles,
+            isMediaFileSelected,
+            setBulkSelectFirstIndex,
+            bulkMediaSelect,
+            selectMultipleMediaFiles,
+            clearMediaFilesSelection,
+        } = useMediaStore({
             mediaUrl: props.mediaUrl,
         });
 
@@ -82,6 +114,12 @@ export default defineComponent({
             mediaFilesFilter,
             endOfList,
             thumbnail,
+            isMediaFileSelected,
+            setBulkSelectFirstIndex,
+            bulkMediaSelect,
+            selectMultipleMediaFiles,
+            clearMediaFilesSelection,
+            selectedMediaFilesCount: computed(() => selectedMediaFiles.value.length),
         };
     },
 });
@@ -93,6 +131,7 @@ export default defineComponent({
     width: 105px;
     height: 105px;
 }
+
 .selected {
     @apply ring-2 ring-primary;
 }
