@@ -50,10 +50,10 @@
                     :key="mediaFile.id"
                     class="mediafile shadow-lg"
                     :class="{ selected: isMediaFileSelected(mediaFile) }"
-                    @click.exact="setBulkSelectFirstIndex(index)"
+                    @click.exact="onThumbnailClicked(index)"
                     @click.shift.exact="bulkMediaSelect(index)"
                 >
-                    <img v-if="thumbnail(mediaFile)" :src="thumbnail(mediaFile)" :alt="mediaFile.title" />
+                    <img v-if="imageUrl(mediaFile)" :src="imageUrl(mediaFile)" :alt="mediaFile.title" />
                     <div v-else class="flex items-center justify-center">
                         <i class="fa fa-file text-primary text-7xl" />
                     </div>
@@ -61,23 +61,30 @@
             </div>
             <div ref="endOfList"></div>
         </div>
+        <MediaViewer
+            v-if="displayIndex !== -1"
+            v-model:show="showViewer"
+            :media-file="mediaFiles[displayIndex]"
+            @previous="viewPreviousMediaFile"
+            @next="viewNextMediaFile"
+        />
     </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, watch, watchEffect } from 'vue';
-import MediaFile from 'admin/interfaces/MediaFile';
-import path from 'path';
 import { useElementVisibility } from '@vueuse/core';
 import { EVENT_MEDIA_UPLOADER_FILE_UPLOADED } from 'admin/events/events';
 import { EventBus } from 'admin/admin';
 import useMediaBrowserSelection from 'admin/vue/functions/mediaBrowserSelection';
 import useMediaBrowserFilesLoader from 'admin/vue/functions/mediaBrowserFilesLoader';
 import FlashBar from 'admin/vue/components/FlashBar.vue';
+import MediaViewer from 'admin/vue/components/MediaViewer.vue';
+import useMediaFileUtilities from 'admin/vue/functions/mediaFileUtilities';
 
 export default defineComponent({
     name: 'MediaBrowser',
-    components: { FlashBar },
+    components: { MediaViewer, FlashBar },
     props: {
         getUrl: {
             type: String,
@@ -95,6 +102,8 @@ export default defineComponent({
         const flashLabel = ref('');
         const flashMessage = ref('');
         const isFlashVisible = ref(false);
+        const showViewer = ref(true);
+        const displayIndex = ref(-1);
 
         const { mediaFiles, mediaFilesFilter, loadMoreMediaFiles, deleteMediaFiles } = useMediaBrowserFilesLoader({
             getUrl: props.getUrl,
@@ -110,6 +119,8 @@ export default defineComponent({
             clearMediaFilesSelection,
         } = useMediaBrowserSelection({ mediaFiles });
 
+        const { imageUrl } = useMediaFileUtilities();
+
         onMounted(() => {
             EventBus.on(EVENT_MEDIA_UPLOADER_FILE_UPLOADED, ({ mediaFile }) => {
                 mediaFiles.value.splice(0, 0, mediaFile);
@@ -123,6 +134,12 @@ export default defineComponent({
             },
         );
 
+        watch(showViewer, () => {
+            if (!showViewer.value) {
+                displayIndex.value = -1;
+            }
+        });
+
         watchEffect(() => {
             mediaFiles.value.length; // This line triggers watch effect and is needed. Don't know why.
 
@@ -130,12 +147,6 @@ export default defineComponent({
                 void loadMoreMediaFiles();
             }
         });
-
-        function thumbnail(mediaFile: MediaFile) {
-            return mediaFile.mimeType.substr(0, 5) === 'image'
-                ? `${path.dirname(mediaFile.path)}/${mediaFile.sizes.thumbnail.filename}`
-                : null;
-        }
 
         async function deleteSelection() {
             try {
@@ -152,13 +163,38 @@ export default defineComponent({
             isFlashVisible.value = true;
         }
 
+        function onThumbnailClicked(index: number) {
+            if (selectMultipleMediaFiles.value) {
+                setBulkSelectFirstIndex(index);
+            } else {
+                displayIndex.value = index;
+                showViewer.value = true;
+            }
+        }
+
+        function viewPreviousMediaFile(): void {
+            if (displayIndex.value > 0) {
+                displayIndex.value--;
+            } else {
+                displayIndex.value = mediaFiles.value.length - 1;
+            }
+        }
+
+        function viewNextMediaFile(): void {
+            if (displayIndex.value < mediaFiles.value.length - 1) {
+                displayIndex.value++;
+            } else {
+                displayIndex.value = 0;
+            }
+        }
+
         return {
             mediaFiles,
             mediaFilesFilter,
             endOfList,
-            thumbnail,
+            imageUrl,
             isMediaFileSelected,
-            setBulkSelectFirstIndex,
+            onThumbnailClicked,
             bulkMediaSelect,
             selectMultipleMediaFiles,
             clearMediaFilesSelection,
@@ -167,6 +203,10 @@ export default defineComponent({
             flashLabel,
             flashMessage,
             isFlashVisible,
+            showViewer,
+            displayIndex,
+            viewPreviousMediaFile,
+            viewNextMediaFile,
         };
     },
 });

@@ -26,7 +26,7 @@ interface MediaBrowserSelectionOptions {
 
 export default function useMediaBrowserSelection(options: MediaBrowserSelectionOptions): MediaBrowserSelection {
     const selectedMediaFiles: Ref<MediaFile[]> = ref([]);
-    const selectionFirstIndex = ref(0);
+    const selectionFirstIndex = ref(-1);
     const selectMultiple = ref(false);
 
     function isMediaFileSelected(mediaFile: MediaFile): boolean {
@@ -34,14 +34,10 @@ export default function useMediaBrowserSelection(options: MediaBrowserSelectionO
     }
 
     function setBulkSelectFirstIndex(index: number): void {
-        if (!selectMultiple.value) {
-            const isToggle = !!selectedMediaFiles.value.find((f) => f.id === options.mediaFiles.value[index].id);
-            clearMediaFilesSelection();
+        const isToggle = !!selectedMediaFiles.value.find((f) => f.id === options.mediaFiles.value[index].id);
+        clearMediaFilesSelection();
 
-            if (!isToggle) {
-                selectMediaFile(options.mediaFiles.value[index]);
-            }
-        } else {
+        if (!isToggle) {
             selectMediaFile(options.mediaFiles.value[index]);
         }
 
@@ -49,7 +45,7 @@ export default function useMediaBrowserSelection(options: MediaBrowserSelectionO
     }
 
     function bulkMediaSelect(index: number): void {
-        if (selectMultiple.value) {
+        if (selectMultiple.value && selectionFirstIndex.value !== -1) {
             const files = options.mediaFiles.value.slice(selectionFirstIndex.value, index + 1);
             files.forEach((file) => {
                 if (!selectedMediaFiles.value.find((f) => f.id === file.id)) {
@@ -72,6 +68,7 @@ export default function useMediaBrowserSelection(options: MediaBrowserSelectionO
 
     function clearMediaFilesSelection(): void {
         selectedMediaFiles.value.splice(0, selectedMediaFiles.value.length);
+        selectionFirstIndex.value = -1;
     }
 
     return {
