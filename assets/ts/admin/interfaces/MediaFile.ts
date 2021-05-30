@@ -9,6 +9,7 @@
 
 import ContentEntity from 'admin/interfaces/ContentEntity';
 import ImageSizes from 'admin/interfaces/ImageSizes';
+import GenericObject from 'admin/interfaces/GenericObject';
 
 export default interface MediaFile extends ContentEntity {
     width: number;
@@ -23,4 +24,5 @@ export default interface MediaFile extends ContentEntity {
     alternativeText?: string;
     caption?: string;
     copyright?: string;
+    exif?: GenericObject<any>;
 }

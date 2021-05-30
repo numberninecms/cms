@@ -65,6 +65,7 @@ class MediaFile extends ContentEntity
 
     /**
      * @ORM\Column(type="json", nullable=true)
+     * @Groups("media_file_get")
      */
     private array $exif = [];
 
