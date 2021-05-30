@@ -1,7 +1,7 @@
 {% for label, messages in app.flashes %}
     {% for message in messages %}
         <div
-            class="flash-{{ label }}"
+            class="flash-{{ label }} sticky top-0"
             data-controller="dismiss autodismiss"
             data-dismiss-target="item"
             data-autodismiss-target="item"

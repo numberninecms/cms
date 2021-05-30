@@ -12,6 +12,7 @@
             {% include '@NumberNine/admin/util/dynamic_tabs.html.twig' with {tabs: [
                 {id: 'browse', icon: 'images', text: 'Browse'},
                 {id: 'upload', icon: 'upload', text: 'Upload'},
+                {id: 'trash', icon: 'trash', text: 'Trash', if: deleted_media_files|length > 0},
             ]} %}
 
             {% embed '@NumberNine/admin/util/dynamic_tabs_panel.html.twig' with {id: 'browse'} %}
@@ -26,6 +27,15 @@
             } %}
                 {% block content %}
                     {% include '@NumberNine/admin/media/index_panel_upload.html.twig' %}
+                {% endblock %}
+            {% endembed %}
+
+            {% embed '@NumberNine/admin/util/dynamic_tabs_panel.html.twig' with {
+                id: 'trash',
+                class: 'flex flex-grow',
+            } %}
+                {% block content %}
+                    {% include '@NumberNine/admin/media/index_panel_trash.html.twig' %}
                 {% endblock %}
             {% endembed %}
         </div>

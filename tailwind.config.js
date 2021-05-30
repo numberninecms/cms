@@ -24,6 +24,9 @@ module.exports = {
             lg: '1024px',
         },
         extend: {
+            inset: {
+                'ui-area': '48px',
+            },
             colors: {
                 light: {
                     DEFAULT: dynamicHsl('var(--color-primary-h)', 'var(--color-primary-s)', 'calc(var(--color-primary-l) + 40%)'),

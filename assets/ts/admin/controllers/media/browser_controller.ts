@@ -13,14 +13,17 @@ import MediaBrowser from '../../vue/components/MediaBrowser.vue';
 
 export default class extends Controller {
     public static values = {
-        mediaUrl: String,
+        getUrl: String,
+        deleteUrl: String,
     };
 
-    private readonly mediaUrlValue: string;
+    private readonly getUrlValue: string;
+    private readonly deleteUrlValue: string;
 
     public connect(): void {
         createApp(MediaBrowser, {
-            mediaUrl: this.mediaUrlValue,
+            getUrl: this.getUrlValue,
+            deleteUrl: this.deleteUrlValue,
         }).mount('#media-browser');
     }
 }

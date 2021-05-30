@@ -41,8 +41,15 @@ export default class extends Controller {
         });
 
         if (tabId) {
-            this.tabTargets.find((tab) => tab.dataset.tabId === tabId)?.classList.add('active', 'font-semibold');
-            this.panelTargets.find((panel) => panel.dataset.tabId === tabId)!.style.display = 'inherit';
+            const tab = this.tabTargets.find((tab) => tab.dataset.tabId === tabId);
+
+            if (tab) {
+                tab.classList.add('active', 'font-semibold');
+                this.panelTargets.find((panel) => panel.dataset.tabId === tabId)!.style.display = 'inherit';
+            } else if (this.panelTargets.length > 0) {
+                this.panelTargets[0].style.display = 'inherit';
+                window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
+            }
         }
     }
 }

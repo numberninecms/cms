@@ -113,8 +113,8 @@ final class MediaRuntime implements RuntimeExtensionInterface
         return sprintf(
             '<img src="%s" width="%d" height="%d" %s>',
             $assetPath,
-            $sizeInfo['width'] ?? $mediaFile->getWidth(),
-            $sizeInfo['height'] ?? $mediaFile->getHeight(),
+            $attributes['width'] ?? $sizeInfo['width'] ?? $mediaFile->getWidth(),
+            $attributes['height'] ?? $sizeInfo['height'] ?? $mediaFile->getHeight(),
             array_implode_associative($attributes, ' ', '=', '', '"'),
         );
     }

@@ -15,13 +15,15 @@ import axios from 'axios';
 type SortDirection = 'asc' | 'desc';
 
 interface MediaBrowserFilesLoaderOptions {
-    mediaUrl: string;
+    getUrl: string;
+    deleteUrl: string;
 }
 
 interface MediaBrowserFilesLoader {
     mediaFiles: Ref<MediaFile[]>;
     mediaFilesFilter: Ref<string>;
     loadMoreMediaFiles: () => void;
+    deleteMediaFiles: (files: MediaFile[]) => Promise<void>;
 }
 
 interface Pagination {
@@ -52,7 +54,7 @@ export default function useMediaBrowserFilesLoader(options: MediaBrowserFilesLoa
             status: 'publish,private,pending_review,password,draft',
         };
 
-        const response = await axios.get(options.mediaUrl, {
+        const response = await axios.get(options.getUrl, {
             params: pagination,
         });
 
@@ -86,9 +88,21 @@ export default function useMediaBrowserFilesLoader(options: MediaBrowserFilesLoa
         void fetch();
     }
 
+    async function deleteMediaFiles(files: MediaFile[]): Promise<void> {
+        await axios.post(options.deleteUrl, { ids: files.map((e) => e.id) });
+
+        files.forEach((file) => {
+            mediaFiles.value.splice(
+                mediaFiles.value.findIndex((f) => f.id === file.id),
+                1,
+            );
+        });
+    }
+
     return {
         mediaFiles,
         mediaFilesFilter: filter,
         loadMoreMediaFiles,
+        deleteMediaFiles,
     };
 }

@@ -9,37 +9,58 @@
 
 <template>
     <div class="flex flex-col">
-        <div class="flex items-center space-x-5 pb-3">
-            <label class="space-x-3" title="Hold SHIFT to select a range of files">
-                <input v-model="selectMultipleMediaFiles" type="checkbox" />
-                <span>Select multiple files</span>
-            </label>
+        <FlashBar
+            v-model:visible="isFlashVisible"
+            :label="flashLabel"
+            :message="flashMessage"
+            class="sticky top-ui-area"
+        />
+        <div class="flex flex-col p-3">
+            <div class="flex items-center space-x-5 pb-3 h-8">
+                <label class="space-x-3" title="Hold SHIFT to select a range of files">
+                    <input v-model="selectMultipleMediaFiles" type="checkbox" />
+                    <span>Select multiple files</span>
+                </label>
 
-            <button
-                v-if="selectedMediaFilesCount > 0"
-                class="btn btn-color-red btn-size-xsmall"
-                type="button"
-                @click="clearMediaFilesSelection"
-            >
-                Clear selection
-            </button>
-        </div>
-        <div class="flex flex-wrap gap-3">
-            <div
-                v-for="(mediaFile, index) in mediaFiles"
-                :key="mediaFile.id"
-                class="mediafile shadow-lg"
-                :class="{ selected: isMediaFileSelected(mediaFile) }"
-                @click.exact="setBulkSelectFirstIndex(index)"
-                @click.shift.exact="bulkMediaSelect(index)"
-            >
-                <img v-if="thumbnail(mediaFile)" :src="thumbnail(mediaFile)" :alt="mediaFile.title" />
-                <div v-else class="flex items-center justify-center">
-                    <i class="fa fa-file text-primary text-7xl" />
+                <button
+                    v-if="selectedMediaFilesCount > 0"
+                    class="btn btn-color-red btn-size-xsmall space-x-3"
+                    type="button"
+                    title="Delete selected media"
+                    @click="deleteSelection"
+                >
+                    <i class="fa fa-trash"></i>
+                    <span class="hidden md:inline">Delete selected media</span>
+                </button>
+
+                <button
+                    v-if="selectedMediaFilesCount > 0"
+                    class="btn btn-color-white btn-style-outline btn-size-xsmall space-x-3"
+                    type="button"
+                    title="Clear selection"
+                    @click="clearMediaFilesSelection"
+                >
+                    <i class="fa fa-eraser"></i>
+                    <span class="hidden md:inline">Clear selection</span>
+                </button>
+            </div>
+            <div class="flex flex-wrap gap-3">
+                <div
+                    v-for="(mediaFile, index) in mediaFiles"
+                    :key="mediaFile.id"
+                    class="mediafile shadow-lg"
+                    :class="{ selected: isMediaFileSelected(mediaFile) }"
+                    @click.exact="setBulkSelectFirstIndex(index)"
+                    @click.shift.exact="bulkMediaSelect(index)"
+                >
+                    <img v-if="thumbnail(mediaFile)" :src="thumbnail(mediaFile)" :alt="mediaFile.title" />
+                    <div v-else class="flex items-center justify-center">
+                        <i class="fa fa-file text-primary text-7xl" />
+                    </div>
                 </div>
             </div>
+            <div ref="endOfList"></div>
         </div>
-        <div ref="endOfList"></div>
     </div>
 </template>
 
@@ -52,25 +73,32 @@ import { EVENT_MEDIA_UPLOADER_FILE_UPLOADED } from 'admin/events/events';
 import { EventBus } from 'admin/admin';
 import useMediaBrowserSelection from 'admin/vue/functions/mediaBrowserSelection';
 import useMediaBrowserFilesLoader from 'admin/vue/functions/mediaBrowserFilesLoader';
-
-interface MediaBrowserProps {
-    mediaUrl: string;
-}
+import FlashBar from 'admin/vue/components/FlashBar.vue';
 
 export default defineComponent({
     name: 'MediaBrowser',
+    components: { FlashBar },
     props: {
-        mediaUrl: {
+        getUrl: {
+            type: String,
+            required: true,
+        },
+        deleteUrl: {
             type: String,
             required: true,
         },
     },
-    setup(props: MediaBrowserProps) {
+    setup(props) {
         const endOfList = ref(null);
         let endOfListIsVisible = useElementVisibility(endOfList);
 
-        const { mediaFiles, mediaFilesFilter, loadMoreMediaFiles } = useMediaBrowserFilesLoader({
-            mediaUrl: props.mediaUrl,
+        const flashLabel = ref('');
+        const flashMessage = ref('');
+        const isFlashVisible = ref(false);
+
+        const { mediaFiles, mediaFilesFilter, loadMoreMediaFiles, deleteMediaFiles } = useMediaBrowserFilesLoader({
+            getUrl: props.getUrl,
+            deleteUrl: props.deleteUrl,
         });
 
         const {
@@ -109,6 +137,21 @@ export default defineComponent({
                 : null;
         }
 
+        async function deleteSelection() {
+            try {
+                await deleteMediaFiles([...selectedMediaFiles.value]);
+                clearMediaFilesSelection();
+
+                flashLabel.value = 'success';
+                flashMessage.value = 'Media files removed successfully.';
+            } catch (e) {
+                flashLabel.value = 'error';
+                flashMessage.value = 'Unable to remove media files.';
+            }
+
+            isFlashVisible.value = true;
+        }
+
         return {
             mediaFiles,
             mediaFilesFilter,
@@ -120,6 +163,10 @@ export default defineComponent({
             selectMultipleMediaFiles,
             clearMediaFilesSelection,
             selectedMediaFilesCount: computed(() => selectedMediaFiles.value.length),
+            deleteSelection,
+            flashLabel,
+            flashMessage,
+            isFlashVisible,
         };
     },
 });
