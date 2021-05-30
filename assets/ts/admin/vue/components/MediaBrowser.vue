@@ -48,7 +48,7 @@
                 <div
                     v-for="(mediaFile, index) in mediaFiles"
                     :key="mediaFile.id"
-                    class="mediafile shadow-lg"
+                    class="mediafile shadow-lg flex items-center"
                     :class="{ selected: isMediaFileSelected(mediaFile) }"
                     @click.exact="onThumbnailClicked(index)"
                     @click.shift.exact="bulkMediaSelect(index)"

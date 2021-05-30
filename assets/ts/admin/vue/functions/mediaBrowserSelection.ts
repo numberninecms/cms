@@ -34,11 +34,13 @@ export default function useMediaBrowserSelection(options: MediaBrowserSelectionO
     }
 
     function setBulkSelectFirstIndex(index: number): void {
-        const isToggle = !!selectedMediaFiles.value.find((f) => f.id === options.mediaFiles.value[index].id);
-        clearMediaFilesSelection();
+        const file = selectedMediaFiles.value.find((f) => f.id === options.mediaFiles.value[index].id);
+        const isSelected = !!file;
 
-        if (!isToggle) {
+        if (!isSelected) {
             selectMediaFile(options.mediaFiles.value[index]);
+        } else {
+            selectedMediaFiles.value.splice(selectedMediaFiles.value.indexOf(file!), 1);
         }
 
         selectionFirstIndex.value = index;
