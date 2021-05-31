@@ -164,7 +164,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 .dropzone {
     position: relative;
-    overflow: hidden;
 
     @apply flex-1 flex flex-col items-center;
 

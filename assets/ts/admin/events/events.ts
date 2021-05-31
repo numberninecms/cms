@@ -8,3 +8,6 @@
  */
 
 export const EVENT_MEDIA_UPLOADER_FILE_UPLOADED = 'media-uploader:file-uploaded';
+export const EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_CLICKED = 'media-thumbnails-list:thumbnail-clicked';
+export const EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_SHIFT_CLICKED = 'media-thumbnails-list:thumbnail-shift-clicked';
+export const EVENT_TINY_EDITOR_SHOW_MEDIA_LIBRARY = 'tiny-editor:show-media-library';

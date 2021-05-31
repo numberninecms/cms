@@ -1,0 +1,31 @@
+<div class="modal-backdrop" data-controller="dynamic-tabs modal" style="display: none">
+    <div class="modal-backdrop-container">
+        <div class="modal-card" @click.stop>
+            <div class="flex justify-between p-3 shadow">
+                {% include '@NumberNine/admin/util/dynamic_tabs.html.twig' with {tabs: [
+                    {id: 'browse', icon: 'images', text: 'Browse'},
+                    {id: 'upload', icon: 'upload', text: 'Upload'},
+                ]} %}
+                <button class="btn btn-color-white btn-style-outline" data-action="modal#close">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="overflow-hidden flex flex-grow p-3">
+                {% embed '@NumberNine/admin/util/dynamic_tabs_panel.html.twig' with {id: 'browse'} %}
+                    {% block content %}
+                        {% include '@NumberNine/admin/media/index_panel_browse.html.twig' %}
+                    {% endblock %}
+                {% endembed %}
+
+                {% embed '@NumberNine/admin/util/dynamic_tabs_panel.html.twig' with {
+                    id: 'upload',
+                    class: 'flex flex-col flex-grow',
+                } %}
+                    {% block content %}
+                        {% include '@NumberNine/admin/media/index_panel_upload.html.twig' %}
+                    {% endblock %}
+                {% endembed %}
+            </div>
+        </div>
+    </div>
+</div>

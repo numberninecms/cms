@@ -2,6 +2,7 @@
      data-controller="media--browser"
      data-media--browser-get-url-value="{{ path('numbernine_admin_contententity_get_collection', {type: 'media_file'}) }}"
      data-media--browser-delete-url-value="{{ path('numbernine_admin_contententity_delete_collection', {type: 'media_file'}) }}"
+     data-media--browser-mode-value="{{ mode ?? 'extended' }}"
 >
     <div id="media-browser"></div>
 </div>

@@ -105,24 +105,3 @@ export default defineComponent({
     },
 });
 </script>
-
-<style lang="scss" scoped>
-.modal-backdrop {
-    @apply fixed inset-0 z-50
-        bg-black bg-opacity-50
-        flex;
-}
-
-.modal-backdrop-container {
-    @apply flex flex-col flex-grow items-center justify-center;
-}
-
-.modal-card {
-    @apply flex flex-col flex-grow justify-between
-    m-5 w-11/12
-    overflow-hidden relative
-    rounded-lg shadow-xl
-    text-left
-    bg-white;
-}
-</style>

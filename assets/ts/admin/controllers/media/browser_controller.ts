@@ -15,15 +15,18 @@ export default class extends Controller {
     public static values = {
         getUrl: String,
         deleteUrl: String,
+        mode: String,
     };
 
     private readonly getUrlValue: string;
     private readonly deleteUrlValue: string;
+    private readonly modeValue: string;
 
     public connect(): void {
         createApp(MediaBrowser, {
             getUrl: this.getUrlValue,
             deleteUrl: this.deleteUrlValue,
+            mode: this.modeValue,
         }).mount('#media-browser');
     }
 }

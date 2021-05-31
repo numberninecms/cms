@@ -1,5 +1,5 @@
 {% trans_default_domain 'numbernine' %}
-<div class="shadow-md rounded-lg p-3 mr-3 mt-3 bg-white">
+<div class="shadow-md rounded-lg p-3 mr-3 mt-3 bg-white border">
     <div class="text-xl font-semibold border-b border-gray-300 pb-3">{{ (title ?? 'Missing title')|trans }}</div>
     {% block content %}{% endblock %}
     {% set footer = block('footer') ?? '' %}

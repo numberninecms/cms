@@ -15,8 +15,9 @@ import axios from 'axios';
 type SortDirection = 'asc' | 'desc';
 
 interface MediaBrowserFilesLoaderOptions {
-    getUrl: string;
-    deleteUrl: string;
+    mediaFiles?: MediaFile[];
+    getUrl?: string;
+    deleteUrl?: string;
 }
 
 interface MediaBrowserFilesLoader {
@@ -44,6 +45,10 @@ export default function useMediaBrowserFilesLoader(options: MediaBrowserFilesLoa
     let maxPages = 1;
     let isFetching = false;
 
+    if (options.mediaFiles) {
+        mediaFiles.value.splice(0, 0, ...options.mediaFiles);
+    }
+
     async function getMediaFiles(page = 1): Promise<PaginatedCollectionResponse<MediaFile>> {
         const pagination: Pagination = {
             startRow: (page - 1) * ROWS_PER_PAGE,
@@ -54,7 +59,7 @@ export default function useMediaBrowserFilesLoader(options: MediaBrowserFilesLoa
             status: 'publish,private,pending_review,password,draft',
         };
 
-        const response = await axios.get(options.getUrl, {
+        const response = await axios.get(options.getUrl as string, {
             params: pagination,
         });
 
@@ -89,7 +94,7 @@ export default function useMediaBrowserFilesLoader(options: MediaBrowserFilesLoa
     }
 
     async function deleteMediaFiles(files: MediaFile[]): Promise<void> {
-        await axios.post(options.deleteUrl, { ids: files.map((e) => e.id) });
+        await axios.post(options.deleteUrl as string, { ids: files.map((e) => e.id) });
 
         files.forEach((file) => {
             mediaFiles.value.splice(

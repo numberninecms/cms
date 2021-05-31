@@ -51,3 +51,13 @@
                 data-list-selector="#{{ id }}">{{ add_new_label }}</button>
     </div>
 {%- endblock key_value_collection_row -%}
+
+{%- block tiny_editor_row -%}
+    {%- set row_attr = row_attr|merge({'data-controller': 'tiny-editor'}) -%}
+    {{- block('form_row') -}}
+{%- endblock -%}
+
+{%- block tiny_editor_widget -%}
+    {%- set row_attr = row_attr|merge({'data-tiny-editor-target': 'editor'}) -%}
+    <textarea{% with {attr: row_attr} %} {{ block('attributes') }}{% endwith %}>{{ value }}</textarea>
+{%- endblock -%}

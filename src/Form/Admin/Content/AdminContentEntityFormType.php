@@ -16,6 +16,7 @@ use NumberNine\Entity\ContentEntity;
 use NumberNine\Event\HiddenCustomFieldsEvent;
 use NumberNine\Form\DataTransformer\AssociativeArrayToKeyValueCollectionTransformer;
 use NumberNine\Form\Type\KeyValueCollectionType;
+use NumberNine\Form\Type\TinyEditorType;
 use NumberNine\Model\Content\PublishingStatusInterface;
 use NumberNine\Theme\TemplateResolver;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -57,7 +58,7 @@ final class AdminContentEntityFormType extends AbstractType
     {
         $builder
             ->add('title', TextType::class)
-            ->add('content', null, ['required' => false])
+            ->add('content', TinyEditorType::class, ['required' => false])
             ->add('seoTitle', null, ['required' => false])
             ->add('seoDescription', TextareaType::class, ['required' => false])
             ->add('customFields', KeyValueCollectionType::class, [

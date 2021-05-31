@@ -16,49 +16,19 @@
             class="sticky top-ui-area"
         />
         <div class="flex flex-col p-3">
-            <div class="flex items-center space-x-5 pb-3 h-8">
-                <label class="space-x-3" title="Hold SHIFT to select a range of files">
-                    <input v-model="selectMultipleMediaFiles" type="checkbox" />
-                    <span>Select multiple files</span>
-                </label>
-
-                <button
-                    v-if="selectedMediaFilesCount > 0"
-                    class="btn btn-color-red btn-size-xsmall space-x-3"
-                    type="button"
-                    title="Delete selected media"
-                    @click="deleteSelection"
-                >
-                    <i class="fa fa-trash"></i>
-                    <span class="hidden md:inline">Delete selected media</span>
-                </button>
-
-                <button
-                    v-if="selectedMediaFilesCount > 0"
-                    class="btn btn-color-white btn-style-outline btn-size-xsmall space-x-3"
-                    type="button"
-                    title="Clear selection"
-                    @click="clearMediaFilesSelection"
-                >
-                    <i class="fa fa-eraser"></i>
-                    <span class="hidden md:inline">Clear selection</span>
-                </button>
-            </div>
-            <div class="flex flex-wrap gap-3">
-                <div
-                    v-for="(mediaFile, index) in mediaFiles"
-                    :key="mediaFile.id"
-                    class="mediafile shadow-lg flex items-center"
-                    :class="{ selected: isMediaFileSelected(mediaFile) }"
-                    @click.exact="onThumbnailClicked(index)"
-                    @click.shift.exact="bulkMediaSelect(index)"
-                >
-                    <img v-if="imageUrl(mediaFile)" :src="imageUrl(mediaFile)" :alt="mediaFile.title" />
-                    <div v-else class="flex items-center justify-center">
-                        <i class="fa fa-file text-primary text-7xl" />
-                    </div>
-                </div>
-            </div>
+            <MediaThumbnailsSelectionBar
+                v-model:select-multiple="selectMultipleMediaFiles"
+                :media-files="mediaFiles"
+                :selected-media-files="selectedMediaFiles"
+                @delete-selected-files-clicked="deleteSelection"
+                @clear-selection-clicked="clearMediaFilesSelection"
+            />
+            <MediaThumbnailsList
+                :media-files="mediaFiles"
+                :selected-media-files="selectedMediaFiles"
+                @thumbnail-clicked="onThumbnailClicked"
+                @thumbnail-shift-clicked="onThumbnailShiftClicked"
+            />
             <div ref="endOfList"></div>
         </div>
         <MediaViewer
@@ -72,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, watch, watchEffect } from 'vue';
+import { defineComponent, onMounted, ref, watch, watchEffect } from 'vue';
 import { useElementVisibility } from '@vueuse/core';
 import { EVENT_MEDIA_UPLOADER_FILE_UPLOADED } from 'admin/events/events';
 import { EventBus } from 'admin/admin';
@@ -80,11 +50,12 @@ import useMediaBrowserSelection from 'admin/vue/functions/mediaBrowserSelection'
 import useMediaBrowserFilesLoader from 'admin/vue/functions/mediaBrowserFilesLoader';
 import FlashBar from 'admin/vue/components/FlashBar.vue';
 import MediaViewer from 'admin/vue/components/MediaViewer.vue';
-import useMediaFileUtilities from 'admin/vue/functions/mediaFileUtilities';
+import MediaThumbnailsList from 'admin/vue/components/MediaThumbnailsList.vue';
+import MediaThumbnailsSelectionBar from 'admin/vue/components/MediaThumbnailsSelectionBar.vue';
 
 export default defineComponent({
     name: 'MediaBrowser',
-    components: { MediaViewer, FlashBar },
+    components: { MediaThumbnailsSelectionBar, MediaThumbnailsList, MediaViewer, FlashBar },
     props: {
         getUrl: {
             type: String,
@@ -92,6 +63,10 @@ export default defineComponent({
         },
         deleteUrl: {
             type: String,
+            required: true,
+        },
+        mode: {
+            type: String as () => 'extended' | 'minimal',
             required: true,
         },
     },
@@ -112,14 +87,11 @@ export default defineComponent({
 
         const {
             selectedMediaFiles,
-            isMediaFileSelected,
             setBulkSelectFirstIndex,
             bulkMediaSelect,
             selectMultipleMediaFiles,
             clearMediaFilesSelection,
         } = useMediaBrowserSelection({ mediaFiles });
-
-        const { imageUrl } = useMediaFileUtilities();
 
         onMounted(() => {
             EventBus.on(EVENT_MEDIA_UPLOADER_FILE_UPLOADED, ({ mediaFile }) => {
@@ -163,13 +135,17 @@ export default defineComponent({
             isFlashVisible.value = true;
         }
 
-        function onThumbnailClicked(index: number) {
+        function onThumbnailClicked({ index }) {
             if (selectMultipleMediaFiles.value) {
                 setBulkSelectFirstIndex(index);
             } else {
                 displayIndex.value = index;
                 showViewer.value = true;
             }
+        }
+
+        function onThumbnailShiftClicked({ index }) {
+            bulkMediaSelect(index);
         }
 
         function viewPreviousMediaFile(): void {
@@ -192,13 +168,11 @@ export default defineComponent({
             mediaFiles,
             mediaFilesFilter,
             endOfList,
-            imageUrl,
-            isMediaFileSelected,
+            selectedMediaFiles,
             onThumbnailClicked,
-            bulkMediaSelect,
+            onThumbnailShiftClicked,
             selectMultipleMediaFiles,
             clearMediaFilesSelection,
-            selectedMediaFilesCount: computed(() => selectedMediaFiles.value.length),
             deleteSelection,
             flashLabel,
             flashMessage,
@@ -211,22 +185,3 @@ export default defineComponent({
     },
 });
 </script>
-
-<style lang="scss" scoped>
-.mediafile {
-    @apply cursor-pointer;
-    width: 105px;
-    height: 105px;
-}
-
-.selected {
-    @apply ring-2 ring-primary;
-}
-
-@screen md {
-    .mediafile {
-        width: 150px;
-        height: 150px;
-    }
-}
-</style>
