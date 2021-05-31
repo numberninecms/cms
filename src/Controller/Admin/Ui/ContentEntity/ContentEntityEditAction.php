@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * @Route("/{type}/{id<\d+>}/", name="numbernine_admin_content_entity_edit", methods={"GET", "POST"})
+ * @Route("/{type}/{id<\d+>}/", name="numbernine_admin_content_entity_edit", methods={"GET", "POST"}, priority="-1000")
  */
 final class ContentEntityEditAction extends AbstractController implements AdminController
 {

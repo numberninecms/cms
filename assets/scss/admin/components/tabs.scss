@@ -31,6 +31,6 @@
     }
 
     .tab-panel {
-        @apply hidden;
+        @apply flex flex-grow;
     }
 }

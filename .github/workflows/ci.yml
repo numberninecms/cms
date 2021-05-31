@@ -58,6 +58,14 @@ jobs:
                     ', github.ref) == false
                 run: composer update --lock
 
+            -   name: Build assets
+                if: contains('
+                    refs/heads/master
+                    refs/heads/develop
+                    refs/tags/
+                    ', github.ref) == false
+                run: yarn install --force && yarn build
+
             -   name: Prepare folders and env files
                 run: |
                     echo 'DATABASE_URL=mysql://test:test@mysql:3306/numbernine_test?serverVersion=5.7' > .env.test.local

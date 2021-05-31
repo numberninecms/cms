@@ -15,7 +15,7 @@ module.exports = {
     purge: [
         './assets/scss/purge_safelist.txt',
         './src/Bundle/Resources/views/admin/**/*.twig',
-        './assets/ts/admin/**/*.{js,jsx,ts,tsx,vue}',
+        './assets/ts/**/*.{js,jsx,ts,tsx,vue}',
     ],
     theme: {
         screens: {
@@ -24,6 +24,9 @@ module.exports = {
             lg: '1024px',
         },
         extend: {
+            inset: {
+                'ui-area': '48px',
+            },
             colors: {
                 light: {
                     DEFAULT: dynamicHsl('var(--color-primary-h)', 'var(--color-primary-s)', 'calc(var(--color-primary-l) + 40%)'),

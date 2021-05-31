@@ -9,7 +9,7 @@
 
 .menu-sidebar {
     @apply
-        flex-shrink
+        flex-initial
         hidden lg:block
         text-light bg-quaternary;
 

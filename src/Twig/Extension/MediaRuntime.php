@@ -22,6 +22,7 @@ use Twig\Error\RuntimeError;
 use Twig\Extension\RuntimeExtensionInterface;
 
 use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
+use function NumberNine\Common\Util\ConfigUtil\get_file_upload_max_size;
 
 final class MediaRuntime implements RuntimeExtensionInterface
 {
@@ -112,9 +113,14 @@ final class MediaRuntime implements RuntimeExtensionInterface
         return sprintf(
             '<img src="%s" width="%d" height="%d" %s>',
             $assetPath,
-            $sizeInfo['width'] ?? $mediaFile->getWidth(),
-            $sizeInfo['height'] ?? $mediaFile->getHeight(),
+            $attributes['width'] ?? $sizeInfo['width'] ?? $mediaFile->getWidth(),
+            $attributes['height'] ?? $sizeInfo['height'] ?? $mediaFile->getHeight(),
             array_implode_associative($attributes, ' ', '=', '', '"'),
         );
+    }
+
+    public function getMaxUploadSize(): int
+    {
+        return get_file_upload_max_size();
     }
 }

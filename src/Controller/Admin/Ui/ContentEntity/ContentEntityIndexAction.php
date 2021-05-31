@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * @Route("/{type}/", name="numbernine_admin_content_entity_index", methods={"GET"})
+ * @Route("/{type}/", name="numbernine_admin_content_entity_index", methods={"GET"}, priority="-1000")
  */
 final class ContentEntityIndexAction extends AbstractController implements AdminController
 {

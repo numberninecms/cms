@@ -66,6 +66,11 @@ services:
     NumberNine\Theme\CssFramework\CssFrameworkInterface: '@NumberNine\Theme\CssFramework\TailwindCss'
     NumberNine\Theme\TemplateResolverInterface: '@NumberNine\Theme\TemplateResolver'
 
+
+    NumberNine\EventSubscriber\MediaFileDeletionEventSubscriber:
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
     Twig\Extension\StringLoaderExtension: ~
 
     Symfony\Cmf\Component\Routing\RouteProviderInterface: '@NumberNine\Routing\RouteProvider'

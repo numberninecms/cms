@@ -65,6 +65,7 @@ class MediaFile extends ContentEntity
 
     /**
      * @ORM\Column(type="json", nullable=true)
+     * @Groups("media_file_get")
      */
     private array $exif = [];
 
@@ -296,5 +297,19 @@ class MediaFile extends ContentEntity
         }
 
         return dirname((string)$this->getPath()) . '/' . $sizeInfo['filename'];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAllAssociatedFilePaths(): array
+    {
+        $paths = [];
+
+        foreach (array_keys($this->sizes) as $size) {
+            $paths[] = $this->getSizePath($size);
+        }
+
+        return $paths;
     }
 }

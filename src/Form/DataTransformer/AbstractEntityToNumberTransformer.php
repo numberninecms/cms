@@ -13,6 +13,7 @@ namespace NumberNine\Form\DataTransformer;
 
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
+use NumberNine\Exception\ClassNotFoundException;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
@@ -52,6 +53,10 @@ abstract class AbstractEntityToNumberTransformer implements DataTransformerInter
     {
         if (!$value) {
             return null;
+        }
+
+        if (!class_exists($this->className)) {
+            throw new ClassNotFoundException($this->className);
         }
 
         $entity = $this->entityManager->getRepository($this->className)->find($value);

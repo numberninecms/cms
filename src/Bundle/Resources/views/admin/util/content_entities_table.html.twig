@@ -1,0 +1,46 @@
+{% trans_default_domain 'numbernine' %}
+{{ form_start(form) }}
+<table class="w-full" data-controller="select-all">
+    <thead>
+        <tr>
+            <th><input type="checkbox" data-action="select-all#toggle"></th>
+            <th>{{ 'Image'|trans }}</th>
+            <th>{{ 'Title'|trans }}</th>
+            <th>{{ 'Author'|trans }}</th>
+            <th>{{ 'Categories'|trans }}</th>
+            <th>{{ 'Tags'|trans }}</th>
+            <th>{{ 'Comments'|trans }}</th>
+            <th>{{ 'Date'|trans }}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td>{{ form_widget(form['entity_' ~ entity.id], {attr: {'data-select-all-target': 'child'}}) }}</td>
+            {% if entity.customType == 'media_file' %}
+                <td>{{ N9_image(entity, 'thumbnail', {width: '50', height: '50'}) }}</td>
+            {% else %}
+                <td>{{ N9_featured_image(entity, 'thumbnail', {width: '50', height: '50'}) }}</td>
+            {% endif %}
+            <td>
+                <a href="{{ N9_entity_admin_url(entity) }}" data-turbo-frame="_top">{{ entity.title }}</a>
+            </td>
+            <td>{{ entity.author }}</td>
+            <td>{{ N9_terms_links(entity, 'category') }}</td>
+            <td>{{ N9_terms_links(entity, 'tag') }}</td>
+            <td>{{ entity.comments|length }}</td>
+            <td>{{ (entity.publishedAt ?? entity.updatedAt)|date('d/m/Y H:i:s') }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="8"><input type="checkbox" data-action="select-all#toggle"></td>
+        </tr>
+    </tfoot>
+</table>
+<div class="flex">
+    {{ form_row(form.restore) }}
+    {{ form_row(form.delete, {row_attr: {class: 'btn btn-color-red'}}) }}
+</div>
+{{ form_end(form) }}

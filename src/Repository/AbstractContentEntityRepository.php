@@ -123,7 +123,10 @@ abstract class AbstractContentEntityRepository extends ServiceEntityRepository
 
     public function removeCollection(array $ids): void
     {
-        $this->_em->getFilters()->disable('softdeleteable');
+        if ($this->_em->getFilters()->isEnabled('softdeleteable')) {
+            $this->_em->getFilters()->disable('softdeleteable');
+        }
+
         $entities = $this->findBy(['id' => $ids]);
 
         foreach ($entities as $entity) {
@@ -148,7 +151,10 @@ abstract class AbstractContentEntityRepository extends ServiceEntityRepository
 
     public function restoreCollection(array $ids): void
     {
-        $this->_em->getFilters()->disable('softdeleteable');
+        if ($this->_em->getFilters()->isEnabled('softdeleteable')) {
+            $this->_em->getFilters()->disable('softdeleteable');
+        }
+
         $entities = $this->findBy(['id' => $ids]);
 
         foreach ($entities as $entity) {
@@ -158,7 +164,9 @@ abstract class AbstractContentEntityRepository extends ServiceEntityRepository
 
     public function hardDeleteAllDeleted(string $type): void
     {
-        $this->_em->getFilters()->disable('softdeleteable');
+        if ($this->_em->getFilters()->isEnabled('softdeleteable')) {
+            $this->_em->getFilters()->disable('softdeleteable');
+        }
 
         $entities = $this->createQueryBuilder('c')
             ->where('c.deletedAt IS NOT NULL')

@@ -16,3 +16,21 @@
 [type='checkbox'], [type='radio'] {
     @apply text-primary border-secondary-100 focus:text-primary focus:ring-primary focus:ring-offset-white;
 }
+
+[type="range"] {
+    @apply rounded-lg overflow-hidden appearance-none bg-primary-100 h-3 w-80;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+
+    [type="range"]::-webkit-slider-thumb {
+        width: 15px;
+        -webkit-appearance: none;
+        appearance: none;
+        height: 15px;
+        cursor: ew-resize;
+        background: #FFF;
+        box-shadow: -405px 0 0 400px var(--color-primary);
+        border-radius: 50%;
+    }
+}

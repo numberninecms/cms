@@ -7,10 +7,13 @@
  * file that was distributed with this source code.
  */
 
-import '../../scss/admin/admin.scss';
-import '../../images/NumberNineWithoutText.png';
+import mitt from 'mitt';
+import 'styles/admin/admin.scss';
+import 'images/NumberNineWithoutText.png';
 import { startStimulusApp } from '@symfony/stimulus-bridge';
 
 export const app = startStimulusApp(
     require.context('@symfony/stimulus-bridge/lazy-controller-loader!./controllers', true, /\.([jt])sx?$/),
 );
+
+export const EventBus = mitt();

@@ -1,6 +1,11 @@
 {% trans_default_domain 'numbernine' %}
 {% extends '@NumberNine/admin/base.html.twig' %}
 
+{% block title %}{{ '%1% edition: %2%'|trans({
+    '%1%': content_type.labels.singularName|capitalize,
+    '%2%': entity.title,
+}) }}{% endblock %}
+
 {% block content %}
     <turbo-frame id="numbernine_admin_content_entity_create">
         <div class="flex flex-col" data-controller="dynamic-tabs">
