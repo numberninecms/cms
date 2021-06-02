@@ -7,9 +7,14 @@
  * file that was distributed with this source code.
  */
 
-export default interface MediaSettings {
-    size: string;
-    alignment: string;
-    link: string;
-    linkUrl: string;
-}
+import { defineStore } from 'pinia';
+
+export const useMediaViewerStore = defineStore({
+    id: 'mediaViewer',
+    state() {
+        return {
+            displayIndex: -1,
+            show: false,
+        };
+    },
+});

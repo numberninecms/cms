@@ -7,9 +7,15 @@
  * file that was distributed with this source code.
  */
 
-export default interface MediaSettings {
-    size: string;
-    alignment: string;
-    link: string;
-    linkUrl: string;
-}
+import { defineStore } from 'pinia';
+
+export const useFlashesStore = defineStore({
+    id: 'flashes',
+    state() {
+        return {
+            label: '',
+            message: '',
+            visible: false,
+        };
+    },
+});
