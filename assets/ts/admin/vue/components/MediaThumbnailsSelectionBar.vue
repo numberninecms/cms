@@ -10,7 +10,7 @@
 <template>
     <div class="flex items-center space-x-5 pb-3 h-8">
         <label class="space-x-3" title="Hold SHIFT to select a range of files">
-            <input v-model="checkbox" type="checkbox" @update:modelValue="$emit('update:select-multiple', $event)" />
+            <input v-model="checkbox" type="checkbox" />
             <span>Select multiple files</span>
         </label>
 
@@ -19,7 +19,7 @@
             class="btn btn-color-red btn-size-xsmall space-x-3"
             type="button"
             title="Delete selected media"
-            @click="$emit('delete-selected-files-clicked')"
+            @click="deleteSelection"
         >
             <i class="fa fa-trash"></i>
             <span class="hidden md:inline">Delete selected media</span>
@@ -30,7 +30,7 @@
             class="btn btn-color-white btn-style-outline btn-size-xsmall space-x-3"
             type="button"
             title="Clear selection"
-            @click="$emit('clear-selection-clicked')"
+            @click="clearMediaFilesSelection"
         >
             <i class="fa fa-eraser"></i>
             <span class="hidden md:inline">Clear selection</span>
@@ -39,28 +39,46 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import MediaFile from 'admin/interfaces/MediaFile';
+import { computed, defineComponent, onMounted, ref, watch } from 'vue';
+import { useMediaFilesStore } from 'admin/vue/stores/mediaFiles';
+import { useFlashesStore } from 'admin/vue/stores/flashes';
 
 export default defineComponent({
     name: 'MediaThumbnailsSelectionBar',
-    props: {
-        mediaFiles: {
-            type: Object as () => MediaFile[],
-            required: true,
-        },
-        selectedMediaFiles: {
-            type: Object as () => MediaFile[],
-            required: true,
-        },
-        selectMultiple: Boolean,
-    },
-    emits: ['update:select-multiple', 'delete-selected-files-clicked', 'clear-selection-clicked'],
     setup() {
+        const mediaFilesStore = useMediaFilesStore();
+        const flashesStore = useFlashesStore();
         const checkbox = ref(false);
+
+        onMounted(() => {
+            checkbox.value = mediaFilesStore.selectMultiple;
+        });
+
+        watch(checkbox, () => {
+            mediaFilesStore.selectMultiple = checkbox.value;
+        });
+
+        async function deleteSelection() {
+            try {
+                await mediaFilesStore.deleteMediaFiles([...mediaFilesStore.selectedMediaFiles]);
+                mediaFilesStore.clearMediaFilesSelection();
+
+                flashesStore.label = 'success';
+                flashesStore.message = 'Media files removed successfully.';
+            } catch (e) {
+                flashesStore.label = 'error';
+                flashesStore.message = 'Unable to remove media files.';
+            }
+
+            flashesStore.visible = true;
+        }
 
         return {
             checkbox,
+            mediaFiles: computed(() => mediaFilesStore.mediaFiles),
+            selectedMediaFiles: computed(() => mediaFilesStore.selectedMediaFiles),
+            deleteSelection,
+            clearMediaFilesSelection: mediaFilesStore.clearMediaFilesSelection,
         };
     },
 });

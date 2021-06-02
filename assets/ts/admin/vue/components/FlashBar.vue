@@ -28,43 +28,37 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watchEffect } from 'vue';
+import { computed, defineComponent, watchEffect } from 'vue';
+import { useFlashesStore } from 'admin/vue/stores/flashes';
 
 export default defineComponent({
     name: 'FlashBar',
     props: {
-        label: {
-            type: String,
-            required: true,
-        },
-        message: {
-            type: String,
-            required: true,
-        },
-        visible: {
-            type: Boolean,
-            default: true,
-        },
         delay: {
             type: Number,
             default: 3000,
         },
     },
     emits: ['update:visible'],
-    setup(props, { emit }) {
+    setup(props) {
+        const flashesStore = useFlashesStore();
+
         watchEffect(() => {
-            if (props.visible) {
+            if (flashesStore.visible) {
                 setTimeout(() => {
-                    emit('update:visible', false);
+                    dismiss();
                 }, props.delay);
             }
         });
 
         const dismiss = () => {
-            emit('update:visible', false);
+            flashesStore.visible = false;
         };
 
         return {
+            visible: computed(() => flashesStore.visible),
+            label: computed(() => flashesStore.label),
+            message: computed(() => flashesStore.message),
             dismiss,
         };
     },

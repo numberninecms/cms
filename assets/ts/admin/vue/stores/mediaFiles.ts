@@ -40,6 +40,7 @@ export const useMediaFilesStore = defineStore({
             queue: [] as Function[],
             selectionFirstIndex: -1,
             selectMultiple: false,
+            displayIndex: -1,
         };
     },
     actions: {
@@ -141,6 +142,10 @@ export const useMediaFilesStore = defineStore({
         clearMediaFilesSelection(): void {
             this.selectedMediaFiles.splice(0, this.selectedMediaFiles.length);
             this.selectionFirstIndex = -1;
+        },
+
+        isMediaFileSelected(mediaFile: MediaFile): boolean {
+            return !!this.selectedMediaFiles.find((f) => f.id === mediaFile.id);
         },
     },
 });

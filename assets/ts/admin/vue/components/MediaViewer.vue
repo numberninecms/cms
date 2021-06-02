@@ -8,8 +8,8 @@
   -->
 
 <template>
-    <teleport to="body">
-        <div v-show="show" class="modal-backdrop" @click="closeModal">
+    <teleport v-if="show && displayIndex !== -1" to="body">
+        <div class="modal-backdrop" @click="closeModal">
             <div class="modal-backdrop-container">
                 <div class="modal-card" @click.stop>
                     <div class="flex justify-end gap-1 p-3 shadow">
@@ -19,7 +19,9 @@
                         <button class="btn btn-color-white btn-style-outline" @click="navigateNext">
                             <i class="fa fa-chevron-right"></i>
                         </button>
-                        <button class="btn btn-color-white btn-style-outline" @click="closeModal"><i class="fa fa-times"></i></button>
+                        <button class="btn btn-color-white btn-style-outline" @click="closeModal">
+                            <i class="fa fa-times"></i>
+                        </button>
                     </div>
                     <div class="overflow-hidden flex flex-grow p-3">
                         <div class="flex flex-grow items-center md:w-3/4">
@@ -44,26 +46,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted } from 'vue';
-import MediaFile from 'admin/interfaces/MediaFile';
+import { computed, defineComponent, onMounted, onUnmounted } from 'vue';
 import useMediaFileUtilities from 'admin/vue/functions/mediaFileUtilities';
 import MediaFileProperties from 'admin/vue/components/MediaFileProperties.vue';
+import { useMediaFilesStore } from 'admin/vue/stores/mediaFiles';
+import { useMediaViewerStore } from 'admin/vue/stores/mediaViewer';
 
 export default defineComponent({
     name: 'MediaViewer',
     components: { MediaFileProperties },
-    props: {
-        show: {
-            type: Boolean,
-            default: false,
-        },
-        mediaFile: {
-            type: Object as () => MediaFile,
-            required: true,
-        },
-    },
-    emits: ['update:show', 'previous', 'next'],
-    setup(props, { emit }) {
+    setup() {
+        const mediaFilesStore = useMediaFilesStore();
+        const mediaViewerStore = useMediaViewerStore();
         const { imageUrl } = useMediaFileUtilities();
 
         onMounted(() => {
@@ -85,19 +79,30 @@ export default defineComponent({
         }
 
         function navigatePrevious() {
-            emit('previous');
+            if (mediaViewerStore.displayIndex > 0) {
+                mediaViewerStore.displayIndex--;
+            } else {
+                mediaViewerStore.displayIndex = mediaFilesStore.mediaFiles.length - 1;
+            }
         }
 
         function navigateNext() {
-            emit('next');
+            if (mediaViewerStore.displayIndex < mediaFilesStore.mediaFiles.length - 1) {
+                mediaViewerStore.displayIndex++;
+            } else {
+                mediaViewerStore.displayIndex = 0;
+            }
         }
 
         function closeModal() {
-            emit('update:show', false);
+            mediaViewerStore.show = false;
         }
 
         return {
             imageUrl,
+            displayIndex: computed(() => mediaViewerStore.displayIndex),
+            show: computed(() => mediaViewerStore.show),
+            mediaFile: computed(() => mediaFilesStore.mediaFiles[mediaViewerStore.displayIndex]),
             navigatePrevious,
             navigateNext,
             closeModal,
