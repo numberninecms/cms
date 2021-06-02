@@ -10,6 +10,6 @@
 export default interface MediaSettings {
     size: string;
     alignment: string;
-    link: string,
-    linkUrl: string,
+    link: string;
+    linkUrl: string;
 }

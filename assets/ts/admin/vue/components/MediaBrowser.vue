@@ -42,16 +42,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch, watchEffect } from 'vue';
+import { computed, defineComponent, nextTick, onMounted, ref, watch } from 'vue';
 import { useElementVisibility } from '@vueuse/core';
 import { EVENT_MEDIA_UPLOADER_FILE_UPLOADED } from 'admin/events/events';
 import { EventBus } from 'admin/admin';
-import useMediaBrowserSelection from 'admin/vue/functions/mediaBrowserSelection';
-import useMediaBrowserFilesLoader from 'admin/vue/functions/mediaBrowserFilesLoader';
 import FlashBar from 'admin/vue/components/FlashBar.vue';
 import MediaViewer from 'admin/vue/components/MediaViewer.vue';
 import MediaThumbnailsList from 'admin/vue/components/MediaThumbnailsList.vue';
 import MediaThumbnailsSelectionBar from 'admin/vue/components/MediaThumbnailsSelectionBar.vue';
+import { useMediaFilesStore } from 'admin/vue/stores/mediaFiles';
 
 export default defineComponent({
     name: 'MediaBrowser',
@@ -72,39 +71,57 @@ export default defineComponent({
     },
     setup(props) {
         const endOfList = ref(null);
-        let endOfListIsVisible = useElementVisibility(endOfList);
-
+        const endOfListIsVisible = ref(false);
+        const endOfListIsVisibleAfterScroll = useElementVisibility(endOfList);
         const flashLabel = ref('');
         const flashMessage = ref('');
         const isFlashVisible = ref(false);
         const showViewer = ref(true);
         const displayIndex = ref(-1);
+        const selectMultipleMediaFiles = ref(false);
+        const isLoadingMore = ref(false);
 
-        const { mediaFiles, mediaFilesFilter, loadMoreMediaFiles, deleteMediaFiles } = useMediaBrowserFilesLoader({
-            getUrl: props.getUrl,
-            deleteUrl: props.deleteUrl,
-        });
+        const store = useMediaFilesStore();
+        store.setup({ getUrl: props.getUrl, deleteUrl: props.deleteUrl });
 
-        const {
-            selectedMediaFiles,
-            setBulkSelectFirstIndex,
-            bulkMediaSelect,
-            selectMultipleMediaFiles,
-            clearMediaFilesSelection,
-        } = useMediaBrowserSelection({ mediaFiles });
-
-        onMounted(() => {
+        onMounted(async () => {
             EventBus.on(EVENT_MEDIA_UPLOADER_FILE_UPLOADED, ({ mediaFile }) => {
-                mediaFiles.value.splice(0, 0, mediaFile);
+                store.mediaFiles.splice(0, 0, mediaFile);
             });
+
+            isLoadingMore.value = true;
+            await store.loadMoreMediaFiles();
+            isLoadingMore.value = false;
         });
 
         watch(
-            () => [...mediaFiles.value],
-            () => {
-                endOfListIsVisible = useElementVisibility(endOfList);
+            store.mediaFiles,
+            async () => {
+                await nextTick();
+
+                const rect = (endOfList.value as unknown as HTMLElement)!.getBoundingClientRect();
+                endOfListIsVisible.value =
+                    rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+                    rect.left <= (window.innerWidth || document.documentElement.clientWidth) &&
+                    rect.bottom >= 0 &&
+                    rect.right >= 0;
+
+                if (endOfListIsVisible.value) {
+                    isLoadingMore.value = true;
+                    await store.loadMoreMediaFiles();
+                    isLoadingMore.value = false;
+                }
             },
+            { deep: true },
         );
+
+        watch(endOfListIsVisibleAfterScroll, async () => {
+            if (endOfListIsVisibleAfterScroll.value && !isLoadingMore.value) {
+                isLoadingMore.value = true;
+                await store.loadMoreMediaFiles();
+                isLoadingMore.value = false;
+            }
+        });
 
         watch(showViewer, () => {
             if (!showViewer.value) {
@@ -112,18 +129,14 @@ export default defineComponent({
             }
         });
 
-        watchEffect(() => {
-            mediaFiles.value.length; // This line triggers watch effect and is needed. Don't know why.
-
-            if (endOfListIsVisible.value) {
-                void loadMoreMediaFiles();
-            }
+        watch(selectMultipleMediaFiles, () => {
+            store.selectMultiple = selectMultipleMediaFiles.value;
         });
 
         async function deleteSelection() {
             try {
-                await deleteMediaFiles([...selectedMediaFiles.value]);
-                clearMediaFilesSelection();
+                await store.deleteMediaFiles([...store.selectedMediaFiles]);
+                store.clearMediaFilesSelection();
 
                 flashLabel.value = 'success';
                 flashMessage.value = 'Media files removed successfully.';
@@ -136,8 +149,8 @@ export default defineComponent({
         }
 
         function onThumbnailClicked({ index }) {
-            if (selectMultipleMediaFiles.value) {
-                setBulkSelectFirstIndex(index);
+            if (store.selectMultiple) {
+                store.setBulkSelectFirstIndex(index);
             } else {
                 displayIndex.value = index;
                 showViewer.value = true;
@@ -145,19 +158,19 @@ export default defineComponent({
         }
 
         function onThumbnailShiftClicked({ index }) {
-            bulkMediaSelect(index);
+            store.bulkMediaSelect(index);
         }
 
         function viewPreviousMediaFile(): void {
             if (displayIndex.value > 0) {
                 displayIndex.value--;
             } else {
-                displayIndex.value = mediaFiles.value.length - 1;
+                displayIndex.value = store.mediaFiles.length - 1;
             }
         }
 
         function viewNextMediaFile(): void {
-            if (displayIndex.value < mediaFiles.value.length - 1) {
+            if (displayIndex.value < store.mediaFiles.length - 1) {
                 displayIndex.value++;
             } else {
                 displayIndex.value = 0;
@@ -165,14 +178,14 @@ export default defineComponent({
         }
 
         return {
-            mediaFiles,
-            mediaFilesFilter,
+            mediaFiles: computed(() => store.mediaFiles),
+            mediaFilesFilter: computed(() => store.filter),
             endOfList,
-            selectedMediaFiles,
+            selectedMediaFiles: computed(() => store.selectedMediaFiles),
             onThumbnailClicked,
             onThumbnailShiftClicked,
             selectMultipleMediaFiles,
-            clearMediaFilesSelection,
+            clearMediaFilesSelection: store.clearMediaFilesSelection,
             deleteSelection,
             flashLabel,
             flashMessage,

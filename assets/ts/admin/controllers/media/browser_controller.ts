@@ -9,6 +9,7 @@
 
 import { Controller } from 'stimulus';
 import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 import MediaBrowser from '../../vue/components/MediaBrowser.vue';
 
 export default class extends Controller {
@@ -27,6 +28,8 @@ export default class extends Controller {
             getUrl: this.getUrlValue,
             deleteUrl: this.deleteUrlValue,
             mode: this.modeValue,
-        }).mount('#media-browser');
+        })
+            .use(createPinia())
+            .mount('#media-browser');
     }
 }
