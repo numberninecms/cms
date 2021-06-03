@@ -8,13 +8,16 @@
   -->
 
 <template>
-    <div class="flex flex-col">
+    <div v-if="mode === 'extended'" class="flex flex-col">
         <FlashBar class="sticky top-ui-area" />
         <div class="flex flex-col p-3">
             <MediaThumbnailsSelectionBar />
-            <MediaThumbnailsList @thumbnail-clicked="onThumbnailClicked" />
+            <MediaThumbnailsList @thumbnail-clicked="onExtendedModeThumbnailClicked" />
         </div>
         <MediaViewer />
+    </div>
+    <div v-else class="flex flex-col">
+        <MediaThumbnailsList @thumbnail-clicked="onMininmalModeThumbnailClicked" />
     </div>
 </template>
 
@@ -50,18 +53,22 @@ export default defineComponent({
 
         mediaFilesStore.setup({ getUrl: props.getUrl, deleteUrl: props.deleteUrl });
 
-        function onThumbnailClicked({ index }) {
+        function onExtendedModeThumbnailClicked({ index }) {
             if (!mediaFilesStore.selectMultiple) {
                 mediaViewerStore.displayIndex = index;
                 mediaViewerStore.show = true;
             }
+        }
+        function onMininmalModeThumbnailClicked({ index }) {
+            mediaViewerStore.displayIndex = index;
         }
 
         return {
             mediaFiles: computed(() => mediaFilesStore.mediaFiles),
             mediaFilesFilter: computed(() => mediaFilesStore.filter),
             selectedMediaFiles: computed(() => mediaFilesStore.selectedMediaFiles),
-            onThumbnailClicked,
+            onExtendedModeThumbnailClicked,
+            onMininmalModeThumbnailClicked,
             clearMediaFilesSelection: mediaFilesStore.clearMediaFilesSelection,
         };
     },

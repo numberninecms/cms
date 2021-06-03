@@ -9,7 +9,8 @@
 
 import { Controller } from 'stimulus';
 import { EventBus } from 'admin/admin';
-import { EVENT_TINY_EDITOR_SHOW_MEDIA_LIBRARY } from 'admin/events/events';
+import { EVENT_MODAL_VISIBILITY_CHANGED, EVENT_TINY_EDITOR_SHOW_MEDIA_LIBRARY } from 'admin/events/events';
+import ModalVisibilityChangedEvent from 'admin/events/ModalVisibilityChangedEvent';
 
 export default class extends Controller {
     public connect(): void {
@@ -32,9 +33,17 @@ export default class extends Controller {
 
     public show(): void {
         (this.element as HTMLElement).style.display = 'flex';
+        EventBus.emit(EVENT_MODAL_VISIBILITY_CHANGED, {
+            element: this.element,
+            visible: true,
+        } as ModalVisibilityChangedEvent);
     }
 
     public close(): void {
         (this.element as HTMLElement).style.display = 'none';
+        EventBus.emit(EVENT_MODAL_VISIBILITY_CHANGED, {
+            element: this.element,
+            visible: false,
+        } as ModalVisibilityChangedEvent);
     }
 }

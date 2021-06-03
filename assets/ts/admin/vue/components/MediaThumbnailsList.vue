@@ -8,7 +8,7 @@
   -->
 
 <template>
-    <div class="flex flex-col">
+    <div class="flex flex-col" ref="mediaBrowser">
         <div class="flex flex-wrap gap-3">
             <div
                 v-for="(mediaFile, index) in mediaFiles"
@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-        <div ref="endOfList"></div>
+        <div v-observe-visibility="endOfListVisibilityChanged"></div>
     </div>
 </template>
 
@@ -34,11 +34,12 @@ import {
     EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_CLICKED,
     EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_SHIFT_CLICKED,
     EVENT_MEDIA_UPLOADER_FILE_UPLOADED,
+    EVENT_MODAL_VISIBILITY_CHANGED,
 } from 'admin/events/events';
 import { EventBus } from 'admin/admin';
 import useMediaFileUtilities from 'admin/vue/functions/mediaFileUtilities';
 import { useMediaFilesStore } from 'admin/vue/stores/mediaFiles';
-import { useElementVisibility } from '@vueuse/core';
+import ModalVisibilityChangedEvent from 'admin/events/ModalVisibilityChangedEvent';
 
 export default defineComponent({
     name: 'MediaThumbnailsList',
@@ -46,50 +47,62 @@ export default defineComponent({
     setup(props, { emit }) {
         const store = useMediaFilesStore();
         const { imageUrl } = useMediaFileUtilities();
-
-        const endOfList = ref(null);
-        const endOfListIsVisible = ref(false);
-        const endOfListIsVisibleAfterScroll = useElementVisibility(endOfList);
+        const mediaBrowser = ref(null);
         let isLoadingMore = false;
+        let isModal = false;
+        const isEndOfListVisible = ref(false);
 
-        onMounted(async () => {
+        onMounted(() => {
             EventBus.on(EVENT_MEDIA_UPLOADER_FILE_UPLOADED, ({ mediaFile }) => {
                 store.mediaFiles.splice(0, 0, mediaFile);
             });
 
-            isLoadingMore = true;
-            await store.loadMoreMediaFiles();
-            isLoadingMore = false;
+            isModal = (mediaBrowser.value as unknown as HTMLElement)!.closest('.modal-backdrop') !== null;
+
+            if (!isModal) {
+                void loadMoreMediaFiles();
+            } else {
+                EventBus.on(EVENT_MODAL_VISIBILITY_CHANGED, (event) => {
+                    if ((event as ModalVisibilityChangedEvent).visible) {
+                        void loadMoreMediaFiles();
+                    }
+                });
+            }
         });
 
         watch(
             store.mediaFiles,
             async () => {
+                if (store.mediaFiles.length === 0) {
+                    return;
+                }
+
                 await nextTick();
 
-                const rect = (endOfList.value as unknown as HTMLElement)!.getBoundingClientRect();
-                endOfListIsVisible.value =
-                    rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
-                    rect.left <= (window.innerWidth || document.documentElement.clientWidth) &&
-                    rect.bottom >= 0 &&
-                    rect.right >= 0;
-
-                if (endOfListIsVisible.value) {
-                    isLoadingMore = true;
-                    await store.loadMoreMediaFiles();
-                    isLoadingMore = false;
+                if (isEndOfListVisible.value) {
+                    await loadMoreMediaFiles();
                 }
             },
             { deep: true },
         );
 
-        watch(endOfListIsVisibleAfterScroll, async () => {
-            if (endOfListIsVisibleAfterScroll.value && !isLoadingMore) {
-                isLoadingMore = true;
-                await store.loadMoreMediaFiles();
-                isLoadingMore = false;
+        async function loadMoreMediaFiles(): Promise<void> {
+            isLoadingMore = true;
+            await store.loadMoreMediaFiles();
+            isLoadingMore = false;
+        }
+
+        function endOfListVisibilityChanged(isVisible) {
+            isEndOfListVisible.value = isVisible;
+
+            if (store.mediaFiles.length === 0) {
+                return;
             }
-        });
+
+            if (isEndOfListVisible.value && !isLoadingMore) {
+                void loadMoreMediaFiles();
+            }
+        }
 
         function onThumbnailClicked(index: number) {
             const event = {
@@ -120,11 +133,12 @@ export default defineComponent({
         }
 
         return {
-            endOfList,
+            mediaBrowser,
             imageUrl,
             mediaFiles: computed(() => store.mediaFiles),
             onThumbnailClicked,
             onThumbnailShiftClicked,
+            endOfListVisibilityChanged,
             isMediaFileSelected: store.isMediaFileSelected,
         };
     },

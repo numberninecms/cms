@@ -29,8 +29,8 @@
             }
         }
     }
+}
 
-    .tab-panel {
-        @apply flex flex-grow;
-    }
+.tab-panel {
+    @apply flex flex-grow overflow-y-auto;
 }

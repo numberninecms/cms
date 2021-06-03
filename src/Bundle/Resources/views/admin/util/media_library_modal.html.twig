@@ -1,19 +1,21 @@
 <div class="modal-backdrop" data-controller="dynamic-tabs modal" style="display: none">
     <div class="modal-backdrop-container">
         <div class="modal-card" @click.stop>
-            <div class="flex justify-between p-3 shadow">
+            <div class="flex justify-between shadow bg-gray-200">
                 {% include '@NumberNine/admin/util/dynamic_tabs.html.twig' with {tabs: [
                     {id: 'browse', icon: 'images', text: 'Browse'},
                     {id: 'upload', icon: 'upload', text: 'Upload'},
                 ]} %}
-                <button class="btn btn-color-white btn-style-outline" data-action="modal#close">
+                <button class="py-2 px-4 border-l-2 border-gray-300 text-gray-700 hover:bg-gray-300 focus:ring-gray-100 focus:ring-offset-white focus:ring-opacity-50"
+                        data-action="modal#close"
+                >
                     <i class="fa fa-times"></i>
                 </button>
             </div>
             <div class="overflow-hidden flex flex-grow p-3">
                 {% embed '@NumberNine/admin/util/dynamic_tabs_panel.html.twig' with {id: 'browse'} %}
                     {% block content %}
-                        {% include '@NumberNine/admin/media/index_panel_browse.html.twig' %}
+                        {% include '@NumberNine/admin/media/index_panel_browse.html.twig' with {mode: 'minimal'} %}
                     {% endblock %}
                 {% endembed %}
 
