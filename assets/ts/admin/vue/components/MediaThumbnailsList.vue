@@ -40,12 +40,15 @@ import { EventBus } from 'admin/admin';
 import useMediaFileUtilities from 'admin/vue/functions/mediaFileUtilities';
 import { useMediaFilesStore } from 'admin/vue/stores/mediaFiles';
 import ModalVisibilityChangedEvent from 'admin/events/ModalVisibilityChangedEvent';
+import MediaFile from 'admin/interfaces/MediaFile';
+import { useMediaViewerStore } from 'admin/vue/stores/mediaViewer';
 
 export default defineComponent({
     name: 'MediaThumbnailsList',
     emits: ['thumbnail-clicked', 'thumbnail-shift-clicked'],
     setup(props, { emit }) {
-        const store = useMediaFilesStore();
+        const mediaFilesStore = useMediaFilesStore();
+        const mediaViewerStore = useMediaViewerStore();
         const { imageUrl } = useMediaFileUtilities();
         const mediaBrowser = ref(null);
         let isLoadingMore = false;
@@ -54,7 +57,7 @@ export default defineComponent({
 
         onMounted(() => {
             EventBus.on(EVENT_MEDIA_UPLOADER_FILE_UPLOADED, ({ mediaFile }) => {
-                store.mediaFiles.splice(0, 0, mediaFile);
+                mediaFilesStore.mediaFiles.splice(0, 0, mediaFile);
             });
 
             isModal = (mediaBrowser.value as unknown as HTMLElement)!.closest('.modal-backdrop') !== null;
@@ -71,9 +74,9 @@ export default defineComponent({
         });
 
         watch(
-            store.mediaFiles,
+            mediaFilesStore.mediaFiles,
             async () => {
-                if (store.mediaFiles.length === 0) {
+                if (mediaFilesStore.mediaFiles.length === 0) {
                     return;
                 }
 
@@ -88,14 +91,14 @@ export default defineComponent({
 
         async function loadMoreMediaFiles(): Promise<void> {
             isLoadingMore = true;
-            await store.loadMoreMediaFiles();
+            await mediaFilesStore.loadMoreMediaFiles();
             isLoadingMore = false;
         }
 
         function endOfListVisibilityChanged(isVisible) {
             isEndOfListVisible.value = isVisible;
 
-            if (store.mediaFiles.length === 0) {
+            if (mediaFilesStore.mediaFiles.length === 0) {
                 return;
             }
 
@@ -107,11 +110,11 @@ export default defineComponent({
         function onThumbnailClicked(index: number) {
             const event = {
                 index,
-                file: store.mediaFiles[index],
+                file: mediaFilesStore.mediaFiles[index],
             };
 
-            if (store.selectMultiple) {
-                store.setBulkSelectFirstIndex(index);
+            if (mediaFilesStore.selectMultiple) {
+                mediaFilesStore.setBulkSelectFirstIndex(index);
             }
 
             EventBus.emit(EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_CLICKED, event);
@@ -121,25 +124,31 @@ export default defineComponent({
         function onThumbnailShiftClicked(index: number) {
             const event = {
                 index,
-                file: store.mediaFiles[index],
+                file: mediaFilesStore.mediaFiles[index],
             };
 
-            if (store.selectMultiple) {
-                store.bulkMediaSelect(index);
+            if (mediaFilesStore.selectMultiple) {
+                mediaFilesStore.bulkMediaSelect(index);
             }
 
             EventBus.emit(EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_SHIFT_CLICKED, event);
             emit('thumbnail-shift-clicked', event);
         }
 
+        function isMediaFileSelected(mediaFile: MediaFile): boolean {
+            return !isModal
+                ? mediaFilesStore.isMediaFileSelected(mediaFile)
+                : mediaViewerStore.isMediaFileDisplayed(mediaFile);
+        }
+
         return {
             mediaBrowser,
             imageUrl,
-            mediaFiles: computed(() => store.mediaFiles),
+            mediaFiles: computed(() => mediaFilesStore.mediaFiles),
             onThumbnailClicked,
             onThumbnailShiftClicked,
             endOfListVisibilityChanged,
-            isMediaFileSelected: store.isMediaFileSelected,
+            isMediaFileSelected,
         };
     },
 });

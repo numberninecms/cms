@@ -40,7 +40,6 @@ export const useMediaFilesStore = defineStore({
             queue: [] as Function[],
             selectionFirstIndex: -1,
             selectMultiple: false,
-            displayIndex: -1,
         };
     },
     actions: {

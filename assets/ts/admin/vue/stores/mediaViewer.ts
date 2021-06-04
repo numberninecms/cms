@@ -8,6 +8,9 @@
  */
 
 import { defineStore } from 'pinia';
+import MediaFile from 'admin/interfaces/MediaFile';
+import MediaSettings from 'admin/interfaces/MediaSettings';
+import { useMediaFilesStore } from 'admin/vue/stores/mediaFiles';
 
 export const useMediaViewerStore = defineStore({
     id: 'mediaViewer',
@@ -15,6 +18,14 @@ export const useMediaViewerStore = defineStore({
         return {
             displayIndex: -1,
             show: false,
+            callback: Object as (files: MediaFile[]) => void,
+            settings: {} as MediaSettings,
         };
+    },
+    actions: {
+        isMediaFileDisplayed(mediaFile: MediaFile) {
+            const mediaFilesStore = useMediaFilesStore();
+            return mediaFilesStore.mediaFiles.findIndex((f) => f.id === mediaFile.id) === this.displayIndex;
+        },
     },
 });

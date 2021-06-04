@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-export default interface ModalVisibilityChangedEvent {
-    element?: Element;
-    visible: boolean;
+export default interface SelectOption {
+    label: string;
+    value: any;
 }

@@ -18,6 +18,12 @@ export default class extends Controller {
             this.show();
         });
 
+        EventBus.on(EVENT_MODAL_VISIBILITY_CHANGED, ({ visible }) => {
+            if (!visible) {
+                this.close(false);
+            }
+        });
+
         window.addEventListener('keydown', this.onKeyDown.bind(this));
     }
 
@@ -39,11 +45,14 @@ export default class extends Controller {
         } as ModalVisibilityChangedEvent);
     }
 
-    public close(): void {
+    public close(emit = true): void {
         (this.element as HTMLElement).style.display = 'none';
-        EventBus.emit(EVENT_MODAL_VISIBILITY_CHANGED, {
-            element: this.element,
-            visible: false,
-        } as ModalVisibilityChangedEvent);
+
+        if (emit) {
+            EventBus.emit(EVENT_MODAL_VISIBILITY_CHANGED, {
+                element: this.element,
+                visible: false,
+            } as ModalVisibilityChangedEvent);
+        }
     }
 }

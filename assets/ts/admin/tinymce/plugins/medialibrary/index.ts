@@ -46,6 +46,7 @@ tinymce.PluginManager.add('medialibrary', function (editor) {
     });
 
     editor.ui.registry.addButton('medialibrary', {
+        icon: 'image',
         text: 'Add media',
         onAction: function () {
             editor.execCommand('n9ShowMediaLibrary');

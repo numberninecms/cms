@@ -8,7 +8,7 @@
  */
 
 import { Controller } from 'stimulus';
-import tinymce from 'tinymce';
+import tinymce, { Editor } from 'tinymce';
 import 'tinymce/icons/default';
 import 'tinymce/themes/silver';
 import 'tinymce/skins/ui/oxide/skin.css';
@@ -39,9 +39,10 @@ export default class extends Controller {
     public static targets = ['editor'];
 
     private readonly editorTarget: HTMLTextAreaElement;
+    private editors: Editor[];
 
-    public connect(): void {
-        void tinymce.init({
+    public async connect(): Promise<void> {
+        this.editors = await tinymce.init({
             target: this.editorTarget,
             theme: 'silver',
             skin: false,
@@ -67,6 +68,12 @@ export default class extends Controller {
                 alignright: { selector: 'img', styles: { float: 'right', margin: '10px 0 10px 10px' } },
                 aligncenter: { selector: 'img', styles: { display: 'block', margin: '10px auto' } },
             },
+        });
+    }
+
+    public disconnect(): void {
+        this.editors.forEach((editor) => {
+            editor.remove();
         });
     }
 }

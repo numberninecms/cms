@@ -9,6 +9,7 @@
 
 interface StringHelpers {
     readableBytes: (bytes: number) => string;
+    upperFirst: (text: string) => string;
 }
 
 export default function useStringHelpers(): StringHelpers {
@@ -19,7 +20,12 @@ export default function useStringHelpers(): StringHelpers {
         return `${(bytes / Math.pow(1024, i)).toFixed(2) as any as number} ${sizes[i]}`;
     }
 
+    function upperFirst(text: string): string {
+        return text ? text.charAt(0).toUpperCase() + text.slice(1) : '';
+    }
+
     return {
         readableBytes,
+        upperFirst,
     };
 }
