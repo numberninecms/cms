@@ -1,3 +1,4 @@
+{% trans_default_domain 'numbernine' %}
 {% use 'form_div_layout.html.twig' %}
 
 {%- block form_row -%}
@@ -60,4 +61,38 @@
 {%- block tiny_editor_widget -%}
     {%- set row_attr = row_attr|merge({'data-tiny-editor-target': 'editor'}) -%}
     <textarea{% with {attr: row_attr} %} {{ block('widget_attributes') }}{% endwith %}>{{ value }}</textarea>
+{%- endblock -%}
+
+{%- block media_file_widget -%}
+    <div class="flex flex-col items-center gap-3 mt-3" data-controller="media--select">
+        <div class="" data-media--select-target="image">
+            {% if media_file is defined and media_file %}
+                {{ N9_image(media_file, 'preview') }}
+            {% endif %}
+        </div>
+        <p
+            data-media--select-target="text"
+            {% if media_file is defined and media_file %} style="display: none"{% endif %}
+        >
+            {{ 'No image selected'|trans }}
+        </p>
+        <div>
+            <button type="button" class="btn btn-color-primary" data-action="media--select#select">
+                {{ 'Select image'|trans }}
+            </button>
+            <button
+                type="button"
+                class="btn btn-color-red"
+                data-action="media--select#remove"
+                data-media--select-target="remove"
+                {% if not (media_file is defined and media_file) %} style="display: none"{% endif %}
+            >
+                <i class="fa fa-trash"></i>
+            </button>
+        </div>
+
+        {%- set type = type|default('hidden') -%}
+        {%- set attr = attr|merge({'data-media--select-target': 'input'}) -%}
+        {{ block('form_widget_simple') }}
+    </div>
 {%- endblock -%}

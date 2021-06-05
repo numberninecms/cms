@@ -18,7 +18,7 @@ export const useMediaViewerStore = defineStore({
         return {
             displayIndex: -1,
             show: false,
-            callback: Object as (files: MediaFile[]) => void,
+            callback: Object as ({ files, settings }: { files: MediaFile[]; settings: MediaSettings }) => void,
             settings: {} as MediaSettings,
         };
     },

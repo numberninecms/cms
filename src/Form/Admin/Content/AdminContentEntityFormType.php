@@ -16,6 +16,7 @@ use NumberNine\Entity\ContentEntity;
 use NumberNine\Event\HiddenCustomFieldsEvent;
 use NumberNine\Form\DataTransformer\AssociativeArrayToKeyValueCollectionTransformer;
 use NumberNine\Form\Type\KeyValueCollectionType;
+use NumberNine\Form\Type\MediaFileType;
 use NumberNine\Form\Type\TinyEditorType;
 use NumberNine\Model\Content\PublishingStatusInterface;
 use NumberNine\Theme\TemplateResolver;
@@ -94,6 +95,7 @@ final class AdminContentEntityFormType extends AbstractType
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'backupData']);
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'addTemplateField']);
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'addFeaturedImageField']);
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'addHiddenCustomFields']);
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'transformCustomFields']);
         $builder->addEventListener(FormEvents::POST_SET_DATA, [$this, 'setUnmappedData']);
@@ -203,5 +205,16 @@ final class AdminContentEntityFormType extends AbstractType
         $entity = $form->getData();
 
         $entity->addCustomField('page_template', $form['customTemplate']->getData());
+    }
+
+    public function addFeaturedImageField(FormEvent $event): void
+    {
+        $form = $event->getForm();
+        /** @var ContentEntity $entity */
+        $entity = $event->getData();
+
+        if (property_exists($entity, 'featuredImage')) {
+            $form->add('featuredImage', MediaFileType::class);
+        }
     }
 }

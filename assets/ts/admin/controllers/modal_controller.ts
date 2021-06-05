@@ -9,18 +9,26 @@
 
 import { Controller } from 'stimulus';
 import { EventBus } from 'admin/admin';
-import { EVENT_MODAL_VISIBILITY_CHANGED, EVENT_TINY_EDITOR_SHOW_MEDIA_LIBRARY } from 'admin/events/events';
+import { EVENT_MODAL_CLOSE, EVENT_MODAL_SHOW, EVENT_MODAL_VISIBILITY_CHANGED } from 'admin/events/events';
 import ModalVisibilityChangedEvent from 'admin/events/ModalVisibilityChangedEvent';
 
 export default class extends Controller {
+    public static values = {
+        id: String,
+    };
+
+    private readonly idValue: string;
+
     public connect(): void {
-        EventBus.on(EVENT_TINY_EDITOR_SHOW_MEDIA_LIBRARY, () => {
-            this.show();
+        EventBus.on(EVENT_MODAL_SHOW, (id) => {
+            if (id === this.idValue) {
+                this.show();
+            }
         });
 
-        EventBus.on(EVENT_MODAL_VISIBILITY_CHANGED, ({ visible }) => {
-            if (!visible) {
-                this.close(false);
+        EventBus.on(EVENT_MODAL_CLOSE, (id) => {
+            if (id === this.idValue) {
+                this.close();
             }
         });
 
@@ -45,14 +53,11 @@ export default class extends Controller {
         } as ModalVisibilityChangedEvent);
     }
 
-    public close(emit = true): void {
+    public close(): void {
         (this.element as HTMLElement).style.display = 'none';
-
-        if (emit) {
-            EventBus.emit(EVENT_MODAL_VISIBILITY_CHANGED, {
-                element: this.element,
-                visible: false,
-            } as ModalVisibilityChangedEvent);
-        }
+        EventBus.emit(EVENT_MODAL_VISIBILITY_CHANGED, {
+            element: this.element,
+            visible: false,
+        } as ModalVisibilityChangedEvent);
     }
 }

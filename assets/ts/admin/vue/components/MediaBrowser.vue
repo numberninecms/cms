@@ -43,7 +43,11 @@ import MediaThumbnailsSelectionBar from 'admin/vue/components/MediaThumbnailsSel
 import { useMediaFilesStore } from 'admin/vue/stores/mediaFiles';
 import { useMediaViewerStore } from 'admin/vue/stores/mediaViewer';
 import { EventBus } from 'admin/admin';
-import { EVENT_MODAL_VISIBILITY_CHANGED, EVENT_TINY_EDITOR_SHOW_MEDIA_LIBRARY } from 'admin/events/events';
+import {
+    EVENT_MEDIA_SELECT, EVENT_MODAL_CLOSE,
+    EVENT_MODAL_VISIBILITY_CHANGED,
+    EVENT_TINY_EDITOR_ADD_MEDIA,
+} from 'admin/events/events';
 import { Editor } from 'tinymce';
 import MediaFile from 'admin/interfaces/MediaFile';
 import MediaFileProperties from 'admin/vue/components/MediaFileProperties.vue';
@@ -81,15 +85,12 @@ export default defineComponent({
         mediaFilesStore.setup({ getUrl: props.getUrl, deleteUrl: props.deleteUrl });
 
         onMounted(() => {
-            EventBus.on(EVENT_TINY_EDITOR_SHOW_MEDIA_LIBRARY, (editor) => {
-                if (editor instanceof Editor) {
-                    mediaViewerStore.callback = (files: MediaFile[]) => {
-                        editor.execCommand('n9InsertFiles', false, {
-                            files,
-                            settings: mediaViewerStore.settings,
-                        });
-                    };
-                }
+            EventBus.on(EVENT_TINY_EDITOR_ADD_MEDIA, (callback) => {
+                mediaViewerStore.callback = callback;
+            });
+
+            EventBus.on(EVENT_MEDIA_SELECT, (callback) => {
+                mediaViewerStore.callback = callback;
             });
         });
 
@@ -105,12 +106,13 @@ export default defineComponent({
         }
 
         function selectFile(): void {
-            mediaViewerStore.callback([mediaFilesStore.mediaFiles[mediaViewerStore.displayIndex]]);
+            mediaViewerStore.callback({
+                files: [mediaFilesStore.mediaFiles[mediaViewerStore.displayIndex]],
+                settings: mediaViewerStore.settings,
+            });
             mediaViewerStore.show = false;
 
-            EventBus.emit(EVENT_MODAL_VISIBILITY_CHANGED, {
-                visible: false,
-            } as ModalVisibilityChangedEvent);
+            EventBus.emit(EVENT_MODAL_CLOSE, 'media_library');
         }
 
         return {
