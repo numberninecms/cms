@@ -39,6 +39,16 @@ final class AssetRuntime implements RuntimeExtensionInterface
 
     /**
      * @param string|null $entryName
+     * @return string[]
+     * @throws Exception
+     */
+    public function getStylesheetUrls(string $entryName = null): array
+    {
+        return $this->tagRenderer->getWebpackLinkStylesheetsPaths($entryName);
+    }
+
+    /**
+     * @param string|null $entryName
      * @return string
      * @throws Exception
      */

@@ -54,7 +54,7 @@
 {%- endblock key_value_collection_row -%}
 
 {%- block tiny_editor_row -%}
-    {%- set row_attr = row_attr|merge({'data-controller': 'tiny-editor'}) -%}
+    {%- set row_attr = row_attr|merge({'data-controller': 'tiny-editor', 'data-tiny-editor-css-value': N9_theme_stylesheet_urls()|join(',')}) -%}
     {{- block('form_row') -}}
 {%- endblock -%}
 

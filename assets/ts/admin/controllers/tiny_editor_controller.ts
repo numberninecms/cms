@@ -36,9 +36,15 @@ import 'tinymce/plugins/wordcount';
 import 'admin/tinymce/plugins/medialibrary';
 
 export default class extends Controller {
+    public static values = {
+        css: String,
+    };
+
     public static targets = ['editor'];
 
+    private readonly cssValue: string;
     private readonly editorTarget: HTMLTextAreaElement;
+
     private editors: Editor[];
 
     public async connect(): Promise<void> {
@@ -46,7 +52,8 @@ export default class extends Controller {
             target: this.editorTarget,
             theme: 'silver',
             skin: false,
-            content_css: false,
+            content_css: this.cssValue ?? false,
+            content_style: '#tinymce { padding: 1rem !important; }',
             branding: false,
             height: 500,
             menubar: false,
