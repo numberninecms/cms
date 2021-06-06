@@ -28,41 +28,28 @@
                     <a href="{{ path('numbernine_admin_content_entity_index', {type: type_slug, status: 'publish'}) }}" data-tabs-target="tab">
                         <span>{{ 'Published'|trans }}</span>
                     </a>
-                    <a href="" data-tabs-target="tab"><span>{{ 'Trash'|trans }}</span></a>
+                    <a href="{{ path('numbernine_admin_content_entity_index', {type: type_slug, status: 'deleted'}) }}" data-tabs-target="tab">
+                        <span>{{ 'Trash'|trans }}</span>
+                    </a>
                 </div>
                 <div>
                     <label class="border border-color-secondary border-0 border-bottom">
                         <input type="text" placeholder="Filter">
-                        <i class="fa fa-search" class=""></i>
+                        <i class="fa fa-search mx-3"></i>
                     </label>
                 </div>
             </div>
 
-            <div>
-                <table class="w-full">
-                    <tr>
-                        <th></th>
-                        <th>{{ 'Title'|trans }}</th>
-                        <th>{{ 'Author'|trans }}</th>
-                        <th>{{ 'Categories'|trans }}</th>
-                        <th>{{ 'Tags'|trans }}</th>
-                        <th>{{ 'Comments'|trans }}</th>
-                        <th>{{ 'Date'|trans }}</th>
-                    </tr>
-                    {% for entity in entities %}
-                        <tr>
-                            <td></td>
-                            <td>
-                                <a href="{{ N9_entity_admin_url(entity) }}" data-turbo-frame="_top">{{ entity.title }}</a>
-                            </td>
-                            <td>{{ entity.author }}</td>
-                            <td>{{ N9_terms_links(entity, 'category') }}</td>
-                            <td>{{ N9_terms_links(entity, 'tag') }}</td>
-                            <td>{{ entity.comments|length }}</td>
-                            <td>{{ (entity.publishedAt ?? entity.updatedAt)|date('d/m/Y H:i:s') }}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
+            <div class="flex-grow p-3">
+                {{ form_start(form) }}
+                    {% include '@NumberNine/admin/util/content_entities_table.html.twig' %}
+                    <div class="flex">
+                        {% if is_trash %}
+                            {{ form_row(form.restore, {row_attr: {class: 'mt-4'}}) }}
+                        {% endif %}
+                        {{ form_row(form.delete, {row_attr: {class: is_trash ? null : 'mt-4'}, attr: {class: 'btn btn-color-red'}}) }}
+                    </div>
+                {{ form_end(form) }}
             </div>
         </turbo-frame>
     </div>

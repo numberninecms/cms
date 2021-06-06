@@ -36,7 +36,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use function NumberNine\Common\Util\ArrayUtil\array_merge_recursive_fixed;
 
-final class AdminContentEntityFormType extends AbstractType
+final class AdminContentEntityEditFormType extends AbstractType
 {
     private AssociativeArrayToKeyValueCollectionTransformer $associativeArrayToKeyValueCollectionTransformer;
     private ContentService $contentService;

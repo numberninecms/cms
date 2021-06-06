@@ -17,17 +17,25 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class AdminContentEntityCollectionFormType extends AbstractType
+final class AdminContentEntityIndexFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('restore', SubmitType::class, ['attr' => ['value' => 'restore']])
-            ->add('delete', SubmitType::class, ['label' => 'Permanently delete', 'attr' => ['value' => 'delete']])
+            ->add('delete', SubmitType::class, ['label' => 'Delete', 'attr' => ['value' => 'delete']])
         ;
 
+        if ($options['trash']) {
+            $builder
+                ->add('restore', SubmitType::class, ['attr' => ['value' => 'restore']])
+                ->add('delete', SubmitType::class, ['label' => 'Permanently delete', 'attr' => ['value' => 'delete']])
+            ;
+        }
+
         foreach ($options['entities'] as $entity) {
-            $builder->add(sprintf('entity_%d', $entity->getId()), CheckboxType::class, ['required' => false]);
+            $builder
+                ->add(sprintf('entity_%d', $entity->getId()), CheckboxType::class, ['required' => false])
+            ;
         }
     }
 
@@ -35,6 +43,10 @@ final class AdminContentEntityCollectionFormType extends AbstractType
     {
         $resolver->setDefaults([
             'entities' => [],
+            'trash' => false,
         ]);
+
+        $resolver->setRequired('entities');
+        $resolver->setAllowedTypes('trash', 'bool');
     }
 }

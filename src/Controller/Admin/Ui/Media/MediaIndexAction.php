@@ -12,7 +12,7 @@
 namespace NumberNine\Controller\Admin\Ui\Media;
 
 use NumberNine\Content\ContentService;
-use NumberNine\Form\Admin\Content\AdminContentEntityCollectionFormType;
+use NumberNine\Form\Admin\Content\AdminContentEntityIndexFormType;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Model\Pagination\PaginationParameters;
 use Psr\Log\LoggerInterface;
@@ -51,8 +51,9 @@ final class MediaIndexAction extends AbstractController implements AdminControll
         $deletedMediaFiles = $contentService->getEntitiesOfType('media_file', $paginationParameters);
 
         /** @var Form $form */
-        $form = $this->createForm(AdminContentEntityCollectionFormType::class, null, [
+        $form = $this->createForm(AdminContentEntityIndexFormType::class, null, [
             'entities' => $deletedMediaFiles,
+            'trash' => true,
         ]);
 
         $form->handleRequest($request);

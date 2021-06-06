@@ -2,9 +2,13 @@
 <table class="w-full" data-controller="select-all">
     <thead>
         <tr>
-            <th><input type="checkbox" data-action="select-all#toggle"></th>
-            <th>{{ 'Image'|trans }}</th>
-            <th>{{ 'Title'|trans }}</th>
+            <th class="w-8"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></th>
+            {% if content_type is defined and content_type.name != 'media_file' %}
+                <th class="w-10"></th>
+            {% else %}
+                <th class="w-32">{{ 'Image'|trans }}</th>
+            {% endif %}
+            <th class="w-96">{{ 'Title'|trans }}</th>
             <th>{{ 'Author'|trans }}</th>
             <th>{{ 'Categories'|trans }}</th>
             <th>{{ 'Tags'|trans }}</th>
@@ -16,10 +20,10 @@
     {% for entity in entities %}
         <tr>
             <td>{{ form_widget(form['entity_' ~ entity.id], {attr: {'data-select-all-target': 'child'}}) }}</td>
-            {% if entity.customType == 'media_file' %}
-                <td>{{ N9_image(entity, 'thumbnail', {width: '50', height: '50'}) }}</td>
+            {% if content_type is defined and content_type.name != 'media_file' %}
+                <td>{{ N9_featured_image(entity, 'thumbnail', {class: 'p-1'}) }}</td>
             {% else %}
-                <td>{{ N9_featured_image(entity, 'thumbnail', {width: '50', height: '50'}) }}</td>
+                <td>{{ N9_image(entity, 'thumbnail', {width: '50', height: '50', class: 'p-1'}) }}</td>
             {% endif %}
             <td>
                 <a href="{{ N9_entity_admin_url(entity) }}" data-turbo-frame="_top">{{ entity.title }}</a>
@@ -34,7 +38,7 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="8"><input type="checkbox" data-action="select-all#toggle"></td>
+            <td colspan="8"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></td>
         </tr>
     </tfoot>
 </table>

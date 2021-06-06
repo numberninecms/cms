@@ -99,7 +99,10 @@ final class ContentEntityRelationshipType extends AbstractType
         /** @var ContentEntity $parent */
         $parent = $options['parent'];
 
-        if (!$parent->getChildren()->contains($form->getData())) {
+        if (
+            !$parent->getChildren()->contains($form->getData())
+            && $form->getData()->getChild() instanceof ContentEntity
+        ) {
             $parent->addChild($form->getData());
         }
     }

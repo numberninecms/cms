@@ -32,18 +32,18 @@ class ContentEntityRelationship
      * @ORM\ManyToOne(targetEntity="NumberNine\Entity\ContentEntity", inversedBy="parents")
      * @ORM\JoinColumn(nullable=false)
      */
-    private ?ContentEntity $parent;
+    private ?ContentEntity $parent = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="NumberNine\Entity\ContentEntity", inversedBy="children")
      * @ORM\JoinColumn(nullable=false)
      */
-    private ?ContentEntity $child;
+    private ?ContentEntity $child = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private ?string $name;
+    private ?string $name = null;
 
     public function getId(): ?int
     {
