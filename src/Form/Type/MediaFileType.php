@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace NumberNine\Form\Type;
 
+use Doctrine\ORM\EntityNotFoundException;
 use NumberNine\Form\DataTransformer\ContentEntityToNumberTransformer;
 use NumberNine\Repository\MediaFileRepository;
 use Symfony\Component\Form\AbstractType;
@@ -41,8 +42,12 @@ final class MediaFileType extends AbstractType
 
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        if ($id = $form->getData()) {
-            $view->vars['media_file'] = $this->mediaFileRepository->find($id);
+        try {
+            if (($id = $form->getData()) && ($mediaFile = $this->mediaFileRepository->findOneBy(['id' => $id]))) {
+                $view->vars['media_file'] = $mediaFile;
+            }
+        } catch (EntityNotFoundException $e) {
+            // Don't set variable if entity doesn't exist anymore
         }
     }
 

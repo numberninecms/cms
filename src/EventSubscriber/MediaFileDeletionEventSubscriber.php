@@ -14,14 +14,16 @@ declare(strict_types=1);
 namespace NumberNine\EventSubscriber;
 
 use Doctrine\Common\EventSubscriber;
+use Doctrine\ORM\Event\OnFlushEventArgs;
+use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Events;
-use Doctrine\Persistence\Event\LifecycleEventArgs;
 use NumberNine\Entity\MediaFile;
 use NumberNine\Exception\FileNotDeletedException;
 
 final class MediaFileDeletionEventSubscriber implements EventSubscriber
 {
     private string $publicPath;
+    private array $deletedEntities;
 
     public function __construct(string $publicPath)
     {
@@ -31,25 +33,34 @@ final class MediaFileDeletionEventSubscriber implements EventSubscriber
     public function getSubscribedEvents(): array
     {
         return [
-            Events::postRemove
+            Events::onFlush,
+            Events::postFlush,
         ];
     }
 
-    public function postRemove(LifecycleEventArgs $args): void
+    public function onFlush(OnFlushEventArgs $args): void
     {
-        $entity = $args->getObject();
+        $em = $args->getEntityManager();
+        $uow = $em->getUnitOfWork();
 
-        if (!$entity instanceof MediaFile) {
-            return;
-        }
+        $this->deletedEntities = $uow->getScheduledEntityDeletions();
+    }
 
-        $paths = array_merge($entity->getAllAssociatedFilePaths(), [$entity->getPath()]);
+    public function postFlush(PostFlushEventArgs $args): void
+    {
+        foreach ($this->deletedEntities as $entity) {
+            if (!$entity instanceof MediaFile) {
+                continue;
+            }
 
-        foreach ($paths as $path) {
-            $fullPath = $this->publicPath . $path;
+            $paths = array_merge($entity->getAllAssociatedFilePaths(), [$entity->getPath()]);
 
-            if (@unlink($fullPath) === false) {
-                throw new FileNotDeletedException($fullPath);
+            foreach ($paths as $path) {
+                $fullPath = $this->publicPath . $path;
+
+                if (file_exists($fullPath) && @unlink($fullPath) === false) {
+                    throw new FileNotDeletedException($fullPath);
+                }
             }
         }
     }

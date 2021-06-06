@@ -11,6 +11,7 @@
 
 namespace NumberNine\Twig\Extension;
 
+use Doctrine\ORM\EntityManagerInterface;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\MediaFile;
 use NumberNine\Exception\InvalidMimeTypeException;
@@ -27,10 +28,12 @@ use function NumberNine\Common\Util\ConfigUtil\get_file_upload_max_size;
 final class MediaRuntime implements RuntimeExtensionInterface
 {
     private ?Request $request;
+    private EntityManagerInterface $entityManager;
 
-    public function __construct(RequestStack $requestStack)
+    public function __construct(RequestStack $requestStack, EntityManagerInterface $entityManager)
     {
         $this->request = $requestStack->getMasterRequest();
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -46,15 +49,17 @@ final class MediaRuntime implements RuntimeExtensionInterface
         string $size = 'large',
         array $attributes = []
     ): string {
-        if (!method_exists($contentEntity, 'getFeaturedImage')) {
+        $repository = $this->entityManager->getRepository(get_class($contentEntity));
+
+        if (!method_exists($repository, 'findFeaturedImage')) {
             throw new RuntimeError(sprintf(
-                "Entity of type %s doesn't have a \$featuredImage property.",
+                "Entity of type %s doesn't support featured images.",
                 get_class($contentEntity)
             ));
         }
 
         /** @var ?MediaFile $featuredImage */
-        $featuredImage = $contentEntity->getFeaturedImage();
+        $featuredImage = $repository->findFeaturedImage($contentEntity);
 
         if (!$featuredImage) {
             return '';

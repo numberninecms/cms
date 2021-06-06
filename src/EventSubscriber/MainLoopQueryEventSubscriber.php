@@ -11,7 +11,7 @@
 
 namespace NumberNine\EventSubscriber;
 
-use NumberNine\Entity\Post;
+use Doctrine\ORM\Query\Expr\Join;
 use NumberNine\Event\MainLoopQueryEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -26,15 +26,11 @@ final class MainLoopQueryEventSubscriber implements EventSubscriberInterface
 
     public function fetchJoinFeaturedImage(MainLoopQueryEvent $event): void
     {
-        if (
-            $event->getContentType()->getEntityClassName() !== Post::class
-            && !is_subclass_of($event->getContentType()->getEntityClassName(), Post::class)
-        ) {
-            return;
-        }
-
-        $event->getQueryBuilder()
-            ->addSelect('featured_image')
-            ->leftJoin('c.featuredImage', 'featured_image');
+        $event
+            ->getQueryBuilder()
+            ->addSelect('children', 'featured_image')
+            ->leftJoin('c.children', 'children', Join::WITH, "children.name = 'featured_image'")
+            ->leftJoin('children.child', 'featured_image')
+        ;
     }
 }

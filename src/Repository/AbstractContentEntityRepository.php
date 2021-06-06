@@ -13,10 +13,9 @@ namespace NumberNine\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\ORMException;
-use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
 use NumberNine\Entity\ContentEntity;
+use NumberNine\Entity\ContentEntityRelationship;
 use NumberNine\Entity\Term;
 use NumberNine\Model\Pagination\PaginationParameters;
 
@@ -144,6 +143,17 @@ abstract class AbstractContentEntityRepository extends ServiceEntityRepository
             foreach ($entity->getComments() as $comment) {
                 $this->_em->remove($comment);
             }
+
+            $relationships = $this->_em->getRepository(ContentEntityRelationship::class)->createQueryBuilder('r')
+                ->where('r.parent = :id')
+                ->orWhere('r.child = :id')
+                ->setParameter('id', $entity->getId())
+                ->getQuery()
+                ->getResult();
+
+            foreach ($relationships as $relationship) {
+                $this->_em->remove($relationship);
+            }
         }
 
         $this->_em->remove($entity);
@@ -173,7 +183,7 @@ abstract class AbstractContentEntityRepository extends ServiceEntityRepository
             ->andWhere('c.customType = :type')
             ->setParameter('type', $type)
             ->getQuery()
-            ->iterate();
+            ->toIterable();
 
         $counter = 0;
 
@@ -188,5 +198,15 @@ abstract class AbstractContentEntityRepository extends ServiceEntityRepository
 
         $this->_em->flush();
         $this->_em->clear();
+    }
+
+    public function findOneByRelationship(ContentEntity $entity, string $relationshipName): ?ContentEntity
+    {
+        $relationship = $this->_em->getRepository(ContentEntityRelationship::class)->findOneBy([
+            'parent' => $entity->getId(),
+            'name' => $relationshipName,
+        ]);
+
+        return $relationship ? $relationship->getChild() : null;
     }
 }

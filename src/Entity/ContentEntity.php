@@ -95,13 +95,16 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
     private Collection $contentEntityTerms;
 
     /**
-     * @ORM\ManyToMany(targetEntity="NumberNine\Entity\ContentEntity", inversedBy="parents")
-     * @ORM\JoinTable(name="contententity_contententity")
+     * @ORM\OneToMany(targetEntity="NumberNine\Entity\ContentEntityRelationship", mappedBy="child", cascade={"persist"})
      */
     private Collection $children;
 
     /**
-     * @ORM\ManyToMany(targetEntity="NumberNine\Entity\ContentEntity", mappedBy="children")
+     * @ORM\OneToMany(
+     *     targetEntity="NumberNine\Entity\ContentEntityRelationship",
+     *     mappedBy="parent",
+     *     cascade={"persist"}
+     * )
      */
     private Collection $parents;
 
@@ -233,54 +236,67 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
     }
 
     /**
-     * @return Collection|self[]
+     * @return Collection|ContentEntityRelationship[]
      */
     public function getChildren(): Collection
     {
         return $this->children;
     }
 
-    public function addChild(self $child): self
+    public function addChild(ContentEntityRelationship $child): self
     {
         if (!$this->children->contains($child)) {
             $this->children[] = $child;
+            $child->setParent($this);
         }
 
         return $this;
     }
 
-    public function removeChild(self $child): self
+    public function removeChild(ContentEntityRelationship $child): self
     {
         if ($this->children->contains($child)) {
             $this->children->removeElement($child);
+            // set the owning side to null (unless already changed)
+            if ($child->getParent() === $this) {
+                $child->setParent(null);
+            }
         }
 
         return $this;
     }
 
+    public function getChildrenByRelationshipName(string $name): Collection
+    {
+        return $this->children->filter(fn (ContentEntityRelationship $r) => $r->getName() === $name);
+    }
+
     /**
-     * @return Collection|self[]
+     * @return Collection|ContentEntityRelationship[]
      */
     public function getParents(): Collection
     {
         return $this->parents;
     }
 
-    public function addParent(self $parent): self
+    public function addParent(ContentEntityRelationship $parent): self
     {
         if (!$this->parents->contains($parent)) {
             $this->parents[] = $parent;
-            $parent->addChild($this);
+            $parent->setChild($this);
         }
 
         return $this;
     }
 
-    public function removeParent(self $parent): self
+    public function removeParent(ContentEntityRelationship $parent): self
     {
         if ($this->parents->contains($parent)) {
             $this->parents->removeElement($parent);
-            $parent->removeChild($this);
+            // set the owning side to null (unless already changed)
+            if ($parent->getChild() === $this) {
+                $parent->setChild(null);
+            }
         }
 
         return $this;

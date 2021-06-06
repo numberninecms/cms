@@ -14,7 +14,9 @@ namespace NumberNine\Form\Admin\Content;
 use NumberNine\Content\ContentService;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Event\HiddenCustomFieldsEvent;
+use NumberNine\Event\SupportedContentEntityRelationshipsEvent;
 use NumberNine\Form\DataTransformer\AssociativeArrayToKeyValueCollectionTransformer;
+use NumberNine\Form\Type\ContentEntityRelationshipType;
 use NumberNine\Form\Type\KeyValueCollectionType;
 use NumberNine\Form\Type\MediaFileType;
 use NumberNine\Form\Type\TinyEditorType;
@@ -213,8 +215,17 @@ final class AdminContentEntityFormType extends AbstractType
         /** @var ContentEntity $entity */
         $entity = $event->getData();
 
-        if (property_exists($entity, 'featuredImage')) {
-            $form->add('featuredImage', MediaFileType::class);
+        /** @var SupportedContentEntityRelationshipsEvent $event */
+        $event = $this->eventDispatcher->dispatch(new SupportedContentEntityRelationshipsEvent(get_class($entity)));
+
+        if (in_array('featured_image', $event->getRelationships())) {
+            $form->add('featuredImage', ContentEntityRelationshipType::class, [
+                'name' => 'featured_image',
+                'form_type' => MediaFileType::class,
+                'form_type_options' => [],
+                'parent' => $entity,
+                'mapped' => false,
+            ]);
         }
     }
 }

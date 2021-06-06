@@ -14,7 +14,6 @@ namespace NumberNine\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use NumberNine\Annotation\FormType;
 use NumberNine\Annotation\NormalizationContext;
-use NumberNine\Model\Content\Features\FeaturedImageTrait;
 
 /**
  * @NormalizationContext(groups={"content_entity_get", "web_access_get", "author_get"})
@@ -23,8 +22,6 @@ use NumberNine\Model\Content\Features\FeaturedImageTrait;
  */
 class Post extends ContentEntity
 {
-    use FeaturedImageTrait;
-
     public function __construct()
     {
         parent::__construct();

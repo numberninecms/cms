@@ -22,6 +22,8 @@ use NumberNine\Entity\Post;
  */
 final class PostRepository extends AbstractContentEntityRepository
 {
+    use FindFeaturedImageTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Post::class);
@@ -65,7 +67,7 @@ final class PostRepository extends AbstractContentEntityRepository
         $nextId = ($currentPosition < count($ids) - 1) ? $ids[$currentPosition + 1] : false;
 
         if ($previousId === false && $nextId === false) {
-            return [null, null];
+            return ['previous' => null, 'next' => null];
         }
 
         $siblings = $this->createQueryBuilder('p')
