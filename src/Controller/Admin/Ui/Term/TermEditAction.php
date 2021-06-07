@@ -16,6 +16,7 @@ namespace NumberNine\Controller\Admin\Ui\Term;
 use Doctrine\ORM\EntityManagerInterface;
 use NumberNine\Entity\Taxonomy;
 use NumberNine\Entity\Term;
+use NumberNine\Exception\InvalidTermTaxonomyException;
 use NumberNine\Form\Taxonomy\TermFormType;
 use NumberNine\Model\Admin\AdminController;
 use Psr\Log\LoggerInterface;
@@ -45,6 +46,10 @@ final class TermEditAction extends AbstractController implements AdminController
         Taxonomy $taxonomy,
         Term $term
     ): Response {
+        if (($tax = $term->getTaxonomy()) && $tax->getId() !== $taxonomy->getId()) {
+            throw new InvalidTermTaxonomyException($taxonomy, $term);
+        }
+
         $inflector = new EnglishInflector();
 
         /** @var Form $form */
