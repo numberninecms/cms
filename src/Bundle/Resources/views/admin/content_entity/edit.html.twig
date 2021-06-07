@@ -12,7 +12,7 @@
             {% include '@NumberNine/admin/layout/toolbar.html.twig' with {title: entity.title} %}
             {% include '@NumberNine/admin/util/flashes.html.twig' %}
 
-            {{ form_start(form) }}
+            {{ form_start(form, {attr: {'data-turbo': 'false'}}) }}
 
             {% include '@NumberNine/admin/util/dynamic_tabs.html.twig' with {tabs: [
                 {id: 'content', icon: 'edit', text: 'Content'},
@@ -63,6 +63,14 @@
                             {% endblock %}
                         {% endembed %}
                     {% endif %}
+
+                    {% for taxonomy in form.vars.taxonomies %}
+                        {% embed '@NumberNine/admin/util/card.html.twig' with {title: taxonomy.name|capitalize} %}
+                            {% block content %}
+                                {{ form_row(form[taxonomy.name ~ '_terms']) }}
+                            {% endblock %}
+                        {% endembed %}
+                    {% endfor %}
 
                     {% embed '@NumberNine/admin/util/card.html.twig' with {title: 'Template'} %}
                         {% block content %}

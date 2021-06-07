@@ -11,8 +11,13 @@
 
 namespace NumberNine\Form\Admin\Content;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityRepository;
 use NumberNine\Content\ContentService;
 use NumberNine\Entity\ContentEntity;
+use NumberNine\Entity\ContentEntityTerm;
+use NumberNine\Entity\Taxonomy;
+use NumberNine\Entity\Term;
 use NumberNine\Event\HiddenCustomFieldsEvent;
 use NumberNine\Event\SupportedContentEntityRelationshipsEvent;
 use NumberNine\Form\DataTransformer\AssociativeArrayToKeyValueCollectionTransformer;
@@ -21,7 +26,11 @@ use NumberNine\Form\Type\KeyValueCollectionType;
 use NumberNine\Form\Type\MediaFileType;
 use NumberNine\Form\Type\TinyEditorType;
 use NumberNine\Model\Content\PublishingStatusInterface;
+use NumberNine\Repository\ContentEntityTermRepository;
+use NumberNine\Repository\TaxonomyRepository;
+use NumberNine\Repository\TermRepository;
 use NumberNine\Theme\TemplateResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -32,6 +41,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use function NumberNine\Common\Util\ArrayUtil\array_merge_recursive_fixed;
@@ -44,17 +55,29 @@ final class AdminContentEntityEditFormType extends AbstractType
     private EventDispatcherInterface $eventDispatcher;
     private HiddenCustomFieldsEvent $hiddenCustomFieldsEvent;
     private ContentEntity $originalEntity;
+    private TaxonomyRepository $taxonomyRepository;
+    private TermRepository $termRepository;
+    private ContentEntityTermRepository $contentEntityTermRepository;
+
+    /** @var Taxonomy[]|null */
+    private ?array $taxonomies = null;
 
     public function __construct(
         AssociativeArrayToKeyValueCollectionTransformer $transformer,
         ContentService $contentService,
         TemplateResolver $templateResolver,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        TaxonomyRepository $taxonomyRepository,
+        TermRepository $termRepository,
+        ContentEntityTermRepository $contentEntityTermRepository
     ) {
         $this->associativeArrayToKeyValueCollectionTransformer = $transformer;
         $this->contentService = $contentService;
         $this->templateResolver = $templateResolver;
         $this->eventDispatcher = $eventDispatcher;
+        $this->taxonomyRepository = $taxonomyRepository;
+        $this->termRepository = $termRepository;
+        $this->contentEntityTermRepository = $contentEntityTermRepository;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -97,12 +120,15 @@ final class AdminContentEntityEditFormType extends AbstractType
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'backupData']);
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'addTemplateField']);
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'addTaxonomyFields']);
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'addFeaturedImageField']);
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'addHiddenCustomFields']);
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'transformCustomFields']);
-        $builder->addEventListener(FormEvents::POST_SET_DATA, [$this, 'setUnmappedData']);
+        $builder->addEventListener(FormEvents::POST_SET_DATA, [$this, 'setCustomTemplateData']);
+        $builder->addEventListener(FormEvents::POST_SET_DATA, [$this, 'setTaxonomyTermsData']);
         $builder->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'transformSeo']);
         $builder->addEventListener(FormEvents::SUBMIT, [$this, 'transformTemplate']);
+        $builder->addEventListener(FormEvents::SUBMIT, [$this, 'submitTaxonomyTerms']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -110,6 +136,13 @@ final class AdminContentEntityEditFormType extends AbstractType
         $resolver->setDefaults([
             'data_class' => ContentEntity::class,
         ]);
+    }
+
+    public function buildView(FormView $view, FormInterface $form, array $options): void
+    {
+        /** @var ContentEntity $entity */
+        $entity = $form->getData();
+        $view->vars['taxonomies'] = $this->getTaxonomies($entity);
     }
 
     public function backupData(FormEvent $event): void
@@ -153,7 +186,7 @@ final class AdminContentEntityEditFormType extends AbstractType
         }
     }
 
-    public function setUnmappedData(FormEvent $event): void
+    public function setCustomTemplateData(FormEvent $event): void
     {
         $form = $event->getForm();
 
@@ -194,7 +227,7 @@ final class AdminContentEntityEditFormType extends AbstractType
         );
 
         $form->add('customTemplate', ChoiceType::class, [
-            'choices' => array_flip($candidates),
+            'choices' => array_merge(['Default' => null], array_flip($candidates)),
             'mapped' => false,
         ]);
     }
@@ -207,6 +240,95 @@ final class AdminContentEntityEditFormType extends AbstractType
         $entity = $form->getData();
 
         $entity->addCustomField('page_template', $form['customTemplate']->getData());
+    }
+
+    public function addTaxonomyFields(FormEvent $event): void
+    {
+        $form = $event->getForm();
+        /** @var ContentEntity $entity */
+        $entity = $event->getData();
+
+        foreach ($this->getTaxonomies($entity) as $taxonomy) {
+            $form
+                ->add($taxonomy->getName() . '_terms', EntityType::class, [
+                    'class' => Term::class,
+                    'query_builder' => function () use ($taxonomy) {
+                        return $this->termRepository->findByTaxonomyNameQueryBuilder($taxonomy->getName());
+                    },
+                    'label' => false,
+                    'choice_label' => 'name',
+                    'multiple' => true,
+                    'expanded' => true,
+                    'mapped' => false,
+                ]);
+        }
+    }
+
+    public function setTaxonomyTermsData(FormEvent $event): void
+    {
+        $form = $event->getForm();
+        /** @var ContentEntity $entity */
+        $entity = $event->getData();
+
+        foreach ($this->getTaxonomies($entity) as $taxonomy) {
+            $contentEntityTerms = $this->contentEntityTermRepository->findByTaxonomyName($entity, $taxonomy->getName());
+            $collection = new ArrayCollection();
+
+            foreach ($contentEntityTerms as $contentEntityTerm) {
+                $collection->add($contentEntityTerm->getTerm());
+            }
+
+            $form[$taxonomy->getName() . '_terms']->setData($collection);
+        }
+    }
+
+    public function submitTaxonomyTerms(FormEvent $event): void
+    {
+        $form = $event->getForm();
+
+        /** @var ContentEntity $entity */
+        $entity = $form->getData();
+
+        foreach ($this->getTaxonomies($entity) as $taxonomy) {
+            $taxonomyTerms = $this->termRepository->findByTaxonomyName($taxonomy->getName());
+
+            $contentEntityTerms = $this->contentEntityTermRepository->findByTaxonomyName($entity, $taxonomy->getName());
+            $existingTermsIds = array_map(function (ContentEntityTerm $cet) {
+                $term = $cet->getTerm();
+                return $term ? $term->getId() : null;
+            }, $contentEntityTerms);
+
+            $checkedIds = array_map(
+                fn (Term $term) => $term->getId(),
+                $form[$taxonomy->getName() . '_terms']->getData()->toArray(),
+            );
+
+            $toBeAddedIds = array_values(array_diff($checkedIds, $existingTermsIds));
+            $toBeRemovedIds = array_values(array_diff($existingTermsIds, $checkedIds));
+
+            $toBeRemoved = $entity->getContentEntityTerms()->filter(
+                function (ContentEntityTerm $contentEntityTerm) use ($toBeRemovedIds) {
+                    $term = $contentEntityTerm->getTerm();
+                    return $term && in_array($term->getId(), $toBeRemovedIds);
+                }
+            );
+
+            foreach ($toBeRemoved as $cet) {
+                $entity->removeContentEntityTerm($cet);
+            }
+
+            foreach ($toBeAddedIds as $id) {
+                /** @var Term $term */
+                $term = current(array_filter($taxonomyTerms, fn (Term $term) => $term->getId() === $id));
+
+                $contentEntityTerm = (new ContentEntityTerm())
+                    ->setContentEntity($entity)
+                    ->setTerm($term)
+                ;
+
+                $entity->addContentEntityTerm($contentEntityTerm);
+            }
+        }
     }
 
     public function addFeaturedImageField(FormEvent $event): void
@@ -227,5 +349,15 @@ final class AdminContentEntityEditFormType extends AbstractType
                 'mapped' => false,
             ]);
         }
+    }
+
+    private function getTaxonomies(ContentEntity $entity): array
+    {
+        if (!$this->taxonomies) {
+            $contentType = $this->contentService->getContentType((string)$entity->getCustomType());
+            $this->taxonomies = $this->taxonomyRepository->findByContentType($contentType);
+        }
+
+        return $this->taxonomies;
     }
 }

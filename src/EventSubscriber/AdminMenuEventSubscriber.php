@@ -158,7 +158,9 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
 
             $menus[$name . '_taxonomy'] = [
                 'text' => $this->__(ucfirst($plural)),
-                'link' => sprintf('/taxonomy/%s/', $name)
+                'link' => $this->urlGenerator->generate('numbernine_admin_term_index', [
+                    'taxonomy' => $name,
+                ])
             ];
         }
 

@@ -60,6 +60,11 @@ final class TermRepository extends ServiceEntityRepository
      */
     public function findByTaxonomyName(string $taxonomyName, bool $includeCount = false): array
     {
+        return $this->findByTaxonomyNameQueryBuilder($taxonomyName, $includeCount)->getQuery()->getResult();
+    }
+
+    public function findByTaxonomyNameQueryBuilder(string $taxonomyName, bool $includeCount = false): QueryBuilder
+    {
         $queryBuilder = $this->createQueryBuilder('t')
             ->join('t.taxonomy', 'tax', Join::WITH, 'tax.name = :taxonomy')
             ->orderBy('t.name', 'asc')
@@ -73,7 +78,7 @@ final class TermRepository extends ServiceEntityRepository
                 ->groupBy('t.id');
         }
 
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder;
     }
 
     public function getByTaxonomyPaginatedCollectionQueryBuilder(

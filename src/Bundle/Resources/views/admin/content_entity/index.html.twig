@@ -7,7 +7,9 @@
     <div class="flex flex-col">
         {% set tools %}
             <a href="{{ path('numbernine_admin_content_entity_create', {type: type_slug}) }}"
-               class="btn btn-color-white btn-size-xsmall">
+               class="btn btn-color-white btn-size-xsmall"
+               data-turbo-frame="_top"
+            >
                 {{ content_type.labels.addNewItem }}
             </a>
         {% endset %}

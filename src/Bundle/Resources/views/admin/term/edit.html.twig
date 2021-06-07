@@ -1,0 +1,35 @@
+{% trans_default_domain 'numbernine' %}
+{% extends '@NumberNine/admin/base.html.twig' %}
+
+{% block title %}{{ 'Editing %1% %2%'|trans({'%1%': taxonomy.name, '%2%': term.id}) }}{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col">
+        <turbo-frame id="numbernine_admin_term">
+            {% include '@NumberNine/admin/layout/toolbar.html.twig' with {
+                title: 'Editing %1% %2%'|trans({'%1%': taxonomy.name, '%2%': term.id}),
+            } %}
+
+            {% include '@NumberNine/admin/util/flashes.html.twig' %}
+
+            {{ form_start(form, {attr: {class: 'lg:max-w-md', 'data-controller': 'slugger', 'data-turbo-frame': '_top'}}) }}
+                {{ form_row(form.name, {attr: {'data-slugger-target': 'main'}}) }}
+                {{ form_row(form.slug, {attr: {'data-slugger-target': 'slug'}}) }}
+                {{ form_row(form.description) }}
+                <div class="flex">
+                    {{ form_row(form.save) }}
+                    {{ form_row(form.delete, {row_attr: {class: 'mt-4'}, attr: {class: 'btn btn-color-red'}}) }}
+                </div>
+            {{ form_end(form) }}
+
+            <div class="mt-3 px-3">
+                <a href="{{ path('numbernine_admin_term_index', {taxonomy: taxonomy.name}) }}"
+                   class="text-primary hover:underline"
+                   data-turbo-frame="_top"
+                >
+                    {{ 'Back to %1% list'|trans({'%1%': taxonomy_plural_name}) }}
+                </a>
+            </div>
+        </turbo-frame>
+    </div>
+{% endblock %}

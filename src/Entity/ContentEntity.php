@@ -90,7 +90,12 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
     private ?DateTime $publishedAt = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="NumberNine\Entity\ContentEntityTerm", mappedBy="contentEntity", orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="NumberNine\Entity\ContentEntityTerm",
+     *     mappedBy="contentEntity",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
      */
     private Collection $contentEntityTerms;
 

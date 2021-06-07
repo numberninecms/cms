@@ -16,6 +16,7 @@ use NumberNine\Content\ContentService;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Form\Admin\Content\AdminContentEntityEditFormType;
 use NumberNine\Model\Admin\AdminController;
+use NumberNine\Repository\ContentEntityRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,15 +30,23 @@ use Symfony\Component\Serializer\SerializerInterface;
 final class ContentEntityEditAction extends AbstractController implements AdminController
 {
     public function __invoke(
+        Request $request,
         EntityManagerInterface $entityManager,
         SerializerInterface $serializer,
         ContentService $contentService,
-        Request $request,
-        ContentEntity $entity,
         LoggerInterface $logger,
+        ContentEntityRepository $contentEntityRepository,
+        int $id,
         string $type
     ): Response {
         $contentType = $contentService->getContentType($type);
+        $entity = $contentEntityRepository->createQueryBuilder('e')
+            ->addSelect('cet')
+            ->join('e.contentEntityTerms', 'cet')
+            ->where('e.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getSingleResult();
 
         $form = $this->createForm(AdminContentEntityEditFormType::class, $entity);
         $form->handleRequest($request);
