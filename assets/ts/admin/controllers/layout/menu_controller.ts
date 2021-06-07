@@ -11,12 +11,20 @@ import { Controller } from 'stimulus';
 
 export default class extends Controller {
     public static targets = ['menuItem'];
+    public static values = {
+        activeUrl: String,
+    };
 
     private readonly menuItemTargets: HTMLAnchorElement[];
+    private readonly activeUrlValue: string;
 
     public connect(): void {
+        console.log();
         this.menuItemTargets.forEach((menuItem) => {
-            if (window.location.pathname === menuItem.getAttribute('href')) {
+            if (
+                window.location.pathname === menuItem.getAttribute('href') ||
+                this.activeUrlValue === menuItem.getAttribute('href')
+            ) {
                 menuItem.classList.add('active');
 
                 const div = this.getParentExpandableDiv(menuItem);

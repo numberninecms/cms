@@ -3,6 +3,8 @@
 
 {% block title %}{{ 'Editing %1% %2%'|trans({'%1%': taxonomy.name, '%2%': term.id}) }}{% endblock %}
 
+{% block active_menu_url %}{{ path('numbernine_admin_term_index', {taxonomy: taxonomy.name}) }}{% endblock %}
+
 {% block content %}
     <div class="flex flex-col">
         <turbo-frame id="numbernine_admin_term">

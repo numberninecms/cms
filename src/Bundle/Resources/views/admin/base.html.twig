@@ -19,7 +19,7 @@
     {% include '@NumberNine/admin/layout/topbar.html.twig' %}
 
     <div class="ui-area">
-        {% include '@NumberNine/admin/layout/menu.html.twig' %}
+        {% include '@NumberNine/admin/layout/menu.html.twig' with {active_menu_url: block('active_menu_url') ?? ''} %}
         <main class="flex-1">
             {% block content %}{% endblock %}
         </main>
