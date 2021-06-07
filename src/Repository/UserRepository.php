@@ -118,7 +118,7 @@ final class UserRepository extends ServiceEntityRepository
         return $queryBuilder;
     }
 
-    public function deleteUsers(array $ids, string $associatedContent): void
+    public function removeCollection(array $ids, string $associatedContent): void
     {
         if (!in_array($associatedContent, [self::DELETE_MODE_REASSIGN, self::DELETE_MODE_DELETE], true)) {
             throw new InvalidArgumentException(sprintf(

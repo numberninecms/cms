@@ -25,6 +25,13 @@
     </label>
 {%- endblock checkbox_widget -%}
 
+{%- block radio_widget -%}
+    <label class="flex flex-row space-x-3 items-center"{% if label_attr %}{% with {attr: label_attr} %} {{ block('attributes') }}{% endwith %}{% endif %}>
+        {{- parent() -}}
+        <span>{{- label -}}</span>
+    </label>
+{%- endblock radio_widget -%}
+
 {%- block key_value_row -%}
     {%- set row_attr = row_attr|merge({class: row_attr.class|default('') ~ ' flex mt-2 space-y-2 md:space-y-0 md:space-x-3 flex-col md:flex-row'}) -%}
     <div{% with {attr: row_attr} %} {{ block('attributes') }}{% endwith %}>

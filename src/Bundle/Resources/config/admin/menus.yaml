@@ -21,12 +21,12 @@ menus:
     #                link: /forms/new
     users:
         text: Users
-        route:
+        route: numbernine_admin_user_index
         icon: users
         children:
             all:
                 text: All users
-                link: /users/
+                route: numbernine_admin_user_index
             add_new:
                 text: Add new
                 link: /users/new
