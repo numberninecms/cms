@@ -29,7 +29,7 @@ menus:
                 route: numbernine_admin_user_index
             add_new:
                 text: Add new
-                link: /users/new
+                route: numbernine_admin_user_create
             roles:
                 text: Roles
                 link: /users/roles/

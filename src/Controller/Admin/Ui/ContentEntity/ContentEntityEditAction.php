@@ -42,7 +42,7 @@ final class ContentEntityEditAction extends AbstractController implements AdminC
         $contentType = $contentService->getContentType($type);
         $entity = $contentEntityRepository->createQueryBuilder('e')
             ->addSelect('cet')
-            ->join('e.contentEntityTerms', 'cet')
+            ->leftJoin('e.contentEntityTerms', 'cet')
             ->where('e.id = :id')
             ->setParameter('id', $id)
             ->getQuery()

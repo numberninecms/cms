@@ -31,7 +31,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\String\Inflector\EnglishInflector;
 
 /**
- * @Route("/taxonomy/{taxonomy}/", name="numbernine_admin_term_index", methods={"GET", "POST"}, priority="-1000")
+ * @Route("/taxonomy/{taxonomy}/", name="numbernine_admin_term_index", methods={"GET", "POST"})
  * @ParamConverter("taxonomy", options={"mapping": {"taxonomy": "name"}})
  */
 final class TermIndexAction extends AbstractController implements AdminController

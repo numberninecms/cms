@@ -17,7 +17,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use NumberNine\Entity\Taxonomy;
 use NumberNine\Entity\Term;
 use NumberNine\Exception\InvalidTermTaxonomyException;
-use NumberNine\Form\Taxonomy\TermFormType;
+use NumberNine\Form\Admin\Term\AdminTermFormType;
 use NumberNine\Model\Admin\AdminController;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -29,12 +29,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Inflector\EnglishInflector;
 
 /**
- * @Route(
- *     "/taxonomy/{taxonomy}/term/{id}/",
- *     name="numbernine_admin_term_edit",
- *     methods={"GET", "POST"},
- *     priority="-1000"
- * )
+ * @Route("/taxonomy/{taxonomy}/term/{id}/", name="numbernine_admin_term_edit", methods={"GET", "POST"})
  * @ParamConverter("taxonomy", options={"mapping": {"taxonomy": "name"}})
  */
 final class TermEditAction extends AbstractController implements AdminController
@@ -53,7 +48,7 @@ final class TermEditAction extends AbstractController implements AdminController
         $inflector = new EnglishInflector();
 
         /** @var Form $form */
-        $form = $this->createForm(TermFormType::class, $term, ['mode' => 'edit']);
+        $form = $this->createForm(AdminTermFormType::class, $term, ['mode' => 'edit']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

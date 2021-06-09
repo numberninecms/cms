@@ -16,7 +16,7 @@ namespace NumberNine\Controller\Admin\Ui\Term;
 use Doctrine\ORM\EntityManagerInterface;
 use NumberNine\Entity\Taxonomy;
 use NumberNine\Entity\Term;
-use NumberNine\Form\Taxonomy\TermFormType;
+use NumberNine\Form\Admin\Term\AdminTermFormType;
 use NumberNine\Model\Admin\AdminController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,7 +26,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Inflector\EnglishInflector;
 
 /**
- * @Route("/taxonomy/{taxonomy}/term/", name="numbernine_admin_term_create", methods={"GET", "POST"}, priority="-1000")
+ * @Route("/taxonomy/{taxonomy}/term/", name="numbernine_admin_term_create", methods={"GET", "POST"})
  * @ParamConverter("taxonomy", options={"mapping": {"taxonomy": "name"}})
  */
 final class TermCreateAction extends AbstractController implements AdminController
@@ -35,7 +35,7 @@ final class TermCreateAction extends AbstractController implements AdminControll
     {
         $inflector = new EnglishInflector();
         $term = (new Term())->setTaxonomy($taxonomy);
-        $form = $this->createForm(TermFormType::class, $term);
+        $form = $this->createForm(AdminTermFormType::class, $term);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

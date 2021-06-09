@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * @Route("/{type}/new/", name="numbernine_admin_content_entity_create", methods={"GET"})
+ * @Route("/{type}/new/", name="numbernine_admin_content_entity_create", methods={"GET"}, priority="-1000")
  */
 final class ContentEntityCreateAction extends AbstractController implements AdminController
 {

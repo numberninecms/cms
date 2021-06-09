@@ -7,7 +7,7 @@
     <div class="flex flex-col">
         <turbo-frame id="numbernine_admin_user_index">
             {% set tools %}
-                <a href="{#{{ path('numbernine_admin_user_create') }}#}"
+                <a href="{{ path('numbernine_admin_user_create') }}"
                    class="btn btn-color-white btn-size-xsmall"
                    data-turbo-frame="_top"
                 >
@@ -40,7 +40,7 @@
                         <tr>
                             <td>{{ form_widget(form['user_' ~ user.id], {attr: {'data-select-all-target': 'child'}}) }}</td>
                             <td>
-                                <a href="{#{{ path('numbernine_admin_user_edit', {id: user.id}) }}#}"
+                                <a href="{{ path('numbernine_admin_user_edit', {id: user.id}) }}"
                                    data-turbo-frame="_top"
                                 >
                                     {{ user.username }}
