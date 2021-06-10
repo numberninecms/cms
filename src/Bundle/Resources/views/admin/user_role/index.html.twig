@@ -1,0 +1,70 @@
+{% trans_default_domain 'numbernine' %}
+{% extends '@NumberNine/admin/base.html.twig' %}
+
+{% block title %}{{ 'User roles'|trans }}{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col">
+        <turbo-frame id="numbernine_admin_user_roles">
+            {% set tools %}
+                <a href="{{ path('numbernine_admin_user_role_create') }}"
+                   class="btn btn-color-white btn-size-xsmall"
+                   data-turbo-frame="_top"
+                >
+                    Add new role
+                </a>
+            {% endset %}
+
+            {% include '@NumberNine/admin/layout/toolbar.html.twig' with {
+                title: 'User roles'|trans,
+                tools: tools,
+            } %}
+
+            {% include '@NumberNine/admin/util/flashes.html.twig' %}
+
+            <div class="flex-grow p-3 flex">
+                {{ form_start(form, {attr: {class: 'flex-grow flex flex-col'}}) }}
+                    <table class="flex-grow">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                {% for role in roles %}
+                                    <th>
+                                        <div class="flex justify-center items-end">
+                                            <span>{{ role.name }}</span>
+                                            {% if role.name not in built_in_roles %}
+                                                {{ form_row(form['delete_' ~ role.id], {
+                                                    attr: {
+                                                        title: 'Delete this role'|trans,
+                                                        class: 'btn btn-color-red btn-size-xsmall'
+                                                    },
+                                                    'label_html': true,
+                                                    'label': '<i class="fa fa-trash"></i>'
+                                                }) }}
+                                            {% endif %}
+                                        </div>
+                                    </th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for capability in capabilities %}
+                                <tr>
+                                    <td>{{ capability }}</td>
+                                    {% for role in roles %}
+                                        <td>
+                                            {{ form_widget(form['cap_' ~ role.id ~ '_' ~ capability], {
+                                                label_attr: {class: 'flex items-center justify-center'},
+                                            }) }}
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {{ form_row(form.save, {row_attr: {class: 'mt-3 px-0'}}) }}
+                {{ form_end(form) }}
+            </div>
+        </turbo-frame>
+    </div>
+{% endblock %}

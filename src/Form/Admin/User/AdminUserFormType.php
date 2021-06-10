@@ -41,7 +41,7 @@ final class AdminUserFormType extends AbstractType
                 'class' => UserRole::class,
                 'multiple' => true,
                 'expanded' => true,
-            ]);
+            ])
         ;
 
         if ($options['mode'] === 'create') {

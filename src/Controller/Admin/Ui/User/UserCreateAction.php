@@ -17,7 +17,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use NumberNine\Entity\User;
 use NumberNine\Form\Admin\User\AdminUserFormType;
 use NumberNine\Model\Admin\AdminController;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +32,6 @@ final class UserCreateAction extends AbstractController implements AdminControll
     public function __invoke(
         Request $request,
         EntityManagerInterface $entityManager,
-        LoggerInterface $logger,
         UserPasswordEncoderInterface $passwordEncoder
     ): Response {
         $user = new User();

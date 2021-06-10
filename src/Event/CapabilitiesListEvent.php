@@ -15,6 +15,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 final class CapabilitiesListEvent extends Event
 {
+    /** @var string[] */
     private array $capabilities;
 
     public function __construct(array $capabilities)

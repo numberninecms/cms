@@ -41,6 +41,7 @@ class UserRole
     /**
      * @ORM\Column(type="json")
      * @Groups("role_get")
+     * @var string[]
      */
     private array $capabilities = [];
 

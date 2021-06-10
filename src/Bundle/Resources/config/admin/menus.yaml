@@ -32,7 +32,7 @@ menus:
                 route: numbernine_admin_user_create
             roles:
                 text: Roles
-                link: /users/roles/
+                route: numbernine_admin_user_role_index
     settings:
         text: Settings
         route:
