@@ -43,7 +43,7 @@ final class UserRoleIndexAction extends AbstractController implements AdminContr
 
         $roles = $userRoleRepository->findAll();
         $capabilities = $capabilityStore->getAllAvailableCapabilities();
-        $builtInRoles = ['Subscriber', 'Contributor', 'Author', 'Editor', 'Administrator'];
+        $builtInRoles = ['Subscriber', 'Contributor', 'Author', 'Editor', 'Administrator', 'Banned'];
 
         /** @var Form $form */
         $form = $this->createForm(AdminUserRoleIndexFormType::class, null, [
