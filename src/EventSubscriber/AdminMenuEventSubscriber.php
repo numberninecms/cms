@@ -23,6 +23,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\String\Inflector\EnglishInflector;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Yaml\Yaml;
@@ -39,6 +40,7 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
     private AdminMenuBuilderStore $adminMenuBuilderStore;
     private SluggerInterface $slugger;
     private TaxonomyRepository $taxonomyRepository;
+    private AuthorizationCheckerInterface $authorizationChecker;
     private EnglishInflector $inflector;
     private string $configFile;
 
@@ -46,7 +48,7 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
     {
         return [
             ControllerEvent::class => ['initializeCoreMenus', 96],
-            AdminMenuEvent::class => 'insertContentEntities'
+            AdminMenuEvent::class => 'insertContentEntities',
         ];
     }
 
@@ -58,6 +60,7 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
         AdminMenuBuilderStore $adminMenuBuilderStore,
         SluggerInterface $slugger,
         TaxonomyRepository $taxonomyRepository,
+        AuthorizationCheckerInterface $authorizationChecker,
         string $adminMenuConfigPath
     ) {
         $this->translator = $translator;
@@ -67,6 +70,7 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
         $this->adminMenuBuilderStore = $adminMenuBuilderStore;
         $this->slugger = $slugger;
         $this->taxonomyRepository = $taxonomyRepository;
+        $this->authorizationChecker = $authorizationChecker;
         $this->inflector = new EnglishInflector();
         $this->configFile = __DIR__ . '/../Bundle/Resources/config/' . $adminMenuConfigPath . '/menus.yaml';
     }
@@ -86,7 +90,7 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
         $config = Yaml::parseFile($this->configFile);
         $menus = $config['menus'] ?? [];
 
-        $builder = new AdminMenuBuilder();
+        $builder = new AdminMenuBuilder($this->authorizationChecker);
 
         foreach ($menus as $key => $menuItem) {
             if (empty($menuItem['link'])) {

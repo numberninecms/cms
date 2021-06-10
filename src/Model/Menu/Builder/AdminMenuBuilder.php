@@ -12,43 +12,46 @@
 namespace NumberNine\Model\Menu\Builder;
 
 use NumberNine\Model\Menu\MenuItem;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class AdminMenuBuilder
 {
+    private AuthorizationCheckerInterface $authorizationChecker;
+
     /** @var MenuItem[] */
     private array $menuItems = [];
+
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker)
+    {
+        $this->authorizationChecker = $authorizationChecker;
+    }
 
     public function reset(): void
     {
         $this->menuItems = [];
     }
 
-    /**
-     * @param string $key
-     * @param array $itemSchema
-     * @return AdminMenuBuilder
-     */
     public function append(string $key, array $itemSchema): self
     {
-        $this->menuItems[$key] = $this->createMenuItemFromSchema($itemSchema);
+        if ($menuItem = $this->createMenuItemFromSchema($itemSchema)) {
+            $this->menuItems[$key] = $menuItem;
+        }
 
         return $this;
     }
 
-    /**
-     * @param string $keyToSearchFor
-     * @param string $key
-     * @param array $itemSchema
-     * @return $this
-     */
     public function insertBefore(string $keyToSearchFor, string $key, array $itemSchema): self
     {
+        if (!($menuItem = $this->createMenuItemFromSchema($itemSchema))) {
+            return $this;
+        }
+
         $offset = array_search($keyToSearchFor, array_keys($this->menuItems), true);
 
         $this->menuItems = array_merge(
             (array)array_slice($this->menuItems, 0, (int)$offset, true),
-            [$key => $this->createMenuItemFromSchema($itemSchema)],
-            array_slice($this->menuItems, (int)$offset, null, true)
+            [$key => $menuItem],
+            array_slice($this->menuItems, (int)$offset, null, true),
         );
 
         return $this;
@@ -56,26 +59,27 @@ final class AdminMenuBuilder
 
     /**
      * @param string $keyToSearchFor Can be either a menu name or a path, e.g. 'settings' or 'settings.general'
-     * @param string $key
-     * @param array $itemSchema
-     * @return $this
      */
     public function insertAfter(string $keyToSearchFor, string $key, array $itemSchema): self
     {
+        if (!($menuItem = $this->createMenuItemFromSchema($itemSchema))) {
+            return $this;
+        }
+
         $tokens = explode('.', $keyToSearchFor);
-        $this->insertAfterItem($tokens, $this->menuItems, [$key => $this->createMenuItemFromSchema($itemSchema)]);
+        $this->insertAfterItem($tokens, $this->menuItems, [$key => $menuItem]);
         return $this;
     }
 
     /**
-     * @param array $path
+     * @param string[] $path
      * @param MenuItem[] $items
      * @param array $menuToInsert
      * @return bool
      */
     private function insertAfterItem(array &$path, array &$items, array $menuToInsert): bool
     {
-        $currentPath = array_shift($path);
+        $currentPath = (string)array_shift($path);
 
         if (!array_key_exists($currentPath, $items)) {
             return false;
@@ -107,19 +111,18 @@ final class AdminMenuBuilder
         return true;
     }
 
-    /**
-     * @param array $itemSchema
-     * @return MenuItem
-     */
-    private function createMenuItemFromSchema(array $itemSchema): MenuItem
+    private function createMenuItemFromSchema(array $itemSchema): ?MenuItem
     {
-        $menuItem = new MenuItem(array_merge($itemSchema, ['position' => (count($this->menuItems) + 1) * 100]));
-        $children = $itemSchema['children'] ?? [];
+        if (!empty($itemSchema['if_granted']) && !$this->authorizationChecker->isGranted($itemSchema['if_granted'])) {
+            return null;
+        }
 
-        $i = 0;
-        foreach ($children as $k => $childOptions) {
-            $childMenuItem = new MenuItem(array_merge($childOptions, ['position' => (($i++) + 1) * 100]));
-            $menuItem->addChild($k, $childMenuItem);
+        $menuItem = new MenuItem(array_merge($itemSchema, ['position' => (count($this->menuItems) + 1) * 100]));
+
+        foreach ($menuItem->getChildren() as $key => $child) {
+            if ($child->getIfGranted() && !$this->authorizationChecker->isGranted($child->getIfGranted())) {
+                $menuItem->removeChild($key);
+            }
         }
 
         return $menuItem;

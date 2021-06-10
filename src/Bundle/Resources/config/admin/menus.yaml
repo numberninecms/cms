@@ -30,9 +30,11 @@ menus:
             add_new:
                 text: Add new
                 route: numbernine_admin_user_create
+                if_granted: add_users
             roles:
                 text: Roles
                 route: numbernine_admin_user_role_index
+                if_granted: manage_roles
     settings:
         text: Settings
         route:

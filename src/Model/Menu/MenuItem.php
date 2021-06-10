@@ -11,136 +11,154 @@
 
 namespace NumberNine\Model\Menu;
 
-/**
- * Class MenuItem
- * @package NumberNine\Model\Menu
- * ApiResource
- */
+use NumberNine\Exception\ChildMenuItemNotFoundException;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+use function Symfony\Component\String\u;
+
 final class MenuItem
 {
-    /** @var string */
-    private $text;
-
-    /** @var string */
-    private $route;
-
-    /** @var string */
-    private $link;
-
-    /** @var string */
-    private $icon;
-
-    /** @var int */
-    private $position;
+    private string $text;
+    private ?string $route = null;
+    private ?string $link = null;
+    private ?string $icon = null;
+    private ?string $ifGranted = null;
+    private int $position;
 
     /** @var MenuItem[] */
-    private $children = [];
+    private array $children = [];
 
-    /**
-     * MenuItem constructor.
-     * @param array $options
-     */
     public function __construct(array $options = [])
     {
-        $this->text = $options['text'] ?? '';
-        $this->route = $options['route'] ?? '';
-        $this->link = $options['link'] ?? '';
-        $this->icon = $options['icon'] ?? '';
-        $this->position = $options['position'] ?? 0;
+        $resolver = new OptionsResolver();
+        $this->configureOptions($resolver);
+        $options = $resolver->resolve($options);
+
+        foreach ($options as $key => $value) {
+            $property = u($key)->camel()->toString();
+
+            if (property_exists($this, $property)) {
+                $this->{$property} = $value;
+            }
+        }
     }
 
-    /**
-     * @return string
-     */
-    public function getText(): ?string
+    private function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'position' => 0,
+        ]);
+
+        $resolver->setDefined(['text', 'route', 'link', 'icon', 'position', 'children', 'if_granted']);
+        $resolver->setRequired(['text']);
+
+        $resolver
+            ->setAllowedTypes('text', 'string')
+            ->setAllowedTypes('route', ['string', 'null'])
+            ->setAllowedTypes('link', ['string', 'null'])
+            ->setAllowedTypes('icon', ['string', 'null'])
+            ->setAllowedTypes('if_granted', ['string', 'null'])
+            ->setAllowedTypes('position', 'int')
+            ->setAllowedTypes('children', ['array', MenuItem::class . '[]'])
+        ;
+
+        $resolver->setNormalizer('children', static function (Options $options, array $children) {
+            $newChildren = $children;
+
+            foreach ($children as $key => $child) {
+                if (is_array($child)) {
+                    $newChildren[$key] = new MenuItem($child);
+                }
+            }
+
+            $i = 0;
+            array_walk($newChildren, function (MenuItem $menuItem) use (&$i) {
+                $menuItem->setPosition((($i++) + 1) * 100);
+            });
+
+            return $newChildren;
+        });
+    }
+
+    public function getText(): string
     {
         return $this->text;
     }
 
-    /**
-     * @param string $text
-     */
     public function setText(string $text): void
     {
         $this->text = $text;
     }
 
-    /**
-     * @return string
-     */
     public function getRoute(): ?string
     {
         return $this->route;
     }
 
-    /**
-     * @param string $route
-     */
-    public function setRoute(string $route): void
+    public function setRoute(?string $route): void
     {
         $this->route = $route;
     }
 
-    /**
-     * @return string
-     */
     public function getLink(): ?string
     {
         return $this->link;
     }
 
-    /**
-     * @param string $link
-     */
-    public function setLink(string $link): void
+    public function setLink(?string $link): void
     {
         $this->link = $link;
     }
 
-    /**
-     * @return string
-     */
     public function getIcon(): ?string
     {
         return $this->icon;
     }
 
-    /**
-     * @param string $icon
-     */
-    public function setIcon(string $icon): void
+    public function setIcon(?string $icon): void
     {
         $this->icon = $icon;
     }
 
-    /**
-     * @return int
-     */
+    public function getIfGranted(): ?string
+    {
+        return $this->ifGranted;
+    }
+
+    public function setIfGranted(?string $ifGranted): self
+    {
+        $this->ifGranted = $ifGranted;
+        return $this;
+    }
+
     public function getPosition(): int
     {
         return $this->position;
     }
 
-    /**
-     * @param int $position
-     */
     public function setPosition(int $position): void
     {
         $this->position = $position;
     }
 
-    /**
-     * @param string $key
-     * @param MenuItem $child
-     */
-    public function addChild(string $key, MenuItem $child): void
+    public function addChild(string $key, MenuItem $child): self
     {
         $this->children[$key] = $child;
+        $child->setPosition(count($this->children) * 100);
+        return $this;
     }
 
-    /**
-     * @return bool
-     */
+    public function removeChild(string $key): self
+    {
+        if (!array_key_exists($key, $this->children)) {
+            throw new ChildMenuItemNotFoundException($this, $key);
+        }
+
+        unset($this->children[$key]);
+        return $this;
+    }
+
     public function hasChildren(): bool
     {
         return count($this->children) > 0;
@@ -157,8 +175,9 @@ final class MenuItem
     /**
      * @param MenuItem[] $children
      */
-    public function setChildren(array $children): void
+    public function setChildren(array $children): self
     {
         $this->children = $children;
+        return $this;
     }
 }
