@@ -4,8 +4,12 @@
 {% block title %}{{ 'Dashboard'|trans }}{% endblock %}
 
 {% block content %}
-    <div class="flex flex-col">
+    <div class="flex flex-col flex-grow h-full">
         {% include '@NumberNine/admin/layout/toolbar.html.twig' with {title: 'Dashboard'} %}
         {% include '@NumberNine/admin/util/flashes.html.twig' %}
+
+        <div class="flex flex-grow items-center justify-center h-full">
+            <img src="{{ preload(asset('bundles/numbernine/build/images/NumberNine512_slogan.png', 'numbernine'), {as: 'image'}) }}" alt="NumberNine CMS">
+        </div>
     </div>
 {% endblock %}

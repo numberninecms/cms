@@ -10,6 +10,7 @@
 import mitt from 'mitt';
 import 'styles/admin/admin.scss';
 import 'images/NumberNineWithoutText.png';
+import 'images/NumberNine512_slogan.png';
 import { startStimulusApp } from '@symfony/stimulus-bridge';
 
 export const app = startStimulusApp(
