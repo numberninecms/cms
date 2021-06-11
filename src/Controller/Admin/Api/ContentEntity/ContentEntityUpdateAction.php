@@ -80,6 +80,7 @@ final class ContentEntityUpdateAction extends AbstractController implements Admi
         $contentType = $contentService->getContentType($entity->getType());
         $this->validateAccess($entity, $contentType);
 
+        /** @var array $data */
         $data = $request->request->all();
         $contentType = $contentService->getContentType($type);
 
@@ -134,7 +135,7 @@ final class ContentEntityUpdateAction extends AbstractController implements Admi
 
         foreach ($termIdsToDelete as $id) {
             $cet = $entity->getContentEntityTerms()->filter(
-                fn(ContentEntityTerm $cet) => $cet->getTerm() instanceof Term ? $cet->getTerm()->getId() === $id : false
+                fn(ContentEntityTerm $cet) => $cet->getTerm() instanceof Term && $cet->getTerm()->getId() === $id
             )->first();
             $entity->removeContentEntityTerm($cet);
         }

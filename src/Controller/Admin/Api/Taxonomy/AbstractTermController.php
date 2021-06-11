@@ -44,7 +44,10 @@ abstract class AbstractTermController extends AbstractController implements Admi
         }
 
         $form = $this->createForm(TermFormType::class, $term);
-        $form->submit($this->request->request->get('term'));
+
+        /** @var array $termData */
+        $termData = $this->request->request->get('term');
+        $form->submit($termData);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->persist($term);

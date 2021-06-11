@@ -39,6 +39,7 @@ final class PageBuilderShortcodePresetCreateUpdateAction
         PresetRepository $templateRepository,
         string $name
     ): JsonResponse {
+        /** @var array $component */
         $component = $request->request->all();
 
         if (empty($component)) {

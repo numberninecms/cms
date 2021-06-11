@@ -36,7 +36,7 @@ final class MenuCreateAction implements AdminController
             throw new BadRequestHttpException('Menu name not specified.');
         }
 
-        $menu = (new Menu())->setName($name);
+        $menu = (new Menu())->setName((string)$name);
         $entityManager->persist($menu);
         $entityManager->flush();
 

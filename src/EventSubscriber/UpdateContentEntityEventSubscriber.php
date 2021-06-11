@@ -33,6 +33,7 @@ final class UpdateContentEntityEventSubscriber implements EventSubscriberInterfa
             return;
         }
 
+        /** @var array $data */
         $data = $event->getRequest()->request->all();
 
         $entity->setCaption($data['caption'] ?? null);

@@ -29,7 +29,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * @Route(
  *     "/users/roles/",
  *     name="numbernine_admin_user_roles_update_collection",
- *     Options={"expose"=true},
+ *     options={"expose"=true},
  *     methods={"PUT"}
  * )
  */
