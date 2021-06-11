@@ -8,6 +8,7 @@ menus:
         text: Media Library
         route: numbernine_admin_media_library_index
         icon: photo-video
+        if_granted: edit_media_files
     #    forms:
     #        text: Forms
     #        route:
@@ -23,6 +24,7 @@ menus:
         text: Users
         route: numbernine_admin_user_index
         icon: users
+        if_granted: list_users
         children:
             all:
                 text: All users
@@ -30,7 +32,7 @@ menus:
             add_new:
                 text: Add new
                 route: numbernine_admin_user_create
-                if_granted: add_users
+                if_granted: create_users
             roles:
                 text: Roles
                 route: numbernine_admin_user_role_index
@@ -39,6 +41,7 @@ menus:
         text: Settings
         route:
         icon: cogs
+        if_granted: manage_options
         children:
             general:
                 text: General
@@ -53,6 +56,7 @@ menus:
         text: Appearance
         route:
         icon: paint-brush
+        if_granted: customize
         children:
             customize:
                 text: Customize

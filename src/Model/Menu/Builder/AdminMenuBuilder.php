@@ -11,20 +11,13 @@
 
 namespace NumberNine\Model\Menu\Builder;
 
+use NumberNine\Exception\MenuItemNotFoundException;
 use NumberNine\Model\Menu\MenuItem;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class AdminMenuBuilder
 {
-    private AuthorizationCheckerInterface $authorizationChecker;
-
     /** @var MenuItem[] */
     private array $menuItems = [];
-
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker)
-    {
-        $this->authorizationChecker = $authorizationChecker;
-    }
 
     public function reset(): void
     {
@@ -33,18 +26,14 @@ final class AdminMenuBuilder
 
     public function append(string $key, array $itemSchema): self
     {
-        if ($menuItem = $this->createMenuItemFromSchema($itemSchema)) {
-            $this->menuItems[$key] = $menuItem;
-        }
+        $this->menuItems[$key] = $this->createMenuItemFromSchema($itemSchema);
 
         return $this;
     }
 
     public function insertBefore(string $keyToSearchFor, string $key, array $itemSchema): self
     {
-        if (!($menuItem = $this->createMenuItemFromSchema($itemSchema))) {
-            return $this;
-        }
+        $menuItem = $this->createMenuItemFromSchema($itemSchema);
 
         $offset = array_search($keyToSearchFor, array_keys($this->menuItems), true);
 
@@ -62,9 +51,7 @@ final class AdminMenuBuilder
      */
     public function insertAfter(string $keyToSearchFor, string $key, array $itemSchema): self
     {
-        if (!($menuItem = $this->createMenuItemFromSchema($itemSchema))) {
-            return $this;
-        }
+        $menuItem = $this->createMenuItemFromSchema($itemSchema);
 
         $tokens = explode('.', $keyToSearchFor);
         $this->insertAfterItem($tokens, $this->menuItems, [$key => $menuItem]);
@@ -111,21 +98,9 @@ final class AdminMenuBuilder
         return true;
     }
 
-    private function createMenuItemFromSchema(array $itemSchema): ?MenuItem
+    private function createMenuItemFromSchema(array $itemSchema): MenuItem
     {
-        if (!empty($itemSchema['if_granted']) && !$this->authorizationChecker->isGranted($itemSchema['if_granted'])) {
-            return null;
-        }
-
-        $menuItem = new MenuItem(array_merge($itemSchema, ['position' => (count($this->menuItems) + 1) * 100]));
-
-        foreach ($menuItem->getChildren() as $key => $child) {
-            if ($child->getIfGranted() && !$this->authorizationChecker->isGranted($child->getIfGranted())) {
-                $menuItem->removeChild($key);
-            }
-        }
-
-        return $menuItem;
+        return new MenuItem(array_merge($itemSchema, ['position' => (count($this->menuItems) + 1) * 100]));
     }
 
     /**
@@ -134,5 +109,16 @@ final class AdminMenuBuilder
     public function getMenuItems(): array
     {
         return $this->menuItems;
+    }
+
+    public function removeMenuItem(string $key): self
+    {
+        if (!array_key_exists($key, $this->menuItems)) {
+            throw new MenuItemNotFoundException($key);
+        }
+
+        unset($this->menuItems[$key]);
+
+        return $this;
     }
 }

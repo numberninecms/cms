@@ -19,9 +19,12 @@ use NumberNine\Model\Translation\QuickTranslate;
 use NumberNine\Repository\TaxonomyRepository;
 use NumberNine\Content\ContentService;
 use NumberNine\Admin\AdminMenuBuilderStore;
+use NumberNine\Security\Capabilities;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\String\Inflector\EnglishInflector;
@@ -43,11 +46,13 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
     private AuthorizationCheckerInterface $authorizationChecker;
     private EnglishInflector $inflector;
     private string $configFile;
+    private string $environment;
 
     public static function getSubscribedEvents(): array
     {
         return [
             ControllerEvent::class => ['initializeCoreMenus', 96],
+            FinishRequestEvent::class => ['initializeCoreMenus', 0],
             AdminMenuEvent::class => 'insertContentEntities',
         ];
     }
@@ -61,7 +66,8 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
         SluggerInterface $slugger,
         TaxonomyRepository $taxonomyRepository,
         AuthorizationCheckerInterface $authorizationChecker,
-        string $adminMenuConfigPath
+        string $adminMenuConfigPath,
+        string $environment
     ) {
         $this->translator = $translator;
         $this->eventDispatcher = $eventDispatcher;
@@ -73,14 +79,24 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
         $this->authorizationChecker = $authorizationChecker;
         $this->inflector = new EnglishInflector();
         $this->configFile = __DIR__ . '/../Bundle/Resources/config/' . $adminMenuConfigPath . '/menus.yaml';
+        $this->environment = $environment;
     }
 
-    public function initializeCoreMenus(ControllerEvent $event): void
+    /**
+     * @param ControllerEvent|FinishRequestEvent $event
+     */
+    public function initializeCoreMenus($event): void
     {
-        $controller = $event->getController();
-
-        if (!$controller instanceof AdminController) {
+        if ($this->environment !== 'test' && $event instanceof FinishRequestEvent) {
             return;
+        }
+
+        if ($event instanceof ControllerEvent) {
+            $controller = $event->getController();
+
+            if (!$controller instanceof AdminController) {
+                return;
+            }
         }
 
         if (!$this->configFile) {
@@ -90,7 +106,7 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
         $config = Yaml::parseFile($this->configFile);
         $menus = $config['menus'] ?? [];
 
-        $builder = new AdminMenuBuilder($this->authorizationChecker);
+        $builder = new AdminMenuBuilder();
 
         foreach ($menus as $key => $menuItem) {
             if (empty($menuItem['link'])) {
@@ -104,7 +120,23 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
 
         /** @var AdminMenuEvent $adminMenuEvent */
         $adminMenuEvent = $this->eventDispatcher->dispatch(new AdminMenuEvent($builder));
-        $this->adminMenuBuilderStore->setAdminMenuBuilder($adminMenuEvent->getBuilder());
+        $builder = $adminMenuEvent->getBuilder();
+
+        foreach ($builder->getMenuItems() as $key => $menuItem) {
+            if ($menuItem->getIfGranted() && !$this->authorizationChecker->isGranted($menuItem->getIfGranted())) {
+                $builder->removeMenuItem($key);
+                continue;
+            }
+
+            foreach ($menuItem->getChildren() as $childKey => $child) {
+                if ($child->getIfGranted() && !$this->authorizationChecker->isGranted($child->getIfGranted())) {
+                    $menuItem->removeChild($childKey);
+                    continue;
+                }
+            }
+        }
+
+        $this->adminMenuBuilderStore->setAdminMenuBuilder($builder);
     }
 
     public function insertContentEntities(AdminMenuEvent $event): void
@@ -133,6 +165,7 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
                     'text' => $contentType->getLabels()->getMenuName(),
                     'link' => $linkIndex,
                     'icon' => $contentType->getIcon(),
+                    'if_granted' => $contentType->getMappedCapability(Capabilities::EDIT_POSTS),
                     'children' => array_merge(
                         [
                             'all' => [

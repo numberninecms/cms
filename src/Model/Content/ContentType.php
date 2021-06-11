@@ -213,7 +213,7 @@ final class ContentType
     {
         $capabilities = array_replace($this->mapCapabilities($options), $value);
 
-        $capabilities = array_reduce(
+        return array_reduce(
             $capabilities,
             static function ($array, $value) use ($capabilities): array {
                 $key = array_search($value, $capabilities, true);
@@ -229,8 +229,6 @@ final class ContentType
             },
             []
         );
-
-        return $capabilities;
     }
 
     private function mapCapabilities(Options $options): array
