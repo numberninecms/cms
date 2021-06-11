@@ -69,6 +69,6 @@ class NumberNineBundleKernel extends Kernel
 
     public function getCacheDir(): string
     {
-        return __DIR__ . '/../var/cache/test/' . spl_object_hash($this);
+        return __DIR__ . '/../var/cache/test/';
     }
 }

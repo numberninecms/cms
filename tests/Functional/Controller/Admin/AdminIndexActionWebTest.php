@@ -11,11 +11,10 @@
 
 namespace NumberNine\Tests\Functional\Controller\Admin;
 
-use NumberNine\Repository\UserRoleRepository;
-use NumberNine\Security\UserFactory;
-use NumberNine\Tests\DotEnvAwareWebTestCase;
+use NumberNine\Security\Capabilities;
+use NumberNine\Tests\Functional\AdminTestCase;
 
-class AdminIndexActionWebTest extends DotEnvAwareWebTestCase
+class AdminIndexActionWebTest extends AdminTestCase
 {
     public function testAdminPageRedirectsToLogin(): void
     {
@@ -23,44 +22,50 @@ class AdminIndexActionWebTest extends DotEnvAwareWebTestCase
         self::assertResponseRedirects('/admin/login');
     }
 
-    public function testAdminLoginIsSuccessful(): void
+    public function testAdministratorCanAccessAdmin(): void
     {
-        /** @var UserRoleRepository $userRoleRepository */
-        $userRoleRepository = self::$container->get(UserRoleRepository::class);
-        /** @var UserFactory $userFactory */
-        $userFactory = self::$container->get(UserFactory::class);
-
-        $adminUser = $userFactory->createUser(
-            'admin',
-            'admin@numbernine-fakedomain.com',
-            'password',
-            [$userRoleRepository->findOneBy(['name' => 'Administrator'])],
-        );
-
-        $this->client->loginUser($adminUser);
-
-        $this->client->request('GET', '/admin/');
+        $this->loginThenNavigateToAdminDashboard('Administrator');
         self::assertResponseIsSuccessful();
         self::assertSelectorExists('div.ui-area');
     }
 
-    public function testSubscriberCantAccessAdmin(): void
+    public function testEditorCanAccessAdmin(): void
     {
-        /** @var UserRoleRepository $userRoleRepository */
-        $userRoleRepository = self::$container->get(UserRoleRepository::class);
-        /** @var UserFactory $userFactory */
-        $userFactory = self::$container->get(UserFactory::class);
+        $this->loginThenNavigateToAdminDashboard('Editor');
+        self::assertResponseIsSuccessful();
+        self::assertSelectorExists('div.ui-area');
+    }
 
-        $subscriberUser = $userFactory->createUser(
-            'subscriber',
-            'subscriber@numbernine-fakedomain.com',
-            'password',
-            [$userRoleRepository->findOneBy(['name' => 'Subscriber'])],
-        );
+    public function testAuthorCanAccessAdmin(): void
+    {
+        $this->loginThenNavigateToAdminDashboard('Author');
+        self::assertResponseIsSuccessful();
+        self::assertSelectorExists('div.ui-area');
+    }
 
-        $this->client->loginUser($subscriberUser);
+    public function testContributorCanAccessAdmin(): void
+    {
+        $this->loginThenNavigateToAdminDashboard('Contributor');
+        self::assertResponseIsSuccessful();
+        self::assertSelectorExists('div.ui-area');
+    }
 
-        $this->client->request('GET', '/admin/');
+    public function testSubscriberCannotAccessAdmin(): void
+    {
+        $this->loginThenNavigateToAdminDashboard('Subscriber');
         self::assertResponseRedirects('/');
+    }
+
+    public function testNoCapabilityCannotAccessAdmin(): void
+    {
+        $this->setCapabilitiesThenLogin([]);
+        self::assertResponseRedirects('/');
+    }
+
+    public function testAccessAdminCapabilityCanAccessAdmin(): void
+    {
+        $this->setCapabilitiesThenLogin([Capabilities::ACCESS_ADMIN]);
+        self::assertResponseIsSuccessful();
+        self::assertSelectorExists('div.ui-area');
     }
 }

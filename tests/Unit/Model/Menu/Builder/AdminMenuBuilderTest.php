@@ -16,7 +16,6 @@ namespace NumberNine\Tests\Unit\Model\Menu\Builder;
 use NumberNine\Model\Menu\Builder\AdminMenuBuilder;
 use NumberNine\Model\Menu\MenuItem;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class AdminMenuBuilderTest extends TestCase
 {
@@ -24,7 +23,7 @@ final class AdminMenuBuilderTest extends TestCase
 
     public function setUp(): void
     {
-        $this->adminMenuBuilder = new AdminMenuBuilder(self::createMock(AuthorizationCheckerInterface::class));
+        $this->adminMenuBuilder = new AdminMenuBuilder();
     }
 
     public function testCreateSimpleMenuItem(): void
