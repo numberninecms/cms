@@ -9,7 +9,7 @@
 
 import { Controller } from 'stimulus';
 import { createApp } from 'vue';
-import MediaUploader from '../../vue/components/MediaUploader.vue';
+import MediaUploader from 'admin/vue/components/media/MediaUploader.vue';
 
 export default class extends Controller {
     public static values = {

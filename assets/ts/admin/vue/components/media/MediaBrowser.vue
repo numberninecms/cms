@@ -37,9 +37,9 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted } from 'vue';
 import FlashBar from 'admin/vue/components/FlashBar.vue';
-import MediaViewer from 'admin/vue/components/MediaViewer.vue';
-import MediaThumbnailsList from 'admin/vue/components/MediaThumbnailsList.vue';
-import MediaThumbnailsSelectionBar from 'admin/vue/components/MediaThumbnailsSelectionBar.vue';
+import MediaViewer from 'admin/vue/components/media/MediaViewer.vue';
+import MediaThumbnailsList from 'admin/vue/components/media/MediaThumbnailsList.vue';
+import MediaThumbnailsSelectionBar from 'admin/vue/components/media/MediaThumbnailsSelectionBar.vue';
 import { useMediaFilesStore } from 'admin/vue/stores/mediaFiles';
 import { useMediaViewerStore } from 'admin/vue/stores/mediaViewer';
 import { EventBus } from 'admin/admin';
@@ -50,8 +50,8 @@ import {
 } from 'admin/events/events';
 import { Editor } from 'tinymce';
 import MediaFile from 'admin/interfaces/MediaFile';
-import MediaFileProperties from 'admin/vue/components/MediaFileProperties.vue';
-import MediaFileSettings from 'admin/vue/components/MediaFileSettings.vue';
+import MediaFileProperties from 'admin/vue/components/media/MediaFileProperties.vue';
+import MediaFileSettings from 'admin/vue/components/media/MediaFileSettings.vue';
 import ModalVisibilityChangedEvent from 'admin/events/ModalVisibilityChangedEvent';
 
 export default defineComponent({

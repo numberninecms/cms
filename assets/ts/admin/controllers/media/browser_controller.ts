@@ -11,7 +11,7 @@ import { Controller } from 'stimulus';
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import { ObserveVisibility } from 'vue-observe-visibility';
-import MediaBrowser from '../../vue/components/MediaBrowser.vue';
+import MediaBrowser from 'admin/vue/components/media/MediaBrowser.vue';
 
 export default class extends Controller {
     public static values = {

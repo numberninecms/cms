@@ -48,7 +48,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, onUnmounted } from 'vue';
 import useMediaFileUtilities from 'admin/vue/functions/mediaFileUtilities';
-import MediaFileProperties from 'admin/vue/components/MediaFileProperties.vue';
+import MediaFileProperties from 'admin/vue/components/media/MediaFileProperties.vue';
 import { useMediaFilesStore } from 'admin/vue/stores/mediaFiles';
 import { useMediaViewerStore } from 'admin/vue/stores/mediaViewer';
 
