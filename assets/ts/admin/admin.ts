@@ -17,4 +17,4 @@ export const app = startStimulusApp(
     require.context('@symfony/stimulus-bridge/lazy-controller-loader!./controllers', true, /\.([jt])sx?$/),
 );
 
-export const EventBus = mitt();
+export const eventBus = mitt();

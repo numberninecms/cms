@@ -8,7 +8,7 @@
  */
 
 import { Controller } from 'stimulus';
-import { EventBus } from 'admin/admin';
+import { eventBus } from 'admin/admin';
 import { EVENT_MODAL_CLOSE, EVENT_MODAL_SHOW, EVENT_MODAL_VISIBILITY_CHANGED } from 'admin/events/events';
 import ModalVisibilityChangedEvent from 'admin/events/ModalVisibilityChangedEvent';
 
@@ -20,13 +20,13 @@ export default class extends Controller {
     private readonly idValue: string;
 
     public connect(): void {
-        EventBus.on(EVENT_MODAL_SHOW, (id) => {
+        eventBus.on(EVENT_MODAL_SHOW, (id) => {
             if (id === this.idValue) {
                 this.show();
             }
         });
 
-        EventBus.on(EVENT_MODAL_CLOSE, (id) => {
+        eventBus.on(EVENT_MODAL_CLOSE, (id) => {
             if (id === this.idValue) {
                 this.close();
             }
@@ -47,7 +47,7 @@ export default class extends Controller {
 
     public show(): void {
         (this.element as HTMLElement).style.display = 'flex';
-        EventBus.emit(EVENT_MODAL_VISIBILITY_CHANGED, {
+        eventBus.emit(EVENT_MODAL_VISIBILITY_CHANGED, {
             element: this.element,
             visible: true,
         } as ModalVisibilityChangedEvent);
@@ -55,7 +55,7 @@ export default class extends Controller {
 
     public close(): void {
         (this.element as HTMLElement).style.display = 'none';
-        EventBus.emit(EVENT_MODAL_VISIBILITY_CHANGED, {
+        eventBus.emit(EVENT_MODAL_VISIBILITY_CHANGED, {
             element: this.element,
             visible: false,
         } as ModalVisibilityChangedEvent);

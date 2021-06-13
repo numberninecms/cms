@@ -34,6 +34,9 @@ module.exports = {
 
         // Conflict with prettier
         'vue/max-attributes-per-line': 'off',
+
+        // Causes error in PageBuilderCompiler
+        'vue/one-component-per-file': 'off',
     },
     env: {
         browser: true,

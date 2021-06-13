@@ -42,7 +42,7 @@ import MediaThumbnailsList from 'admin/vue/components/media/MediaThumbnailsList.
 import MediaThumbnailsSelectionBar from 'admin/vue/components/media/MediaThumbnailsSelectionBar.vue';
 import { useMediaFilesStore } from 'admin/vue/stores/mediaFiles';
 import { useMediaViewerStore } from 'admin/vue/stores/mediaViewer';
-import { EventBus } from 'admin/admin';
+import { eventBus } from 'admin/admin';
 import {
     EVENT_MEDIA_SELECT, EVENT_MODAL_CLOSE,
     EVENT_MODAL_VISIBILITY_CHANGED,
@@ -85,11 +85,11 @@ export default defineComponent({
         mediaFilesStore.setup({ getUrl: props.getUrl, deleteUrl: props.deleteUrl });
 
         onMounted(() => {
-            EventBus.on(EVENT_TINY_EDITOR_ADD_MEDIA, (callback) => {
+            eventBus.on(EVENT_TINY_EDITOR_ADD_MEDIA, (callback) => {
                 mediaViewerStore.callback = callback;
             });
 
-            EventBus.on(EVENT_MEDIA_SELECT, (callback) => {
+            eventBus.on(EVENT_MEDIA_SELECT, (callback) => {
                 mediaViewerStore.callback = callback;
             });
         });
@@ -112,7 +112,7 @@ export default defineComponent({
             });
             mediaViewerStore.show = false;
 
-            EventBus.emit(EVENT_MODAL_CLOSE, 'media_library');
+            eventBus.emit(EVENT_MODAL_CLOSE, 'media_library');
         }
 
         return {

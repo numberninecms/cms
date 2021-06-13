@@ -31,6 +31,7 @@ Encore
         'admin': path.resolve(__dirname, 'assets/ts/admin/'),
         'styles': path.resolve(__dirname, 'assets/scss/'),
         'images': path.resolve(__dirname, 'assets/images/'),
+        'vue': 'vue/dist/vue.esm-bundler',
     })
     .addRule({
         enforce: 'pre',

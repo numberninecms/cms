@@ -36,7 +36,7 @@ import {
     EVENT_MEDIA_UPLOADER_FILE_UPLOADED,
     EVENT_MODAL_VISIBILITY_CHANGED,
 } from 'admin/events/events';
-import { EventBus } from 'admin/admin';
+import { eventBus } from 'admin/admin';
 import useMediaFileUtilities from 'admin/vue/functions/mediaFileUtilities';
 import { useMediaFilesStore } from 'admin/vue/stores/mediaFiles';
 import ModalVisibilityChangedEvent from 'admin/events/ModalVisibilityChangedEvent';
@@ -56,7 +56,7 @@ export default defineComponent({
         const isEndOfListVisible = ref(false);
 
         onMounted(() => {
-            EventBus.on(EVENT_MEDIA_UPLOADER_FILE_UPLOADED, ({ mediaFile }) => {
+            eventBus.on(EVENT_MEDIA_UPLOADER_FILE_UPLOADED, ({ mediaFile }) => {
                 mediaFilesStore.mediaFiles.splice(0, 0, mediaFile);
             });
 
@@ -65,7 +65,7 @@ export default defineComponent({
             if (!isModal) {
                 void loadMoreMediaFiles();
             } else {
-                EventBus.on(EVENT_MODAL_VISIBILITY_CHANGED, (event) => {
+                eventBus.on(EVENT_MODAL_VISIBILITY_CHANGED, (event) => {
                     if ((event as ModalVisibilityChangedEvent).visible) {
                         void loadMoreMediaFiles();
                     }
@@ -117,7 +117,7 @@ export default defineComponent({
                 mediaFilesStore.setBulkSelectFirstIndex(index);
             }
 
-            EventBus.emit(EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_CLICKED, event);
+            eventBus.emit(EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_CLICKED, event);
             emit('thumbnail-clicked', event);
         }
 
@@ -131,7 +131,7 @@ export default defineComponent({
                 mediaFilesStore.bulkMediaSelect(index);
             }
 
-            EventBus.emit(EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_SHIFT_CLICKED, event);
+            eventBus.emit(EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_SHIFT_CLICKED, event);
             emit('thumbnail-shift-clicked', event);
         }
 

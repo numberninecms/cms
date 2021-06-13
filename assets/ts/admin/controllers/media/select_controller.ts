@@ -8,7 +8,7 @@
  */
 
 import { Controller } from 'stimulus';
-import { EventBus } from 'admin/admin';
+import { eventBus } from 'admin/admin';
 import MediaFile from 'admin/interfaces/MediaFile';
 import { EVENT_MEDIA_SELECT, EVENT_MODAL_SHOW } from 'admin/events/events';
 import { dirname } from 'path';
@@ -22,8 +22,8 @@ export default class extends Controller {
     private readonly removeTarget: HTMLElement;
 
     public select(): void {
-        EventBus.emit(EVENT_MODAL_SHOW, 'media_library');
-        EventBus.emit(EVENT_MEDIA_SELECT, ({ files }: { files: MediaFile[] }) => {
+        eventBus.emit(EVENT_MODAL_SHOW, 'media_library');
+        eventBus.emit(EVENT_MEDIA_SELECT, ({ files }: { files: MediaFile[] }) => {
             if (files.length > 0) {
                 const img = document.createElement('img');
                 const size = Object.prototype.hasOwnProperty.call(files[0].sizes, 'preview') ? 'preview' : 'original';
