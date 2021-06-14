@@ -9,8 +9,8 @@
 
 .modal-backdrop {
     @apply fixed inset-0 z-50
-    bg-black bg-opacity-50
-    flex;
+        bg-black bg-opacity-50
+        flex;
 }
 
 .modal-backdrop-container {
@@ -19,9 +19,13 @@
 
 .modal-card {
     @apply flex flex-col flex-grow justify-between
-    m-5 w-11/12
-    overflow-hidden relative
-    rounded shadow-xl
-    text-left
-    bg-white;
+        m-5 w-11/12
+        overflow-hidden relative
+        rounded shadow-xl
+        text-left
+        bg-white;
+
+    &.modal-draggable {
+        @apply w-48 h-48 flex-initial fixed z-50 top-60 right-60;
+    }
 }

@@ -15,21 +15,22 @@ import { EVENT_PAGE_BUILDER_FRAME_HEIGHT_CHANGED } from 'admin/events/events';
 
 export default class extends Controller {
     public static values = {
-        url: String,
+        frontendUrl: String,
+        componentsApiUrl: String,
     };
 
-    private readonly urlValue: string;
+    private readonly frontendUrlValue: string;
+    private readonly componentsApiUrlValue: string;
 
     public connect(): void {
         window.addEventListener('resize', () => this.emitWindowHeight());
         this.emitWindowHeight();
 
-        const app = createApp(PageBuilderFrame, {
-            url: this.urlValue,
+        createApp(PageBuilderFrame, {
+            frontendUrl: this.frontendUrlValue,
+            componentsApiUrl: this.componentsApiUrlValue,
             disableLinks: true,
-        });
-
-        app.mount(this.element);
+        }).mount(this.element);
     }
 
     private emitWindowHeight(): void {

@@ -8,16 +8,23 @@
   -->
 
 <template>
-    <div>{{ text }}</div>
+    <div>
+        <PageBuilderComponent v-for="component in components" :key="component.id" :component="component" />
+    </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
+import { usePageBuilderStore } from 'admin/vue/stores/pageBuilder';
+import PageBuilderComponent from 'admin/vue/components/builder/PageBuilderComponent.vue';
 
 export default defineComponent({
     name: 'PageBuilder',
+    components: { PageBuilderComponent },
     setup() {
+        const store = usePageBuilderStore();
+
         return {
-            text: "It's working",
+            components: computed(() => store.pageComponents),
         };
     },
 });

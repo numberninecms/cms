@@ -8,9 +8,9 @@
  */
 
 import { Ref, ref } from 'vue';
-import ImageResizer from '../../services/ImageResizer';
-import ParsedFile from '../../interfaces/ParsedFile';
-import ResizeOptions from '../../interfaces/ResizeOptions';
+import ImageResizer from 'admin/classes/ImageResizer';
+import ParsedFile from 'admin/interfaces/ParsedFile';
+import ResizeOptions from 'admin/interfaces/ResizeOptions';
 import MediaFile from 'admin/interfaces/MediaFile';
 import axios, { AxiosPromise } from 'axios';
 

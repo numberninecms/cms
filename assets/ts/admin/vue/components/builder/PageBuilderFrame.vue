@@ -9,13 +9,13 @@
 
 <template>
     <div class="flex-1 min-h-full flex" :style="{ height: `${frameHeight - 48}px` }">
-        <iframe ref="iframe" :src="url" class="flex-1" @load="onLoad"></iframe>
+        <iframe ref="iframe" :src="frontendUrl" class="flex-1" @load="onLoad"></iframe>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, Ref, ref } from 'vue';
-import PageBuilderApp from 'admin/services/PageBuilderApp';
+import PageBuilderApp from 'admin/classes/PageBuilderApp';
 import { eventBus } from 'admin/admin';
 import {
     EVENT_PAGE_BUILDER_CREATED,
@@ -26,7 +26,11 @@ import {
 export default defineComponent({
     name: 'PageBuilderFrame',
     props: {
-        url: {
+        frontendUrl: {
+            type: String,
+            required: true,
+        },
+        componentsApiUrl: {
             type: String,
             required: true,
         },
@@ -44,7 +48,7 @@ export default defineComponent({
             const pageBuilderElements = iframe.value!.contentDocument!.body.getElementsByTagName('page-builder');
 
             if (pageBuilderElements.length > 0) {
-                const app = new PageBuilderApp(pageBuilderElements[0]);
+                const app = new PageBuilderApp(pageBuilderElements[0], props.componentsApiUrl);
                 eventBus.emit(EVENT_PAGE_BUILDER_CREATED, { app });
             }
 
