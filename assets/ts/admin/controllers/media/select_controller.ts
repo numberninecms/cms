@@ -9,9 +9,10 @@
 
 import { Controller } from 'stimulus';
 import { eventBus } from 'admin/admin';
-import MediaFile from 'admin/interfaces/MediaFile';
 import { EVENT_MEDIA_SELECT, EVENT_MODAL_SHOW } from 'admin/events/events';
 import { dirname } from 'path';
+import ModalShowEvent from 'admin/events/ModalShowEvent';
+import { MediaViewerEvent } from 'admin/events/MediaViewerEvent';
 
 export default class extends Controller {
     public static targets = ['image', 'text', 'input', 'remove'];
@@ -22,11 +23,13 @@ export default class extends Controller {
     private readonly removeTarget: HTMLElement;
 
     public select(): void {
-        eventBus.emit(EVENT_MODAL_SHOW, 'media_library');
-        eventBus.emit(EVENT_MEDIA_SELECT, ({ files }: { files: MediaFile[] }) => {
+        eventBus.emit<ModalShowEvent>(EVENT_MODAL_SHOW, { modalId: 'media_library' });
+        eventBus.emit<MediaViewerEvent>(EVENT_MEDIA_SELECT, ({ files }) => {
             if (files.length > 0) {
                 const img = document.createElement('img');
-                const size = Object.prototype.hasOwnProperty.call(files[0].sizes, 'preview') ? 'preview' : 'original';
+                const size = Object.prototype.hasOwnProperty.call(files[0].sizes, 'preview')
+                    ? 'preview'
+                    : 'original';
                 img.src = `${dirname(files[0].path)}/${files[0].sizes[size].filename}`;
                 this.imageTarget.innerHTML = img.outerHTML;
                 this.textTarget.style.display = 'none';

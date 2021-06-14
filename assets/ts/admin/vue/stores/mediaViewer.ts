@@ -11,6 +11,7 @@ import { defineStore } from 'pinia';
 import MediaFile from 'admin/interfaces/MediaFile';
 import MediaSettings from 'admin/interfaces/MediaSettings';
 import { useMediaFilesStore } from 'admin/vue/stores/mediaFiles';
+import { MediaViewerEvent } from 'admin/events/MediaViewerEvent';
 
 export const useMediaViewerStore = defineStore({
     id: 'mediaViewer',
@@ -18,7 +19,7 @@ export const useMediaViewerStore = defineStore({
         return {
             displayIndex: -1,
             show: false,
-            callback: Object as ({ files, settings }: { files: MediaFile[]; settings: MediaSettings }) => void,
+            callback: Object as MediaViewerEvent | undefined,
             settings: {} as MediaSettings,
         };
     },

@@ -42,6 +42,8 @@ import { useMediaFilesStore } from 'admin/vue/stores/mediaFiles';
 import ModalVisibilityChangedEvent from 'admin/events/ModalVisibilityChangedEvent';
 import MediaFile from 'admin/interfaces/MediaFile';
 import { useMediaViewerStore } from 'admin/vue/stores/mediaViewer';
+import MediaLibraryThumbnailClickedEvent from 'admin/events/MediaLibraryThumbnailClickedEvent';
+import MediaFileUploadedEvent from 'admin/events/MediaFileUploadedEvent';
 
 export default defineComponent({
     name: 'MediaThumbnailsList',
@@ -56,8 +58,8 @@ export default defineComponent({
         const isEndOfListVisible = ref(false);
 
         onMounted(() => {
-            eventBus.on(EVENT_MEDIA_UPLOADER_FILE_UPLOADED, ({ mediaFile }) => {
-                mediaFilesStore.mediaFiles.splice(0, 0, mediaFile);
+            eventBus.on<MediaFileUploadedEvent>(EVENT_MEDIA_UPLOADER_FILE_UPLOADED, (event) => {
+                mediaFilesStore.mediaFiles.splice(0, 0, event!.mediaFile);
             });
 
             isModal = (mediaBrowser.value as unknown as HTMLElement)!.closest('.modal-backdrop') !== null;
@@ -65,8 +67,8 @@ export default defineComponent({
             if (!isModal) {
                 void loadMoreMediaFiles();
             } else {
-                eventBus.on(EVENT_MODAL_VISIBILITY_CHANGED, (event) => {
-                    if ((event as ModalVisibilityChangedEvent).visible) {
+                eventBus.on<ModalVisibilityChangedEvent>(EVENT_MODAL_VISIBILITY_CHANGED, (event) => {
+                    if (event?.visible) {
                         void loadMoreMediaFiles();
                     }
                 });
@@ -108,7 +110,7 @@ export default defineComponent({
         }
 
         function onThumbnailClicked(index: number) {
-            const event = {
+            const event: MediaLibraryThumbnailClickedEvent = {
                 index,
                 file: mediaFilesStore.mediaFiles[index],
             };
@@ -117,7 +119,7 @@ export default defineComponent({
                 mediaFilesStore.setBulkSelectFirstIndex(index);
             }
 
-            eventBus.emit(EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_CLICKED, event);
+            eventBus.emit<MediaLibraryThumbnailClickedEvent>(EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_CLICKED, event);
             emit('thumbnail-clicked', event);
         }
 
@@ -131,7 +133,11 @@ export default defineComponent({
                 mediaFilesStore.bulkMediaSelect(index);
             }
 
-            eventBus.emit(EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_SHIFT_CLICKED, event);
+            eventBus.emit<MediaLibraryThumbnailClickedEvent>(
+                EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_SHIFT_CLICKED,
+                event,
+            );
+
             emit('thumbnail-shift-clicked', event);
         }
 

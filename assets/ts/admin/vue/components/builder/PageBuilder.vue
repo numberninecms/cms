@@ -9,22 +9,37 @@
 
 <template>
     <div>
+        <div>{{ x }}, {{ y }}</div>
         <PageBuilderComponent v-for="component in components" :key="component.id" :component="component" />
     </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, onMounted, ref } from 'vue';
 import { usePageBuilderStore } from 'admin/vue/stores/pageBuilder';
 import PageBuilderComponent from 'admin/vue/components/builder/PageBuilderComponent.vue';
+import { EVENT_PAGE_BUILDER_MOUSE_COORDINATES_CHANGED } from 'admin/events/events';
+import { eventBus } from 'admin/admin';
+import MouseCoordinatesEvent from 'admin/events/MouseCoordinatesEvent';
 
 export default defineComponent({
     name: 'PageBuilder',
     components: { PageBuilderComponent },
     setup() {
-        const store = usePageBuilderStore();
+        const pageBuilderStore = usePageBuilderStore();
+        const x = ref(0);
+        const y = ref(0);
+
+        onMounted(() => {
+            eventBus.on<MouseCoordinatesEvent>(EVENT_PAGE_BUILDER_MOUSE_COORDINATES_CHANGED, (event) => {
+                x.value = event!.x;
+                y.value = event!.y;
+            });
+        });
 
         return {
-            components: computed(() => store.pageComponents),
+            components: computed(() => pageBuilderStore.pageComponents),
+            x,
+            y,
         };
     },
 });

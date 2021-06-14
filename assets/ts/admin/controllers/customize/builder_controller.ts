@@ -12,6 +12,8 @@ import { createApp } from 'vue';
 import PageBuilderFrame from 'admin/vue/components/builder/PageBuilderFrame.vue';
 import { eventBus } from 'admin/admin';
 import { EVENT_PAGE_BUILDER_FRAME_HEIGHT_CHANGED } from 'admin/events/events';
+import { createPinia } from 'pinia';
+import { PageBuilderFrameHeightChangedEvent } from 'admin/events/PageBuilderFrameHeightChangedEvent';
 
 export default class extends Controller {
     public static values = {
@@ -30,10 +32,15 @@ export default class extends Controller {
             frontendUrl: this.frontendUrlValue,
             componentsApiUrl: this.componentsApiUrlValue,
             disableLinks: true,
-        }).mount(this.element);
+        })
+            .use(createPinia())
+            .mount(this.element);
     }
 
     private emitWindowHeight(): void {
-        eventBus.emit(EVENT_PAGE_BUILDER_FRAME_HEIGHT_CHANGED, document.documentElement.clientHeight);
+        eventBus.emit<PageBuilderFrameHeightChangedEvent>(
+            EVENT_PAGE_BUILDER_FRAME_HEIGHT_CHANGED,
+            document.documentElement.clientHeight,
+        );
     }
 }

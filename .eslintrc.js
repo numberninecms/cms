@@ -30,6 +30,7 @@ module.exports = {
         '@typescript-eslint/explicit-member-accessibility': 'error',
         '@typescript-eslint/ban-types': 'off',
         '@typescript-eslint/no-unsafe-assignment': 'off',
+        '@typescript-eslint/no-empty-interface': 'off',
         'vue/html-indent': ['error', 4],
 
         // Conflict with prettier

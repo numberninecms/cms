@@ -13,11 +13,13 @@ import MediaFile from 'admin/interfaces/MediaFile';
 import MediaSettings from 'admin/interfaces/MediaSettings';
 import { dirname } from 'path';
 import { EVENT_MODAL_SHOW, EVENT_TINY_EDITOR_ADD_MEDIA } from 'admin/events/events';
+import ModalShowEvent from 'admin/events/ModalShowEvent';
+import { MediaViewerEvent } from 'admin/events/MediaViewerEvent';
 
 tinymce.PluginManager.add('medialibrary', function (editor) {
     editor.addCommand('n9ShowMediaLibrary', () => {
-        eventBus.emit(EVENT_MODAL_SHOW, 'media_library');
-        eventBus.emit(EVENT_TINY_EDITOR_ADD_MEDIA, ({ files, settings }) => {
+        eventBus.emit<ModalShowEvent>(EVENT_MODAL_SHOW, { modalId: 'media_library' });
+        eventBus.emit<MediaViewerEvent>(EVENT_TINY_EDITOR_ADD_MEDIA, ({ files, settings }) => {
             editor.execCommand('n9InsertFiles', false, { files, settings });
         });
     });

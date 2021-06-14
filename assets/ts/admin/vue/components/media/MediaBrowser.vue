@@ -53,6 +53,8 @@ import MediaFile from 'admin/interfaces/MediaFile';
 import MediaFileProperties from 'admin/vue/components/media/MediaFileProperties.vue';
 import MediaFileSettings from 'admin/vue/components/media/MediaFileSettings.vue';
 import ModalVisibilityChangedEvent from 'admin/events/ModalVisibilityChangedEvent';
+import { MediaViewerEvent } from 'admin/events/MediaViewerEvent';
+import ModalCloseEvent from 'admin/events/ModalCloseEvent';
 
 export default defineComponent({
     name: 'MediaBrowser',
@@ -85,11 +87,11 @@ export default defineComponent({
         mediaFilesStore.setup({ getUrl: props.getUrl, deleteUrl: props.deleteUrl });
 
         onMounted(() => {
-            eventBus.on(EVENT_TINY_EDITOR_ADD_MEDIA, (callback) => {
+            eventBus.on<MediaViewerEvent>(EVENT_TINY_EDITOR_ADD_MEDIA, (callback) => {
                 mediaViewerStore.callback = callback;
             });
 
-            eventBus.on(EVENT_MEDIA_SELECT, (callback) => {
+            eventBus.on<MediaViewerEvent>(EVENT_MEDIA_SELECT, (callback) => {
                 mediaViewerStore.callback = callback;
             });
         });
@@ -106,13 +108,15 @@ export default defineComponent({
         }
 
         function selectFile(): void {
-            mediaViewerStore.callback({
-                files: [mediaFilesStore.mediaFiles[mediaViewerStore.displayIndex]],
-                settings: mediaViewerStore.settings,
-            });
+            if (mediaViewerStore.callback) {
+                mediaViewerStore.callback({
+                    files: [mediaFilesStore.mediaFiles[mediaViewerStore.displayIndex]],
+                    settings: mediaViewerStore.settings,
+                });
+            }
             mediaViewerStore.show = false;
 
-            eventBus.emit(EVENT_MODAL_CLOSE, 'media_library');
+            eventBus.emit<ModalCloseEvent>(EVENT_MODAL_CLOSE, { modalId: 'media_library' });
         }
 
         return {
