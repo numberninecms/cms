@@ -1,4 +1,4 @@
-/*!
+/*
  * This file is part of the NumberNine package.
  *
  * (c) William Arin <williamarin.dev@gmail.com>
@@ -7,10 +7,15 @@
  * file that was distributed with this source code.
  */
 
-.n9-page-builder-component {
-    &.dragging {
-        opacity: 0.8 !important;
-        background-color: rgba(68, 96, 132, 0.3) !important;
-        outline: 1px solid rgba(68, 96, 132, 0.5) !important;
-    }
-}
+import { defineStore } from 'pinia';
+
+export const useMouseStore = defineStore({
+    id: 'mouse',
+    state() {
+        return {
+            x: 0,
+            y: 0,
+            over: false,
+        };
+    },
+});

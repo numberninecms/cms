@@ -8,7 +8,7 @@
   -->
 
 <template>
-    <div class="flex-1 min-h-full flex" :style="{ height: `${frameHeight - 48}px` }">
+    <div id="page-builder-content-frame" class="flex-1 min-h-full flex" :style="{ height: `${frameHeight - 48}px` }">
         <iframe ref="iframe" :src="frontendUrl" class="flex-1" @load="onLoad"></iframe>
     </div>
 </template>

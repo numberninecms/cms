@@ -9,7 +9,7 @@
 
 $lineWidth: 3px;
 
-#page-builder-tool-insert-line {
+#n9-page-builder-tool-insert-line {
     backface-visibility: hidden;
     z-index: 20;
     pointer-events: none;
@@ -17,32 +17,32 @@ $lineWidth: 3px;
     top: 0;
     left: 0;
 
-    .line {
+    .n9-line {
         position: absolute;
         background-color: var(--n9-tertiary);
 
-        &.left {
+        &.n9-left {
             width: $lineWidth;
             height: 100%;
             left: 0;
             top: 0;
         }
 
-        &.right {
+        &.n9-right {
             width: $lineWidth;
             height: 100%;
             right: 0;
             top: 0;
         }
 
-        &.top {
+        &.n9-top {
             width: 100%;
             height: $lineWidth;
             left: 0;
             top: 0;
         }
 
-        &.bottom {
+        &.n9-bottom {
             width: 100%;
             height: $lineWidth;
             left: 0;

@@ -8,38 +8,47 @@
   -->
 
 <template>
-    <div>
-        <div>{{ x }}, {{ y }}</div>
+    <div @mouseenter="mouseOver = true" @mousemove="mouseOver = true" @mouseleave="mouseOver = false">
+        <div>{{ x }}, {{ y }}, {{ over ? 'over' : 'out' }}</div>
         <PageBuilderComponent v-for="component in components" :key="component.id" :component="component" />
+        <PageBuilderToolbox />
     </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue';
+import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 import { usePageBuilderStore } from 'admin/vue/stores/pageBuilder';
 import PageBuilderComponent from 'admin/vue/components/builder/PageBuilderComponent.vue';
 import { EVENT_PAGE_BUILDER_MOUSE_COORDINATES_CHANGED } from 'admin/events/events';
 import { eventBus } from 'admin/admin';
 import MouseCoordinatesEvent from 'admin/events/MouseCoordinatesEvent';
+import { useMouseStore } from 'admin/vue/stores/mouse';
+import PageBuilderToolbox from 'admin/vue/components/builder/toolbox/PageBuilderToolbox.vue';
 
 export default defineComponent({
     name: 'PageBuilder',
-    components: { PageBuilderComponent },
+    components: { PageBuilderToolbox, PageBuilderComponent },
     setup() {
+        const mouseStore = useMouseStore();
         const pageBuilderStore = usePageBuilderStore();
-        const x = ref(0);
-        const y = ref(0);
+        const mouseOver = ref(false);
 
         onMounted(() => {
             eventBus.on<MouseCoordinatesEvent>(EVENT_PAGE_BUILDER_MOUSE_COORDINATES_CHANGED, (event) => {
-                x.value = event!.x;
-                y.value = event!.y;
+                mouseStore.x = event!.x;
+                mouseStore.y = event!.y;
             });
+        });
+
+        watch(mouseOver, () => {
+            mouseStore.over = mouseOver.value;
         });
 
         return {
             components: computed(() => pageBuilderStore.pageComponents),
-            x,
-            y,
+            over: computed(() => mouseStore.over),
+            mouseOver,
+            x: computed(() => mouseStore.x),
+            y: computed(() => mouseStore.y),
         };
     },
 });
