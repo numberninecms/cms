@@ -15,7 +15,7 @@
 @import "page_builder/colors";
 
 @import "page_builder/toolbox";
-//@import "page_builder/drag_handle";
+@import "page_builder/drag_handle";
 //@import "page_builder/line";
 //@import "page_builder/add_button";
 @import "page_builder/outline";
@@ -26,6 +26,12 @@
 
 body {
     user-select: none !important;
+}
+
+#n9-page-builder-wrapper {
+    &.dragging {
+        cursor: grabbing;
+    }
 }
 
 .n9-px-3 {

@@ -73,12 +73,12 @@ export default defineComponent({
                     return;
                 }
 
-                const clickListener = (event: MouseEvent) => {
+                const clickListener = (event: Event) => {
                     event.stopPropagation();
                     selectComponent(ancestors.value[i].id);
                 };
 
-                const mouseOverListener = (event: MouseEvent) => {
+                const mouseOverListener = (event: Event) => {
                     event.stopPropagation();
                     highlightComponent(ancestors.value[i].id);
                 };

@@ -8,7 +8,7 @@
   -->
 
 <template>
-    <div ref="builder">
+    <div id="n9-page-builder-wrapper" ref="builder" :class="{ dragging: isDragging }">
         <div>{{ x }}, {{ y }}, {{ mouseOver ? 'over' : 'out' }}</div>
         <PageBuilderComponent v-for="component in components" :key="component.id" :component="component" />
         <PageBuilderToolbox />
@@ -77,6 +77,7 @@ export default defineComponent({
             mouseOver,
             x: computed(() => mouseStore.x),
             y: computed(() => mouseStore.y),
+            isDragging: computed(() => pageBuilderStore.dragId !== undefined),
         };
     },
 });

@@ -44,6 +44,10 @@ export const usePageBuilderStore = defineStore({
             return this.getComponentLabel(this.selectedId);
         },
 
+        draggedComponent(): PageComponent | undefined {
+            return this.dragId ? this.getComponentById(this.dragId) : undefined;
+        },
+
         getComponentLabel() {
             return (componentId: string | undefined): string => {
                 if (!componentId) {

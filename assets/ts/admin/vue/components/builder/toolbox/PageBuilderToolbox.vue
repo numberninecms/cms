@@ -11,6 +11,7 @@
     <div id="n9-page-builder-toolbox">
         <PageBuilderToolOutline />
         <PageBuilderToolSelect />
+        <PageBuilderToolDragHandle />
     </div>
 </template>
 
@@ -18,10 +19,11 @@
 import { defineComponent } from 'vue';
 import PageBuilderToolOutline from 'admin/vue/components/builder/toolbox/PageBuilderToolOutline.vue';
 import PageBuilderToolSelect from 'admin/vue/components/builder/toolbox/PageBuilderToolSelect.vue';
+import PageBuilderToolDragHandle from 'admin/vue/components/builder/toolbox/PageBuilderToolDragHandle.vue';
 
 export default defineComponent({
     name: 'PageBuilderToolbox',
-    components: { PageBuilderToolOutline, PageBuilderToolSelect },
+    components: { PageBuilderToolDragHandle, PageBuilderToolOutline, PageBuilderToolSelect },
     setup() {
 
     },
