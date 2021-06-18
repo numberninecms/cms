@@ -20,9 +20,14 @@
         background-color: var(--n9-tertiary);
         color: #fff;
         pointer-events: all;
+        cursor: pointer;
 
         &:focus {
             outline: none;
+        }
+
+        &:active {
+            background-color: rgb(46, 119, 224);
         }
 
         &.n9-left {

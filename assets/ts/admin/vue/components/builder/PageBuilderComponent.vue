@@ -50,7 +50,6 @@ export default defineComponent({
             elementRef.value!.$el.addEventListener('mousedown', mouseDown);
             elementRef.value!.$el.addEventListener('mouseup', mouseUp);
             elementRef.value!.$el.addEventListener('mousemove', mouseMove);
-            elementRef.value!.$el.addEventListener('mouseleave', removeHighlight);
             elementRef.value!.$el.addEventListener('click', select);
         });
 
@@ -59,17 +58,12 @@ export default defineComponent({
             elementRef.value!.$el.removeEventListener('mousedown', mouseDown);
             elementRef.value!.$el.removeEventListener('mouseup', mouseUp);
             elementRef.value!.$el.removeEventListener('mousemove', mouseMove);
-            elementRef.value!.$el.removeEventListener('mouseleave', removeHighlight);
             elementRef.value!.$el.removeEventListener('click', select);
         });
 
         function highlight(event: MouseEvent) {
             event.stopPropagation();
             pageBuilderStore.highlightedId = props.component.id;
-        }
-
-        function removeHighlight() {
-            pageBuilderStore.highlightedId = undefined;
         }
 
         function select(event: MouseEvent) {

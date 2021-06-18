@@ -13,6 +13,7 @@
         <PageBuilderToolSelect />
         <PageBuilderToolDragHandle />
         <PageBuilderToolInsertLine />
+        <PageBuilderToolInsertButton />
     </div>
 </template>
 
@@ -22,12 +23,16 @@ import PageBuilderToolOutline from 'admin/vue/components/builder/toolbox/PageBui
 import PageBuilderToolSelect from 'admin/vue/components/builder/toolbox/PageBuilderToolSelect.vue';
 import PageBuilderToolDragHandle from 'admin/vue/components/builder/toolbox/PageBuilderToolDragHandle.vue';
 import PageBuilderToolInsertLine from 'admin/vue/components/builder/toolbox/PageBuilderToolInsertLine.vue';
+import PageBuilderToolInsertButton from 'admin/vue/components/builder/toolbox/PageBuilderToolInsertButton.vue';
 
 export default defineComponent({
     name: 'PageBuilderToolbox',
-    components: { PageBuilderToolInsertLine, PageBuilderToolDragHandle, PageBuilderToolOutline, PageBuilderToolSelect },
-    setup() {
-
+    components: {
+        PageBuilderToolInsertButton,
+        PageBuilderToolInsertLine,
+        PageBuilderToolDragHandle,
+        PageBuilderToolOutline,
+        PageBuilderToolSelect,
     },
 });
 </script>
