@@ -16,6 +16,7 @@ import PageBuilderApp from 'admin/classes/PageBuilderApp';
 import { Direction } from 'admin/types/Direction';
 import usePageBuilderHelpers from 'admin/vue/functions/pageBuilderHelpers';
 import { capitalCase } from 'change-case';
+import { DropPosition } from 'admin/types/DropPosition';
 
 export const usePageBuilderStore = defineStore({
     id: 'pageBuilder',
@@ -29,6 +30,7 @@ export const usePageBuilderStore = defineStore({
             selectedId: undefined as string | undefined,
             dragId: undefined as string | undefined,
             isContextMenuVisible: false,
+            dropPosition: undefined as DropPosition | undefined,
         };
     },
     getters: {
@@ -36,8 +38,20 @@ export const usePageBuilderStore = defineStore({
             (document.getElementById('page-builder-content-frame')!.querySelector('iframe') as HTMLIFrameElement)
                 .contentWindow!.document,
 
+        highlightedComponentElement(): Element | undefined {
+            if (!this.highlightedId) {
+                return undefined;
+            }
+
+            return this.document.querySelector(`[data-component-id='${this.highlightedId}']`)!;
+        },
+
         highlightedComponentLabel(): string {
             return this.getComponentLabel(this.highlightedId);
+        },
+
+        highlightedComponent(): PageComponent | undefined {
+            return this.highlightedId ? this.getComponentById(this.highlightedId) : undefined;
         },
 
         selectedComponentLabel(): string {
