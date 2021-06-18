@@ -10,16 +10,18 @@
 <template>
     <div id="n9-page-builder-toolbox">
         <PageBuilderToolOutline />
+        <PageBuilderToolSelect />
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import PageBuilderToolOutline from 'admin/vue/components/builder/toolbox/PageBuilderToolOutline.vue';
+import PageBuilderToolSelect from 'admin/vue/components/builder/toolbox/PageBuilderToolSelect.vue';
 
 export default defineComponent({
     name: 'PageBuilderToolbox',
-    components: { PageBuilderToolOutline },
+    components: { PageBuilderToolOutline, PageBuilderToolSelect },
     setup() {
 
     },

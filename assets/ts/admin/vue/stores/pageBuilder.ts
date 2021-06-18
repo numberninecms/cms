@@ -9,10 +9,13 @@
 
 import { defineStore } from 'pinia';
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 import PageComponent from 'admin/interfaces/PageComponent';
 import ComponentsApiResponse from 'admin/interfaces/ComponentsApiResponse';
 import PageBuilderApp from 'admin/classes/PageBuilderApp';
-import useStringHelpers from 'admin/vue/functions/stringHelpers';
+import { Direction } from 'admin/types/Direction';
+import usePageBuilderHelpers from 'admin/vue/functions/pageBuilderHelpers';
+import { capitalCase } from 'change-case';
 
 export const usePageBuilderStore = defineStore({
     id: 'pageBuilder',
@@ -23,6 +26,9 @@ export const usePageBuilderStore = defineStore({
             pageComponents: [] as PageComponent[],
             availablePageComponents: [] as unknown as { [componentName: string]: PageComponent },
             highlightedId: undefined as string | undefined,
+            selectedId: undefined as string | undefined,
+            dragId: undefined as string | undefined,
+            isContextMenuVisible: false,
         };
     },
     getters: {
@@ -31,14 +37,23 @@ export const usePageBuilderStore = defineStore({
                 .contentWindow!.document,
 
         highlightedComponentLabel(): string {
-            if (!this.highlightedId) {
-                return '';
-            }
+            return this.getComponentLabel(this.highlightedId);
+        },
 
-            const { upperFirst } = useStringHelpers();
-            const component = this.getComponentById(this.highlightedId);
+        selectedComponentLabel(): string {
+            return this.getComponentLabel(this.selectedId);
+        },
 
-            return component ? upperFirst(component.label) : '';
+        getComponentLabel() {
+            return (componentId: string | undefined): string => {
+                if (!componentId) {
+                    return '';
+                }
+
+                const component = this.getComponentById(componentId);
+
+                return component ? capitalCase(component.label) : '';
+            };
         },
 
         getComponentById() {
@@ -64,6 +79,52 @@ export const usePageBuilderStore = defineStore({
                 return undefined;
             };
         },
+
+        getComponentAncestors() {
+            return (component: PageComponent | undefined): PageComponent[] => {
+                if (!component) {
+                    return [];
+                }
+
+                const ancestors: PageComponent[] = [];
+                const parent = this.getComponentParent(component);
+
+                if (parent) {
+                    ancestors.push(...this.getComponentAncestors(parent), parent);
+                }
+
+                return ancestors;
+            };
+        },
+
+        getComponentParent() {
+            return (component: PageComponent | undefined): PageComponent | undefined => {
+                if (!component || !component.parentId) {
+                    return undefined;
+                }
+
+                return this.getComponentById(component.parentId);
+            };
+        },
+
+        defaultTextComponent(): PageComponent {
+            return {
+                id: uuidv4(),
+                name: 'text',
+                parameters: { content: 'Add a new component to this page...' },
+                computed: [],
+                position: 0,
+                label: 'Text',
+                children: [],
+                parentId: undefined,
+                siblingsPosition: ['top' as Direction, 'bottom' as Direction],
+                siblingsShortcodes: [],
+                icon: 'file-alt',
+                editable: true,
+                container: false,
+                responsive: [],
+            };
+        },
     },
     actions: {
         setup({ app, componentsApiUrl }: { app: PageBuilderApp; componentsApiUrl: string }) {
@@ -72,8 +133,15 @@ export const usePageBuilderStore = defineStore({
         },
 
         async fetchComponents(): Promise<void> {
+            const { prepareTree } = usePageBuilderHelpers();
             const response = await axios.get(this.componentsApiUrl);
             const { tree, templates, components }: ComponentsApiResponse = response.data;
+
+            if (tree.length === 0) {
+                tree.push(this.defaultTextComponent);
+            }
+
+            prepareTree(tree);
 
             this.pageComponents = tree;
             this.availablePageComponents = components;
@@ -81,6 +149,10 @@ export const usePageBuilderStore = defineStore({
             for (const template in templates) {
                 this.app!.compileComponent(template, templates[template]);
             }
+        },
+
+        toggleContextMenu() {
+            this.isContextMenuVisible = !this.isContextMenuVisible;
         },
     },
 });

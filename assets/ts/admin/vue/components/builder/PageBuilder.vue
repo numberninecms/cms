@@ -8,14 +8,14 @@
   -->
 
 <template>
-    <div @mouseenter="mouseOver = true" @mousemove="mouseOver = true" @mouseleave="mouseOver = false">
-        <div>{{ x }}, {{ y }}, {{ over ? 'over' : 'out' }}</div>
+    <div ref="builder">
+        <div>{{ x }}, {{ y }}, {{ mouseOver ? 'over' : 'out' }}</div>
         <PageBuilderComponent v-for="component in components" :key="component.id" :component="component" />
         <PageBuilderToolbox />
     </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, watch } from 'vue';
+import { computed, defineComponent, onBeforeUnmount, onMounted, Ref, ref, watch } from 'vue';
 import { usePageBuilderStore } from 'admin/vue/stores/pageBuilder';
 import PageBuilderComponent from 'admin/vue/components/builder/PageBuilderComponent.vue';
 import { EVENT_PAGE_BUILDER_MOUSE_COORDINATES_CHANGED } from 'admin/events/events';
@@ -28,6 +28,7 @@ export default defineComponent({
     name: 'PageBuilder',
     components: { PageBuilderToolbox, PageBuilderComponent },
     setup() {
+        const builder: Ref<HTMLDivElement | null> = ref(null);
         const mouseStore = useMouseStore();
         const pageBuilderStore = usePageBuilderStore();
         const mouseOver = ref(false);
@@ -37,13 +38,40 @@ export default defineComponent({
                 mouseStore.x = event!.x;
                 mouseStore.y = event!.y;
             });
+
+            pageBuilderStore.document.addEventListener('mousedown', () => {
+                if (!mouseStore.over) {
+                    pageBuilderStore.selectedId = undefined;
+                }
+            });
+
+            pageBuilderStore.document.addEventListener('mouseup', () => {
+                pageBuilderStore.dragId = undefined;
+            });
+
+            builder.value!.addEventListener('mouseenter', onMouseEnter);
+            builder.value!.addEventListener('mouseleave', onMouseLeave);
         });
+
+        onBeforeUnmount(() => {
+            builder.value!.removeEventListener('mouseenter', onMouseEnter);
+            builder.value!.removeEventListener('mouseleave', onMouseLeave);
+        });
+
+        function onMouseEnter() {
+            mouseOver.value = true;
+        }
+
+        function onMouseLeave() {
+            mouseOver.value = false;
+        }
 
         watch(mouseOver, () => {
             mouseStore.over = mouseOver.value;
         });
 
         return {
+            builder,
             components: computed(() => pageBuilderStore.pageComponents),
             over: computed(() => mouseStore.over),
             mouseOver,

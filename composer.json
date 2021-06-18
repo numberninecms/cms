@@ -43,6 +43,7 @@
         "symfony/http-kernel": "^5.1",
         "symfony/mailer": "^5.2",
         "symfony/mime": "^5.1",
+        "symfony/options-resolver": "^5.3",
         "symfony/process": "^5.1",
         "symfony/routing": "^5.3",
         "symfony/security-bundle": "^5.1",

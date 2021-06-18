@@ -7,12 +7,12 @@
  * file that was distributed with this source code.
  */
 
-import * as changeCase from 'change-case';
 import { App, compile, createApp, h } from 'vue';
 import PageBuilder from 'admin/vue/components/builder/PageBuilder.vue';
 import { createPinia } from 'pinia';
 import { usePageBuilderStore } from 'admin/vue/stores/pageBuilder';
 import PageBuilderComponent from 'admin/vue/components/builder/PageBuilderComponent.vue';
+import { pascalCase } from 'change-case';
 
 export default class PageBuilderApp {
     private app: App;
@@ -54,7 +54,7 @@ export default class PageBuilderApp {
     }
 
     public compileComponent(componentName: string, template: string): void {
-        const name = changeCase.pascalCase(componentName) + 'PageBuilderComponent';
+        const name = pascalCase(componentName) + 'PageBuilderComponent';
 
         this.app.component(name, {
             components: { PageBuilderComponent, PageBuilderStyle: this.app.component('PageBuilderStyle')! },

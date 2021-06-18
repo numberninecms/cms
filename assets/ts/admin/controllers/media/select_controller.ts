@@ -27,9 +27,7 @@ export default class extends Controller {
         eventBus.emit<MediaViewerEvent>(EVENT_MEDIA_SELECT, ({ files }) => {
             if (files.length > 0) {
                 const img = document.createElement('img');
-                const size = Object.prototype.hasOwnProperty.call(files[0].sizes, 'preview')
-                    ? 'preview'
-                    : 'original';
+                const size = Object.prototype.hasOwnProperty.call(files[0].sizes, 'preview') ? 'preview' : 'original';
                 img.src = `${dirname(files[0].path)}/${files[0].sizes[size].filename}`;
                 this.imageTarget.innerHTML = img.outerHTML;
                 this.textTarget.style.display = 'none';

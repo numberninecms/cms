@@ -67,7 +67,7 @@ import { useMediaFilesStore } from 'admin/vue/stores/mediaFiles';
 import { useMediaViewerStore } from 'admin/vue/stores/mediaViewer';
 import MediaSettings from 'admin/interfaces/MediaSettings';
 import SelectOption from 'admin/interfaces/SelectOption';
-import useStringHelpers from 'admin/vue/functions/stringHelpers';
+import { capitalCase } from 'change-case';
 
 export default defineComponent({
     name: 'MediaFileSettings',
@@ -75,7 +75,6 @@ export default defineComponent({
         const mediaFilesStore = useMediaFilesStore();
         const mediaViewerStore = useMediaViewerStore();
         const mediaFile = computed(() => mediaFilesStore.mediaFiles[mediaViewerStore.displayIndex]);
-        const { upperFirst } = useStringHelpers();
 
         const settings: MediaSettings = reactive({
             size: 'medium',
@@ -106,7 +105,9 @@ export default defineComponent({
                 },
                 ...Object.keys(mediaFile.value.sizes).map((name) => {
                     return {
-                        label: `${upperFirst(name)} - ${mediaFile.value.sizes[name].width} x ${mediaFile.value.sizes[name].height}`,
+                        label: `${capitalCase(name)} - ${mediaFile.value.sizes[name].width} x ${
+                            mediaFile.value.sizes[name].height
+                        }`,
                         value: name,
                     };
                 }),

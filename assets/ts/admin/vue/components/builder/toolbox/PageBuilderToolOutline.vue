@@ -49,9 +49,16 @@ export default defineComponent({
             return styles;
         });
 
+        const active = computed(
+            () =>
+                pageBuilderStore.highlightedId &&
+                mouseStore.over &&
+                pageBuilderStore.highlightedId !== pageBuilderStore.selectedId,
+        );
+
         return {
             styles,
-            active: computed(() => pageBuilderStore.highlightedId && mouseStore.over),
+            active,
             label: computed(() => pageBuilderStore.highlightedComponentLabel),
         };
     },

@@ -11,6 +11,7 @@
     <component
         :is="componentName"
         v-if="isVisible"
+        ref="elementRef"
         :self-instance="component"
         :parameters="component.parameters"
         :responsive="component.responsive"
@@ -19,15 +20,14 @@
         :children="component.children"
         :data-component-id="component.id"
         class="n9-page-builder-component"
-        @mousemove="highlight"
-        @mouseleave="removeHighlight"
     />
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, watch } from 'vue';
-import PageComponent from '../../../interfaces/PageComponent';
+import { computed, defineComponent, onBeforeUnmount, onMounted, reactive, ref, Ref, watch } from 'vue';
 import { usePageBuilderStore } from 'admin/vue/stores/pageBuilder';
+import { pascalCase } from 'change-case';
+import PageComponent from 'admin/interfaces/PageComponent';
 
 export default defineComponent({
     name: 'PageBuilderComponent',
@@ -40,16 +40,31 @@ export default defineComponent({
     setup(props) {
         const pageBuilderStore = usePageBuilderStore();
         const viewSize = 'lg';
-        const componentName = computed(() => `${props.component.name}PageBuilderComponent`);
+        const componentName = computed(() => `${pascalCase(props.component.name)}PageBuilderComponent`);
         const isVisible = true;
-        let element: HTMLElement;
+        const elementRef: Ref<{ $el: HTMLElement } | null> = ref(null);
+        const mouse = reactive({ down: false, move: false });
 
         onMounted(() => {
-            element = pageBuilderStore.document.querySelector(`[data-component-id='${props.component.id}']`)!;
-            element.style.transition = 'transform .2s ease-in-out';
+            elementRef.value!.$el.addEventListener('mouseover', highlight);
+            elementRef.value!.$el.addEventListener('mousedown', mouseDown);
+            elementRef.value!.$el.addEventListener('mouseup', mouseUp);
+            elementRef.value!.$el.addEventListener('mousemove', mouseMove);
+            elementRef.value!.$el.addEventListener('mouseleave', removeHighlight);
+            elementRef.value!.$el.addEventListener('click', select);
         });
 
-        function highlight() {
+        onBeforeUnmount(() => {
+            elementRef.value!.$el.removeEventListener('mouseover', highlight);
+            elementRef.value!.$el.removeEventListener('mousedown', mouseDown);
+            elementRef.value!.$el.removeEventListener('mouseup', mouseUp);
+            elementRef.value!.$el.removeEventListener('mousemove', mouseMove);
+            elementRef.value!.$el.removeEventListener('mouseleave', removeHighlight);
+            elementRef.value!.$el.removeEventListener('click', select);
+        });
+
+        function highlight(event: MouseEvent) {
+            event.stopPropagation();
             pageBuilderStore.highlightedId = props.component.id;
         }
 
@@ -57,21 +72,36 @@ export default defineComponent({
             pageBuilderStore.highlightedId = undefined;
         }
 
-        watch(
-            () => pageBuilderStore.highlightedId,
-            () => {
-                element.style.transform = `perspective(100px) translateZ(${
-                    pageBuilderStore.highlightedId ? '-3' : '0'
-                }px)`;
-            },
-        );
+        function select(event: MouseEvent) {
+            event.preventDefault();
+            event.stopPropagation();
+            pageBuilderStore.selectedId = props.component.id;
+        }
+
+        function mouseDown(event: MouseEvent) {
+            event.stopPropagation();
+            mouse.down = true;
+            pageBuilderStore.isContextMenuVisible = false;
+        }
+
+        function mouseMove() {
+            mouse.move = !!mouse.down;
+        }
+
+        function mouseUp() {
+            mouse.down = false;
+            mouse.move = false;
+        }
+
+        const isDragging = computed(() => mouse.down && mouse.move);
+
+        watch(isDragging, () => (pageBuilderStore.dragId = isDragging.value ? props.component.id : undefined));
 
         return {
+            elementRef,
             componentName,
             viewSize,
             isVisible,
-            highlight,
-            removeHighlight,
         };
     },
 });
