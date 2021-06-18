@@ -114,7 +114,7 @@ export default defineComponent({
                 : false;
         }
 
-        watch(position, () => (pageBuilderStore.dropPosition = position));
+        watch(position, () => (pageBuilderStore.dropPosition = position.value));
 
         watch(
             () => pageBuilderStore.$state,

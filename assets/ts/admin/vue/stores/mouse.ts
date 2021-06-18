@@ -18,4 +18,9 @@ export const useMouseStore = defineStore({
             over: false,
         };
     },
+    actions: {
+        isWithinBoundingBox(rect: DOMRect): boolean {
+            return this.x >= rect.left && this.x <= rect.right && this.y >= rect.top && this.y <= rect.bottom;
+        },
+    },
 });

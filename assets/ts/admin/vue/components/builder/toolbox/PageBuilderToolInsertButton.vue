@@ -8,15 +8,20 @@
   -->
 
 <template>
-    <div id="n9-page-builder-tool-insert-button" :style="styles">
-        <button v-show="active" ref="buttonRef" :class="dropPosition ? 'n9-' + dropPosition : null">
-            <i class="fas fa-plus"></i>
+    <div id="n9-page-builder-tool-insert-button" ref="wrapperRef" :style="styles">
+        <button
+            v-show="active"
+            ref="buttonRef"
+            :class="dropPosition ? 'n9-' + dropPosition : null"
+            :style="buttonStyles"
+        >
+            <i class="fas fa-plus fa-xs"></i>
         </button>
     </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeUnmount, onMounted, reactive, Ref, ref, watch } from 'vue';
+import { computed, defineComponent, onBeforeUnmount, onMounted, Ref, ref, watch } from 'vue';
 import GenericObject from 'admin/interfaces/GenericObject';
 import { useMouseStore } from 'admin/vue/stores/mouse';
 import { usePageBuilderStore } from 'admin/vue/stores/pageBuilder';
@@ -29,8 +34,9 @@ export default defineComponent({
     setup() {
         const mouseStore = useMouseStore();
         const pageBuilderStore = usePageBuilderStore();
-        const lineRect = reactive({ x: 0, y: 0, width: 0, height: 0 });
+        const wrapperRef: Ref<HTMLDivElement | null> = ref(null);
         const buttonRef: Ref<HTMLButtonElement | null> = ref(null);
+        const active = computed(() => mouseStore.over && !!pageBuilderStore.dropPosition);
 
         onMounted(() => {
             buttonRef.value?.addEventListener('click', addToContent);
@@ -59,21 +65,28 @@ export default defineComponent({
             return styles;
         });
 
+        const buttonStyles = computed(() => {
+            const styles: GenericObject<string> = {};
+            const element = pageBuilderStore.highlightedComponentElement;
+
+            if (!element) {
+                return styles;
+            }
+
+            const rect = element.getBoundingClientRect();
+            styles.left = `${mouseStore.x - rect.left}px`;
+
+            return styles;
+        });
+
         watch(
-            () => pageBuilderStore.$state,
+            () => mouseStore.$state,
             () => {
-                const element = pageBuilderStore.highlightedComponentElement;
+                const rect = pageBuilderStore.highlightedComponentElement?.getBoundingClientRect();
 
-                if (!element) {
-                    return;
+                if (active.value && rect && !mouseStore.isWithinBoundingBox(rect)) {
+                    pageBuilderStore.highlightedId = undefined;
                 }
-
-                const rect = element.getBoundingClientRect();
-
-                lineRect.width = rect.right - rect.left;
-                lineRect.height = rect.bottom - rect.top;
-                lineRect.x = rect.left;
-                lineRect.y = rect.top;
             },
             { deep: true },
         );
@@ -86,10 +99,12 @@ export default defineComponent({
         }
 
         return {
+            wrapperRef,
             buttonRef,
             styles,
+            buttonStyles,
             dropPosition: computed(() => pageBuilderStore.dropPosition),
-            active: computed(() => mouseStore.over && !!pageBuilderStore.dropPosition),
+            active,
         };
     },
 });

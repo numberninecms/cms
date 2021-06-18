@@ -21,6 +21,10 @@
         color: #fff;
         pointer-events: all;
         cursor: pointer;
+        width: 18px;
+        height: 18px;
+        padding: 0;
+        border-radius: 15px;
 
         &:focus {
             outline: none;
@@ -32,38 +36,32 @@
 
         &.n9-left {
             top: 50%;
-            left: -14px;
-            padding: 5px;
-            width: 35px;
-            border-radius: 30px;
-            transform: translateY(-17.5px);
+            left: -7px;
+            transform: translateY(-9px);
         }
 
         &.n9-right {
             top: 50%;
-            right: -14px;
-            padding: 5px;
-            width: 35px;
-            border-radius: 30px;
-            transform: translateY(-17.5px);
+            right: -7px;
+            transform: translateY(-9px);
         }
 
         &.n9-top {
             left: 50%;
-            top: -14px;
-            padding: 5px;
-            width: 35px;
-            border-radius: 30px;
-            transform: translateX(-17.5px);
+            top: -7px;
+            transform: translateX(-9px);
         }
 
         &.n9-bottom {
             left: 50%;
-            bottom: -14px;
-            padding: 5px;
-            width: 35px;
-            border-radius: 30px;
-            transform: translateX(-17.5px);
+            bottom: -7px;
+            transform: translateX(-9px);
+        }
+
+        i {
+            top: 3px;
+            left: 4px;
+            position: absolute;
         }
     }
 }
