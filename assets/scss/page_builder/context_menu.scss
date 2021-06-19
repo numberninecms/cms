@@ -8,23 +8,48 @@
  */
 
 #n9-page-builder-tool-context-menu {
-    @apply pointer-events-auto absolute w-auto z-50 px-3 py-0 border border-gray-500 shadow-md bg-white text-quaternary transition-transform duration-300 ease-in-out;
-    font-size: 15px;
+    pointer-events: auto;
+    position: absolute;
+    width: auto;
+    z-index: 50;
+    font-size: 0.75rem;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2), 0 2px 2px rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12);
+    background-color: white;
+    color: var(--n9-quaternary);
+    transition: transform 300ms ease-in-out;
 
     .n9-menu-buttons-list {
-        @apply flex flex-col relative p-0;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        padding: 0;
         z-index: 2000;
         user-select: none !important;
 
         button {
-            @apply block w-full px-3 m-0 text-quaternary border-0 text-left bg-transparent cursor-pointer normal-case overflow-visible leading-relaxed;
+            display: block;
+            width: 100%;
+            padding: 0.25rem 0.5rem;
+            margin: 0;
+            color: var(--n9-quaternary);
+            cursor: pointer;
+            overflow: visible;
+            text-align: left;
 
             &:hover {
-                @apply text-tertiary;
+                background-color: #eeeeee;
+            }
+
+            &:active {
+                background-color: #dddddd;
             }
 
             &:focus {
-                @apply outline-none;
+                outline: none;
+            }
+
+            i {
+                margin-right: 5px;
             }
         }
     }

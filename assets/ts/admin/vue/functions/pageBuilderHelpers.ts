@@ -8,12 +8,25 @@
  */
 
 import PageComponent from 'admin/interfaces/PageComponent';
+import { v4 as uuidv4 } from 'uuid';
 
 interface PageBuilderHelpers {
     prepareTree: (tree: PageComponent[], parent?: PageComponent) => void;
+    removeComponentInTree: (tree: PageComponent[], componentToRemoveId: string) => PageComponent[];
+    duplicateComponentInTree: (tree: PageComponent[], componentToDuplicate: PageComponent) => PageComponent[];
 }
 
 export default function usePageBuilderHelpers(): PageBuilderHelpers {
+    function assignNewUidToTree(tree: PageComponent[]) {
+        tree.forEach((pageComponent) => {
+            pageComponent.id = uuidv4();
+
+            if (pageComponent.children && pageComponent.children.length > 0) {
+                assignNewUidToTree(pageComponent.children);
+            }
+        });
+    }
+
     function prepareTree(tree: PageComponent[], parent?: PageComponent) {
         tree.forEach((component) => {
             component.parentId = parent ? parent.id : undefined;
@@ -25,7 +38,37 @@ export default function usePageBuilderHelpers(): PageBuilderHelpers {
         });
     }
 
+    function removeComponentInTree(tree: PageComponent[], componentToRemoveId: string): PageComponent[] {
+        for (const [i, component] of tree.entries()) {
+            if (component.id === componentToRemoveId) {
+                tree.splice(i, 1);
+                return tree;
+            } else if (component.children && component.children.length > 0) {
+                component.children = removeComponentInTree(component.children, componentToRemoveId);
+            }
+        }
+
+        return tree;
+    }
+
+    function duplicateComponentInTree(tree: PageComponent[], componentToDuplicate: PageComponent): PageComponent[] {
+        for (const [i, component] of tree.entries()) {
+            if (component.id === componentToDuplicate.id) {
+                const newComponent: PageComponent = Object.assign({}, componentToDuplicate);
+                assignNewUidToTree([newComponent]);
+                tree.splice(i + 1, 0, newComponent);
+                return tree;
+            } else if (component.children && component.children.length > 0) {
+                component.children = duplicateComponentInTree(component.children, componentToDuplicate);
+            }
+        }
+
+        return tree;
+    }
+
     return {
         prepareTree,
+        removeComponentInTree,
+        duplicateComponentInTree,
     };
 }

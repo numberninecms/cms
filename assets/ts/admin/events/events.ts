@@ -20,3 +20,5 @@ export const EVENT_PAGE_BUILDER_LOADED = 'page-builder:loaded';
 export const EVENT_PAGE_BUILDER_FRAME_HEIGHT_CHANGED = 'page-builder:frame-height-changed';
 export const EVENT_PAGE_BUILDER_MOUSE_COORDINATES_CHANGED = 'page-builder:mouse-coordinates-changed';
 export const EVENT_PAGE_BUILDER_ADD_ELEMENT = 'page-builder:add-element';
+export const EVENT_PAGE_BUILDER_SAVE_PRESET = 'page-builder:save-preset';
+export const EVENT_PAGE_BUILDER_SHOW_SHORTCODE = 'page-builder:show-shortcode';

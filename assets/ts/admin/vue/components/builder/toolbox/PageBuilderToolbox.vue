@@ -14,6 +14,7 @@
         <PageBuilderToolDragHandle />
         <PageBuilderToolInsertLine />
         <PageBuilderToolInsertButton />
+        <PageBuilderToolContextMenu />
     </div>
 </template>
 
@@ -24,10 +25,12 @@ import PageBuilderToolSelect from 'admin/vue/components/builder/toolbox/PageBuil
 import PageBuilderToolDragHandle from 'admin/vue/components/builder/toolbox/PageBuilderToolDragHandle.vue';
 import PageBuilderToolInsertLine from 'admin/vue/components/builder/toolbox/PageBuilderToolInsertLine.vue';
 import PageBuilderToolInsertButton from 'admin/vue/components/builder/toolbox/PageBuilderToolInsertButton.vue';
+import PageBuilderToolContextMenu from 'admin/vue/components/builder/toolbox/PageBuilderToolContextMenu.vue';
 
 export default defineComponent({
     name: 'PageBuilderToolbox',
     components: {
+        PageBuilderToolContextMenu,
         PageBuilderToolInsertButton,
         PageBuilderToolInsertLine,
         PageBuilderToolDragHandle,

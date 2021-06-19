@@ -58,6 +58,10 @@ export const usePageBuilderStore = defineStore({
             return this.getComponentLabel(this.selectedId);
         },
 
+        selectedComponent(): PageComponent | undefined {
+            return this.selectedId ? this.getComponentById(this.selectedId) : undefined;
+        },
+
         draggedComponent(): PageComponent | undefined {
             return this.dragId ? this.getComponentById(this.dragId) : undefined;
         },
@@ -166,6 +170,27 @@ export const usePageBuilderStore = defineStore({
 
             for (const template in templates) {
                 this.app!.compileComponent(template, templates[template]);
+            }
+        },
+
+        duplicateComponent(id: string): void {
+            const { duplicateComponentInTree } = usePageBuilderHelpers();
+            const component = this.getComponentById(id);
+
+            if (component) {
+                duplicateComponentInTree(this.pageComponents, component);
+            }
+        },
+
+        deleteComponent(id: string): void {
+            const { removeComponentInTree } = usePageBuilderHelpers();
+
+            if (id === this.selectedId) {
+                this.selectedId = undefined;
+            }
+
+            if (this.getComponentById(id)) {
+                this.pageComponents = removeComponentInTree(this.pageComponents, id);
             }
         },
 
