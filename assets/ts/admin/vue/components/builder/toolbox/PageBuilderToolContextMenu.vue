@@ -44,6 +44,9 @@ export default defineComponent({
         });
 
         onBeforeUnmount(() => {
+            duplicateRef.value?.removeEventListener('click', duplicateComponent);
+            savePresetRef.value?.removeEventListener('click', savePreset);
+            showShortcodeRef.value?.removeEventListener('click', showShortcode);
             deleteRef.value?.removeEventListener('click', deleteComponent);
         });
 
