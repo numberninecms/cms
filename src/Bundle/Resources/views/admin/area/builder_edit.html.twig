@@ -1,0 +1,27 @@
+{% trans_default_domain 'numbernine' %}
+{% extends '@NumberNine/admin/base.html.twig' %}
+
+{% block title %}{{ '%1% edition'|trans({'%1%': area|capitalize}) }}{% endblock %}
+
+{% block content %}
+    <div class="flex-1 flex min-h-full"
+         data-controller="customize--builder"
+         data-customize--builder-frontend-url-value="{{ path('numbernine_homepage', {n9: 'admin', area: area}) }}"
+         data-customize--builder-components-api-url-value="{{ path('numbernine_admin_pagebuilder_area_get_components', {area: area}) }}"
+    >
+    </div>
+
+    {% embed '@NumberNine/admin/util/draggable_modal.html.twig' with {
+        id: 'shortcode_viewer',
+        title: 'Shortcode viewer',
+        controller: 'customize--builder-shortcode-viewer',
+        attributes: {
+            'data-customize--builder-shortcode-viewer-render-url-value': path('numbernine_admin_page_builder_generate_shortcode'),
+            style: 'display: none',
+        },
+    } %}
+        {% block content %}
+            <div data-customize--builder-shortcode-viewer-target="content"></div>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}

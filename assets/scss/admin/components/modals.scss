@@ -21,11 +21,12 @@
     @apply flex flex-col flex-grow justify-between
         m-5 w-11/12
         overflow-hidden relative
+        border border-gray-200
         rounded shadow-xl
         text-left
         bg-white;
 
     &.modal-draggable {
-        @apply w-48 h-48 flex-initial fixed z-50 top-60 right-60;
+        @apply w-auto max-w-7xl h-auto flex-initial fixed top-12 z-50 select-text;
     }
 }

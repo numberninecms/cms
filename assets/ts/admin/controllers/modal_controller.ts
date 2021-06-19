@@ -15,10 +15,12 @@ import ModalShowEvent from 'admin/events/ModalShowEvent';
 import ModalCloseEvent from 'admin/events/ModalCloseEvent';
 
 export default class extends Controller {
+    public static targets = ['dragHandle'];
     public static values = {
         id: String,
     };
 
+    private readonly dragHandleTarget: HTMLElement | undefined;
     private readonly idValue: string;
 
     public connect(): void {
@@ -35,6 +37,11 @@ export default class extends Controller {
         });
 
         window.addEventListener('keydown', this.onKeyDown.bind(this));
+
+        if (this.dragHandleTarget) {
+            (this.element as HTMLElement).draggable = true;
+            this.dragHandleTarget.addEventListener('mousedown', this.dragStart.bind(this));
+        }
     }
 
     public disconnect(): void {
@@ -61,5 +68,30 @@ export default class extends Controller {
             element: this.element,
             visible: false,
         });
+    }
+
+    private dragStart(event: MouseEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+
+        (this.element as HTMLElement).style.position = 'absolute';
+        const rect = (this.element as HTMLElement).getBoundingClientRect();
+
+        const dragOffsetX = Math.max(30, event.clientX - rect.left);
+        const dragOffsetY = Math.max(30, event.clientY - rect.top);
+        console.log(dragOffsetX, dragOffsetY);
+
+        const dragStop = (): void => {
+            window.removeEventListener('mousemove', moveModal);
+            window.removeEventListener('mouseup', dragStop);
+        };
+
+        const moveModal = (event: MouseEvent): void => {
+            (this.element as HTMLElement).style.left = `${event.clientX - dragOffsetX}px`;
+            (this.element as HTMLElement).style.top = `${event.clientY - dragOffsetY}px`;
+        };
+
+        window.addEventListener('mousemove', moveModal);
+        window.addEventListener('mouseup', dragStop);
     }
 }
