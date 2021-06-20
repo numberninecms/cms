@@ -20,7 +20,7 @@ export default class extends Controller {
         renderUrl: String,
     };
 
-    private readonly contentTarget: HTMLDivElement;
+    private readonly contentTarget: HTMLElement;
     private readonly renderUrlValue: string;
 
     public connect(): void {
@@ -29,7 +29,7 @@ export default class extends Controller {
                 void axios
                     .post(this.renderUrlValue, {
                         component: event.component,
-                        html: true,
+                        beautify: true,
                     })
                     .then((response) => {
                         this.contentTarget.innerHTML = response.data;

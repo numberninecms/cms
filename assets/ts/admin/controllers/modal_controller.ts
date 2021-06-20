@@ -39,7 +39,6 @@ export default class extends Controller {
         window.addEventListener('keydown', this.onKeyDown.bind(this));
 
         if (this.dragHandleTarget) {
-            (this.element as HTMLElement).draggable = true;
             this.dragHandleTarget.addEventListener('mousedown', this.dragStart.bind(this));
         }
     }

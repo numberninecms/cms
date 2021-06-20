@@ -11,6 +11,7 @@
 
 namespace NumberNine\Controller\Admin\Api\PageBuilder;
 
+use NumberNine\Content\ShortcodeMarkupBeautifier;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Content\ArrayToShortcodeConverter;
 use NumberNine\Http\ResponseFactory;
@@ -31,9 +32,13 @@ final class PageBuilderComponentToShortcodeAction implements AdminController
     public function __invoke(
         Request $request,
         ResponseFactory $responseFactory,
-        ArrayToShortcodeConverter $arrayToShortcodeConverter
+        ArrayToShortcodeConverter $arrayToShortcodeConverter,
+        ShortcodeMarkupBeautifier $shortcodeMarkupBeautifier
     ): JsonResponse {
-        $text = $arrayToShortcodeConverter->convertMany([$request->request->get('component')]);
+        $text = $arrayToShortcodeConverter->convertMany(
+            [$request->request->get('component')],
+            (bool)$request->request->get('beautify', false),
+        );
 
         return $responseFactory->createSerializedJsonResponse($text);
     }
