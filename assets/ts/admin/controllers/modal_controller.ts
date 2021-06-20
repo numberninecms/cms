@@ -20,7 +20,7 @@ export default class extends Controller {
         id: String,
     };
 
-    private readonly dragHandleTarget: HTMLElement | undefined;
+    private readonly dragHandleTargets: HTMLElement[];
     private readonly idValue: string;
 
     public connect(): void {
@@ -38,8 +38,10 @@ export default class extends Controller {
 
         window.addEventListener('keydown', this.onKeyDown.bind(this));
 
-        if (this.dragHandleTarget) {
-            this.dragHandleTarget.addEventListener('mousedown', this.dragStart.bind(this));
+        if (this.dragHandleTargets.length > 0) {
+            this.dragHandleTargets.forEach((dragHandle) =>
+                dragHandle.addEventListener('mousedown', this.dragStart.bind(this)),
+            );
         }
     }
 
