@@ -21,27 +21,27 @@ final class ShortcodeMarkupBeautifierTest extends DotEnvAwareWebTestCase impleme
     private const SAMPLE_SHORTCODE_DIRTY = '[section backgroundSize="original" margin="0px" padding="0px 0px 0px 0px"' .
         ' color="light"][section backgroundSize="original" backgroundColor="#46a6e9" margin="0px" padding="5px 30px' .
         ' 5px 30px" color="dark"][flex_row justify="between" align="start" margin="0 auto"]Sample content' .
-        ' [my_account_link loggedOutText="Login / Register" loggedInText="My account"/][/flex_row][/section][flex_row' .
+        ' [my_account_link loggedOutText="Login / Register" loggedInText="My account"][/flex_row][/section][flex_row' .
         ' justify="center" align="center" margin="10px auto 10px auto"][link href="/" title="NumberNine - Every good' .
         ' business needs a good CMS software"][image fromTitle="NumberNine Logo" maxWidth="581" maxHeight="131"' .
-        ' alt="NumberNine - Good CMS software"/][/link][/flex_row] [flex_row justify="center" align="start"' .
-        ' margin="0px auto 30px auto"][menu id="2"/][/flex_row][/section]';
+        ' alt="NumberNine - Good CMS software"][/link][/flex_row] [flex_row justify="center" align="start"' .
+        ' margin="0px auto 30px auto"][menu id="2"][/flex_row][/section]';
 
     private const SAMPLE_SHORTCODE_EXPECTED = <<<'SHORTCODE'
 [section backgroundSize="original" margin="0px" padding="0px 0px 0px 0px" color="light"]
     [section backgroundSize="original" backgroundColor="#46a6e9" margin="0px" padding="5px 30px 5px 30px" color="dark"]
         [flex_row justify="between" align="start" margin="0 auto"]
             Sample content
-            [my_account_link loggedOutText="Login / Register" loggedInText="My account"/]
+            [my_account_link loggedOutText="Login / Register" loggedInText="My account"]
         [/flex_row]
     [/section]
     [flex_row justify="center" align="center" margin="10px auto 10px auto"]
         [link href="/" title="NumberNine - Every good business needs a good CMS software"]
-            [image fromTitle="NumberNine Logo" maxWidth="581" maxHeight="131" alt="NumberNine - Good CMS software"/]
+            [image fromTitle="NumberNine Logo" maxWidth="581" maxHeight="131" alt="NumberNine - Good CMS software"]
         [/link]
     [/flex_row]
     [flex_row justify="center" align="start" margin="0px auto 30px auto"]
-        [menu id="2"/]
+        [menu id="2"]
     [/flex_row]
 [/section]
 SHORTCODE;

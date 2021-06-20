@@ -66,6 +66,12 @@ Encore
         config.useBuiltIns = 'usage';
         config.corejs = 3;
     })
+    .configureBabel(function(babelConfig) {
+        babelConfig.plugins.push(['prismjs', {
+            'languages': ['shortcode'],
+            'css': true,
+        }]);
+    })
 ;
 
 module.exports = Encore.getWebpackConfig();

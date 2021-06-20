@@ -59,7 +59,7 @@ final class ArrayToShortcodeConverter
                 $array['name'],
             );
         } else {
-            $text .= '/]' . ($beautify ? "\n" : '');
+            $text .= ']' . ($beautify ? "\n" : '');
         }
 
         return $text;

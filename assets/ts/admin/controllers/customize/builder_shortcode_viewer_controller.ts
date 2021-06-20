@@ -13,6 +13,7 @@ import { EVENT_MODAL_SHOW, EVENT_PAGE_BUILDER_SHOW_SHORTCODE } from 'admin/event
 import PageBuilderShowShortcodeEvent from 'admin/events/PageBuilderShowShortcodeEvent';
 import axios from 'axios';
 import ModalShowEvent from 'admin/events/ModalShowEvent';
+import Prism from 'prismjs';
 
 export default class extends Controller {
     public static targets = ['content'];
@@ -32,7 +33,11 @@ export default class extends Controller {
                         beautify: true,
                     })
                     .then((response) => {
-                        this.contentTarget.innerHTML = response.data;
+                        this.contentTarget.innerHTML = Prism.highlight(
+                            response.data as string,
+                            Prism.languages.shortcode,
+                            'shortcode',
+                        );
                         eventBus.emit<ModalShowEvent>(EVENT_MODAL_SHOW, { modalId: 'shortcode_viewer' });
                     });
             }
