@@ -11,6 +11,7 @@ import { Controller } from 'stimulus';
 import { createApp } from 'vue';
 import MediaUploader from 'admin/vue/components/media/MediaUploader.vue';
 
+/* stimulusFetch: 'lazy' */
 export default class extends Controller {
     public static values = {
         uploadUrl: String,

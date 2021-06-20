@@ -14,6 +14,7 @@ import { dirname } from 'path';
 import ModalShowEvent from 'admin/events/ModalShowEvent';
 import { MediaViewerEvent } from 'admin/events/MediaViewerEvent';
 
+/* stimulusFetch: 'lazy' */
 export default class extends Controller {
     public static targets = ['image', 'text', 'input', 'remove'];
 

@@ -15,6 +15,7 @@ import { EVENT_PAGE_BUILDER_FRAME_HEIGHT_CHANGED } from 'admin/events/events';
 import { createPinia } from 'pinia';
 import { PageBuilderFrameHeightChangedEvent } from 'admin/events/PageBuilderFrameHeightChangedEvent';
 
+/* stimulusFetch: 'lazy' */
 export default class extends Controller {
     public static values = {
         frontendUrl: String,

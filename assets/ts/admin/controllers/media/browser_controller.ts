@@ -13,6 +13,7 @@ import { createPinia } from 'pinia';
 import { ObserveVisibility } from 'vue-observe-visibility';
 import MediaBrowser from 'admin/vue/components/media/MediaBrowser.vue';
 
+/* stimulusFetch: 'lazy' */
 export default class extends Controller {
     public static values = {
         getUrl: String,

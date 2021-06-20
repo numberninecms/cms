@@ -9,6 +9,7 @@
 
 import { Controller } from 'stimulus';
 
+/* stimulusFetch: 'lazy' */
 export default class extends Controller {
     public static targets = ['username', 'firstName', 'lastName', 'displayNameFormat'];
 
