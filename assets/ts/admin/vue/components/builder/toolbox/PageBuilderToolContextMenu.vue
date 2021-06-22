@@ -24,8 +24,13 @@ import { usePageBuilderStore } from 'admin/vue/stores/pageBuilder';
 import GenericObject from 'admin/interfaces/GenericObject';
 import { eventBus } from 'admin/admin';
 import PageBuilderSavePresetEvent from 'admin/events/PageBuilderSavePresetEvent';
-import { EVENT_PAGE_BUILDER_SAVE_PRESET, EVENT_PAGE_BUILDER_SHOW_SHORTCODE } from 'admin/events/events';
+import {
+    EVENT_PAGE_BUILDER_DELETE_COMPONENT,
+    EVENT_PAGE_BUILDER_SAVE_PRESET,
+    EVENT_PAGE_BUILDER_SHOW_SHORTCODE,
+} from 'admin/events/events';
 import PageBuilderShowShortcodeEvent from 'admin/events/PageBuilderShowShortcodeEvent';
+import PageBuilderDeleteComponentEvent from 'admin/events/PageBuilderDeleteComponentEvent';
 
 export default defineComponent({
     name: 'PageBuilderToolContextMenu',
@@ -81,7 +86,15 @@ export default defineComponent({
 
         function deleteComponent(): void {
             hideContextMenu();
-            pageBuilderStore.deleteComponent(pageBuilderStore.selectedId!);
+
+            if (!pageBuilderStore.selectedComponent) {
+                return;
+            }
+
+            eventBus.emit<PageBuilderDeleteComponentEvent>(EVENT_PAGE_BUILDER_DELETE_COMPONENT, {
+                tree: pageBuilderStore.pageComponents,
+                componentToDelete: pageBuilderStore.selectedComponent,
+            });
         }
 
         function hideContextMenu(): void {

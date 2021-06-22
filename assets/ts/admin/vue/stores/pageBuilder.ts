@@ -84,21 +84,9 @@ export const usePageBuilderStore = defineStore({
                     components = this.pageComponents;
                 }
 
-                for (const component of components) {
-                    if (component.id === id) {
-                        return component;
-                    }
+                const { findComponentInTree } = usePageBuilderHelpers();
 
-                    if (Object.hasOwnProperty.call(component, 'children') && component.children.length > 0) {
-                        const found = this.getComponentById(id, component.children);
-
-                        if (found) {
-                            return found;
-                        }
-                    }
-                }
-
-                return undefined;
+                return findComponentInTree(id, components);
             };
         },
 

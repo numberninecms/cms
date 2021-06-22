@@ -17,11 +17,15 @@
 import { computed, defineComponent, onBeforeUnmount, onMounted, Ref, ref, watch } from 'vue';
 import { usePageBuilderStore } from 'admin/vue/stores/pageBuilder';
 import PageBuilderComponent from 'admin/vue/components/builder/PageBuilderComponent.vue';
-import { EVENT_PAGE_BUILDER_MOUSE_COORDINATES_CHANGED } from 'admin/events/events';
+import {
+    EVENT_PAGE_BUILDER_COMPONENT_DELETED,
+    EVENT_PAGE_BUILDER_MOUSE_COORDINATES_CHANGED,
+} from 'admin/events/events';
 import { eventBus } from 'admin/admin';
 import MouseCoordinatesEvent from 'admin/events/MouseCoordinatesEvent';
 import { useMouseStore } from 'admin/vue/stores/mouse';
 import PageBuilderToolbox from 'admin/vue/components/builder/toolbox/PageBuilderToolbox.vue';
+import PageBuilderComponentDeletedEvent from 'admin/events/PageBuilderComponentDeletedEvent';
 
 export default defineComponent({
     name: 'PageBuilder',
@@ -36,6 +40,12 @@ export default defineComponent({
             eventBus.on<MouseCoordinatesEvent>(EVENT_PAGE_BUILDER_MOUSE_COORDINATES_CHANGED, (event) => {
                 mouseStore.x = event!.x;
                 mouseStore.y = event!.y;
+            });
+
+            eventBus.on<PageBuilderComponentDeletedEvent>(EVENT_PAGE_BUILDER_COMPONENT_DELETED, (event) => {
+                if (event!.deletedComponent.id === pageBuilderStore.selectedId) {
+                    pageBuilderStore.selectedId = undefined;
+                }
             });
 
             pageBuilderStore.document.addEventListener('mousedown', () => {

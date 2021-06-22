@@ -11,12 +11,31 @@ import PageComponent from 'admin/interfaces/PageComponent';
 import { v4 as uuidv4 } from 'uuid';
 
 interface PageBuilderHelpers {
+    findComponentInTree: (id: string, components: PageComponent[]) => PageComponent | undefined;
     prepareTree: (tree: PageComponent[], parent?: PageComponent) => void;
     removeComponentInTree: (tree: PageComponent[], componentToRemoveId: string) => PageComponent[];
     duplicateComponentInTree: (tree: PageComponent[], componentToDuplicate: PageComponent) => PageComponent[];
 }
 
 export default function usePageBuilderHelpers(): PageBuilderHelpers {
+    function findComponentInTree(id: string, components: PageComponent[]): PageComponent | undefined {
+        for (const component of components) {
+            if (component.id === id) {
+                return component;
+            }
+
+            if (Object.hasOwnProperty.call(component, 'children') && component.children.length > 0) {
+                const found = findComponentInTree(id, component.children);
+
+                if (found) {
+                    return found;
+                }
+            }
+        }
+
+        return undefined;
+    }
+
     function assignNewUidToTree(tree: PageComponent[]) {
         tree.forEach((pageComponent) => {
             pageComponent.id = uuidv4();
@@ -67,6 +86,7 @@ export default function usePageBuilderHelpers(): PageBuilderHelpers {
     }
 
     return {
+        findComponentInTree,
         prepareTree,
         removeComponentInTree,
         duplicateComponentInTree,
