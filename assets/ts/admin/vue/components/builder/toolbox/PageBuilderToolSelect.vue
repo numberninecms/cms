@@ -53,7 +53,9 @@ export default defineComponent({
         const ancestorsButtonRefs = ref([]);
         const componentLabelRef: Ref<HTMLElement | null> = ref(null);
         const optionsRef: Ref<HTMLElement | null> = ref(null);
-        const ancestors = computed(() => pageBuilderStore.getComponentAncestors(component.value));
+        const ancestors = computed(() =>
+            pageBuilderStore.getComponentAncestors(pageBuilderStore.selectedComponent).reverse(),
+        );
         const ancestorsButtonsListeners: Map<number, Map<string, EventListenerOrEventListenerObject>> = new Map();
 
         onBeforeUpdate(() => {
@@ -83,13 +85,17 @@ export default defineComponent({
                     highlightComponent(ancestors.value[i].id);
                 };
 
+                const stopPropagation = (event: Event) => event.stopPropagation();
+
                 const map: Map<string, EventListenerOrEventListenerObject> = new Map();
                 map.set('click', clickListener);
                 map.set('mouseover', mouseOverListener);
+                map.set('mousemove', stopPropagation);
                 ancestorsButtonsListeners.set(i, map);
 
                 button.addEventListener('click', clickListener);
                 button.addEventListener('mouseover', mouseOverListener);
+                button.addEventListener('mousemove', stopPropagation);
             });
         });
 
@@ -120,14 +126,6 @@ export default defineComponent({
         function hideAncestors() {
             areAncestorsVisible.value = false;
         }
-
-        const component = computed(() => {
-            if (pageBuilderStore.selectedId) {
-                return pageBuilderStore.getComponentById(pageBuilderStore.selectedId);
-            }
-
-            return undefined;
-        });
 
         const styles = computed(() => {
             const styles: GenericObject<string> = {};

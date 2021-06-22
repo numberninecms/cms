@@ -8,7 +8,7 @@
  */
 
 #n9-page-builder-tool-select {
-    z-index: 30;
+    z-index: 70;
     border-color: var(--n9-tertiary);
 
     .n9-wrapper {
@@ -57,7 +57,6 @@
             top: 100%;
             margin-left: 4px;
             list-style: none;
-            transition: opacity 300ms cubic-bezier(0.23, 1, 0.32, 1), visibility 300ms cubic-bezier(0.23, 1, 0.32, 1);
 
             li {
                 display: block;
@@ -72,7 +71,7 @@
                     color: #fff;
                     border: 0;
                     text-transform: none;
-                    background: rgba(var(--n9-tertiary-rgb), 0.85);
+                    background: var(--n9-tertiary);
                 }
             }
         }
