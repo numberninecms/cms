@@ -56,6 +56,15 @@
         &.btn-style-outline {
             @apply border-2 border-gray-700;
         }
+
+        &.btn-style-flat {
+            @apply
+                py-1 px-2
+                text-white
+                bg-transparent
+                hover:bg-white hover:bg-opacity-10
+            ;
+        }
     }
 
     &.btn-color-red {

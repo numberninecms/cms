@@ -19,32 +19,37 @@ import PageBuilderComponentDeletedEvent from 'admin/events/PageBuilderComponentD
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
     public connect(): void {
-        eventBus.on<PageBuilderDeleteComponentEvent>(EVENT_PAGE_BUILDER_DELETE_COMPONENT, (event) => {
-            if (!event) {
-                return;
-            }
+        eventBus.on<PageBuilderDeleteComponentEvent>(
+            EVENT_PAGE_BUILDER_DELETE_COMPONENT,
+            this.deleteComponent.bind(this),
+        );
+    }
 
-            void Swal.fire({
-                title: 'Are you sure?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: 'var(--color-primary)',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const { findComponentInTree, removeComponentInTree } = usePageBuilderHelpers();
+    private deleteComponent(event?: PageBuilderDeleteComponentEvent): void {
+        if (!event) {
+            return;
+        }
 
-                    if (findComponentInTree(event.componentToDelete.id, event.tree)) {
-                        removeComponentInTree(event.tree, event.componentToDelete.id);
+        void Swal.fire({
+            title: 'Are you sure?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: 'var(--color-primary)',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const { findComponentInTree, removeComponentInTree } = usePageBuilderHelpers();
 
-                        eventBus.emit<PageBuilderComponentDeletedEvent>(EVENT_PAGE_BUILDER_COMPONENT_DELETED, {
-                            tree: event.tree,
-                            deletedComponent: event.componentToDelete,
-                        });
-                    }
+                if (findComponentInTree(event.componentToDelete.id, event.tree)) {
+                    removeComponentInTree(event.tree, event.componentToDelete.id);
+
+                    eventBus.emit<PageBuilderComponentDeletedEvent>(EVENT_PAGE_BUILDER_COMPONENT_DELETED, {
+                        tree: event.tree,
+                        deletedComponent: event.componentToDelete,
+                    });
                 }
-            });
+            }
         });
     }
 }

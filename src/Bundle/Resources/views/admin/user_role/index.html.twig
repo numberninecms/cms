@@ -6,19 +6,16 @@
 {% block content %}
     <div class="flex flex-col">
         <turbo-frame id="numbernine_admin_user_roles">
-            {% set tools %}
-                <a href="{{ path('numbernine_admin_user_role_create') }}"
-                   class="btn btn-color-white btn-size-xsmall"
-                   data-turbo-frame="_top"
-                >
-                    Add new role
-                </a>
-            {% endset %}
-
-            {% include '@NumberNine/admin/layout/toolbar.html.twig' with {
-                title: 'User roles'|trans,
-                tools: tools,
-            } %}
+            {% embed '@NumberNine/admin/util/toolbar.html.twig' with {title: 'User roles'|trans} %}
+                {% block tools %}
+                    <a href="{{ path('numbernine_admin_user_role_create') }}"
+                       class="btn btn-color-white btn-size-xsmall"
+                       data-turbo-frame="_top"
+                    >
+                        Add new role
+                    </a>
+                {% endblock %}
+            {% endembed %}
 
             {% include '@NumberNine/admin/util/flashes.html.twig' %}
 

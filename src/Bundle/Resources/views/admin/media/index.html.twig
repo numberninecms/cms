@@ -6,7 +6,7 @@
 {% block content %}
     <turbo-frame id="numbernine_admin_media_library">
         <div class="flex flex-col min-h-full" data-controller="dynamic-tabs">
-            {% include '@NumberNine/admin/layout/toolbar.html.twig' with {title: 'Media library'} %}
+            {% include '@NumberNine/admin/util/toolbar.html.twig' with {title: 'Media library'} %}
             {% include '@NumberNine/admin/util/flashes.html.twig' %}
 
             {% include '@NumberNine/admin/util/dynamic_tabs.html.twig' with {tabs: [

@@ -18,6 +18,7 @@ import { computed, defineComponent, onBeforeUnmount, onMounted, Ref, ref, watch 
 import { usePageBuilderStore } from 'admin/vue/stores/pageBuilder';
 import PageBuilderComponent from 'admin/vue/components/builder/PageBuilderComponent.vue';
 import {
+    EVENT_PAGE_BUILDER_CHANGE_VIEWPORT_SIZE_EVENT,
     EVENT_PAGE_BUILDER_COMPONENT_DELETED,
     EVENT_PAGE_BUILDER_MOUSE_COORDINATES_CHANGED,
 } from 'admin/events/events';
@@ -26,6 +27,7 @@ import MouseCoordinatesEvent from 'admin/events/MouseCoordinatesEvent';
 import { useMouseStore } from 'admin/vue/stores/mouse';
 import PageBuilderToolbox from 'admin/vue/components/builder/toolbox/PageBuilderToolbox.vue';
 import PageBuilderComponentDeletedEvent from 'admin/events/PageBuilderComponentDeletedEvent';
+import { PageBuilderChangeViewportSizeEvent } from 'admin/events/PageBuilderChangeViewportSizeEvent';
 
 export default defineComponent({
     name: 'PageBuilder',
@@ -47,6 +49,11 @@ export default defineComponent({
                     pageBuilderStore.selectedId = undefined;
                 }
             });
+
+            eventBus.on<PageBuilderChangeViewportSizeEvent>(
+                EVENT_PAGE_BUILDER_CHANGE_VIEWPORT_SIZE_EVENT,
+                (size) => (pageBuilderStore.viewportSize = size!),
+            );
 
             pageBuilderStore.document.addEventListener('mousedown', () => {
                 if (!mouseStore.over) {

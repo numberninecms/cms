@@ -27,3 +27,4 @@ export const EVENT_PAGE_BUILDER_SAVE_PRESET = 'page-builder:save-preset';
 export const EVENT_PAGE_BUILDER_SHOW_SHORTCODE = 'page-builder:show-shortcode';
 export const EVENT_PAGE_BUILDER_DELETE_COMPONENT = 'page-builder:delete-component';
 export const EVENT_PAGE_BUILDER_COMPONENT_DELETED = 'page-builder:component-deleted';
+export const EVENT_PAGE_BUILDER_CHANGE_VIEWPORT_SIZE_EVENT = 'page-builder:change-viewport-size';

@@ -17,6 +17,7 @@ import { Direction } from 'admin/types/Direction';
 import usePageBuilderHelpers from 'admin/vue/functions/pageBuilderHelpers';
 import { capitalCase } from 'change-case';
 import { DropPosition } from 'admin/types/DropPosition';
+import { ViewportSize } from 'admin/types/ViewportSize';
 
 export const usePageBuilderStore = defineStore({
     id: 'pageBuilder',
@@ -31,6 +32,7 @@ export const usePageBuilderStore = defineStore({
             dragId: undefined as string | undefined,
             isContextMenuVisible: false,
             dropPosition: undefined as DropPosition | undefined,
+            viewportSize: 'lg' as ViewportSize,
         };
     },
     getters: {

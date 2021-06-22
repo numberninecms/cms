@@ -8,7 +8,7 @@
 {% block content %}
     <div class="flex flex-col">
         <turbo-frame id="numbernine_admin_term">
-            {% include '@NumberNine/admin/layout/toolbar.html.twig' with {
+            {% include '@NumberNine/admin/util/toolbar.html.twig' with {
                 title: 'Add new %1%'|trans({'%1%': taxonomy.name}),
             } %}
 

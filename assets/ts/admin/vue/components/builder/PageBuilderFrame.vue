@@ -8,16 +8,17 @@
   -->
 
 <template>
-    <div id="page-builder-content-frame" class="flex-1 min-h-full flex" :style="{ height: `${frameHeight - 48}px` }">
+    <div id="page-builder-content-frame" class="w-full min-h-full flex" :style="{ height, width }">
         <iframe ref="iframe" :src="frontendUrl" class="flex-1" @load="onLoad"></iframe>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, ref } from 'vue';
+import { computed, defineComponent, onMounted, Ref, ref } from 'vue';
 import PageBuilderApp from 'admin/classes/PageBuilderApp';
 import { eventBus } from 'admin/admin';
 import {
+    EVENT_PAGE_BUILDER_CHANGE_VIEWPORT_SIZE_EVENT,
     EVENT_PAGE_BUILDER_CREATED,
     EVENT_PAGE_BUILDER_FRAME_HEIGHT_CHANGED,
     EVENT_PAGE_BUILDER_LOADED,
@@ -27,6 +28,7 @@ import PageBuilderCreatedEvent from 'admin/events/PageBuilderCreatedEvent';
 import PageBuilderLoadedEvent from 'admin/events/PageBuilderLoadedEvent';
 import MouseCoordinatesEvent from 'admin/events/MouseCoordinatesEvent';
 import { PageBuilderFrameHeightChangedEvent } from 'admin/events/PageBuilderFrameHeightChangedEvent';
+import { PageBuilderChangeViewportSizeEvent } from 'admin/events/PageBuilderChangeViewportSizeEvent';
 
 export default defineComponent({
     name: 'PageBuilderFrame',
@@ -48,6 +50,25 @@ export default defineComponent({
     setup(props) {
         const iframe: Ref<HTMLIFrameElement | null> = ref(null);
         const frameHeight = ref(0);
+        const width = ref('100%');
+
+        onMounted(() => {
+            eventBus.on<PageBuilderChangeViewportSizeEvent>(EVENT_PAGE_BUILDER_CHANGE_VIEWPORT_SIZE_EVENT, (size) => {
+                console.log('ahag', size);
+                switch (size) {
+                    case 'md':
+                        width.value = '768px';
+                        break;
+
+                    case 'xs':
+                        width.value = '425px';
+                        break;
+
+                    default:
+                        width.value = '100%';
+                }
+            });
+        });
 
         const onLoad = () => {
             const pageBuilderElements = iframe.value!.contentDocument!.body.getElementsByTagName('page-builder');
@@ -90,7 +111,8 @@ export default defineComponent({
 
         return {
             iframe,
-            frameHeight,
+            width,
+            height: computed(() => `${frameHeight.value - 48}px`),
             onLoad,
         };
     },

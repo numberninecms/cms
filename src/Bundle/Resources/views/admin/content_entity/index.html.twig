@@ -5,19 +5,16 @@
 
 {% block content %}
     <div class="flex flex-col">
-        {% set tools %}
-            <a href="{{ path('numbernine_admin_content_entity_create', {type: type_slug}) }}"
-               class="btn btn-color-white btn-size-xsmall"
-               data-turbo-frame="_top"
-            >
-                {{ content_type.labels.addNewItem }}
-            </a>
-        {% endset %}
-
-        {% include '@NumberNine/admin/layout/toolbar.html.twig' with {
-            title: content_type.labels.pluralName|capitalize,
-            tools: tools
-        } %}
+        {% embed '@NumberNine/admin/util/toolbar.html.twig' with {title: content_type.labels.pluralName|capitalize} %}
+            {% block tools %}
+                <a href="{{ path('numbernine_admin_content_entity_create', {type: type_slug}) }}"
+                   class="btn btn-color-white btn-size-xsmall"
+                   data-turbo-frame="_top"
+                >
+                    {{ content_type.labels.addNewItem }}
+                </a>
+            {% endblock %}
+        {% endembed %}
 
         <turbo-frame id="numbernine_admin_content_entity_index">
             {% include '@NumberNine/admin/util/flashes.html.twig' %}

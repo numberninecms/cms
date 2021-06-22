@@ -3,12 +3,62 @@
 
 {% block title %}{{ '%1% edition'|trans({'%1%': area|capitalize}) }}{% endblock %}
 
+{% block topbar_center_menu %}
+    <div class="flex items-center gap-5" data-controller="customize--builder-toolbar">
+        <div>
+            <button type="button"
+                    title="{{ 'Save page'|trans }}"
+                    class="btn btn-color-white btn-style-flat"
+                    data-customize--builder-toolbar-target="save">
+                <i class="fas fa-save"></i>
+            </button>
+            <button type="button"
+                    title="{{ 'Components tree'|trans }}"
+                    class="btn btn-color-white btn-style-flat"
+                    data-customize--builder-toolbar-target="tree">
+                <i class="fas fa-sitemap"></i>
+            </button>
+        </div>
+
+        <div>
+            <button type="button"
+                    title="{{ 'Desktop'|trans }}"
+                    class="btn btn-color-white btn-style-flat"
+                    data-customize--builder-toolbar-target="desktop">
+                <i class="fas fa-desktop"></i>
+            </button>
+            <button type="button"
+                    title="{{ 'Tablet'|trans }}"
+                    class="btn btn-color-white btn-style-flat"
+                    data-customize--builder-toolbar-target="tablet">
+                <i class="fas fa-tablet-alt"></i>
+            </button>
+            <button type="button"
+                    title="{{ 'Phone'|trans }}"
+                    class="btn btn-color-white btn-style-flat"
+                    data-customize--builder-toolbar-target="phone">
+                <i class="fas fa-mobile-alt"></i>
+            </button>
+        </div>
+    </div>
+{% endblock %}
+
 {% block content %}
-    <div class="flex-1 flex min-h-full"
-         data-controller="customize--builder customize--builder-tree"
-         data-customize--builder-frontend-url-value="{{ path('numbernine_homepage', {n9: 'admin', area: area}) }}"
-         data-customize--builder-components-api-url-value="{{ path('numbernine_admin_pagebuilder_area_get_components', {area: area}) }}"
-    >
+    <div class="flex-1 flex min-h-full" data-controller="splitter">
+        <div class="flex-1 flex min-h-full justify-center"
+             data-controller="customize--builder customize--builder-tree"
+             data-customize--builder-frontend-url-value="{{ path('numbernine_homepage', {n9: 'admin', area: area}) }}"
+             data-customize--builder-components-api-url-value="{{ path('numbernine_admin_pagebuilder_area_get_components', {area: area}) }}"
+             data-splitter-target="panel"
+        >
+        </div>
+        <div class="hidden lg:flex flex-col"
+             data-controller="customize--builder-sidebar"
+             data-splitter-target="panel"
+             data-min-size="300"
+        >
+            <div data-customize--builder-sidebar-target="content"></div>
+        </div>
     </div>
 
     {% embed '@NumberNine/admin/util/draggable_modal.html.twig' with {

@@ -5,7 +5,7 @@
 
 {% block content %}
     <div class="flex flex-col">
-        {% include '@NumberNine/admin/layout/toolbar.html.twig' with {title: 'General settings'} %}
+        {% include '@NumberNine/admin/util/toolbar.html.twig' with {title: 'General settings'} %}
 
         <turbo-frame id="numbernine_admin_settings_general">
             {% include '@NumberNine/admin/util/flashes.html.twig' %}

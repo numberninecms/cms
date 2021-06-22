@@ -16,7 +16,10 @@
 </head>
 
 <body class="h-full">
-    {% include '@NumberNine/admin/layout/topbar.html.twig' %}
+    {% set topbar_center_menu = block('topbar_center_menu') ?? null %}
+    {% embed '@NumberNine/admin/layout/topbar.html.twig' %}
+        {% block center_menu %}{{ topbar_center_menu|raw }}{% endblock %}
+    {% endembed %}
 
     <div class="ui-area">
         {% include '@NumberNine/admin/layout/menu.html.twig' with {active_menu_url: block('active_menu_url') ?? ''} %}
