@@ -5,7 +5,7 @@
 
 {% block topbar_center_menu %}
     <div class="flex items-center gap-5" data-controller="customize--builder-toolbar">
-        <div>
+        <div class="flex items-center gap-1">
             <button type="button"
                     title="{{ 'Save page'|trans }}"
                     class="btn btn-color-white btn-style-flat"
@@ -16,11 +16,13 @@
                     title="{{ 'Components tree'|trans }}"
                     class="btn btn-color-white btn-style-flat"
                     data-customize--builder-toolbar-target="tree">
-                <i class="fas fa-sitemap"></i>
+                <svg width="16" height="24" viewBox="0 0 16 16" class="fill-current">
+                    <path d="M8 11v1h-1v-2h5v-4h-8v1h-1v-2h6v-4h-9v4h2v3h2v2h2v3h2v2h8v-4z"></path>
+                </svg>
             </button>
         </div>
 
-        <div>
+        <div class="flex items-center gap-1">
             <button type="button"
                     title="{{ 'Desktop'|trans }}"
                     class="btn btn-color-white btn-style-flat"
