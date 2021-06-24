@@ -9,6 +9,7 @@
 
 import PageComponent from 'admin/interfaces/PageComponent';
 
-export default interface PageBuilderShowShortcodeEvent {
-    component: PageComponent;
+export default interface PageBuilderRequestForDeleteComponentEvent {
+    tree: PageComponent[];
+    componentToDelete: PageComponent;
 }

@@ -7,9 +7,12 @@
  * file that was distributed with this source code.
  */
 
-import PageComponent from 'admin/interfaces/PageComponent';
+import GenericObject from 'admin/interfaces/GenericObject';
 
-export default interface PageBuilderDeleteComponentEvent {
-    tree: PageComponent[];
-    componentToDelete: PageComponent;
+export default interface TreeNode extends GenericObject<any> {
+    avatar?: string;
+    icon?: string;
+    img?: string;
+    disabled?: boolean;
+    collapsed?: boolean;
 }

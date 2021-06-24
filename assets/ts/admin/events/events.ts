@@ -24,7 +24,13 @@ export const EVENT_PAGE_BUILDER_FRAME_HEIGHT_CHANGED = 'page-builder:frame-heigh
 export const EVENT_PAGE_BUILDER_MOUSE_COORDINATES_CHANGED = 'page-builder:mouse-coordinates-changed';
 export const EVENT_PAGE_BUILDER_ADD_ELEMENT = 'page-builder:add-element';
 export const EVENT_PAGE_BUILDER_SAVE_PRESET = 'page-builder:save-preset';
-export const EVENT_PAGE_BUILDER_SHOW_SHORTCODE = 'page-builder:show-shortcode';
-export const EVENT_PAGE_BUILDER_DELETE_COMPONENT = 'page-builder:delete-component';
 export const EVENT_PAGE_BUILDER_COMPONENT_DELETED = 'page-builder:component-deleted';
-export const EVENT_PAGE_BUILDER_CHANGE_VIEWPORT_SIZE_EVENT = 'page-builder:change-viewport-size';
+export const EVENT_PAGE_BUILDER_COMPONENT_SELECTED = 'page-builder:component-selected';
+export const EVENT_PAGE_BUILDER_COMPONENTS_TREE_CHANGED = 'page-builder:components-tree-changed';
+export const EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_SHORTCODE = 'page-builder:request-for-show-shortcode';
+export const EVENT_PAGE_BUILDER_REQUEST_FOR_DELETE_COMPONENT = 'page-builder:request-for-delete-component';
+export const EVENT_PAGE_BUILDER_REQUEST_FOR_SELECT_COMPONENT = 'page-builder:request-for-select-component';
+export const EVENT_PAGE_BUILDER_REQUEST_FOR_HIGHLIGHT_COMPONENT = 'page-builder:request-for-highlight-component';
+export const EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE = 'page-builder:request-for-change-components-tree';
+export const EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_VIEWPORT_SIZE_EVENT =
+    'page-builder:request-for-change-viewport-size';

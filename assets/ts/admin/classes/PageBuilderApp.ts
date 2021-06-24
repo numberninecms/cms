@@ -13,6 +13,9 @@ import { createPinia } from 'pinia';
 import { usePageBuilderStore } from 'admin/vue/stores/pageBuilder';
 import PageBuilderComponent from 'admin/vue/components/builder/PageBuilderComponent.vue';
 import { pascalCase } from 'change-case';
+import { eventBus } from 'admin/admin';
+import PageBuilderComponentsTreeChangedEvent from 'admin/events/PageBuilderComponentsTreeChangedEvent';
+import { EVENT_PAGE_BUILDER_COMPONENTS_TREE_CHANGED } from 'admin/events/events';
 
 export default class PageBuilderApp {
     private app: App;
@@ -20,7 +23,7 @@ export default class PageBuilderApp {
     public constructor(element: Element, componentsApiUrl: string) {
         this.createApp(element);
         this.registerBuiltInComponents();
-        this.setupStoreAndFetchData(componentsApiUrl);
+        void this.setupStoreAndFetchData(componentsApiUrl);
     }
 
     private createApp(element: Element): void {
@@ -47,10 +50,14 @@ export default class PageBuilderApp {
         });
     }
 
-    private setupStoreAndFetchData(componentsApiUrl: string): void {
+    private async setupStoreAndFetchData(componentsApiUrl: string): Promise<void> {
         const store = usePageBuilderStore();
         store.setup({ app: this, componentsApiUrl });
-        void store.fetchComponents();
+        await store.fetchComponents();
+
+        eventBus.emit<PageBuilderComponentsTreeChangedEvent>(EVENT_PAGE_BUILDER_COMPONENTS_TREE_CHANGED, {
+            tree: JSON.parse(JSON.stringify(store.pageComponents)),
+        });
     }
 
     public compileComponent(componentName: string, template: string): void {

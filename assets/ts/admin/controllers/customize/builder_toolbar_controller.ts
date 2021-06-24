@@ -10,8 +10,8 @@
 import { Controller } from 'stimulus';
 import { ViewportSize } from 'admin/types/ViewportSize';
 import { eventBus } from 'admin/admin';
-import { EVENT_PAGE_BUILDER_CHANGE_VIEWPORT_SIZE_EVENT } from 'admin/events/events';
-import { PageBuilderChangeViewportSizeEvent } from 'admin/events/PageBuilderChangeViewportSizeEvent';
+import { EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_VIEWPORT_SIZE_EVENT } from 'admin/events/events';
+import { PageBuilderRequestForChangeViewportSizeEvent } from 'admin/events/PageBuilderRequestForChangeViewportSizeEvent';
 
 export default class extends Controller {
     public static targets = ['save', 'tree', 'phone', 'tablet', 'desktop'];
@@ -41,6 +41,9 @@ export default class extends Controller {
     }
 
     private changeViewportSize(size: ViewportSize) {
-        eventBus.emit<PageBuilderChangeViewportSizeEvent>(EVENT_PAGE_BUILDER_CHANGE_VIEWPORT_SIZE_EVENT, size);
+        eventBus.emit<PageBuilderRequestForChangeViewportSizeEvent>(
+            EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_VIEWPORT_SIZE_EVENT,
+            size,
+        );
     }
 }

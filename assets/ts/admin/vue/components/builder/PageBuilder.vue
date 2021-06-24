@@ -18,16 +18,21 @@ import { computed, defineComponent, onBeforeUnmount, onMounted, Ref, ref, watch 
 import { usePageBuilderStore } from 'admin/vue/stores/pageBuilder';
 import PageBuilderComponent from 'admin/vue/components/builder/PageBuilderComponent.vue';
 import {
-    EVENT_PAGE_BUILDER_CHANGE_VIEWPORT_SIZE_EVENT,
+    EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_VIEWPORT_SIZE_EVENT,
     EVENT_PAGE_BUILDER_COMPONENT_DELETED,
     EVENT_PAGE_BUILDER_MOUSE_COORDINATES_CHANGED,
+    EVENT_PAGE_BUILDER_REQUEST_FOR_HIGHLIGHT_COMPONENT,
+    EVENT_PAGE_BUILDER_REQUEST_FOR_SELECT_COMPONENT, EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE,
 } from 'admin/events/events';
 import { eventBus } from 'admin/admin';
 import MouseCoordinatesEvent from 'admin/events/MouseCoordinatesEvent';
 import { useMouseStore } from 'admin/vue/stores/mouse';
 import PageBuilderToolbox from 'admin/vue/components/builder/toolbox/PageBuilderToolbox.vue';
 import PageBuilderComponentDeletedEvent from 'admin/events/PageBuilderComponentDeletedEvent';
-import { PageBuilderChangeViewportSizeEvent } from 'admin/events/PageBuilderChangeViewportSizeEvent';
+import { PageBuilderRequestForChangeViewportSizeEvent } from 'admin/events/PageBuilderRequestForChangeViewportSizeEvent';
+import PageBuilderRequestForHighlightComponentEvent from 'admin/events/PageBuilderRequestForHighlightComponentEvent';
+import PageBuilderRequestForSelectComponentEvent from 'admin/events/PageBuilderRequestForSelectComponentEvent';
+import PageBuilderRequestForChangeComponentsTree from 'admin/events/PageBuilderRequestForChangeComponentsTree';
 
 export default defineComponent({
     name: 'PageBuilder',
@@ -50,9 +55,31 @@ export default defineComponent({
                 }
             });
 
-            eventBus.on<PageBuilderChangeViewportSizeEvent>(
-                EVENT_PAGE_BUILDER_CHANGE_VIEWPORT_SIZE_EVENT,
+            eventBus.on<PageBuilderRequestForChangeViewportSizeEvent>(
+                EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_VIEWPORT_SIZE_EVENT,
                 (size) => (pageBuilderStore.viewportSize = size!),
+            );
+
+            eventBus.on<PageBuilderRequestForSelectComponentEvent>(
+                EVENT_PAGE_BUILDER_REQUEST_FOR_SELECT_COMPONENT,
+                (event) => {
+                    pageBuilderStore.selectedId = event?.component?.id;
+                },
+            );
+
+            eventBus.on<PageBuilderRequestForHighlightComponentEvent>(
+                EVENT_PAGE_BUILDER_REQUEST_FOR_HIGHLIGHT_COMPONENT,
+                (event) => {
+                    pageBuilderStore.highlightedId = event?.component?.id;
+                    mouseStore.over = !!event?.component;
+                },
+            );
+
+            eventBus.on<PageBuilderRequestForChangeComponentsTree>(
+                EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE,
+                (event) => {
+                    pageBuilderStore.pageComponents = event?.tree ?? [];
+                },
             );
 
             pageBuilderStore.document.addEventListener('mousedown', () => {

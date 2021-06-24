@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
-import { ViewportSize } from 'admin/types/ViewportSize';
+import PageComponent from 'admin/interfaces/PageComponent';
 
-export type PageBuilderChangeViewportSizeEvent = ViewportSize;
+export default interface PageBuilderComponentsTreeChangedEvent {
+    tree: PageComponent[];
+}

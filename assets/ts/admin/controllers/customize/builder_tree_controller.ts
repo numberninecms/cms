@@ -9,8 +9,8 @@
 
 import { Controller } from 'stimulus';
 import { eventBus } from 'admin/admin';
-import { EVENT_PAGE_BUILDER_DELETE_COMPONENT, EVENT_PAGE_BUILDER_COMPONENT_DELETED } from 'admin/events/events';
-import PageBuilderDeleteComponentEvent from 'admin/events/PageBuilderDeleteComponentEvent';
+import { EVENT_PAGE_BUILDER_REQUEST_FOR_DELETE_COMPONENT, EVENT_PAGE_BUILDER_COMPONENT_DELETED } from 'admin/events/events';
+import PageBuilderRequestForDeleteComponentEvent from 'admin/events/PageBuilderRequestForDeleteComponentEvent';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import usePageBuilderHelpers from 'admin/vue/functions/pageBuilderHelpers';
@@ -19,13 +19,13 @@ import PageBuilderComponentDeletedEvent from 'admin/events/PageBuilderComponentD
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
     public connect(): void {
-        eventBus.on<PageBuilderDeleteComponentEvent>(
-            EVENT_PAGE_BUILDER_DELETE_COMPONENT,
+        eventBus.on<PageBuilderRequestForDeleteComponentEvent>(
+            EVENT_PAGE_BUILDER_REQUEST_FOR_DELETE_COMPONENT,
             this.deleteComponent.bind(this),
         );
     }
 
-    private deleteComponent(event?: PageBuilderDeleteComponentEvent): void {
+    private deleteComponent(event?: PageBuilderRequestForDeleteComponentEvent): void {
         if (!event) {
             return;
         }

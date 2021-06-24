@@ -18,7 +18,7 @@ import { computed, defineComponent, onMounted, Ref, ref } from 'vue';
 import PageBuilderApp from 'admin/classes/PageBuilderApp';
 import { eventBus } from 'admin/admin';
 import {
-    EVENT_PAGE_BUILDER_CHANGE_VIEWPORT_SIZE_EVENT,
+    EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_VIEWPORT_SIZE_EVENT,
     EVENT_PAGE_BUILDER_CREATED,
     EVENT_PAGE_BUILDER_FRAME_HEIGHT_CHANGED,
     EVENT_PAGE_BUILDER_LOADED,
@@ -28,7 +28,7 @@ import PageBuilderCreatedEvent from 'admin/events/PageBuilderCreatedEvent';
 import PageBuilderLoadedEvent from 'admin/events/PageBuilderLoadedEvent';
 import MouseCoordinatesEvent from 'admin/events/MouseCoordinatesEvent';
 import { PageBuilderFrameHeightChangedEvent } from 'admin/events/PageBuilderFrameHeightChangedEvent';
-import { PageBuilderChangeViewportSizeEvent } from 'admin/events/PageBuilderChangeViewportSizeEvent';
+import { PageBuilderRequestForChangeViewportSizeEvent } from 'admin/events/PageBuilderRequestForChangeViewportSizeEvent';
 
 export default defineComponent({
     name: 'PageBuilderFrame',
@@ -53,21 +53,23 @@ export default defineComponent({
         const width = ref('100%');
 
         onMounted(() => {
-            eventBus.on<PageBuilderChangeViewportSizeEvent>(EVENT_PAGE_BUILDER_CHANGE_VIEWPORT_SIZE_EVENT, (size) => {
-                console.log('ahag', size);
-                switch (size) {
-                    case 'md':
-                        width.value = '768px';
-                        break;
+            eventBus.on<PageBuilderRequestForChangeViewportSizeEvent>(
+                EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_VIEWPORT_SIZE_EVENT,
+                (size) => {
+                    switch (size) {
+                        case 'md':
+                            width.value = '768px';
+                            break;
 
-                    case 'xs':
-                        width.value = '425px';
-                        break;
+                        case 'xs':
+                            width.value = '425px';
+                            break;
 
-                    default:
-                        width.value = '100%';
-                }
-            });
+                        default:
+                            width.value = '100%';
+                    }
+                },
+            );
         });
 
         const onLoad = () => {
