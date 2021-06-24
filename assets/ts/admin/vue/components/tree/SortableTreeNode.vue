@@ -10,10 +10,7 @@
         <template #item="{ element }">
             <div
                 class="sortable-tree__node relative"
-                :class="{
-                    'sortable-tree__node--parent': !isLeaf(element),
-                    'sortable-tree__node--child': isLeaf(element),
-                }"
+                :class="isLeaf(element) ? 'sortable-tree__node--child' : 'sortable-tree__node--parent'"
                 @dblclick.stop="$emit('dblclick', element)"
                 @click.right.stop.prevent="$emit('rightclick', element)"
                 @click.left.stop="$emit('select', element)"
@@ -38,7 +35,7 @@
                 >
                     <div tabindex="-1" class="sortable-focus-helper"></div>
                     <svg
-                        v-if="element[childrenKey].length > 0"
+                        v-if="!isLeaf(element)"
                         aria-hidden="true"
                         role="presentation"
                         focusable="false"
@@ -51,14 +48,22 @@
                     </svg>
                     <div class="sortable-tree__node-header-content flex-1 flex flex-row flex-nowrap items-center">
                         <slot name="default-header" :node="element" :label-key="labelKey">
-                            <div v-if="element.avatar" class="sortable-avatar mr-3">
+                            <div v-if="element.avatar" class="sortable-avatar mr-2">
                                 <div
                                     class="sortable-avatar-content flex flex-row justify-center items-center flex-wrap"
                                 >
                                     <img :src="element.avatar" />
                                 </div>
                             </div>
-                            <i v-if="element.icon" class="mr-3 fas" :class="`fa-${element.icon}`"></i>
+                            <i
+                                v-if="element.icon"
+                                class="mr-2"
+                                :class="
+                                    element.icon.startsWith('mdi')
+                                        ? `text-2xl mdi ${element.icon}`
+                                        : `text-lg fas fa-${element.icon}`
+                                "
+                            ></i>
                             <div>
                                 {{ element[labelKey] }}
                             </div>
