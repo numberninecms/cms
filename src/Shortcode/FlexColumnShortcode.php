@@ -25,7 +25,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *     name="flex_column",
  *     label="Flex column",
  *     container=true,
- *     icon="view_column",
+ *     icon="mdi-view-week",
  *     siblingsPosition={"left", "right"},
  *     siblingsShortcodes={"flex_column"}
  * )

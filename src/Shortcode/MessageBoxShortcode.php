@@ -17,7 +17,7 @@ use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 
 /**
- * @Shortcode(name="message_box", container=true, label="Message Box", icon="message")
+ * @Shortcode(name="message_box", container=true, label="Message Box", icon="mdi-card-text-outline")
  */
 final class MessageBoxShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {

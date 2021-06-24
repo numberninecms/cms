@@ -20,7 +20,7 @@ use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @Shortcode(name="block", label="Block", icon="view_day")
+ * @Shortcode(name="block", label="Block", icon="puzzle-piece")
  */
 final class BlockShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {

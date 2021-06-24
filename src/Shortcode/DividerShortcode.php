@@ -23,7 +23,7 @@ use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @Shortcode(name="divider", label="Divider", icon="remove")
+ * @Shortcode(name="divider", label="Divider", icon="mdi-minus")
  */
 final class DividerShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {

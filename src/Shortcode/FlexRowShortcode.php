@@ -28,7 +28,7 @@ use function NumberNine\Common\Util\ArrayUtil\array_set_if_value_exists;
  *     name="flex_row",
  *     label="Flex row",
  *     container=true,
- *     icon="view_stream",
+ *     icon="mdi-table-row",
  *     siblingsPosition={"top", "bottom"}
  * )
  */

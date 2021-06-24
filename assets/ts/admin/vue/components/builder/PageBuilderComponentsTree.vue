@@ -8,18 +8,20 @@
   -->
 
 <template>
-    <SortableTree
-        :nodes="nodes"
-        node-key="id"
-        default-expand-all
-        :selected="selectedId"
-        @select="select"
-        @dblclick="edit"
-        @rightclick="showContextMenu"
-        @mouseenter="highlight"
-        @mouseleave="cleanup"
-        @change="requestTreeUpdate"
-    />
+    <div>
+        <SortableTree
+            :nodes="nodes"
+            node-key="id"
+            default-expand-all
+            :selected="selectedId"
+            @select="select"
+            @dblclick="edit"
+            @rightclick="showContextMenu"
+            @mouseenter="highlight"
+            @mouseleave="cleanup"
+            @change="requestTreeUpdate"
+        />
+    </div>
 </template>
 
 <script lang="ts">
@@ -28,7 +30,8 @@ import SortableTree from 'admin/vue/components/tree/SortableTree.vue';
 import { eventBus } from 'admin/admin';
 import {
     EVENT_PAGE_BUILDER_COMPONENT_SELECTED,
-    EVENT_PAGE_BUILDER_COMPONENTS_TREE_CHANGED, EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE,
+    EVENT_PAGE_BUILDER_COMPONENTS_TREE_CHANGED,
+    EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE,
     EVENT_PAGE_BUILDER_REQUEST_FOR_HIGHLIGHT_COMPONENT,
     EVENT_PAGE_BUILDER_REQUEST_FOR_SELECT_COMPONENT,
 } from 'admin/events/events';

@@ -60,7 +60,7 @@
                                 class="mr-2"
                                 :class="
                                     element.icon.startsWith('mdi')
-                                        ? `text-2xl mdi ${element.icon}`
+                                        ? `mdi-24px mdi ${element.icon}`
                                         : `text-lg fas fa-${element.icon}`
                                 "
                             ></i>

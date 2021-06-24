@@ -25,7 +25,7 @@ use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
 use function NumberNine\Common\Util\ArrayUtil\array_set_if_value_exists;
 
 /**
- * @Shortcode(name="image", label="Image", icon="image")
+ * @Shortcode(name="image", label="Image", icon="mdi-image-area")
  */
 final class ImageShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {

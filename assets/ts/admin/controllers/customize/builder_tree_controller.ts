@@ -9,12 +9,16 @@
 
 import { Controller } from 'stimulus';
 import { eventBus } from 'admin/admin';
-import { EVENT_PAGE_BUILDER_REQUEST_FOR_DELETE_COMPONENT, EVENT_PAGE_BUILDER_COMPONENT_DELETED } from 'admin/events/events';
+import {
+    EVENT_PAGE_BUILDER_REQUEST_FOR_DELETE_COMPONENT,
+    EVENT_PAGE_BUILDER_COMPONENT_DELETED,
+} from 'admin/events/events';
 import PageBuilderRequestForDeleteComponentEvent from 'admin/events/PageBuilderRequestForDeleteComponentEvent';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import usePageBuilderHelpers from 'admin/vue/functions/pageBuilderHelpers';
 import PageBuilderComponentDeletedEvent from 'admin/events/PageBuilderComponentDeletedEvent';
+import '@mdi/font/css/materialdesignicons.min.css';
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {

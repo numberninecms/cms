@@ -19,7 +19,7 @@ use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @Shortcode(name="text", label="Text", icon="text_fields")
+ * @Shortcode(name="text", label="Text", icon="mdi-format-text-variant")
  */
 final class TextShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {

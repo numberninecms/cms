@@ -31,7 +31,7 @@ use function NumberNine\Common\Util\ArrayUtil\array_set_if_value_exists;
  *     name="section",
  *     label="Section",
  *     container=true,
- *     icon="web",
+ *     icon="mdi-rectangle-outline",
  *     siblingsPosition={"top", "bottom"}
  * )
  */

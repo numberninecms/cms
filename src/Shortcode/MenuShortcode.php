@@ -26,7 +26,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use function NumberNine\Common\Util\ArrayUtil\array_depth;
 
 /**
- * @Shortcode(name="menu", label="Menu", icon="menu")
+ * @Shortcode(name="menu", label="Menu", icon="mdi-file-tree")
  */
 final class MenuShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
