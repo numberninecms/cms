@@ -9,8 +9,9 @@
 
 .btn {
     @apply
-        py-2 px-4
+        py-2 px-4 gap-2
         normal-case
+        flex items-center
         text-white text-center text-base font-semibold
         shadow-md rounded-lg
         transition ease-in duration-200

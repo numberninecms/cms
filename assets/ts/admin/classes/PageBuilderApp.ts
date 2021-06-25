@@ -15,7 +15,8 @@ import PageBuilderComponent from 'admin/vue/components/builder/PageBuilderCompon
 import { pascalCase } from 'change-case';
 import { eventBus } from 'admin/admin';
 import PageBuilderComponentsTreeChangedEvent from 'admin/events/PageBuilderComponentsTreeChangedEvent';
-import { EVENT_PAGE_BUILDER_COMPONENTS_TREE_CHANGED } from 'admin/events/events';
+import { EVENT_PAGE_BUILDER_COMPONENTS_LOADED, EVENT_PAGE_BUILDER_COMPONENTS_TREE_CHANGED } from 'admin/events/events';
+import PageBuilderComponentsComponentsLoadedEvent from 'admin/events/PageBuilderComponentsComponentsLoadedEvent';
 
 export default class PageBuilderApp {
     private app: App;
@@ -55,8 +56,15 @@ export default class PageBuilderApp {
         store.setup({ app: this, componentsApiUrl });
         await store.fetchComponents();
 
+        const tree = JSON.parse(JSON.stringify(store.pageComponents));
+
         eventBus.emit<PageBuilderComponentsTreeChangedEvent>(EVENT_PAGE_BUILDER_COMPONENTS_TREE_CHANGED, {
-            tree: JSON.parse(JSON.stringify(store.pageComponents)),
+            tree,
+        });
+
+        eventBus.emit<PageBuilderComponentsComponentsLoadedEvent>(EVENT_PAGE_BUILDER_COMPONENTS_LOADED, {
+            tree,
+            availableComponents: JSON.parse(JSON.stringify(store.availablePageComponents)),
         });
     }
 

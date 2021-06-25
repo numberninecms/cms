@@ -6,6 +6,7 @@
         :item-key="(node) => node[nodeKey]"
         :group="{ name: 'SortableTree' }"
         :animation="200"
+        @change="$emit('change', $event)"
     >
         <template #item="{ element }">
             <div
@@ -93,6 +94,7 @@
                             @mouseover="$emit('mouseover', $event)"
                             @mouseleave="$emit('mouseleave', $event)"
                             @update:nodes="$emit('update:nodes', nodes)"
+                            @change="$emit('change', $event)"
                         >
                             <template #default-header="props">
                                 <slot name="default-header" v-bind="props"></slot>
@@ -162,7 +164,7 @@ export default defineComponent({
             default: 1,
         },
     },
-    emits: ['dblclick', 'rightclick', 'select', 'mouseenter', 'mouseover', 'mouseleave', 'update:nodes'],
+    emits: ['dblclick', 'rightclick', 'select', 'mouseenter', 'mouseover', 'mouseleave', 'update:nodes', 'change'],
     setup(props, { emit, slots }) {
         const hasDefaultBodySlot = computed(() => !!slots.default);
 

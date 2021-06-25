@@ -17,6 +17,7 @@
         @mouseover="$emit('mouseover', $event)"
         @mouseleave="$emit('mouseleave', $event)"
         @update:nodes="$emit('update:nodes', nodes)"
+        @change="$emit('change', nodes)"
     >
         <template #default-header="props">
             <slot name="default-header" v-bind="props"></slot>
@@ -27,7 +28,7 @@
     </sortable-tree-node>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, onUpdated, watch } from 'vue';
+import { defineComponent, onMounted, onUpdated } from 'vue';
 import SortableTreeNode from 'admin/vue/components/tree/SortableTreeNode.vue';
 import TreeNode from 'admin/interfaces/TreeNode';
 
@@ -80,7 +81,7 @@ export default defineComponent({
         },
     },
     emits: ['select', 'dblclick', 'rightclick', 'mouseenter', 'mouseover', 'mouseleave', 'update:nodes', 'change'],
-    setup(props, { emit }) {
+    setup(props) {
         onMounted(() => {
             repairNodes(props.nodes);
         });
@@ -88,14 +89,6 @@ export default defineComponent({
         onUpdated(() => {
             repairNodes(props.nodes);
         });
-
-        watch(
-            () => props.nodes,
-            () => {
-                emit('change', props.nodes);
-            },
-            { deep: true },
-        );
 
         function repairNodes(nodes: TreeNode[]) {
             nodes.forEach((node) => {

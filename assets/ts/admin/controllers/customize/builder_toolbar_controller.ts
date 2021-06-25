@@ -10,34 +10,30 @@
 import { Controller } from 'stimulus';
 import { ViewportSize } from 'admin/types/ViewportSize';
 import { eventBus } from 'admin/admin';
-import { EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_VIEWPORT_SIZE_EVENT } from 'admin/events/events';
+import {
+    EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_VIEWPORT_SIZE_EVENT,
+    EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_COMPONENTS_TREE,
+} from 'admin/events/events';
 import { PageBuilderRequestForChangeViewportSizeEvent } from 'admin/events/PageBuilderRequestForChangeViewportSizeEvent';
+import PageBuilderRequestForShowComponentsTreeEvent from 'admin/events/PageBuilderRequestForShowComponentsTreeEvent';
 
 export default class extends Controller {
-    public static targets = ['save', 'tree', 'phone', 'tablet', 'desktop'];
-
-    private readonly saveTarget: HTMLButtonElement;
-    private readonly treeTarget: HTMLButtonElement;
-    private readonly phoneTarget: HTMLButtonElement;
-    private readonly tabletTarget: HTMLButtonElement;
-    private readonly desktopTarget: HTMLButtonElement;
-
-    public connect(): void {
-        this.desktopTarget.addEventListener('click', this.setDesktopSize.bind(this));
-        this.tabletTarget.addEventListener('click', this.setTabletSize.bind(this));
-        this.phoneTarget.addEventListener('click', this.setPhoneSize.bind(this));
-    }
-
-    private setDesktopSize(): void {
+    public setDesktopSize(): void {
         this.changeViewportSize('lg');
     }
 
-    private setTabletSize(): void {
+    public setTabletSize(): void {
         this.changeViewportSize('md');
     }
 
-    private setPhoneSize(): void {
+    public setPhoneSize(): void {
         this.changeViewportSize('xs');
+    }
+
+    public showTree(): void {
+        eventBus.emit<PageBuilderRequestForShowComponentsTreeEvent>(
+            EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_COMPONENTS_TREE,
+        );
     }
 
     private changeViewportSize(size: ViewportSize) {

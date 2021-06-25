@@ -22,7 +22,9 @@ import {
     EVENT_PAGE_BUILDER_COMPONENT_DELETED,
     EVENT_PAGE_BUILDER_MOUSE_COORDINATES_CHANGED,
     EVENT_PAGE_BUILDER_REQUEST_FOR_HIGHLIGHT_COMPONENT,
-    EVENT_PAGE_BUILDER_REQUEST_FOR_SELECT_COMPONENT, EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE,
+    EVENT_PAGE_BUILDER_REQUEST_FOR_SELECT_COMPONENT,
+    EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE,
+    EVENT_PAGE_BUILDER_COMPONENTS_TREE_CHANGED,
 } from 'admin/events/events';
 import { eventBus } from 'admin/admin';
 import MouseCoordinatesEvent from 'admin/events/MouseCoordinatesEvent';
@@ -33,6 +35,7 @@ import { PageBuilderRequestForChangeViewportSizeEvent } from 'admin/events/PageB
 import PageBuilderRequestForHighlightComponentEvent from 'admin/events/PageBuilderRequestForHighlightComponentEvent';
 import PageBuilderRequestForSelectComponentEvent from 'admin/events/PageBuilderRequestForSelectComponentEvent';
 import PageBuilderRequestForChangeComponentsTree from 'admin/events/PageBuilderRequestForChangeComponentsTree';
+import PageBuilderComponentsTreeChangedEvent from 'admin/events/PageBuilderComponentsTreeChangedEvent';
 
 export default defineComponent({
     name: 'PageBuilder',
@@ -79,6 +82,10 @@ export default defineComponent({
                 EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE,
                 (event) => {
                     pageBuilderStore.pageComponents = event?.tree ?? [];
+
+                    eventBus.emit<PageBuilderComponentsTreeChangedEvent>(EVENT_PAGE_BUILDER_COMPONENTS_TREE_CHANGED, {
+                        tree: JSON.parse(JSON.stringify(pageBuilderStore.pageComponents)),
+                    });
                 },
             );
 

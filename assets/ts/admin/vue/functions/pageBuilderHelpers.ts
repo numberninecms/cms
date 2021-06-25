@@ -9,12 +9,19 @@
 
 import PageComponent from 'admin/interfaces/PageComponent';
 import { v4 as uuidv4 } from 'uuid';
+import { DropPosition } from 'admin/types/DropPosition';
 
 interface PageBuilderHelpers {
     findComponentInTree: (id: string, components: PageComponent[]) => PageComponent | undefined;
     prepareTree: (tree: PageComponent[], parent?: PageComponent) => void;
     removeComponentInTree: (tree: PageComponent[], componentToRemoveId: string) => PageComponent[];
     duplicateComponentInTree: (tree: PageComponent[], componentToDuplicate: PageComponent) => PageComponent[];
+    insertComponentInTree: (
+        componentToInsert: PageComponent,
+        tree: PageComponent[],
+        siblingId?: string,
+        position?: DropPosition,
+    ) => PageComponent[];
 }
 
 export default function usePageBuilderHelpers(): PageBuilderHelpers {
@@ -85,10 +92,44 @@ export default function usePageBuilderHelpers(): PageBuilderHelpers {
         return tree;
     }
 
+    function insertComponentInTree(
+        componentToInsert: PageComponent,
+        tree: PageComponent[],
+        siblingId?: string,
+        position?: DropPosition,
+    ): PageComponent[] {
+        if (!position) {
+            position = 'bottom';
+        }
+
+        if (!siblingId) {
+            if (['bottom', 'right'].includes(position)) {
+                tree.push(componentToInsert);
+            } else {
+                tree.splice(0, 0, componentToInsert);
+            }
+
+            return tree;
+        }
+
+        for (const [i, component] of tree.entries()) {
+            if (component.id === siblingId) {
+                const increment = ['bottom', 'right'].includes(position) ? 1 : 0;
+                tree.splice(i + increment, 0, componentToInsert);
+                return tree;
+            } else if (component.children && component.children.length > 0) {
+                component.children = insertComponentInTree(componentToInsert, component.children, siblingId, position);
+            }
+        }
+
+        return tree;
+    }
+
     return {
         findComponentInTree,
         prepareTree,
         removeComponentInTree,
         duplicateComponentInTree,
+        insertComponentInTree,
     };
 }

@@ -18,6 +18,7 @@ import usePageBuilderHelpers from 'admin/vue/functions/pageBuilderHelpers';
 import { capitalCase } from 'change-case';
 import { DropPosition } from 'admin/types/DropPosition';
 import { ViewportSize } from 'admin/types/ViewportSize';
+import GenericObject from 'admin/interfaces/GenericObject';
 
 export const usePageBuilderStore = defineStore({
     id: 'pageBuilder',
@@ -26,7 +27,7 @@ export const usePageBuilderStore = defineStore({
             app: undefined as PageBuilderApp | undefined,
             componentsApiUrl: '',
             pageComponents: [] as PageComponent[],
-            availablePageComponents: [] as unknown as { [componentName: string]: PageComponent },
+            availablePageComponents: {} as GenericObject<PageComponent>,
             highlightedId: undefined as string | undefined,
             selectedId: undefined as string | undefined,
             dragId: undefined as string | undefined,

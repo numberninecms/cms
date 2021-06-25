@@ -25,9 +25,9 @@ import { computed, defineComponent, onBeforeUnmount, onMounted, Ref, ref, watch 
 import GenericObject from 'admin/interfaces/GenericObject';
 import { useMouseStore } from 'admin/vue/stores/mouse';
 import { usePageBuilderStore } from 'admin/vue/stores/pageBuilder';
-import PageBuilderAddElementEvent from 'admin/events/PageBuilderAddElementEvent';
-import { EVENT_PAGE_BUILDER_ADD_ELEMENT } from 'admin/events/events';
+import { EVENT_PAGE_BUILDER_REQUEST_FOR_ADD_TO_CONTENT } from 'admin/events/events';
 import { eventBus } from 'admin/admin';
+import PageBuilderRequestForAddToContentEvent from 'admin/events/PageBuilderRequestForAddToContentEvent';
 
 export default defineComponent({
     name: 'PageBuilderToolInsertButton',
@@ -92,7 +92,8 @@ export default defineComponent({
         );
 
         function addToContent() {
-            eventBus.emit<PageBuilderAddElementEvent>(EVENT_PAGE_BUILDER_ADD_ELEMENT, {
+            eventBus.emit<PageBuilderRequestForAddToContentEvent>(EVENT_PAGE_BUILDER_REQUEST_FOR_ADD_TO_CONTENT, {
+                tree: pageBuilderStore.pageComponents,
                 target: pageBuilderStore.highlightedComponent,
                 position: pageBuilderStore.dropPosition,
             });

@@ -8,7 +8,7 @@
   -->
 
 <template>
-    <div>
+    <div class="p-3 flex flex-col gap-3">
         <SortableTree
             :nodes="nodes"
             node-key="id"
@@ -21,6 +21,11 @@
             @mouseleave="cleanup"
             @change="requestTreeUpdate"
         />
+        <div>
+            <button class="btn btn-color-primary" @click="addToContent">
+                <i class="mdi mdi-24px mdi-view-grid-plus"></i> Add to content
+            </button>
+        </div>
     </div>
 </template>
 
@@ -31,6 +36,7 @@ import { eventBus } from 'admin/admin';
 import {
     EVENT_PAGE_BUILDER_COMPONENT_SELECTED,
     EVENT_PAGE_BUILDER_COMPONENTS_TREE_CHANGED,
+    EVENT_PAGE_BUILDER_REQUEST_FOR_ADD_TO_CONTENT,
     EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE,
     EVENT_PAGE_BUILDER_REQUEST_FOR_HIGHLIGHT_COMPONENT,
     EVENT_PAGE_BUILDER_REQUEST_FOR_SELECT_COMPONENT,
@@ -41,6 +47,7 @@ import PageComponent from 'admin/interfaces/PageComponent';
 import PageBuilderRequestForHighlightComponentEvent from 'admin/events/PageBuilderRequestForHighlightComponentEvent';
 import PageBuilderRequestForSelectComponentEvent from 'admin/events/PageBuilderRequestForSelectComponentEvent';
 import PageBuilderRequestForChangeComponentsTree from 'admin/events/PageBuilderRequestForChangeComponentsTree';
+import PageBuilderRequestForAddToContentEvent from 'admin/events/PageBuilderRequestForAddToContentEvent';
 
 export default defineComponent({
     name: 'PageBuilderComponentsTree',
@@ -80,11 +87,11 @@ export default defineComponent({
 
         function showContextMenu() {}
 
-        function requestTreeUpdate(nodes: PageComponent[]) {
+        function requestTreeUpdate(newNodes: PageComponent[]) {
             eventBus.emit<PageBuilderRequestForChangeComponentsTree>(
                 EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE,
                 {
-                    tree: JSON.parse(JSON.stringify(nodes)),
+                    tree: JSON.parse(JSON.stringify(newNodes)),
                 },
             );
         }
@@ -98,6 +105,13 @@ export default defineComponent({
             );
         }
 
+        function addToContent() {
+            eventBus.emit<PageBuilderRequestForAddToContentEvent>(EVENT_PAGE_BUILDER_REQUEST_FOR_ADD_TO_CONTENT, {
+                tree: nodes.value,
+                position: 'bottom',
+            });
+        }
+
         return {
             nodes,
             selectedId,
@@ -107,6 +121,7 @@ export default defineComponent({
             showContextMenu,
             cleanup,
             requestTreeUpdate,
+            addToContent,
         };
     },
 });

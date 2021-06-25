@@ -10,7 +10,8 @@
 import PageComponent from 'admin/interfaces/PageComponent';
 import { DropPosition } from 'admin/types/DropPosition';
 
-export default interface PageBuilderAddElementEvent {
+export default interface PageBuilderRequestForAddToContentEvent {
+    tree?: PageComponent[];
     target?: PageComponent;
     position?: DropPosition;
 }
