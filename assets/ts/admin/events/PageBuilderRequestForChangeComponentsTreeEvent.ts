@@ -8,11 +8,7 @@
  */
 
 import PageComponent from 'admin/interfaces/PageComponent';
-import GenericObject from 'admin/interfaces/GenericObject';
-import Form from 'admin/interfaces/Form';
 
-export default interface PageBuilderComponentsComponentsLoadedEvent {
+export default interface PageBuilderRequestForChangeComponentsTreeEvent {
     tree: PageComponent[];
-    availableComponents: GenericObject<PageComponent>;
-    forms: GenericObject<Form>;
 }

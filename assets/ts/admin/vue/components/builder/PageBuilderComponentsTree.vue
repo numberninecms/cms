@@ -38,6 +38,7 @@ import {
     EVENT_PAGE_BUILDER_COMPONENTS_TREE_CHANGED,
     EVENT_PAGE_BUILDER_REQUEST_FOR_ADD_TO_CONTENT,
     EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE,
+    EVENT_PAGE_BUILDER_REQUEST_FOR_EDIT_COMPONENT,
     EVENT_PAGE_BUILDER_REQUEST_FOR_HIGHLIGHT_COMPONENT,
     EVENT_PAGE_BUILDER_REQUEST_FOR_SELECT_COMPONENT,
 } from 'admin/events/events';
@@ -46,8 +47,9 @@ import PageBuilderComponentSelectedEvent from 'admin/events/PageBuilderComponent
 import PageComponent from 'admin/interfaces/PageComponent';
 import PageBuilderRequestForHighlightComponentEvent from 'admin/events/PageBuilderRequestForHighlightComponentEvent';
 import PageBuilderRequestForSelectComponentEvent from 'admin/events/PageBuilderRequestForSelectComponentEvent';
-import PageBuilderRequestForChangeComponentsTree from 'admin/events/PageBuilderRequestForChangeComponentsTree';
+import PageBuilderRequestForChangeComponentsTreeEvent from 'admin/events/PageBuilderRequestForChangeComponentsTreeEvent';
 import PageBuilderRequestForAddToContentEvent from 'admin/events/PageBuilderRequestForAddToContentEvent';
+import PageBuilderRequestForEditComponentEvent from 'admin/events/PageBuilderRequestForEditComponentEvent';
 
 export default defineComponent({
     name: 'PageBuilderComponentsTree',
@@ -83,12 +85,16 @@ export default defineComponent({
             );
         }
 
-        function edit() {}
+        function edit(component: PageComponent) {
+            eventBus.emit<PageBuilderRequestForEditComponentEvent>(EVENT_PAGE_BUILDER_REQUEST_FOR_EDIT_COMPONENT, {
+                component,
+            });
+        }
 
         function showContextMenu() {}
 
         function requestTreeUpdate(newNodes: PageComponent[]) {
-            eventBus.emit<PageBuilderRequestForChangeComponentsTree>(
+            eventBus.emit<PageBuilderRequestForChangeComponentsTreeEvent>(
                 EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE,
                 {
                     tree: JSON.parse(JSON.stringify(newNodes)),

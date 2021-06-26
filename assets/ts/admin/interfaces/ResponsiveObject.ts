@@ -7,6 +7,6 @@
  * file that was distributed with this source code.
  */
 
-import GenericObject from 'admin/interfaces/GenericObject';
+import { ViewportSize } from 'admin/types/ViewportSize';
 
-export default interface FormControlParameters extends GenericObject<any> {}
+export default interface ResponsiveObject<T> extends Record<ViewportSize, T> {}

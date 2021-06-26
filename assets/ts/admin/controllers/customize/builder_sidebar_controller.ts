@@ -16,6 +16,7 @@ import {
     EVENT_PAGE_BUILDER_COMPONENTS_LOADED,
     EVENT_PAGE_BUILDER_REQUEST_FOR_ADD_TO_CONTENT,
     EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE,
+    EVENT_PAGE_BUILDER_REQUEST_FOR_EDIT_COMPONENT,
     EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_COMPONENTS_TREE,
 } from 'admin/events/events';
 import PageBuilderRequestForShowComponentsTreeEvent from 'admin/events/PageBuilderRequestForShowComponentsTreeEvent';
@@ -24,19 +25,20 @@ import GenericObject from 'admin/interfaces/GenericObject';
 import PageComponent from 'admin/interfaces/PageComponent';
 import usePageBuilderHelpers from 'admin/vue/functions/pageBuilderHelpers';
 import { v4 as uuidv4 } from 'uuid';
-import PageBuilderRequestForChangeComponentsTree from 'admin/events/PageBuilderRequestForChangeComponentsTree';
+import PageBuilderRequestForChangeComponentsTreeEvent from 'admin/events/PageBuilderRequestForChangeComponentsTreeEvent';
+import PageBuilderRequestForEditComponentEvent from 'admin/events/PageBuilderRequestForEditComponentEvent';
 
 export default class extends Controller {
-    public static targets = ['tree', 'componentsList'];
+    public static targets = ['panel', 'tree', 'componentsList'];
 
-    private readonly treeTarget: HTMLElement;
-    private readonly componentsListTarget: HTMLElement;
+    private readonly panelTargets: HTMLElement[];
 
     private availableComponents?: GenericObject<PageComponent>;
     private event?: PageBuilderRequestForAddToContentEvent;
 
     public connect(): void {
-        createApp(PageBuilderComponentsTree).mount(this.treeTarget);
+        this.showTree();
+        createApp(PageBuilderComponentsTree).mount(this.getPanel('tree')!);
 
         eventBus.on<PageBuilderComponentsComponentsLoadedEvent>(EVENT_PAGE_BUILDER_COMPONENTS_LOADED, (event) => {
             this.availableComponents = event?.availableComponents;
@@ -51,6 +53,24 @@ export default class extends Controller {
             EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_COMPONENTS_TREE,
             this.showTree.bind(this),
         );
+
+        eventBus.on<PageBuilderRequestForEditComponentEvent>(
+            EVENT_PAGE_BUILDER_REQUEST_FOR_EDIT_COMPONENT,
+            this.showComponentForm.bind(this),
+        );
+    }
+
+    private getPanel(name: string): HTMLElement | undefined {
+        return this.panelTargets.find((p) => p.dataset.id === name);
+    }
+
+    private showPanel(name: string): void {
+        this.panelTargets.forEach((p) => {
+            p.style.display = 'none';
+        });
+
+        const panel = this.getPanel(name);
+        panel && (panel.style.display = 'block');
     }
 
     private addToContent(event?: PageBuilderRequestForAddToContentEvent): void {
@@ -59,18 +79,16 @@ export default class extends Controller {
         }
 
         this.event = event;
-        this.showComponentsList();
+        this.showPanel('componentsList');
     }
 
-    private showComponentsList(): void {
-        this.treeTarget.style.display = 'none';
-        this.componentsListTarget.style.display = 'block';
-    }
-
-    private showTree(): void {
+    public showTree(): void {
         this.event = undefined;
-        this.treeTarget.style.display = 'block';
-        this.componentsListTarget.style.display = 'none';
+        this.showPanel('tree');
+    }
+
+    public showComponentForm(): void {
+        this.showPanel('componentForm');
     }
 
     public select(event: MouseEvent): void {
@@ -80,7 +98,7 @@ export default class extends Controller {
         if (
             !this.event?.tree ||
             !this.availableComponents ||
-            !Object.hasOwnProperty.call(this.availableComponents, shortcode)
+            !Object.prototype.hasOwnProperty.call(this.availableComponents, shortcode)
         ) {
             return;
         }
@@ -95,7 +113,7 @@ export default class extends Controller {
             this.event.position,
         );
 
-        eventBus.emit<PageBuilderRequestForChangeComponentsTree>(
+        eventBus.emit<PageBuilderRequestForChangeComponentsTreeEvent>(
             EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE,
             {
                 tree: JSON.parse(JSON.stringify(tree)),

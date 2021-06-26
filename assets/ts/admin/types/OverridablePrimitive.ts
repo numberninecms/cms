@@ -7,6 +7,6 @@
  * file that was distributed with this source code.
  */
 
-import GenericObject from 'admin/interfaces/GenericObject';
+import { Primitive } from 'admin/types/Primitive';
 
-export default interface FormControlParameters extends GenericObject<any> {}
+export type OverridablePrimitive = Primitive | { parameter: string; value: Primitive };

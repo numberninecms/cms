@@ -178,15 +178,15 @@ export default defineComponent({
 
         function isLeaf(node: TreeNode): boolean {
             return !(
-                Object.hasOwnProperty.call(node, props.childrenKey) &&
+                Object.prototype.hasOwnProperty.call(node, props.childrenKey) &&
                 (node[props.childrenKey] as TreeNode[]).length > 0
             );
         }
 
         function nodeCanHaveChildren(node: TreeNode): boolean {
             return (
-                !Object.hasOwnProperty.call(node, props.leafKey) ||
-                (Object.hasOwnProperty.call(node, props.leafKey) && !node[props.leafKey])
+                !Object.prototype.hasOwnProperty.call(node, props.leafKey) ||
+                (Object.prototype.hasOwnProperty.call(node, props.leafKey) && !node[props.leafKey])
             );
         }
 

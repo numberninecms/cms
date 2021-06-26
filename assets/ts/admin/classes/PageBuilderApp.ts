@@ -65,6 +65,7 @@ export default class PageBuilderApp {
         eventBus.emit<PageBuilderComponentsComponentsLoadedEvent>(EVENT_PAGE_BUILDER_COMPONENTS_LOADED, {
             tree,
             availableComponents: JSON.parse(JSON.stringify(store.availablePageComponents)),
+            forms: JSON.parse(JSON.stringify(store.pageComponentForms)),
         });
     }
 
@@ -84,7 +85,7 @@ export default class PageBuilderApp {
                         return props.parameters[field]; // eslint-disable-line
                     }
 
-                    return Object.hasOwnProperty.call(props.parameters[field], props.viewSize) // eslint-disable-line
+                    return Object.prototype.hasOwnProperty.call(props.parameters[field], props.viewSize) // eslint-disable-line
                         ? props.parameters[field][props.viewSize] // eslint-disable-line
                         : '';
                 }

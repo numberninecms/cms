@@ -92,13 +92,13 @@ export default defineComponent({
 
         function repairNodes(nodes: TreeNode[]) {
             nodes.forEach((node) => {
-                if (!Object.hasOwnProperty.call(node, props.childrenKey) || !Array.isArray(node[props.childrenKey])) {
+                if (!Object.prototype.hasOwnProperty.call(node, props.childrenKey) || !Array.isArray(node[props.childrenKey])) {
                     node[props.childrenKey] = [];
                 } else {
                     repairNodes(node[props.childrenKey]);
                 }
 
-                if (!Object.hasOwnProperty.call(node, 'collapsed')) {
+                if (!Object.prototype.hasOwnProperty.call(node, 'collapsed')) {
                     if (node.disabled) {
                         node.collapsed = true;
                     } else {
@@ -110,7 +110,7 @@ export default defineComponent({
 
         function isLeaf(node: TreeNode): boolean {
             return !(
-                Object.hasOwnProperty.call(node, props.childrenKey) &&
+                Object.prototype.hasOwnProperty.call(node, props.childrenKey) &&
                 (node[props.childrenKey] as TreeNode[]).length > 0
             );
         }

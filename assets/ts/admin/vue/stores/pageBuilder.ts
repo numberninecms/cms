@@ -19,6 +19,7 @@ import { capitalCase } from 'change-case';
 import { DropPosition } from 'admin/types/DropPosition';
 import { ViewportSize } from 'admin/types/ViewportSize';
 import GenericObject from 'admin/interfaces/GenericObject';
+import Form from 'admin/interfaces/Form';
 
 export const usePageBuilderStore = defineStore({
     id: 'pageBuilder',
@@ -28,6 +29,7 @@ export const usePageBuilderStore = defineStore({
             componentsApiUrl: '',
             pageComponents: [] as PageComponent[],
             availablePageComponents: {} as GenericObject<PageComponent>,
+            pageComponentForms: {} as GenericObject<Form>,
             highlightedId: undefined as string | undefined,
             selectedId: undefined as string | undefined,
             dragId: undefined as string | undefined,
@@ -148,7 +150,7 @@ export const usePageBuilderStore = defineStore({
         async fetchComponents(): Promise<void> {
             const { prepareTree } = usePageBuilderHelpers();
             const response = await axios.get(this.componentsApiUrl);
-            const { tree, templates, components }: ComponentsApiResponse = response.data;
+            const { tree, templates, components, controls }: ComponentsApiResponse = response.data;
 
             if (tree.length === 0) {
                 tree.push(this.defaultTextComponent);
@@ -157,9 +159,10 @@ export const usePageBuilderStore = defineStore({
             prepareTree(tree);
 
             this.pageComponents = tree;
+            this.pageComponentForms = controls;
             this.availablePageComponents = components;
 
-            for (const template in templates) {
+            for (const template of Object.keys(templates)) {
                 this.app!.compileComponent(template, templates[template]);
             }
         },

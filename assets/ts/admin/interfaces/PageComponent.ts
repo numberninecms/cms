@@ -9,11 +9,13 @@
 
 import { Direction } from 'admin/types/Direction';
 import GenericObject from 'admin/interfaces/GenericObject';
+import ResponsiveObject from 'admin/interfaces/ResponsiveObject';
+import { Primitive } from 'admin/types/Primitive';
 
 export default interface PageComponent {
     id: string;
     name: string;
-    parameters: GenericObject<any>;
+    parameters: GenericObject<Primitive | ResponsiveObject<Primitive>>;
     computed: GenericObject<any>;
     position: number;
     label: string;

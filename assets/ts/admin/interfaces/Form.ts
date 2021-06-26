@@ -8,7 +8,6 @@
  */
 
 import FormControl from 'admin/interfaces/FormControl';
+import GenericObject from 'admin/interfaces/GenericObject';
 
-export default interface Form {
-    [parameter: string]: FormControl;
-}
+export default interface Form extends GenericObject<FormControl> {}

@@ -25,6 +25,7 @@ import {
     EVENT_PAGE_BUILDER_REQUEST_FOR_SELECT_COMPONENT,
     EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE,
     EVENT_PAGE_BUILDER_COMPONENTS_TREE_CHANGED,
+    EVENT_PAGE_BUILDER_COMPONENT_UPDATED,
 } from 'admin/events/events';
 import { eventBus } from 'admin/admin';
 import MouseCoordinatesEvent from 'admin/events/MouseCoordinatesEvent';
@@ -34,13 +35,16 @@ import PageBuilderComponentDeletedEvent from 'admin/events/PageBuilderComponentD
 import { PageBuilderRequestForChangeViewportSizeEvent } from 'admin/events/PageBuilderRequestForChangeViewportSizeEvent';
 import PageBuilderRequestForHighlightComponentEvent from 'admin/events/PageBuilderRequestForHighlightComponentEvent';
 import PageBuilderRequestForSelectComponentEvent from 'admin/events/PageBuilderRequestForSelectComponentEvent';
-import PageBuilderRequestForChangeComponentsTree from 'admin/events/PageBuilderRequestForChangeComponentsTree';
+import PageBuilderRequestForChangeComponentsTreeEvent from 'admin/events/PageBuilderRequestForChangeComponentsTreeEvent';
 import PageBuilderComponentsTreeChangedEvent from 'admin/events/PageBuilderComponentsTreeChangedEvent';
+import PageBuilderComponentUpdatedEvent from 'admin/events/PageBuilderComponentUpdatedEvent';
+import usePageBuilderHelpers from 'admin/vue/functions/pageBuilderHelpers';
 
 export default defineComponent({
     name: 'PageBuilder',
     components: { PageBuilderToolbox, PageBuilderComponent },
     setup() {
+        const { replaceComponentInTree } = usePageBuilderHelpers();
         const builder: Ref<HTMLDivElement | null> = ref(null);
         const mouseStore = useMouseStore();
         const pageBuilderStore = usePageBuilderStore();
@@ -56,6 +60,17 @@ export default defineComponent({
                 if (event!.deletedComponent.id === pageBuilderStore.selectedId) {
                     pageBuilderStore.selectedId = undefined;
                 }
+            });
+
+            eventBus.on<PageBuilderComponentUpdatedEvent>(EVENT_PAGE_BUILDER_COMPONENT_UPDATED, (event) => {
+                if (!event) {
+                    return;
+                }
+
+                pageBuilderStore.pageComponents = replaceComponentInTree(
+                    pageBuilderStore.pageComponents,
+                    event.component,
+                );
             });
 
             eventBus.on<PageBuilderRequestForChangeViewportSizeEvent>(
@@ -78,7 +93,7 @@ export default defineComponent({
                 },
             );
 
-            eventBus.on<PageBuilderRequestForChangeComponentsTree>(
+            eventBus.on<PageBuilderRequestForChangeComponentsTreeEvent>(
                 EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE,
                 (event) => {
                     pageBuilderStore.pageComponents = event?.tree ?? [];

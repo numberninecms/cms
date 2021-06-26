@@ -7,8 +7,8 @@
  * file that was distributed with this source code.
  */
 
-import PageComponent from 'admin/interfaces/PageComponent';
+import FormControlTextBox from 'admin/vue/form/controls/FormControlTextBox.vue';
 
-export default interface PageBuilderRequestForChangeComponentsTree {
-    tree: PageComponent[];
-}
+export default {
+    FormControlTextBox,
+};

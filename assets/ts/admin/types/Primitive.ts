@@ -7,6 +7,4 @@
  * file that was distributed with this source code.
  */
 
-import GenericObject from 'admin/interfaces/GenericObject';
-
-export default interface FormControlParameters extends GenericObject<any> {}
+export type Primitive = string | number | boolean | undefined | null;

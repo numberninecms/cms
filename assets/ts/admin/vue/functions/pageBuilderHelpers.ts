@@ -16,6 +16,7 @@ interface PageBuilderHelpers {
     prepareTree: (tree: PageComponent[], parent?: PageComponent) => void;
     removeComponentInTree: (tree: PageComponent[], componentToRemoveId: string) => PageComponent[];
     duplicateComponentInTree: (tree: PageComponent[], componentToDuplicate: PageComponent) => PageComponent[];
+    replaceComponentInTree: (tree: PageComponent[], component: PageComponent) => PageComponent[];
     insertComponentInTree: (
         componentToInsert: PageComponent,
         tree: PageComponent[],
@@ -31,7 +32,7 @@ export default function usePageBuilderHelpers(): PageBuilderHelpers {
                 return component;
             }
 
-            if (Object.hasOwnProperty.call(component, 'children') && component.children.length > 0) {
+            if (Object.prototype.hasOwnProperty.call(component, 'children') && component.children.length > 0) {
                 const found = findComponentInTree(id, component.children);
 
                 if (found) {
@@ -125,11 +126,29 @@ export default function usePageBuilderHelpers(): PageBuilderHelpers {
         return tree;
     }
 
+    function replaceComponentInTree(tree: PageComponent[], newComponent: PageComponent): PageComponent[] {
+        const oldComponent = findComponentInTree(newComponent.id, tree);
+
+        if (!oldComponent) {
+            return tree;
+        }
+
+        newComponent.id += '#';
+
+        tree = insertComponentInTree(newComponent, tree, oldComponent.id);
+        tree = removeComponentInTree(tree, oldComponent.id);
+
+        newComponent.id = newComponent.id.substr(0, newComponent.id.length - 1);
+
+        return tree;
+    }
+
     return {
         findComponentInTree,
         prepareTree,
         removeComponentInTree,
         duplicateComponentInTree,
         insertComponentInTree,
+        replaceComponentInTree,
     };
 }

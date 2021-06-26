@@ -63,8 +63,8 @@
              data-splitter-target="panel"
              data-min-size="300"
         >
-            <div data-customize--builder-sidebar-target="tree"></div>
-            <div data-customize--builder-sidebar-target="componentsList" style="display: none">
+            <div data-customize--builder-sidebar-target="panel" data-id="tree"></div>
+            <div data-customize--builder-sidebar-target="panel" data-id="componentsList" style="display: none">
                 <div class="flex flex-wrap gap-3 p-3">
                     {% for name, shortcode in shortcodes %}
                         <button
@@ -80,6 +80,12 @@
                         </button>
                     {% endfor %}
                 </div>
+            </div>
+            <div data-customize--builder-sidebar-target="panel"
+                 data-controller="customize--builder-form"
+                 data-id="componentForm"
+                 style="display: none"
+            >
             </div>
         </div>
     </div>

@@ -9,10 +9,11 @@
 
 import PageComponent from 'admin/interfaces/PageComponent';
 import Form from 'admin/interfaces/Form';
+import GenericObject from 'admin/interfaces/GenericObject';
 
 export default interface ComponentsApiResponse {
     tree: PageComponent[];
-    components: { [componentName: string]: PageComponent };
-    controls: { [componentName: string]: Form[] };
-    templates: { [componentName: string]: string };
+    components: GenericObject<PageComponent>;
+    controls: GenericObject<Form>;
+    templates: GenericObject<string>;
 }
