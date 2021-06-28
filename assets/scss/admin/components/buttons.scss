@@ -108,3 +108,19 @@
         @apply w-full;
     }
 }
+
+.btn-group {
+    @apply flex flex-row;
+
+    .btn {
+        @apply rounded-none focus:ring-0 focus:ring-offset-0;
+
+        &:first-child {
+            @apply rounded-l-lg;
+        }
+
+        &:last-child {
+            @apply rounded-r-lg;
+        }
+    }
+}
