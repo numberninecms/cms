@@ -70,7 +70,7 @@ export default defineComponent({
                     : '';
             }
 
-            return component.value?.parameters[field];
+            return component.value?.parameters[field] ?? '';
         }
 
         function isResponsive(field: string): boolean {

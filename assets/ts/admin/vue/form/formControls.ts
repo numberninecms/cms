@@ -11,10 +11,12 @@ import FormControlTextBox from 'admin/vue/form/controls/FormControlTextBox.vue';
 import FormControlSlidableInput from 'admin/vue/form/controls/FormControlSlidableInput.vue';
 import FormControlSlider from 'admin/vue/form/controls/FormControlSlider.vue';
 import FormControlSliderInput from 'admin/vue/form/controls/FormControlSliderInput.vue';
+import FormControlSelect from 'admin/vue/form/controls/FormControlSelect.vue';
 
 export default {
     FormControlTextBox,
     FormControlSlider,
     FormControlSliderInput,
     FormControlSlidableInput,
+    FormControlSelect,
 };
