@@ -30,7 +30,11 @@ import { pascalCase } from 'change-case';
 import PageComponent from 'admin/interfaces/PageComponent';
 import { eventBus } from 'admin/admin';
 import PageBuilderComponentSelectedEvent from 'admin/events/PageBuilderComponentSelectedEvent';
-import { EVENT_PAGE_BUILDER_COMPONENT_SELECTED } from 'admin/events/events';
+import {
+    EVENT_PAGE_BUILDER_COMPONENT_SELECTED,
+    EVENT_PAGE_BUILDER_REQUEST_FOR_EDIT_COMPONENT,
+} from 'admin/events/events';
+import PageBuilderRequestForEditComponentEvent from 'admin/events/PageBuilderRequestForEditComponentEvent';
 
 export default defineComponent({
     name: 'PageBuilderComponent',
@@ -54,6 +58,7 @@ export default defineComponent({
             elementRef.value!.$el.addEventListener('mouseup', mouseUp);
             elementRef.value!.$el.addEventListener('mousemove', mouseMove);
             elementRef.value!.$el.addEventListener('click', select);
+            elementRef.value!.$el.addEventListener('dblclick', edit);
         });
 
         onBeforeUnmount(() => {
@@ -62,6 +67,7 @@ export default defineComponent({
             elementRef.value!.$el.removeEventListener('mouseup', mouseUp);
             elementRef.value!.$el.removeEventListener('mousemove', mouseMove);
             elementRef.value!.$el.removeEventListener('click', select);
+            elementRef.value!.$el.removeEventListener('dblclick', edit);
         });
 
         function highlight(event: MouseEvent) {
@@ -75,6 +81,15 @@ export default defineComponent({
             pageBuilderStore.selectedId = props.component.id;
 
             eventBus.emit<PageBuilderComponentSelectedEvent>(EVENT_PAGE_BUILDER_COMPONENT_SELECTED, {
+                component: pageBuilderStore.selectedComponent!,
+            });
+        }
+
+        function edit(event: MouseEvent) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            eventBus.emit<PageBuilderRequestForEditComponentEvent>(EVENT_PAGE_BUILDER_REQUEST_FOR_EDIT_COMPONENT, {
                 component: pageBuilderStore.selectedComponent!,
             });
         }

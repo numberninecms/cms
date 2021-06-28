@@ -38,3 +38,7 @@ export const EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE = 'page-build
 export const EVENT_PAGE_BUILDER_REQUEST_FOR_ADD_TO_CONTENT = 'page-builder:request-for-add-to-content';
 export const EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_VIEWPORT_SIZE_EVENT =
     'page-builder:request-for-change-viewport-size';
+
+export const EVENT_SLIDABLE_INPUT_POSITION = 'slidable-input:position';
+export const EVENT_SLIDABLE_INPUT_START_DRAGGING = 'slidable-input:start-dragging';
+export const EVENT_SLIDABLE_INPUT_STOP_DRAGGING = 'slidable-input:stop-dragging';

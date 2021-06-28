@@ -8,7 +8,9 @@
  */
 
 import FormControlTextBox from 'admin/vue/form/controls/FormControlTextBox.vue';
+import FormControlSlidableInput from 'admin/vue/form/controls/FormControlSlidableInput.vue';
 
 export default {
     FormControlTextBox,
+    FormControlSlidableInput,
 };

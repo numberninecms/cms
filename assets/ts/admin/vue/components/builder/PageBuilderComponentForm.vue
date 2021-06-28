@@ -8,7 +8,8 @@
   -->
 
 <template>
-    <div v-if="form">
+    <div v-if="form" class="px-3 mt-2">
+        <div class="text-xl font-bold mb-3">{{ component?.label }}</div>
         <component
             :is="`FormControl${control.name}`"
             v-for="(control, field) in form"

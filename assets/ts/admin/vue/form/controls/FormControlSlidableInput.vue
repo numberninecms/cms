@@ -10,19 +10,27 @@
 <template>
     <div class="flex flex-col">
         <label class="font-semibold text-quaternary">{{ parameters.label }}</label>
-        <input type="text" :value="value" @input="$emit('input', $event.target.value)" />
+        <SlidableInput
+            :modelValue="value"
+            :min="parameters.min"
+            :max="parameters.max"
+            :suffix="parameters.suffix"
+            @update:modelValue="$emit('input', $event)"
+        />
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
+import SlidableInput from 'admin/vue/form/SlidableInput.vue';
 import FormControlParameters from 'admin/interfaces/FormControlParameters';
 
 export default defineComponent({
-    name: 'FormControlTextBox',
+    name: 'FormControlSlidableInput',
+    components: { SlidableInput },
     props: {
         value: {
-            type: String,
+            type: [String, Number],
             required: true,
         },
         parameters: {

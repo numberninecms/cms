@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import Point2D from 'admin/interfaces/Point2D';
-
-export default interface MouseCoordinatesEvent extends Point2D {}
+export default interface Point2D {
+    x: number;
+    y: number;
+}

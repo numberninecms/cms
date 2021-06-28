@@ -38,6 +38,10 @@ module.exports = {
 
         // Causes error in PageBuilderCompiler
         'vue/one-component-per-file': 'off',
+
+        'vue/attribute-hyphenation': ['error', 'always', {
+            'ignore': ['modelValue'],
+        }],
     },
     env: {
         browser: true,
