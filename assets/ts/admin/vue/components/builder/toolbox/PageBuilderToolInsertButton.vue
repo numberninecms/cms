@@ -27,7 +27,6 @@ import { useMouseStore } from 'admin/vue/stores/mouse';
 import { usePageBuilderStore } from 'admin/vue/stores/pageBuilder';
 import { EVENT_PAGE_BUILDER_REQUEST_FOR_ADD_TO_CONTENT } from 'admin/events/events';
 import { eventBus } from 'admin/admin';
-import PageBuilderRequestForAddToContentEvent from 'admin/events/PageBuilderRequestForAddToContentEvent';
 
 export default defineComponent({
     name: 'PageBuilderToolInsertButton',
@@ -92,7 +91,7 @@ export default defineComponent({
         );
 
         function addToContent() {
-            eventBus.emit<PageBuilderRequestForAddToContentEvent>(EVENT_PAGE_BUILDER_REQUEST_FOR_ADD_TO_CONTENT, {
+            eventBus.emit(EVENT_PAGE_BUILDER_REQUEST_FOR_ADD_TO_CONTENT, {
                 tree: pageBuilderStore.pageComponents,
                 target: pageBuilderStore.highlightedComponent,
                 position: pageBuilderStore.dropPosition,

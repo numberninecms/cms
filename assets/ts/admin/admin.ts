@@ -12,9 +12,10 @@ import 'styles/admin/admin.scss';
 import 'images/NumberNineWithoutText.png';
 import 'images/NumberNine512_slogan.png';
 import { startStimulusApp } from '@symfony/stimulus-bridge';
+import { Events } from 'admin/events/events';
 
 export const app = startStimulusApp(
     require.context('@symfony/stimulus-bridge/lazy-controller-loader!./controllers', true, /\.([jt])sx?$/),
 );
 
-export const eventBus = mitt();
+export const eventBus = mitt<Events>();

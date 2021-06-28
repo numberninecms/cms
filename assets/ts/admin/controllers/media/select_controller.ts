@@ -11,8 +11,6 @@ import { Controller } from 'stimulus';
 import { eventBus } from 'admin/admin';
 import { EVENT_MEDIA_SELECT, EVENT_MODAL_SHOW } from 'admin/events/events';
 import { dirname } from 'path';
-import ModalShowEvent from 'admin/events/ModalShowEvent';
-import { MediaViewerEvent } from 'admin/events/MediaViewerEvent';
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
@@ -24,8 +22,8 @@ export default class extends Controller {
     private readonly removeTarget: HTMLElement;
 
     public select(): void {
-        eventBus.emit<ModalShowEvent>(EVENT_MODAL_SHOW, { modalId: 'media_library' });
-        eventBus.emit<MediaViewerEvent>(EVENT_MEDIA_SELECT, ({ files }) => {
+        eventBus.emit(EVENT_MODAL_SHOW, { modalId: 'media_library' });
+        eventBus.emit(EVENT_MEDIA_SELECT, ({ files }) => {
             if (files.length > 0) {
                 const img = document.createElement('img');
                 const size = Object.prototype.hasOwnProperty.call(files[0].sizes, 'preview') ? 'preview' : 'original';

@@ -80,7 +80,7 @@ export default defineComponent({
                 if (!mouse.move) {
                     mouse.move = true;
                     eventBus.emit(EVENT_SLIDABLE_INPUT_START_DRAGGING);
-                    eventBus.on<MouseCoordinatesEvent>(EVENT_SLIDABLE_INPUT_POSITION, updatePosition);
+                    eventBus.on(EVENT_SLIDABLE_INPUT_POSITION, updatePosition);
                 }
             } else {
                 mouse.move = false;

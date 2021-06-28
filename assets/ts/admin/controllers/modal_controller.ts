@@ -10,9 +10,6 @@
 import { Controller } from 'stimulus';
 import { eventBus } from 'admin/admin';
 import { EVENT_MODAL_CLOSE, EVENT_MODAL_SHOW, EVENT_MODAL_VISIBILITY_CHANGED } from 'admin/events/events';
-import ModalVisibilityChangedEvent from 'admin/events/ModalVisibilityChangedEvent';
-import ModalShowEvent from 'admin/events/ModalShowEvent';
-import ModalCloseEvent from 'admin/events/ModalCloseEvent';
 
 export default class extends Controller {
     public static targets = ['dragHandle'];
@@ -24,14 +21,14 @@ export default class extends Controller {
     private readonly idValue: string;
 
     public connect(): void {
-        eventBus.on<ModalShowEvent>(EVENT_MODAL_SHOW, (event) => {
-            if (event!.modalId === this.idValue) {
+        eventBus.on(EVENT_MODAL_SHOW, (event) => {
+            if (event.modalId === this.idValue) {
                 this.show();
             }
         });
 
-        eventBus.on<ModalCloseEvent>(EVENT_MODAL_CLOSE, (event) => {
-            if (event!.modalId === this.idValue) {
+        eventBus.on(EVENT_MODAL_CLOSE, (event) => {
+            if (event.modalId === this.idValue) {
                 this.close();
             }
         });
@@ -57,7 +54,7 @@ export default class extends Controller {
 
     public show(): void {
         (this.element as HTMLElement).style.display = 'flex';
-        eventBus.emit<ModalVisibilityChangedEvent>(EVENT_MODAL_VISIBILITY_CHANGED, {
+        eventBus.emit(EVENT_MODAL_VISIBILITY_CHANGED, {
             element: this.element,
             visible: true,
         });
@@ -65,7 +62,7 @@ export default class extends Controller {
 
     public close(): void {
         (this.element as HTMLElement).style.display = 'none';
-        eventBus.emit<ModalVisibilityChangedEvent>(EVENT_MODAL_VISIBILITY_CHANGED, {
+        eventBus.emit(EVENT_MODAL_VISIBILITY_CHANGED, {
             element: this.element,
             visible: false,
         });

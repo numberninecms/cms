@@ -8,7 +8,7 @@
   -->
 
 <template>
-    <div class="flex flex-col" ref="mediaBrowser">
+    <div ref="mediaBrowser" class="flex flex-col">
         <div class="flex flex-wrap gap-3">
             <div
                 v-for="(mediaFile, index) in mediaFiles"
@@ -39,11 +39,9 @@ import {
 import { eventBus } from 'admin/admin';
 import useMediaFileUtilities from 'admin/vue/functions/mediaFileUtilities';
 import { useMediaFilesStore } from 'admin/vue/stores/mediaFiles';
-import ModalVisibilityChangedEvent from 'admin/events/ModalVisibilityChangedEvent';
 import MediaFile from 'admin/interfaces/MediaFile';
 import { useMediaViewerStore } from 'admin/vue/stores/mediaViewer';
 import MediaLibraryThumbnailClickedEvent from 'admin/events/MediaLibraryThumbnailClickedEvent';
-import MediaFileUploadedEvent from 'admin/events/MediaFileUploadedEvent';
 
 export default defineComponent({
     name: 'MediaThumbnailsList',
@@ -58,8 +56,8 @@ export default defineComponent({
         const isEndOfListVisible = ref(false);
 
         onMounted(() => {
-            eventBus.on<MediaFileUploadedEvent>(EVENT_MEDIA_UPLOADER_FILE_UPLOADED, (event) => {
-                mediaFilesStore.mediaFiles.splice(0, 0, event!.mediaFile);
+            eventBus.on(EVENT_MEDIA_UPLOADER_FILE_UPLOADED, (event) => {
+                mediaFilesStore.mediaFiles.splice(0, 0, event.mediaFile);
             });
 
             isModal = (mediaBrowser.value as unknown as HTMLElement)!.closest('.modal-backdrop') !== null;
@@ -67,8 +65,8 @@ export default defineComponent({
             if (!isModal) {
                 void loadMoreMediaFiles();
             } else {
-                eventBus.on<ModalVisibilityChangedEvent>(EVENT_MODAL_VISIBILITY_CHANGED, (event) => {
-                    if (event?.visible) {
+                eventBus.on(EVENT_MODAL_VISIBILITY_CHANGED, (event) => {
+                    if (event.visible) {
                         void loadMoreMediaFiles();
                     }
                 });
@@ -119,7 +117,7 @@ export default defineComponent({
                 mediaFilesStore.setBulkSelectFirstIndex(index);
             }
 
-            eventBus.emit<MediaLibraryThumbnailClickedEvent>(EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_CLICKED, event);
+            eventBus.emit(EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_CLICKED, event);
             emit('thumbnail-clicked', event);
         }
 
@@ -133,10 +131,7 @@ export default defineComponent({
                 mediaFilesStore.bulkMediaSelect(index);
             }
 
-            eventBus.emit<MediaLibraryThumbnailClickedEvent>(
-                EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_SHIFT_CLICKED,
-                event,
-            );
+            eventBus.emit(EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_SHIFT_CLICKED, event);
 
             emit('thumbnail-shift-clicked', event);
         }

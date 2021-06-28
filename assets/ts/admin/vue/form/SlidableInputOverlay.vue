@@ -19,7 +19,6 @@ import {
     EVENT_SLIDABLE_INPUT_STOP_DRAGGING,
 } from 'admin/events/events';
 import { eventBus } from 'admin/admin';
-import MouseCoordinatesEvent from 'admin/events/MouseCoordinatesEvent';
 
 export default defineComponent({
     name: 'SlidableInputOverlay',
@@ -38,7 +37,7 @@ export default defineComponent({
 
         function drag(event: MouseEvent) {
             if (dragging.value) {
-                eventBus.emit<MouseCoordinatesEvent>(EVENT_SLIDABLE_INPUT_POSITION, {
+                eventBus.emit(EVENT_SLIDABLE_INPUT_POSITION, {
                     x: event.clientX,
                     y: event.clientY,
                 });

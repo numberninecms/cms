@@ -13,7 +13,6 @@ import PageBuilderFrame from 'admin/vue/components/builder/PageBuilderFrame.vue'
 import { eventBus } from 'admin/admin';
 import { EVENT_PAGE_BUILDER_FRAME_HEIGHT_CHANGED } from 'admin/events/events';
 import { createPinia } from 'pinia';
-import { PageBuilderFrameHeightChangedEvent } from 'admin/events/PageBuilderFrameHeightChangedEvent';
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
@@ -39,9 +38,6 @@ export default class extends Controller {
     }
 
     private emitWindowHeight(): void {
-        eventBus.emit<PageBuilderFrameHeightChangedEvent>(
-            EVENT_PAGE_BUILDER_FRAME_HEIGHT_CHANGED,
-            document.documentElement.clientHeight,
-        );
+        eventBus.emit(EVENT_PAGE_BUILDER_FRAME_HEIGHT_CHANGED, document.documentElement.clientHeight);
     }
 }

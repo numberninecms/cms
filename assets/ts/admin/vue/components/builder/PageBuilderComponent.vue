@@ -29,12 +29,10 @@ import { usePageBuilderStore } from 'admin/vue/stores/pageBuilder';
 import { pascalCase } from 'change-case';
 import PageComponent from 'admin/interfaces/PageComponent';
 import { eventBus } from 'admin/admin';
-import PageBuilderComponentSelectedEvent from 'admin/events/PageBuilderComponentSelectedEvent';
 import {
     EVENT_PAGE_BUILDER_COMPONENT_SELECTED,
     EVENT_PAGE_BUILDER_REQUEST_FOR_EDIT_COMPONENT,
 } from 'admin/events/events';
-import PageBuilderRequestForEditComponentEvent from 'admin/events/PageBuilderRequestForEditComponentEvent';
 
 export default defineComponent({
     name: 'PageBuilderComponent',
@@ -80,7 +78,7 @@ export default defineComponent({
             event.stopPropagation();
             pageBuilderStore.selectedId = props.component.id;
 
-            eventBus.emit<PageBuilderComponentSelectedEvent>(EVENT_PAGE_BUILDER_COMPONENT_SELECTED, {
+            eventBus.emit(EVENT_PAGE_BUILDER_COMPONENT_SELECTED, {
                 component: pageBuilderStore.selectedComponent!,
             });
         }
@@ -89,7 +87,7 @@ export default defineComponent({
             event.preventDefault();
             event.stopPropagation();
 
-            eventBus.emit<PageBuilderRequestForEditComponentEvent>(EVENT_PAGE_BUILDER_REQUEST_FOR_EDIT_COMPONENT, {
+            eventBus.emit(EVENT_PAGE_BUILDER_REQUEST_FOR_EDIT_COMPONENT, {
                 component: pageBuilderStore.selectedComponent!,
             });
         }

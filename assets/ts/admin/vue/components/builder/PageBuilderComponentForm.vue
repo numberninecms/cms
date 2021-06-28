@@ -26,8 +26,6 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, Ref, ref } from 'vue';
 import PageComponent from 'admin/interfaces/PageComponent';
-import PageBuilderRequestForEditComponentEvent from 'admin/events/PageBuilderRequestForEditComponentEvent';
-import PageBuilderComponentsComponentsLoadedEvent from 'admin/events/PageBuilderComponentsComponentsLoadedEvent';
 import {
     EVENT_PAGE_BUILDER_COMPONENT_UPDATED,
     EVENT_PAGE_BUILDER_COMPONENTS_LOADED,
@@ -38,11 +36,9 @@ import { eventBus } from 'admin/admin';
 import GenericObject from 'admin/interfaces/GenericObject';
 import Form from 'admin/interfaces/Form';
 import { ViewportSize } from 'admin/types/ViewportSize';
-import { PageBuilderRequestForChangeViewportSizeEvent } from 'admin/events/PageBuilderRequestForChangeViewportSizeEvent';
 import { Primitive } from 'admin/types/Primitive';
 import { OverridablePrimitive } from 'admin/types/OverridablePrimitive';
 import formControls from 'admin/vue/form/formControls';
-import PageBuilderComponentUpdatedEvent from 'admin/events/PageBuilderComponentUpdatedEvent';
 
 export default defineComponent({
     name: 'PageBuilderComponentForm',
@@ -54,23 +50,17 @@ export default defineComponent({
         let viewportSize: ViewportSize = 'lg';
 
         onMounted(() => {
-            eventBus.on<PageBuilderComponentsComponentsLoadedEvent>(EVENT_PAGE_BUILDER_COMPONENTS_LOADED, (event) => {
-                forms = event?.forms;
+            eventBus.on(EVENT_PAGE_BUILDER_COMPONENTS_LOADED, (event) => {
+                forms = event.forms;
             });
 
-            eventBus.on<PageBuilderRequestForEditComponentEvent>(
-                EVENT_PAGE_BUILDER_REQUEST_FOR_EDIT_COMPONENT,
-                (event) => {
-                    component.value = event?.component;
-                },
-            );
+            eventBus.on(EVENT_PAGE_BUILDER_REQUEST_FOR_EDIT_COMPONENT, (event) => {
+                component.value = event.component;
+            });
 
-            eventBus.on<PageBuilderRequestForChangeViewportSizeEvent>(
-                EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_VIEWPORT_SIZE_EVENT,
-                (size) => {
-                    viewportSize = size!;
-                },
-            );
+            eventBus.on(EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_VIEWPORT_SIZE_EVENT, (size) => {
+                viewportSize = size;
+            });
         });
 
         function fieldValue(field: string): any {
@@ -108,10 +98,10 @@ export default defineComponent({
                     [viewportSize]: value,
                 });
             } else {
-                component.value!.parameters[parameter] = value;
+                component.value!.parameters[parameter] = value as Primitive;
             }
 
-            eventBus.emit<PageBuilderComponentUpdatedEvent>(EVENT_PAGE_BUILDER_COMPONENT_UPDATED, {
+            eventBus.emit(EVENT_PAGE_BUILDER_COMPONENT_UPDATED, {
                 component: component.value!,
             });
         }

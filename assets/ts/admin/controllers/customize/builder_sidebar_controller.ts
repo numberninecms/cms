@@ -19,14 +19,10 @@ import {
     EVENT_PAGE_BUILDER_REQUEST_FOR_EDIT_COMPONENT,
     EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_COMPONENTS_TREE,
 } from 'admin/events/events';
-import PageBuilderRequestForShowComponentsTreeEvent from 'admin/events/PageBuilderRequestForShowComponentsTreeEvent';
-import PageBuilderComponentsComponentsLoadedEvent from 'admin/events/PageBuilderComponentsComponentsLoadedEvent';
 import GenericObject from 'admin/interfaces/GenericObject';
 import PageComponent from 'admin/interfaces/PageComponent';
 import usePageBuilderHelpers from 'admin/vue/functions/pageBuilderHelpers';
 import { v4 as uuidv4 } from 'uuid';
-import PageBuilderRequestForChangeComponentsTreeEvent from 'admin/events/PageBuilderRequestForChangeComponentsTreeEvent';
-import PageBuilderRequestForEditComponentEvent from 'admin/events/PageBuilderRequestForEditComponentEvent';
 
 export default class extends Controller {
     public static targets = ['panel', 'tree', 'componentsList'];
@@ -40,24 +36,13 @@ export default class extends Controller {
         this.showTree();
         createApp(PageBuilderComponentsTree).mount(this.getPanel('tree')!);
 
-        eventBus.on<PageBuilderComponentsComponentsLoadedEvent>(EVENT_PAGE_BUILDER_COMPONENTS_LOADED, (event) => {
-            this.availableComponents = event?.availableComponents;
+        eventBus.on(EVENT_PAGE_BUILDER_COMPONENTS_LOADED, (event) => {
+            this.availableComponents = event.availableComponents;
         });
 
-        eventBus.on<PageBuilderRequestForAddToContentEvent>(
-            EVENT_PAGE_BUILDER_REQUEST_FOR_ADD_TO_CONTENT,
-            this.addToContent.bind(this),
-        );
-
-        eventBus.on<PageBuilderRequestForShowComponentsTreeEvent>(
-            EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_COMPONENTS_TREE,
-            this.showTree.bind(this),
-        );
-
-        eventBus.on<PageBuilderRequestForEditComponentEvent>(
-            EVENT_PAGE_BUILDER_REQUEST_FOR_EDIT_COMPONENT,
-            this.showComponentForm.bind(this),
-        );
+        eventBus.on(EVENT_PAGE_BUILDER_REQUEST_FOR_ADD_TO_CONTENT, this.addToContent.bind(this));
+        eventBus.on(EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_COMPONENTS_TREE, this.showTree.bind(this));
+        eventBus.on(EVENT_PAGE_BUILDER_REQUEST_FOR_EDIT_COMPONENT, this.showComponentForm.bind(this));
     }
 
     private getPanel(name: string): HTMLElement | undefined {
@@ -113,12 +98,9 @@ export default class extends Controller {
             this.event.position,
         );
 
-        eventBus.emit<PageBuilderRequestForChangeComponentsTreeEvent>(
-            EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE,
-            {
-                tree: JSON.parse(JSON.stringify(tree)),
-            },
-        );
+        eventBus.emit(EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE, {
+            tree: JSON.parse(JSON.stringify(tree)),
+        });
 
         this.showTree();
     }

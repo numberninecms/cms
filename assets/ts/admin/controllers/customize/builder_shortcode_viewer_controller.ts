@@ -10,9 +10,7 @@
 import { Controller } from 'stimulus';
 import { eventBus } from 'admin/admin';
 import { EVENT_MODAL_SHOW, EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_SHORTCODE } from 'admin/events/events';
-import PageBuilderRequestForShowShortcodeEvent from 'admin/events/PageBuilderRequestForShowShortcodeEvent';
 import axios from 'axios';
-import ModalShowEvent from 'admin/events/ModalShowEvent';
 import Prism from 'prismjs';
 
 export default class extends Controller {
@@ -25,8 +23,8 @@ export default class extends Controller {
     private readonly renderUrlValue: string;
 
     public connect(): void {
-        eventBus.on<PageBuilderRequestForShowShortcodeEvent>(EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_SHORTCODE, (event) => {
-            if (event?.component) {
+        eventBus.on(EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_SHORTCODE, (event) => {
+            if (event.component) {
                 void axios
                     .post(this.renderUrlValue, {
                         component: event.component,
@@ -38,7 +36,7 @@ export default class extends Controller {
                             Prism.languages.shortcode,
                             'shortcode',
                         );
-                        eventBus.emit<ModalShowEvent>(EVENT_MODAL_SHOW, { modalId: 'shortcode_viewer' });
+                        eventBus.emit(EVENT_MODAL_SHOW, { modalId: 'shortcode_viewer' });
                     });
             }
         });

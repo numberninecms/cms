@@ -17,23 +17,15 @@ import PageBuilderRequestForDeleteComponentEvent from 'admin/events/PageBuilderR
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import usePageBuilderHelpers from 'admin/vue/functions/pageBuilderHelpers';
-import PageBuilderComponentDeletedEvent from 'admin/events/PageBuilderComponentDeletedEvent';
 import '@mdi/font/css/materialdesignicons.min.css';
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
     public connect(): void {
-        eventBus.on<PageBuilderRequestForDeleteComponentEvent>(
-            EVENT_PAGE_BUILDER_REQUEST_FOR_DELETE_COMPONENT,
-            this.deleteComponent.bind(this),
-        );
+        eventBus.on(EVENT_PAGE_BUILDER_REQUEST_FOR_DELETE_COMPONENT, this.deleteComponent.bind(this));
     }
 
-    private deleteComponent(event?: PageBuilderRequestForDeleteComponentEvent): void {
-        if (!event) {
-            return;
-        }
-
+    private deleteComponent(event: PageBuilderRequestForDeleteComponentEvent): void {
         void Swal.fire({
             title: 'Are you sure?',
             icon: 'warning',
@@ -48,7 +40,7 @@ export default class extends Controller {
                 if (findComponentInTree(event.componentToDelete.id, event.tree)) {
                     removeComponentInTree(event.tree, event.componentToDelete.id);
 
-                    eventBus.emit<PageBuilderComponentDeletedEvent>(EVENT_PAGE_BUILDER_COMPONENT_DELETED, {
+                    eventBus.emit(EVENT_PAGE_BUILDER_COMPONENT_DELETED, {
                         tree: event.tree,
                         deletedComponent: event.componentToDelete,
                     });

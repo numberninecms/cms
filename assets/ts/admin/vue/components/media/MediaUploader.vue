@@ -70,7 +70,6 @@ import ResizeOptions from 'admin/interfaces/ResizeOptions';
 import { eventBus } from 'admin/admin';
 import { EVENT_MEDIA_UPLOADER_FILE_UPLOADED } from 'admin/events/events';
 import MediaFile from 'admin/interfaces/MediaFile';
-import MediaFileUploadedEvent from 'admin/events/MediaFileUploadedEvent';
 
 interface MediaUploaderProps {
     uploadUrl: string;
@@ -141,7 +140,7 @@ export default defineComponent({
                 1,
             );
 
-            eventBus.emit<MediaFileUploadedEvent>(EVENT_MEDIA_UPLOADER_FILE_UPLOADED, {
+            eventBus.emit(EVENT_MEDIA_UPLOADER_FILE_UPLOADED, {
                 parsedFile,
                 mediaFile,
                 remainingCount: files.value.length,

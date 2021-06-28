@@ -42,14 +42,7 @@ import {
     EVENT_PAGE_BUILDER_REQUEST_FOR_HIGHLIGHT_COMPONENT,
     EVENT_PAGE_BUILDER_REQUEST_FOR_SELECT_COMPONENT,
 } from 'admin/events/events';
-import PageBuilderComponentsTreeChangedEvent from 'admin/events/PageBuilderComponentsTreeChangedEvent';
-import PageBuilderComponentSelectedEvent from 'admin/events/PageBuilderComponentSelectedEvent';
 import PageComponent from 'admin/interfaces/PageComponent';
-import PageBuilderRequestForHighlightComponentEvent from 'admin/events/PageBuilderRequestForHighlightComponentEvent';
-import PageBuilderRequestForSelectComponentEvent from 'admin/events/PageBuilderRequestForSelectComponentEvent';
-import PageBuilderRequestForChangeComponentsTreeEvent from 'admin/events/PageBuilderRequestForChangeComponentsTreeEvent';
-import PageBuilderRequestForAddToContentEvent from 'admin/events/PageBuilderRequestForAddToContentEvent';
-import PageBuilderRequestForEditComponentEvent from 'admin/events/PageBuilderRequestForEditComponentEvent';
 
 export default defineComponent({
     name: 'PageBuilderComponentsTree',
@@ -59,17 +52,17 @@ export default defineComponent({
         const selectedId: Ref<string | undefined> = ref(undefined);
 
         onMounted(() => {
-            eventBus.on<PageBuilderComponentsTreeChangedEvent>(EVENT_PAGE_BUILDER_COMPONENTS_TREE_CHANGED, (event) => {
-                nodes.value = event!.tree;
+            eventBus.on(EVENT_PAGE_BUILDER_COMPONENTS_TREE_CHANGED, (event) => {
+                nodes.value = event.tree;
             });
 
-            eventBus.on<PageBuilderComponentSelectedEvent>(EVENT_PAGE_BUILDER_COMPONENT_SELECTED, (event) => {
-                selectedId.value = event!.component.id;
+            eventBus.on(EVENT_PAGE_BUILDER_COMPONENT_SELECTED, (event) => {
+                selectedId.value = event.component.id;
             });
         });
 
         function select(component: PageComponent) {
-            eventBus.emit<PageBuilderRequestForSelectComponentEvent>(EVENT_PAGE_BUILDER_REQUEST_FOR_SELECT_COMPONENT, {
+            eventBus.emit(EVENT_PAGE_BUILDER_REQUEST_FOR_SELECT_COMPONENT, {
                 component,
             });
 
@@ -77,16 +70,13 @@ export default defineComponent({
         }
 
         function highlight(component: PageComponent) {
-            eventBus.emit<PageBuilderRequestForHighlightComponentEvent>(
-                EVENT_PAGE_BUILDER_REQUEST_FOR_HIGHLIGHT_COMPONENT,
-                {
-                    component,
-                },
-            );
+            eventBus.emit(EVENT_PAGE_BUILDER_REQUEST_FOR_HIGHLIGHT_COMPONENT, {
+                component,
+            });
         }
 
         function edit(component: PageComponent) {
-            eventBus.emit<PageBuilderRequestForEditComponentEvent>(EVENT_PAGE_BUILDER_REQUEST_FOR_EDIT_COMPONENT, {
+            eventBus.emit(EVENT_PAGE_BUILDER_REQUEST_FOR_EDIT_COMPONENT, {
                 component,
             });
         }
@@ -94,25 +84,19 @@ export default defineComponent({
         function showContextMenu() {}
 
         function requestTreeUpdate(newNodes: PageComponent[]) {
-            eventBus.emit<PageBuilderRequestForChangeComponentsTreeEvent>(
-                EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE,
-                {
-                    tree: JSON.parse(JSON.stringify(newNodes)),
-                },
-            );
+            eventBus.emit(EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE, {
+                tree: JSON.parse(JSON.stringify(newNodes)),
+            });
         }
 
         function cleanup() {
-            eventBus.emit<PageBuilderRequestForHighlightComponentEvent>(
-                EVENT_PAGE_BUILDER_REQUEST_FOR_HIGHLIGHT_COMPONENT,
-                {
-                    component: undefined,
-                },
-            );
+            eventBus.emit(EVENT_PAGE_BUILDER_REQUEST_FOR_HIGHLIGHT_COMPONENT, {
+                component: undefined,
+            });
         }
 
         function addToContent() {
-            eventBus.emit<PageBuilderRequestForAddToContentEvent>(EVENT_PAGE_BUILDER_REQUEST_FOR_ADD_TO_CONTENT, {
+            eventBus.emit(EVENT_PAGE_BUILDER_REQUEST_FOR_ADD_TO_CONTENT, {
                 tree: nodes.value,
                 position: 'bottom',
             });

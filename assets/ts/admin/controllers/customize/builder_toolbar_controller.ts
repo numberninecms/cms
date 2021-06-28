@@ -14,8 +14,6 @@ import {
     EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_VIEWPORT_SIZE_EVENT,
     EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_COMPONENTS_TREE,
 } from 'admin/events/events';
-import { PageBuilderRequestForChangeViewportSizeEvent } from 'admin/events/PageBuilderRequestForChangeViewportSizeEvent';
-import PageBuilderRequestForShowComponentsTreeEvent from 'admin/events/PageBuilderRequestForShowComponentsTreeEvent';
 
 export default class extends Controller {
     public setDesktopSize(): void {
@@ -31,15 +29,10 @@ export default class extends Controller {
     }
 
     public showTree(): void {
-        eventBus.emit<PageBuilderRequestForShowComponentsTreeEvent>(
-            EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_COMPONENTS_TREE,
-        );
+        eventBus.emit(EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_COMPONENTS_TREE);
     }
 
     private changeViewportSize(size: ViewportSize) {
-        eventBus.emit<PageBuilderRequestForChangeViewportSizeEvent>(
-            EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_VIEWPORT_SIZE_EVENT,
-            size,
-        );
+        eventBus.emit(EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_VIEWPORT_SIZE_EVENT, size);
     }
 }

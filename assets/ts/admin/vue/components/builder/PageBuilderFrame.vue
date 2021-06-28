@@ -24,11 +24,6 @@ import {
     EVENT_PAGE_BUILDER_LOADED,
     EVENT_PAGE_BUILDER_MOUSE_COORDINATES_CHANGED,
 } from 'admin/events/events';
-import PageBuilderCreatedEvent from 'admin/events/PageBuilderCreatedEvent';
-import PageBuilderLoadedEvent from 'admin/events/PageBuilderLoadedEvent';
-import MouseCoordinatesEvent from 'admin/events/MouseCoordinatesEvent';
-import { PageBuilderFrameHeightChangedEvent } from 'admin/events/PageBuilderFrameHeightChangedEvent';
-import { PageBuilderRequestForChangeViewportSizeEvent } from 'admin/events/PageBuilderRequestForChangeViewportSizeEvent';
 
 export default defineComponent({
     name: 'PageBuilderFrame',
@@ -53,23 +48,20 @@ export default defineComponent({
         const width = ref('100%');
 
         onMounted(() => {
-            eventBus.on<PageBuilderRequestForChangeViewportSizeEvent>(
-                EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_VIEWPORT_SIZE_EVENT,
-                (size) => {
-                    switch (size) {
-                        case 'md':
-                            width.value = '768px';
-                            break;
+            eventBus.on(EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_VIEWPORT_SIZE_EVENT, (size) => {
+                switch (size) {
+                    case 'md':
+                        width.value = '768px';
+                        break;
 
-                        case 'xs':
-                            width.value = '425px';
-                            break;
+                    case 'xs':
+                        width.value = '425px';
+                        break;
 
-                        default:
-                            width.value = '100%';
-                    }
-                },
-            );
+                    default:
+                        width.value = '100%';
+                }
+            });
         });
 
         const onLoad = () => {
@@ -80,7 +72,7 @@ export default defineComponent({
             }
 
             const app = new PageBuilderApp(pageBuilderElements[0], props.componentsApiUrl);
-            eventBus.emit<PageBuilderCreatedEvent>(EVENT_PAGE_BUILDER_CREATED, { app });
+            eventBus.emit(EVENT_PAGE_BUILDER_CREATED, { app });
 
             if (props.disableLinks) {
                 disableFrameLinks();
@@ -89,11 +81,11 @@ export default defineComponent({
             iframe.value!.contentWindow!.addEventListener('mousemove', updateMouseCoordinates);
 
             // todo: fix resize bug
-            eventBus.on<PageBuilderFrameHeightChangedEvent>(EVENT_PAGE_BUILDER_FRAME_HEIGHT_CHANGED, (height) => {
-                frameHeight.value = height!;
-                iframe.value!.height = `${height! - 48}`;
+            eventBus.on(EVENT_PAGE_BUILDER_FRAME_HEIGHT_CHANGED, (height) => {
+                frameHeight.value = height;
+                iframe.value!.height = `${height - 48}`;
             });
-            eventBus.emit<PageBuilderLoadedEvent>(EVENT_PAGE_BUILDER_LOADED);
+            eventBus.emit(EVENT_PAGE_BUILDER_LOADED);
         };
 
         function disableFrameLinks(): void {
@@ -105,7 +97,7 @@ export default defineComponent({
         }
 
         function updateMouseCoordinates(event: MouseEvent): void {
-            eventBus.emit<MouseCoordinatesEvent>(EVENT_PAGE_BUILDER_MOUSE_COORDINATES_CHANGED, {
+            eventBus.emit(EVENT_PAGE_BUILDER_MOUSE_COORDINATES_CHANGED, {
                 x: event.clientX,
                 y: event.clientY,
             });

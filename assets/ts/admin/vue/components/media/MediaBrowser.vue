@@ -43,18 +43,9 @@ import MediaThumbnailsSelectionBar from 'admin/vue/components/media/MediaThumbna
 import { useMediaFilesStore } from 'admin/vue/stores/mediaFiles';
 import { useMediaViewerStore } from 'admin/vue/stores/mediaViewer';
 import { eventBus } from 'admin/admin';
-import {
-    EVENT_MEDIA_SELECT, EVENT_MODAL_CLOSE,
-    EVENT_MODAL_VISIBILITY_CHANGED,
-    EVENT_TINY_EDITOR_ADD_MEDIA,
-} from 'admin/events/events';
-import { Editor } from 'tinymce';
-import MediaFile from 'admin/interfaces/MediaFile';
+import { EVENT_MEDIA_SELECT, EVENT_MODAL_CLOSE, EVENT_TINY_EDITOR_ADD_MEDIA } from 'admin/events/events';
 import MediaFileProperties from 'admin/vue/components/media/MediaFileProperties.vue';
 import MediaFileSettings from 'admin/vue/components/media/MediaFileSettings.vue';
-import ModalVisibilityChangedEvent from 'admin/events/ModalVisibilityChangedEvent';
-import { MediaViewerEvent } from 'admin/events/MediaViewerEvent';
-import ModalCloseEvent from 'admin/events/ModalCloseEvent';
 
 export default defineComponent({
     name: 'MediaBrowser',
@@ -87,11 +78,11 @@ export default defineComponent({
         mediaFilesStore.setup({ getUrl: props.getUrl, deleteUrl: props.deleteUrl });
 
         onMounted(() => {
-            eventBus.on<MediaViewerEvent>(EVENT_TINY_EDITOR_ADD_MEDIA, (callback) => {
+            eventBus.on(EVENT_TINY_EDITOR_ADD_MEDIA, (callback) => {
                 mediaViewerStore.callback = callback;
             });
 
-            eventBus.on<MediaViewerEvent>(EVENT_MEDIA_SELECT, (callback) => {
+            eventBus.on(EVENT_MEDIA_SELECT, (callback) => {
                 mediaViewerStore.callback = callback;
             });
         });
@@ -116,7 +107,7 @@ export default defineComponent({
             }
             mediaViewerStore.show = false;
 
-            eventBus.emit<ModalCloseEvent>(EVENT_MODAL_CLOSE, { modalId: 'media_library' });
+            eventBus.emit(EVENT_MODAL_CLOSE, { modalId: 'media_library' });
         }
 
         return {

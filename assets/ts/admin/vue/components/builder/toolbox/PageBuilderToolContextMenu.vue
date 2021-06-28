@@ -23,14 +23,11 @@ import { computed, defineComponent, onBeforeUnmount, onMounted, ref, Ref, watch 
 import { usePageBuilderStore } from 'admin/vue/stores/pageBuilder';
 import GenericObject from 'admin/interfaces/GenericObject';
 import { eventBus } from 'admin/admin';
-import PageBuilderSavePresetEvent from 'admin/events/PageBuilderSavePresetEvent';
 import {
     EVENT_PAGE_BUILDER_REQUEST_FOR_DELETE_COMPONENT,
     EVENT_PAGE_BUILDER_SAVE_PRESET,
     EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_SHORTCODE,
 } from 'admin/events/events';
-import PageBuilderRequestForShowShortcodeEvent from 'admin/events/PageBuilderRequestForShowShortcodeEvent';
-import PageBuilderRequestForDeleteComponentEvent from 'admin/events/PageBuilderRequestForDeleteComponentEvent';
 
 export default defineComponent({
     name: 'PageBuilderToolContextMenu',
@@ -67,7 +64,7 @@ export default defineComponent({
                 return;
             }
 
-            eventBus.emit<PageBuilderSavePresetEvent>(EVENT_PAGE_BUILDER_SAVE_PRESET, {
+            eventBus.emit(EVENT_PAGE_BUILDER_SAVE_PRESET, {
                 component: pageBuilderStore.selectedComponent,
             });
         }
@@ -79,7 +76,7 @@ export default defineComponent({
                 return;
             }
 
-            eventBus.emit<PageBuilderRequestForShowShortcodeEvent>(EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_SHORTCODE, {
+            eventBus.emit(EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_SHORTCODE, {
                 component: pageBuilderStore.selectedComponent,
             });
         }
@@ -91,7 +88,7 @@ export default defineComponent({
                 return;
             }
 
-            eventBus.emit<PageBuilderRequestForDeleteComponentEvent>(EVENT_PAGE_BUILDER_REQUEST_FOR_DELETE_COMPONENT, {
+            eventBus.emit(EVENT_PAGE_BUILDER_REQUEST_FOR_DELETE_COMPONENT, {
                 tree: pageBuilderStore.pageComponents,
                 componentToDelete: pageBuilderStore.selectedComponent,
             });
