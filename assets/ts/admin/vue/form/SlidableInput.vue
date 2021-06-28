@@ -128,8 +128,9 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .slidable-input {
+    @apply w-full;
     cursor: ew-resize;
 }
 </style>
