@@ -11,6 +11,6 @@
 
 namespace NumberNine\Model\PageBuilder\Control;
 
-class ButtonToggleControl extends SelectControl
+final class ButtonToggleControl extends AbstractSelectControl
 {
 }

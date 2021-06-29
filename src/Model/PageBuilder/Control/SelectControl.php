@@ -11,25 +11,6 @@
 
 namespace NumberNine\Model\PageBuilder\Control;
 
-use NumberNine\Model\PageBuilder\AbstractPageBuilderFormControl;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use function NumberNine\Common\Util\ArrayUtil\in_array_all;
-use function Symfony\Component\String\u;
-
-class SelectControl extends AbstractPageBuilderFormControl
+final class SelectControl extends AbstractSelectControl
 {
-    protected function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setRequired('choices');
-        $resolver->setAllowedTypes('choices', 'array');
-        $resolver->setNormalizer('choices', static function (Options $options, array $choices) {
-            return array_map(
-                fn ($choice, $label) => ['label' => $label, 'value' => $choice],
-                array_keys($choices),
-                $choices,
-            );
-        });
-    }
 }
