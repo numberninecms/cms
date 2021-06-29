@@ -108,8 +108,8 @@ export const EVENT_SLIDABLE_INPUT_STOP_DRAGGING = 'slidable-input:stop-dragging'
 
 export type FormComponentEvents = {
     [EVENT_SLIDABLE_INPUT_POSITION]: MouseCoordinatesEvent;
-    [EVENT_SLIDABLE_INPUT_START_DRAGGING]: void;
-    [EVENT_SLIDABLE_INPUT_STOP_DRAGGING]: void;
+    [EVENT_SLIDABLE_INPUT_START_DRAGGING]: string;
+    [EVENT_SLIDABLE_INPUT_STOP_DRAGGING]: string;
 };
 
 export type Events = MediaLibraryEvents & TinyEditorEvents & ModalEvents & PageBuilderEvents & FormComponentEvents;

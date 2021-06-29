@@ -10,22 +10,27 @@
 <template>
     <div class="flex">
         <input
-            :value="`${modelValue}${suffix}`"
-            :style="styles"
+            :value="`${modelValue}${suffix ? suffix : ''}`"
             type="text"
-            class="slidable-input flex-grow"
+            class="slidable-input flex-grow box-border"
+            :class="{
+                'border-t-4': border === 'top',
+                'border-r-4': border === 'right',
+                'border-b-4': border === 'bottom',
+                'border-l-4': border === 'left',
+            }"
             @input="$emit('update:modelValue', $event.target.value.replace(/[^\d.]/g, ''))"
             @dblclick="stopDragging"
             @click="stopDragging"
             @mousedown="mouseDown"
             @mousemove="mouseMove"
         />
-        <SlidableInputOverlay />
+        <SlidableInputOverlay :id="id" />
     </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from 'vue';
+import { computed, defineComponent, PropType, ref } from 'vue';
 import SlidableInputOverlay from 'admin/vue/form/SlidableInputOverlay.vue';
 import { Border } from 'admin/types/Border';
 import {
@@ -36,6 +41,7 @@ import {
 import MouseCoordinatesEvent from 'admin/events/MouseCoordinatesEvent';
 import { eventBus } from 'admin/admin';
 import Point2D from 'admin/interfaces/Point2D';
+import { v4 as uuidv4 } from 'uuid';
 
 export default defineComponent({
     name: 'SlidableInput',
@@ -67,6 +73,7 @@ export default defineComponent({
         const mouse: { down: boolean; move: boolean } = { down: false, move: false };
         let originalPosition: Point2D | undefined;
         let originalValue = 0;
+        const id = ref(uuidv4());
 
         function mouseDown(event: MouseEvent): void {
             mouse.down = true;
@@ -79,7 +86,7 @@ export default defineComponent({
             if (mouse.down) {
                 if (!mouse.move) {
                     mouse.move = true;
-                    eventBus.emit(EVENT_SLIDABLE_INPUT_START_DRAGGING);
+                    eventBus.emit(EVENT_SLIDABLE_INPUT_START_DRAGGING, id.value);
                     eventBus.on(EVENT_SLIDABLE_INPUT_POSITION, updatePosition);
                 }
             } else {
@@ -87,12 +94,15 @@ export default defineComponent({
             }
         }
 
-        function stopDragging(): void {
-            eventBus.all.delete(EVENT_SLIDABLE_INPUT_STOP_DRAGGING);
-            eventBus.all.delete(EVENT_SLIDABLE_INPUT_POSITION);
-            mouse.move = mouse.down = false;
-            originalValue = 0;
-            originalPosition = undefined;
+        function stopDragging(dragId): void {
+            if (id.value === dragId) {
+                eventBus.all.delete(EVENT_SLIDABLE_INPUT_STOP_DRAGGING);
+                eventBus.all.delete(EVENT_SLIDABLE_INPUT_POSITION);
+                mouse.move = mouse.down = false;
+                originalValue = 0;
+                originalPosition = undefined;
+                console.log('stop');
+            }
         }
 
         function updatePosition(event?: MouseCoordinatesEvent): void {
@@ -113,13 +123,9 @@ export default defineComponent({
             emit('update:modelValue', newValue);
         }
 
-        const styles = computed(() => {
-            return props.border ? `border-${props.border}: 1px solid` : '';
-        });
-
         return {
+            id,
             dragging: computed(() => mouse.down && mouse.move),
-            styles,
             mouseDown,
             mouseMove,
             stopDragging,

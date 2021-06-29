@@ -16,6 +16,7 @@ import FormControlTextAlignment from 'admin/vue/form/controls/FormControlTextAli
 import FormControlButtonToggle from 'admin/vue/form/controls/FormControlButtonToggle.vue';
 import FormControlHorizontalAlignment from 'admin/vue/form/controls/FormControlHorizontalAlignment.vue';
 import FormControlVerticalAlignment from 'admin/vue/form/controls/FormControlVerticalAlignment.vue';
+import FormControlBorders from 'admin/vue/form/controls/FormControlBorders.vue';
 
 export default {
     FormControlTextBox,
@@ -27,4 +28,5 @@ export default {
     FormControlHorizontalAlignment,
     FormControlVerticalAlignment,
     FormControlButtonToggle,
+    FormControlBorders,
 };

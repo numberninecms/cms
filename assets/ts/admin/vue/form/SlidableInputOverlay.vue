@@ -22,12 +22,20 @@ import { eventBus } from 'admin/admin';
 
 export default defineComponent({
     name: 'SlidableInputOverlay',
-    setup() {
+    props: {
+        id: {
+            type: String,
+            required: true,
+        },
+    },
+    setup(props) {
         const dragging = ref(false);
 
         onMounted(() => {
-            eventBus.on(EVENT_SLIDABLE_INPUT_START_DRAGGING, () => {
-                dragging.value = true;
+            eventBus.on(EVENT_SLIDABLE_INPUT_START_DRAGGING, (id) => {
+                if (id === props.id) {
+                    dragging.value = true;
+                }
             });
         });
 
@@ -45,7 +53,7 @@ export default defineComponent({
         }
 
         function stopDrag() {
-            eventBus.emit(EVENT_SLIDABLE_INPUT_STOP_DRAGGING);
+            eventBus.emit(EVENT_SLIDABLE_INPUT_STOP_DRAGGING, props.id);
             dragging.value = false;
         }
 
