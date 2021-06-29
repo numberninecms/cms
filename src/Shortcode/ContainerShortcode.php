@@ -13,6 +13,7 @@ namespace NumberNine\Shortcode;
 
 use NumberNine\Annotation\Shortcode;
 use NumberNine\Model\PageBuilder\Control\BordersControl;
+use NumberNine\Model\PageBuilder\Control\ButtonToggleControl;
 use NumberNine\Model\PageBuilder\Control\FlexAlignControl;
 use NumberNine\Model\PageBuilder\Control\FlexJustifyControl;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
@@ -25,18 +26,22 @@ use function NumberNine\Common\Util\ArrayUtil\array_set_if_value_exists;
 
 /**
  * @Shortcode(
- *     name="flex_row",
- *     label="Flex row",
+ *     name="container",
+ *     label="Container",
  *     container=true,
  *     icon="mdi-table-row",
  *     siblingsPosition={"top", "bottom"}
  * )
  */
-final class FlexRowShortcode extends AbstractShortcode implements EditableShortcodeInterface
+final class ContainerShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
     public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void
     {
         $builder
+            ->add('orientation', ButtonToggleControl::class, ['choices' => [
+                'horizontal' => 'Horizontal',
+                'vertical' => 'Vertical',
+            ]])
             ->add('justify', FlexJustifyControl::class, ['label' => 'Horizontal alignment'])
             ->add('align', FlexAlignControl::class, ['label' => 'Vertical alignment'])
             ->add('margin', BordersControl::class, ['borders' => ['top', 'bottom']])
@@ -48,6 +53,7 @@ final class FlexRowShortcode extends AbstractShortcode implements EditableShortc
     {
         $resolver->setDefaults([
             'content' => '',
+            'orientation' => 'horizontal',
             'justify' => 'start',
             'align' => 'start',
             'margin' => '0 auto',
