@@ -16,7 +16,7 @@ use NumberNine\Model\PageBuilder\Control\BordersControl;
 use NumberNine\Model\PageBuilder\Control\ColorControl;
 use NumberNine\Model\PageBuilder\Control\OnOffSwitchControl;
 use NumberNine\Model\PageBuilder\Control\SliderInputControl;
-use NumberNine\Model\PageBuilder\Control\TextAlignControl;
+use NumberNine\Model\PageBuilder\Control\TextAlignmentControl;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
@@ -31,7 +31,7 @@ final class DividerShortcode extends AbstractShortcode implements EditableShortc
     {
         $builder
             ->add('fullWidth', OnOffSwitchControl::class, ['label' => 'Full width'])
-            ->add('align', TextAlignControl::class, ['label' => 'Align'])
+            ->add('align', TextAlignmentControl::class, ['label' => 'Align'])
             ->add('width', SliderInputControl::class, [
                 'label' => 'Width',
                 'min' => 30,

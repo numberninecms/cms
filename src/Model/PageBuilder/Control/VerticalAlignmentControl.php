@@ -13,6 +13,6 @@ namespace NumberNine\Model\PageBuilder\Control;
 
 use NumberNine\Model\PageBuilder\AbstractPageBuilderFormControl;
 
-class FlexJustifyControl extends AbstractPageBuilderFormControl
+final class VerticalAlignmentControl extends AbstractPageBuilderFormControl
 {
 }

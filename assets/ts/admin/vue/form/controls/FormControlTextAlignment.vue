@@ -40,7 +40,7 @@ import { TextAlignment } from 'admin/types/TextAlignment';
 import ButtonGroup from 'admin/vue/form/ButtonGroup.vue';
 
 export default defineComponent({
-    name: 'FormControlTextAlign',
+    name: 'FormControlTextAlignment',
     components: { ButtonGroup },
     props: {
         value: {

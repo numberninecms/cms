@@ -14,8 +14,8 @@ namespace NumberNine\Shortcode;
 use NumberNine\Annotation\Shortcode;
 use NumberNine\Model\PageBuilder\Control\BordersControl;
 use NumberNine\Model\PageBuilder\Control\ButtonToggleControl;
-use NumberNine\Model\PageBuilder\Control\FlexAlignControl;
-use NumberNine\Model\PageBuilder\Control\FlexJustifyControl;
+use NumberNine\Model\PageBuilder\Control\VerticalAlignmentControl;
+use NumberNine\Model\PageBuilder\Control\HorizontalAlignmentControl;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
@@ -42,8 +42,8 @@ final class ContainerShortcode extends AbstractShortcode implements EditableShor
                 'horizontal' => 'Horizontal',
                 'vertical' => 'Vertical',
             ]])
-            ->add('justify', FlexJustifyControl::class, ['label' => 'Horizontal alignment'])
-            ->add('align', FlexAlignControl::class, ['label' => 'Vertical alignment'])
+            ->add('justify', HorizontalAlignmentControl::class, ['label' => 'Horizontal alignment'])
+            ->add('align', VerticalAlignmentControl::class, ['label' => 'Vertical alignment'])
             ->add('margin', BordersControl::class, ['borders' => ['top', 'bottom']])
             ->add('padding', BordersControl::class)
         ;

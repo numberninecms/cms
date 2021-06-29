@@ -1,5 +1,3 @@
-<?php
-
 /*
  * This file is part of the NumberNine package.
  *
@@ -9,10 +7,4 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Model\PageBuilder\Control;
-
-use NumberNine\Model\PageBuilder\AbstractPageBuilderFormControl;
-
-class FlexAlignControl extends AbstractPageBuilderFormControl
-{
-}
+export type JustifyAlignment = 'start' | 'center' | 'end' | 'between' | 'around';

@@ -13,6 +13,6 @@ namespace NumberNine\Model\PageBuilder\Control;
 
 use NumberNine\Model\PageBuilder\AbstractPageBuilderFormControl;
 
-class TextAlignControl extends AbstractPageBuilderFormControl
+final class TextAlignmentControl extends AbstractPageBuilderFormControl
 {
 }

@@ -12,8 +12,9 @@ import FormControlSlidableInput from 'admin/vue/form/controls/FormControlSlidabl
 import FormControlSlider from 'admin/vue/form/controls/FormControlSlider.vue';
 import FormControlSliderInput from 'admin/vue/form/controls/FormControlSliderInput.vue';
 import FormControlSelect from 'admin/vue/form/controls/FormControlSelect.vue';
-import FormControlTextAlign from 'admin/vue/form/controls/FormControlTextAlign.vue';
+import FormControlTextAlignment from 'admin/vue/form/controls/FormControlTextAlignment.vue';
 import FormControlButtonToggle from 'admin/vue/form/controls/FormControlButtonToggle.vue';
+import FormControlHorizontalAlignment from 'admin/vue/form/controls/FormControlHorizontalAlignment.vue';
 
 export default {
     FormControlTextBox,
@@ -21,6 +22,7 @@ export default {
     FormControlSliderInput,
     FormControlSlidableInput,
     FormControlSelect,
-    FormControlTextAlign,
+    FormControlTextAlignment,
+    FormControlHorizontalAlignment,
     FormControlButtonToggle,
 };
