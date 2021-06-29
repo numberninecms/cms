@@ -22,7 +22,7 @@ export default defineComponent({
     name: 'FormControlTextBox',
     props: {
         value: {
-            type: String,
+            type: [String, Number],
             required: true,
         },
         parameters: {

@@ -11,6 +11,14 @@
     <div v-if="model.data" class="flex flex-col">
         <label class="font-semibold text-quaternary">{{ parameters.label }}</label>
         <div class="grid grid-cols-4 gap-2 items-stretch">
+            <div v-if="hasBorder('left')" class="col-span-1 flex">
+                <SlidableInput
+                    v-model="model.data.left"
+                    class="items-stretch"
+                    border="left"
+                    @update:modelValue="updateValue"
+                />
+            </div>
             <div v-if="hasBorder('top')" class="col-span-1 flex">
                 <SlidableInput
                     v-model="model.data.top"
@@ -32,14 +40,6 @@
                     v-model="model.data.bottom"
                     class="items-stretch"
                     border="bottom"
-                    @update:modelValue="updateValue"
-                />
-            </div>
-            <div v-if="hasBorder('left')" class="col-span-1 flex">
-                <SlidableInput
-                    v-model="model.data.left"
-                    class="items-stretch"
-                    border="left"
                     @update:modelValue="updateValue"
                 />
             </div>
