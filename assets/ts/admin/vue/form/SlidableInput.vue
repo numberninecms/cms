@@ -101,7 +101,6 @@ export default defineComponent({
                 mouse.move = mouse.down = false;
                 originalValue = 0;
                 originalPosition = undefined;
-                console.log('stop');
             }
         }
 

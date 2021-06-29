@@ -30,6 +30,7 @@ import PageBuilderRequestForHighlightComponentEvent from 'admin/events/PageBuild
 import PageBuilderRequestForChangeComponentsTreeEvent from 'admin/events/PageBuilderRequestForChangeComponentsTreeEvent';
 import PageBuilderRequestForAddToContentEvent from 'admin/events/PageBuilderRequestForAddToContentEvent';
 import { PageBuilderRequestForChangeViewportSizeEvent } from 'admin/events/PageBuilderRequestForChangeViewportSizeEvent';
+import { SplitterDraggingEvent } from 'admin/events/SplitterDraggingEvent';
 
 export const EVENT_MEDIA_UPLOADER_FILE_UPLOADED = 'media-uploader:file-uploaded';
 export const EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_CLICKED = 'media-thumbnails-list:thumbnail-clicked';
@@ -112,4 +113,15 @@ export type FormComponentEvents = {
     [EVENT_SLIDABLE_INPUT_STOP_DRAGGING]: string;
 };
 
-export type Events = MediaLibraryEvents & TinyEditorEvents & ModalEvents & PageBuilderEvents & FormComponentEvents;
+export const EVENT_SPLITTER_DRAGGING = 'splitter:dragging';
+
+export type SplitterEvents = {
+    [EVENT_SPLITTER_DRAGGING]: SplitterDraggingEvent;
+};
+
+export type Events = MediaLibraryEvents &
+    TinyEditorEvents &
+    ModalEvents &
+    PageBuilderEvents &
+    FormComponentEvents &
+    SplitterEvents;
