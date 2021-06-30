@@ -10,13 +10,11 @@
 <template>
     <div class="btn-group" role="group" aria-label="Button group">
         <button
-            v-for="(option, index) in options"
+            v-for="(option) in options"
             :key="option.value"
             :title="option.label"
             class="btn flex-grow justify-center items-center"
             :class="{
-                'rounded-l-lg': index === 0,
-                'rounded-r-lg': index === options.length - 1,
                 'btn-color-white': option.value !== modelValue,
                 'btn-color-primary': option.value === modelValue,
             }"

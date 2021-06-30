@@ -39,17 +39,27 @@ import { ViewportSize } from 'admin/types/ViewportSize';
 import { Primitive } from 'admin/types/Primitive';
 import { OverridablePrimitive } from 'admin/types/OverridablePrimitive';
 import formControls from 'admin/vue/form/formControls';
+import { useColorStore } from 'admin/vue/stores/color';
 
 export default defineComponent({
     name: 'PageBuilderComponentForm',
     components: formControls,
-    setup() {
+    props: {
+        colorsUrl: {
+            type: String,
+            required: true,
+        },
+    },
+    setup(props) {
+        const colorStore = useColorStore();
         const component: Ref<PageComponent | undefined> = ref(undefined);
         let forms: GenericObject<Form> | undefined;
         const form = computed(() => (component.value?.name && forms ? forms[component.value.name] : undefined));
         let viewportSize: ViewportSize = 'lg';
 
         onMounted(() => {
+            void colorStore.setup(props.colorsUrl);
+
             eventBus.on(EVENT_PAGE_BUILDER_COMPONENTS_LOADED, (event) => {
                 forms = event.forms;
             });

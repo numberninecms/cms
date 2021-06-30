@@ -10,9 +10,20 @@
 import { Controller } from 'stimulus';
 import { createApp } from 'vue';
 import PageBuilderComponentForm from 'admin/vue/components/builder/PageBuilderComponentForm.vue';
+import { createPinia } from 'pinia';
 
 export default class extends Controller {
+    public static values = {
+        colorsUrl: String,
+    };
+
+    private readonly colorsUrlValue: string;
+
     public connect(): void {
-        createApp(PageBuilderComponentForm).mount(this.element);
+        createApp(PageBuilderComponentForm, {
+            colorsUrl: this.colorsUrlValue,
+        })
+            .use(createPinia())
+            .mount(this.element);
     }
 }

@@ -1,5 +1,6 @@
 {
     "devDependencies": {
+        "@ckpack/vue-color": "^0.0.3",
         "@fortawesome/fontawesome-free": "^5.15.2",
         "@hotwired/turbo": "^7.0.0-beta.7",
         "@mdi/font": "^5.9.55",

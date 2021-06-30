@@ -27,6 +27,22 @@ form {
     }
 }
 
+.input-group {
+    input, button {
+        @apply rounded-none;
+    }
+
+    input:not(.append),
+    .prepend {
+        @apply rounded-l;
+    }
+
+    button:not(.prepend),
+    .append {
+        @apply rounded-r;
+    }
+}
+
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
     [type="range"]::-webkit-slider-thumb {
         width: 15px;

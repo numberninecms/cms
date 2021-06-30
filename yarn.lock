@@ -875,6 +875,11 @@
     "@babel/helper-validator-identifier" "^7.14.5"
     to-fast-properties "^2.0.0"
 
+"@ckpack/vue-color@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@ckpack/vue-color/-/vue-color-0.0.3.tgz#0774f2d2878e5a5833987f2547a9b2cb52c0e855"
+  integrity sha512-UAVYBLbE6vLZRB+UEkYU3QMBrHc8UJGbckRSASgs5x1GKLdH/hg1wwrg0vHtYhBkKze+GrSCc91V1dvoFTY6Kw==
+
 "@discoveryjs/json-ext@^0.5.0":
   version "0.5.3"
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.3.tgz#90420f9f9c6d3987f176a19a7d8e764271a2f55d"
