@@ -43,6 +43,40 @@ form {
     }
 }
 
+.toggle-group {
+    @apply relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in;
+}
+
+.toggle-checkbox {
+    @apply
+        absolute
+        block
+        w-6 h-6
+        rounded-full
+        bg-white
+        border-4 border-gray-300
+        focus:ring-0 focus:ring-offset-0
+        appearance-none
+        cursor-pointer;
+
+    &:checked {
+        @apply
+            right-0
+            bg-none bg-white
+            border-primary
+            hover:bg-white hover:border-primary
+            focus:bg-white focus:border-primary;
+
+        + .toggle-label {
+            @apply bg-primary;
+        }
+    }
+}
+
+.toggle-label {
+    @apply block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer;
+}
+
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
     [type="range"]::-webkit-slider-thumb {
         width: 15px;
