@@ -50,7 +50,7 @@ services:
         restart: unless-stopped
 
     blackfire:
-        image: blackfire/blackfire
+        image: blackfire/blackfire:2
         restart: unless-stopped
 
     maildev:
