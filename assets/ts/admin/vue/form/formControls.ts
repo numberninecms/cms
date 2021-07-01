@@ -19,6 +19,7 @@ import FormControlVerticalAlignment from 'admin/vue/form/controls/FormControlVer
 import FormControlBorders from 'admin/vue/form/controls/FormControlBorders.vue';
 import FormControlColor from 'admin/vue/form/controls/FormControlColor.vue';
 import FormControlOnOffSwitch from 'admin/vue/form/controls/FormControlOnOffSwitch.vue';
+import FormControlImage from 'admin/vue/form/controls/FormControlImage.vue';
 
 export default {
     FormControlTextBox,
@@ -33,4 +34,5 @@ export default {
     FormControlBorders,
     FormControlColor,
     FormControlOnOffSwitch,
+    FormControlImage,
 };

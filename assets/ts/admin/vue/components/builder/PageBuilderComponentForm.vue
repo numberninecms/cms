@@ -40,6 +40,7 @@ import { Primitive } from 'admin/types/Primitive';
 import { OverridablePrimitive } from 'admin/types/OverridablePrimitive';
 import formControls from 'admin/vue/form/formControls';
 import { useColorStore } from 'admin/vue/stores/color';
+import { useContentEntityStore } from 'admin/vue/stores/contentEntity';
 
 export default defineComponent({
     name: 'PageBuilderComponentForm',
@@ -49,9 +50,14 @@ export default defineComponent({
             type: String,
             required: true,
         },
+        contentEntitySingleUrlValue: {
+            type: String,
+            required: true,
+        },
     },
     setup(props) {
         const colorStore = useColorStore();
+        const contentEntityStore = useContentEntityStore();
         const component: Ref<PageComponent | undefined> = ref(undefined);
         let forms: GenericObject<Form> | undefined;
         const form = computed(() => (component.value?.name && forms ? forms[component.value.name] : undefined));
@@ -59,6 +65,7 @@ export default defineComponent({
 
         onMounted(() => {
             void colorStore.setup(props.colorsUrl);
+            contentEntityStore.setup({ fetchSingleEntityUrl: props.contentEntitySingleUrlValue });
 
             eventBus.on(EVENT_PAGE_BUILDER_COMPONENTS_LOADED, (event) => {
                 forms = event.forms;
