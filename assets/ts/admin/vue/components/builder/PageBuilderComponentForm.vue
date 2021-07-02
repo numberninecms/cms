@@ -13,7 +13,7 @@
         <component
             :is="`FormControl${control.name}`"
             v-for="(control, field) in form"
-            :key="field"
+            :key="`${component?.id}-${field}`"
             :value="fieldValue(field)"
             :parameters="control.parameters"
             class="mb-2"

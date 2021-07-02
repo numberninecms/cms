@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeUpdate, onMounted, PropType, reactive, Ref, ref } from 'vue';
+import { computed, defineComponent, onBeforeUpdate, onMounted, PropType, reactive } from 'vue';
 import FormControlParameters from 'admin/interfaces/FormControlParameters';
 import { Border } from 'admin/types/Border';
 import SlidableInput from 'admin/vue/form/SlidableInput.vue';
