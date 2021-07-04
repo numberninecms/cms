@@ -41,7 +41,7 @@ export default defineComponent({
             default: 'primary',
         },
     },
-    emits: ['update:modelValue'],
+    emits: ['update:modelValue', 'input-computed'],
     setup(props, { emit }) {
         const contentEntityStore = useContentEntityStore();
         const file: Ref<MediaFile | undefined> = ref(undefined);
@@ -51,6 +51,7 @@ export default defineComponent({
                 file.value = (await contentEntityStore.fetchSingleEntityById(
                     typeof props.modelValue === 'string' ? parseInt(props.modelValue) : props.modelValue ?? 0,
                 )) as MediaFile;
+                emit('input-computed', file.value);
             }
         });
 
@@ -64,6 +65,7 @@ export default defineComponent({
                 if (files.length > 0) {
                     file.value = files[0];
                     emit('update:modelValue', file.value?.id);
+                    emit('input-computed', file.value);
                 }
             });
         }

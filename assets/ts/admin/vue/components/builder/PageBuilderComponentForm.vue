@@ -16,9 +16,10 @@
             :key="`${component?.id}-${field}`"
             :value="fieldValue(field)"
             :parameters="control.parameters"
+            :field="field"
             class="mb-2"
             @input="updateParameter(field, $event)"
-            @input-computed="updateComputed(field, $event)"
+            @input-computed="updateComputedParameter(field, $event)"
         />
     </div>
 </template>
@@ -109,7 +110,7 @@ export default defineComponent({
             );
         }
 
-        function updateParameter(parameter: string, value: OverridablePrimitive) {
+        function updateParameter(parameter: string, value: OverridablePrimitive): void {
             // A control can override which field will be updated instead of itself
             if (isValueOverridden(value)) {
                 parameter = (value as { parameter: string; value: Primitive }).parameter;
@@ -129,11 +130,26 @@ export default defineComponent({
             });
         }
 
+        function updateComputedParameter(parameter: string, value: any): void {
+            // A control can override which field will be updated instead of itself
+            if (isValueOverridden(value)) {
+                parameter = (value as { parameter: string; value: Primitive }).parameter;
+                value = (value as { parameter: string; value: Primitive }).value;
+            }
+
+            component.value!.computed[parameter] = value;
+
+            eventBus.emit(EVENT_PAGE_BUILDER_COMPONENT_UPDATED, {
+                component: component.value!,
+            });
+        }
+
         return {
             component,
             form,
             fieldValue,
             updateParameter,
+            updateComputedParameter,
         };
     },
 });

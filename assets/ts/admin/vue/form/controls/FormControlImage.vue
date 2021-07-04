@@ -10,7 +10,12 @@
 <template>
     <div class="flex flex-col">
         <label class="font-semibold text-quaternary">{{ parameters.label }}</label>
-        <MediaSelect :modelValue="value" class="w-full" @update:modelValue="$emit('input', $event)" />
+        <MediaSelect
+            :modelValue="value"
+            class="w-full"
+            @update:modelValue="$emit('input', $event)"
+            @input-computed="$emit('input-computed', $event)"
+        />
     </div>
 </template>
 
@@ -32,6 +37,6 @@ export default defineComponent({
             required: true,
         },
     },
-    emits: ['input'],
+    emits: ['input', 'input-computed'],
 });
 </script>
