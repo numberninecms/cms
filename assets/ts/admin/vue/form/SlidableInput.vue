@@ -20,10 +20,11 @@
                 'border-l-4': border === 'left',
             }"
             @input="$emit('update:modelValue', $event.target.value.replace(/[^\d.]/g, ''))"
-            @dblclick="stopDragging"
-            @click="stopDragging"
+            @dblclick="stopDragging(id)"
+            @click="stopDragging(id)"
             @mousedown="mouseDown"
             @mousemove="mouseMove"
+            @keydown="stopDragging(id)"
         />
         <SlidableInputOverlay :id="id" />
     </div>
