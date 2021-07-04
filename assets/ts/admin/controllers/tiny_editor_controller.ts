@@ -34,6 +34,7 @@ import 'tinymce/plugins/paste';
 import 'tinymce/plugins/help';
 import 'tinymce/plugins/wordcount';
 import 'admin/tinymce/plugins/medialibrary';
+import createTinymceOptions from 'admin/tinymce/createTinymceOptions';
 
 export default class extends Controller {
     public static values = {
@@ -46,34 +47,12 @@ export default class extends Controller {
     private readonly editorTarget: HTMLTextAreaElement;
 
     public connect(): void {
-        void tinymce.init({
-            target: this.editorTarget,
-            theme: 'silver',
-            skin: false,
-            content_css: this.cssValue ?? false,
-            content_style: '#tinymce { padding: 1rem !important; }',
-            branding: false,
-            height: 500,
-            menubar: false,
-            relative_urls: false,
-            plugins: [
-                'advlist autolink lists link image imagetools charmap print preview anchor',
-                'searchreplace visualblocks code',
-                'insertdatetime media table paste code help wordcount',
-                'medialibrary',
-                'autoresize',
-            ],
-            toolbar:
-                'medialibrary | undo redo copy paste | formatselect | bold italic backcolor | \
-                alignleft aligncenter alignright alignjustify | \
-                bullist numlist outdent indent | charmap anchor | searchreplace | \
-                removeformat | code | wordcount | help',
-            formats: {
-                alignleft: { selector: 'img', styles: { float: 'left', margin: '10px 10px 10px 0' } },
-                alignright: { selector: 'img', styles: { float: 'right', margin: '10px 0 10px 10px' } },
-                aligncenter: { selector: 'img', styles: { display: 'block', margin: '10px auto' } },
-            },
-        });
+        void tinymce.init(
+            createTinymceOptions({
+                target: this.editorTarget,
+                css: this.cssValue,
+            }),
+        );
     }
 
     public disconnect(): void {

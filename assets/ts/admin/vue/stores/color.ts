@@ -10,6 +10,7 @@
 import { defineStore } from 'pinia';
 import Color from 'admin/interfaces/Color';
 import axios from 'axios';
+import { useApiStore } from 'admin/vue/stores/api';
 
 export const useColorStore = defineStore({
     id: 'color',
@@ -19,8 +20,9 @@ export const useColorStore = defineStore({
         };
     },
     actions: {
-        async setup(url: string): Promise<void> {
-            const response = await axios.get(url);
+        async fetchColors(): Promise<void> {
+            const api = useApiStore();
+            const response = await axios.get(api.colorsUrl);
             this.colors = response.data;
         },
     },

@@ -40,7 +40,7 @@ import { Primitive } from 'admin/types/Primitive';
 import { OverridablePrimitive } from 'admin/types/OverridablePrimitive';
 import formControls from 'admin/vue/form/formControls';
 import { useColorStore } from 'admin/vue/stores/color';
-import { useContentEntityStore } from 'admin/vue/stores/contentEntity';
+import { useApiStore } from 'admin/vue/stores/api';
 
 export default defineComponent({
     name: 'PageBuilderComponentForm',
@@ -50,22 +50,28 @@ export default defineComponent({
             type: String,
             required: true,
         },
-        contentEntitySingleUrlValue: {
+        contentEntitySingleUrl: {
+            type: String,
+            required: true,
+        },
+        frontendCssUrl: {
             type: String,
             required: true,
         },
     },
     setup(props) {
         const colorStore = useColorStore();
-        const contentEntityStore = useContentEntityStore();
+        const apiStore = useApiStore();
         const component: Ref<PageComponent | undefined> = ref(undefined);
         let forms: GenericObject<Form> | undefined;
         const form = computed(() => (component.value?.name && forms ? forms[component.value.name] : undefined));
         let viewportSize: ViewportSize = 'lg';
 
         onMounted(() => {
-            void colorStore.setup(props.colorsUrl);
-            contentEntityStore.setup({ fetchSingleEntityUrl: props.contentEntitySingleUrlValue });
+            apiStore.colorsUrl = props.colorsUrl;
+            apiStore.fetchSingleEntityUrl = props.contentEntitySingleUrl;
+            apiStore.frontendCssUrl = props.frontendCssUrl;
+            void colorStore.fetchColors();
 
             eventBus.on(EVENT_PAGE_BUILDER_COMPONENTS_LOADED, (event) => {
                 forms = event.forms;

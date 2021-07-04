@@ -8,6 +8,7 @@
         "@symfony/ux-turbo": "file:vendor/symfony/ux-turbo/Resources/assets",
         "@symfony/webpack-encore": "^1.0.2",
         "@tailwindcss/forms": "^0.3.2",
+        "@tinymce/tinymce-vue": "^4.0.3",
         "@types/dateformat": "^3.0.1",
         "@types/mathjs": "^9.3.2",
         "@types/prismjs": "^1.16.5",

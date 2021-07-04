@@ -38,3 +38,9 @@ h-10
 self-start
 self-end
 justify-self-start
+justify-start
+justify-end
+justify-center
+justify-between
+justify-around
+justify-evenly
