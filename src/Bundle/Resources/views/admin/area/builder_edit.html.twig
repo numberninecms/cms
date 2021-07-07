@@ -9,6 +9,7 @@
             <button type="button"
                     title="{{ 'Save page'|trans }}"
                     class="btn btn-color-white btn-style-flat"
+                    data-action="customize--builder-toolbar#save"
             >
                 <i class="fas fa-save"></i>
             </button>
@@ -50,48 +51,51 @@
 {% endblock %}
 
 {% block content %}
-    <div class="flex-1 flex min-h-full" data-controller="splitter">
-        <div class="flex-1 flex min-h-full justify-center"
-             data-controller="customize--builder customize--builder-watcher"
-             data-customize--builder-frontend-url-value="{{ path('numbernine_homepage', {n9: 'admin', area: area}) }}"
-             data-customize--builder-components-api-url-value="{{ path('numbernine_admin_pagebuilder_area_get_components', {area: area}) }}"
-             data-splitter-target="panel"
-        >
-        </div>
-        <div class="hidden lg:flex flex-col"
-             data-controller="customize--builder-sidebar"
-             data-splitter-target="panel"
-             data-min-size="300"
-        >
-            <div data-customize--builder-sidebar-target="panel" data-id="tree"></div>
-            <div data-customize--builder-sidebar-target="panel" data-id="componentsList" style="display: none">
-                <div class="flex flex-wrap gap-3 p-3">
-                    {% for name, shortcode in shortcodes %}
-                        <button
-                            type="button"
-                            class="border border-primary flex items-center justify-center h-24 w-24"
-                            data-action="customize--builder-sidebar#select"
-                            data-shortcode="{{ name }}"
-                        >
-                            <span class="flex flex-col text-center text-primary leading-4 gap-2 px-2 text-sm mt-3">
-                                <i class="{% if shortcode.icon starts with 'mdi' %}mdi mdi-36px {{ shortcode.icon }}{% else %}text-3xl fas fa-{{ shortcode.icon }}{% endif %}"></i>
-                                <span>{{ shortcode.label }}</span>
-                            </span>
-                        </button>
-                    {% endfor %}
-                </div>
-            </div>
-            <div data-customize--builder-sidebar-target="panel"
-                 data-controller="customize--builder-form"
-                 data-customize--builder-form-colors-url-value="{{ path('numbernine_admin_theme_colors_get_collection') }}"
-                 data-customize--builder-form-frontend-css-url-value="{{ N9_theme_stylesheet_urls()|join(',') }}"
-                 data-customize--builder-form-content-entity-single-url-value="{{ path('numbernine_admin_contententity_get_item', {
-                     type: '__type__',
-                     id: '__id__',
-                 }) }}"
-                 data-id="componentForm"
-                 style="display: none"
+    <div class="flex flex-col min-h-full">
+        {% include '@NumberNine/admin/util/flash_single.html.twig' %}
+        <div class="flex-1 flex min-h-full" data-controller="splitter">
+            <div class="flex-1 flex min-h-full justify-center"
+                 data-controller="customize--builder customize--builder-watcher"
+                 data-customize--builder-frontend-url-value="{{ path('numbernine_homepage', {n9: 'admin', area: area}) }}"
+                 data-customize--builder-components-api-url-value="{{ path('numbernine_admin_pagebuilder_area_get_components', {area: area}) }}"
+                 data-splitter-target="panel"
             >
+            </div>
+            <div class="hidden lg:flex flex-col"
+                 data-controller="customize--builder-sidebar"
+                 data-splitter-target="panel"
+                 data-min-size="300"
+            >
+                <div data-customize--builder-sidebar-target="panel" data-id="tree"></div>
+                <div data-customize--builder-sidebar-target="panel" data-id="componentsList" style="display: none">
+                    <div class="flex flex-wrap gap-3 p-3">
+                        {% for name, shortcode in shortcodes %}
+                            <button
+                                type="button"
+                                class="border border-primary flex items-center justify-center h-24 w-24"
+                                data-action="customize--builder-sidebar#select"
+                                data-shortcode="{{ name }}"
+                            >
+                                <span class="flex flex-col text-center text-primary leading-4 gap-2 px-2 text-sm mt-3">
+                                    <i class="{% if shortcode.icon starts with 'mdi' %}mdi mdi-36px {{ shortcode.icon }}{% else %}text-3xl fas fa-{{ shortcode.icon }}{% endif %}"></i>
+                                    <span>{{ shortcode.label }}</span>
+                                </span>
+                            </button>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div data-customize--builder-sidebar-target="panel"
+                     data-controller="customize--builder-form"
+                     data-customize--builder-form-colors-url-value="{{ path('numbernine_admin_theme_colors_get_collection') }}"
+                     data-customize--builder-form-frontend-css-url-value="{{ N9_theme_stylesheet_urls()|join(',') }}"
+                     data-customize--builder-form-content-entity-single-url-value="{{ path('numbernine_admin_contententity_get_item', {
+                         type: '__type__',
+                         id: '__id__',
+                     }) }}"
+                     data-id="componentForm"
+                     style="display: none"
+                >
+                </div>
             </div>
         </div>
     </div>

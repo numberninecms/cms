@@ -7,11 +7,8 @@
  * file that was distributed with this source code.
  */
 
-import { Controller } from 'stimulus';
+import PageComponent from 'admin/interfaces/PageComponent';
 
-export default class extends Controller {
-    public dismiss(event: MouseEvent): void {
-        event.preventDefault();
-        (this.element as HTMLElement).style.display = 'none';
-    }
+export default interface PageBuilderComponentsComponentsSavedEvent {
+    tree: PageComponent[];
 }

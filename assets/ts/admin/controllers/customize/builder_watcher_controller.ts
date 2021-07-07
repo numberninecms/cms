@@ -12,6 +12,8 @@ import { eventBus } from 'admin/admin';
 import {
     EVENT_PAGE_BUILDER_REQUEST_FOR_DELETE_COMPONENT,
     EVENT_PAGE_BUILDER_COMPONENT_DELETED,
+    EVENT_PAGE_BUILDER_COMPONENTS_SAVED,
+    EVENT_FLASH_SHOW,
 } from 'admin/events/events';
 import PageBuilderRequestForDeleteComponentEvent from 'admin/events/PageBuilderRequestForDeleteComponentEvent';
 import Swal from 'sweetalert2';
@@ -22,7 +24,15 @@ import '@mdi/font/css/materialdesignicons.min.css';
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
     public connect(): void {
+        eventBus.on(EVENT_PAGE_BUILDER_COMPONENTS_SAVED, this.displaySaveSuccessFlash.bind(this));
         eventBus.on(EVENT_PAGE_BUILDER_REQUEST_FOR_DELETE_COMPONENT, this.deleteComponent.bind(this));
+    }
+
+    private displaySaveSuccessFlash(): void {
+        eventBus.emit(EVENT_FLASH_SHOW, {
+            label: 'success',
+            message: 'Page successfully saved!',
+        });
     }
 
     private deleteComponent(event: PageBuilderRequestForDeleteComponentEvent): void {

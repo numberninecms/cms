@@ -26,6 +26,8 @@ import {
     EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE,
     EVENT_PAGE_BUILDER_COMPONENTS_TREE_CHANGED,
     EVENT_PAGE_BUILDER_COMPONENT_UPDATED,
+    EVENT_PAGE_BUILDER_REQUEST_FOR_SAVE_COMPONENTS_TREE,
+    EVENT_PAGE_BUILDER_COMPONENTS_SAVED,
 } from 'admin/events/events';
 import { eventBus } from 'admin/admin';
 import { useMouseStore } from 'admin/vue/stores/mouse';
@@ -79,6 +81,13 @@ export default defineComponent({
                 pageBuilderStore.pageComponents = event?.tree ?? [];
 
                 eventBus.emit(EVENT_PAGE_BUILDER_COMPONENTS_TREE_CHANGED, {
+                    tree: JSON.parse(JSON.stringify(pageBuilderStore.pageComponents)),
+                });
+            });
+
+            eventBus.on(EVENT_PAGE_BUILDER_REQUEST_FOR_SAVE_COMPONENTS_TREE, () => {
+                void pageBuilderStore.saveComponents();
+                eventBus.emit(EVENT_PAGE_BUILDER_COMPONENTS_SAVED, {
                     tree: JSON.parse(JSON.stringify(pageBuilderStore.pageComponents)),
                 });
             });

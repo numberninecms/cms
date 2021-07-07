@@ -12,6 +12,7 @@ import { ViewportSize } from 'admin/types/ViewportSize';
 import { eventBus } from 'admin/admin';
 import {
     EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_VIEWPORT_SIZE_EVENT,
+    EVENT_PAGE_BUILDER_REQUEST_FOR_SAVE_COMPONENTS_TREE,
     EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_COMPONENTS_TREE,
 } from 'admin/events/events';
 
@@ -30,6 +31,10 @@ export default class extends Controller {
 
     public showTree(): void {
         eventBus.emit(EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_COMPONENTS_TREE);
+    }
+
+    public save(): void {
+        eventBus.emit(EVENT_PAGE_BUILDER_REQUEST_FOR_SAVE_COMPONENTS_TREE);
     }
 
     private changeViewportSize(size: ViewportSize) {

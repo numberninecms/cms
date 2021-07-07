@@ -167,6 +167,12 @@ export const usePageBuilderStore = defineStore({
             }
         },
 
+        async saveComponents(): Promise<void> {
+            await axios.post(this.componentsApiUrl, {
+                components: this.pageComponents,
+            });
+        },
+
         duplicateComponent(id: string): void {
             const { duplicateComponentInTree } = usePageBuilderHelpers();
             const component = this.getComponentById(id);

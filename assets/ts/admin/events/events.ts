@@ -31,6 +31,8 @@ import PageBuilderRequestForChangeComponentsTreeEvent from 'admin/events/PageBui
 import PageBuilderRequestForAddToContentEvent from 'admin/events/PageBuilderRequestForAddToContentEvent';
 import { PageBuilderRequestForChangeViewportSizeEvent } from 'admin/events/PageBuilderRequestForChangeViewportSizeEvent';
 import { SplitterDraggingEvent } from 'admin/events/SplitterDraggingEvent';
+import PageBuilderComponentsComponentsSavedEvent from 'admin/events/PageBuilderComponentsComponentsSavedEvent';
+import FlashShowEvent from 'admin/events/FlashShowEvent';
 
 export const EVENT_MEDIA_UPLOADER_FILE_UPLOADED = 'media-uploader:file-uploaded';
 export const EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_CLICKED = 'media-thumbnails-list:thumbnail-clicked';
@@ -70,12 +72,14 @@ export const EVENT_PAGE_BUILDER_COMPONENT_SELECTED = 'page-builder:component-sel
 export const EVENT_PAGE_BUILDER_COMPONENT_UPDATED = 'page-builder:component-updated';
 export const EVENT_PAGE_BUILDER_COMPONENTS_TREE_CHANGED = 'page-builder:components-tree-changed';
 export const EVENT_PAGE_BUILDER_COMPONENTS_LOADED = 'page-builder:components-loaded';
+export const EVENT_PAGE_BUILDER_COMPONENTS_SAVED = 'page-builder:components-saved';
 export const EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_SHORTCODE = 'page-builder:request-for-show-shortcode';
 export const EVENT_PAGE_BUILDER_REQUEST_FOR_DELETE_COMPONENT = 'page-builder:request-for-delete-component';
 export const EVENT_PAGE_BUILDER_REQUEST_FOR_SELECT_COMPONENT = 'page-builder:request-for-select-component';
 export const EVENT_PAGE_BUILDER_REQUEST_FOR_EDIT_COMPONENT = 'page-builder:request-for-edit-component';
 export const EVENT_PAGE_BUILDER_REQUEST_FOR_HIGHLIGHT_COMPONENT = 'page-builder:request-for-highlight-component';
 export const EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_COMPONENTS_TREE = 'page-builder:request-for-show-components-tree';
+export const EVENT_PAGE_BUILDER_REQUEST_FOR_SAVE_COMPONENTS_TREE = 'page-builder:request-for-save-components-tree';
 export const EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE = 'page-builder:request-for-change-components-tree';
 export const EVENT_PAGE_BUILDER_REQUEST_FOR_ADD_TO_CONTENT = 'page-builder:request-for-add-to-content';
 export const EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_VIEWPORT_SIZE_EVENT =
@@ -92,12 +96,14 @@ export type PageBuilderEvents = {
     [EVENT_PAGE_BUILDER_COMPONENT_UPDATED]: PageBuilderComponentUpdatedEvent;
     [EVENT_PAGE_BUILDER_COMPONENTS_TREE_CHANGED]: PageBuilderComponentsTreeChangedEvent;
     [EVENT_PAGE_BUILDER_COMPONENTS_LOADED]: PageBuilderComponentsComponentsLoadedEvent;
+    [EVENT_PAGE_BUILDER_COMPONENTS_SAVED]: PageBuilderComponentsComponentsSavedEvent;
     [EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_SHORTCODE]: PageBuilderRequestForShowShortcodeEvent;
     [EVENT_PAGE_BUILDER_REQUEST_FOR_DELETE_COMPONENT]: PageBuilderRequestForDeleteComponentEvent;
     [EVENT_PAGE_BUILDER_REQUEST_FOR_SELECT_COMPONENT]: PageBuilderRequestForSelectComponentEvent;
     [EVENT_PAGE_BUILDER_REQUEST_FOR_EDIT_COMPONENT]: PageBuilderRequestForEditComponentEvent;
     [EVENT_PAGE_BUILDER_REQUEST_FOR_HIGHLIGHT_COMPONENT]: PageBuilderRequestForHighlightComponentEvent;
     [EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_COMPONENTS_TREE]: void;
+    [EVENT_PAGE_BUILDER_REQUEST_FOR_SAVE_COMPONENTS_TREE]: void;
     [EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_COMPONENTS_TREE]: PageBuilderRequestForChangeComponentsTreeEvent;
     [EVENT_PAGE_BUILDER_REQUEST_FOR_ADD_TO_CONTENT]: PageBuilderRequestForAddToContentEvent;
     [EVENT_PAGE_BUILDER_REQUEST_FOR_CHANGE_VIEWPORT_SIZE_EVENT]: PageBuilderRequestForChangeViewportSizeEvent;
@@ -119,9 +125,16 @@ export type SplitterEvents = {
     [EVENT_SPLITTER_DRAGGING]: SplitterDraggingEvent;
 };
 
+export const EVENT_FLASH_SHOW = 'flash:show';
+
+export type FlashEvents = {
+    [EVENT_FLASH_SHOW]: FlashShowEvent;
+};
+
 export type Events = MediaLibraryEvents &
     TinyEditorEvents &
     ModalEvents &
     PageBuilderEvents &
     FormComponentEvents &
-    SplitterEvents;
+    SplitterEvents &
+    FlashEvents;

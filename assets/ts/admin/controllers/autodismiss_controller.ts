@@ -8,17 +8,22 @@
  */
 
 import { Controller } from 'stimulus';
+import { eventBus } from 'admin/admin';
+import { EVENT_FLASH_SHOW } from 'admin/events/events';
 
 export default class extends Controller {
-    public static targets = ['item'];
-
-    private readonly itemTargets: HTMLElement[];
+    private timeout: ReturnType<typeof setTimeout>;
 
     public connect(): void {
-        setTimeout(() => {
-            this.itemTargets.forEach((item) => {
-                item.parentNode && item.parentNode.removeChild(item);
-            });
+        eventBus.on(EVENT_FLASH_SHOW, this.dismissAfterTimeout.bind(this));
+        this.dismissAfterTimeout();
+    }
+
+    private dismissAfterTimeout(): void {
+        clearTimeout(this.timeout);
+
+        this.timeout = setTimeout(() => {
+            (this.element as HTMLElement).style.display = 'none';
         }, 3000);
     }
 }
