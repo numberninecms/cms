@@ -33,6 +33,7 @@ import {
     EVENT_PAGE_BUILDER_COMPONENT_SELECTED,
     EVENT_PAGE_BUILDER_REQUEST_FOR_EDIT_COMPONENT,
 } from 'admin/events/events';
+import usePageBuilderHelpers from 'admin/vue/functions/pageBuilderHelpers';
 
 export default defineComponent({
     name: 'PageBuilderComponent',
@@ -44,6 +45,7 @@ export default defineComponent({
     },
     setup(props) {
         const pageBuilderStore = usePageBuilderStore();
+        const { preloadComponent } = usePageBuilderHelpers();
         const viewSize = 'lg';
         const componentName = computed(() => `${pascalCase(props.component.name)}PageBuilderComponent`);
         const isVisible = true;
@@ -51,6 +53,8 @@ export default defineComponent({
         const mouse = reactive({ down: false, move: false });
 
         onMounted(() => {
+            preloadComponent(props.component);
+
             elementRef.value!.$el.addEventListener('mouseover', highlight);
             elementRef.value!.$el.addEventListener('mousedown', mouseDown);
             elementRef.value!.$el.addEventListener('mouseup', mouseUp);

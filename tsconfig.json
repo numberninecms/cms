@@ -21,6 +21,9 @@
             ],
             "images/*": [
                 "assets/images/*",
+            ],
+            "assets/*": [
+                "assets/*",
             ]
         },
         "types": [

@@ -87,6 +87,8 @@ webpack_encore:
         'data-turbo-track': reload
 
 doctrine:
+    dbal:
+        url: '%env(resolve:DATABASE_URL)%'
     orm:
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         metadata_cache_driver:

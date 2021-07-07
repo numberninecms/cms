@@ -20,6 +20,8 @@ import { DropPosition } from 'admin/types/DropPosition';
 import { ViewportSize } from 'admin/types/ViewportSize';
 import GenericObject from 'admin/interfaces/GenericObject';
 import Form from 'admin/interfaces/Form';
+import { eventBus } from 'admin/admin';
+import { EVENT_PAGE_BUILDER_COMPONENT_UPDATED } from 'admin/events/events';
 
 export const usePageBuilderStore = defineStore({
     id: 'pageBuilder',
@@ -196,6 +198,23 @@ export const usePageBuilderStore = defineStore({
 
         toggleContextMenu() {
             this.isContextMenuVisible = !this.isContextMenuVisible;
+        },
+
+        updateComponentComputedParameter({
+            id,
+            parameter,
+            value,
+        }: {
+            id: string;
+            parameter: string;
+            value: any;
+        }): void {
+            const component = this.getComponentById(id);
+
+            if (component) {
+                component.computed[parameter] = value;
+                eventBus.emit(EVENT_PAGE_BUILDER_COMPONENT_UPDATED, { component });
+            }
         },
     },
 });

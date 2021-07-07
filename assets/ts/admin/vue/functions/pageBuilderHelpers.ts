@@ -10,6 +10,9 @@
 import PageComponent from 'admin/interfaces/PageComponent';
 import { v4 as uuidv4 } from 'uuid';
 import { DropPosition } from 'admin/types/DropPosition';
+import { pascalCase } from 'change-case';
+import Preloader from 'admin/interfaces/Preloader';
+import * as preloaders from 'admin/vue/preloaders/preloaders';
 
 interface PageBuilderHelpers {
     findComponentInTree: (id: string, components: PageComponent[]) => PageComponent | undefined;
@@ -23,6 +26,7 @@ interface PageBuilderHelpers {
         siblingId?: string,
         position?: DropPosition,
     ) => PageComponent[];
+    preloadComponent: (component: PageComponent) => void;
 }
 
 export default function usePageBuilderHelpers(): PageBuilderHelpers {
@@ -143,6 +147,15 @@ export default function usePageBuilderHelpers(): PageBuilderHelpers {
         return tree;
     }
 
+    function preloadComponent(component: PageComponent): void {
+        const pascalName = pascalCase(component.name);
+
+        if (typeof preloaders[`${pascalName}Preloader`] === 'function') {
+            const preloader: Preloader = new preloaders[pascalName + 'Preloader'](component);
+            void preloader.preload();
+        }
+    }
+
     return {
         findComponentInTree,
         prepareTree,
@@ -150,5 +163,6 @@ export default function usePageBuilderHelpers(): PageBuilderHelpers {
         duplicateComponentInTree,
         insertComponentInTree,
         replaceComponentInTree,
+        preloadComponent,
     };
 }
