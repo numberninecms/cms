@@ -51,10 +51,6 @@ export default defineComponent({
             type: String,
             required: true,
         },
-        contentEntitySingleUrl: {
-            type: String,
-            required: true,
-        },
         frontendCssUrl: {
             type: String,
             required: true,
@@ -70,7 +66,6 @@ export default defineComponent({
 
         onMounted(() => {
             apiStore.colorsUrl = props.colorsUrl;
-            apiStore.fetchSingleEntityUrl = props.contentEntitySingleUrl;
             apiStore.frontendCssUrl = props.frontendCssUrl;
             void colorStore.fetchColors();
 

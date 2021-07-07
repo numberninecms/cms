@@ -14,8 +14,6 @@ export const useApiStore = defineStore({
     state() {
         return {
             colorsUrl: '',
-            fetchSingleEntityUrl: '',
-            fetchSingleEntityByTitleUrl: '',
             frontendCssUrl: '',
         };
     },

@@ -73,6 +73,7 @@ export default defineComponent({
         function removeImage() {
             file.value = undefined;
             emit('update:modelValue', undefined);
+            emit('input-computed', undefined);
         }
 
         return {
