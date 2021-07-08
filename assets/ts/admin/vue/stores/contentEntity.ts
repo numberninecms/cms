@@ -15,23 +15,19 @@ import Routing from 'assets/ts/routing';
 export const useContentEntityStore = defineStore({
     id: 'contentEntity',
     actions: {
-        async fetchSingleEntityById<T extends ContentEntity>(id: number, type?: string): Promise<T> {
+        async fetchSingleEntity<T extends ContentEntity>(
+            value: string,
+            entity_type?: string,
+            findBy?: string,
+        ): Promise<T> {
             const response = await axios.get(
-                Routing.generate('numbernine_admin_contententity_get_item', {
-                    id: id.toString(),
-                    type: type ?? 'media_file',
-                }),
-            );
-
-            return response.data as T;
-        },
-
-        async fetchSingleEntityByTitle<T extends ContentEntity>(title: string, type?: string): Promise<T> {
-            const response = await axios.get(
-                Routing.generate('numbernine_admin_contententity_get_item_by_title', {
-                    title,
-                    type: type ?? 'media_file',
-                }),
+                Routing.generate(
+                    `numbernine_admin_contententity_get_item${findBy && findBy !== 'id' ? `_by_${findBy}` : ''}`,
+                    {
+                        [findBy ?? 'id']: value,
+                        type: entity_type ?? 'media_file',
+                    },
+                ),
             );
 
             return response.data as T;

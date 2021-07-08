@@ -27,14 +27,15 @@ export class ImagePreloader implements Preloader {
         let value: MediaFile | undefined;
 
         if (this.component.parameters.id) {
-            value = (await contentEntityStore.fetchSingleEntityById(
-                this.component.parameters.id as number,
+            value = (await contentEntityStore.fetchSingleEntity(
+                (this.component.parameters.id as number).toString(),
                 'media_file',
             )) as MediaFile;
         } else if (this.component.parameters.fromTitle) {
-            value = (await contentEntityStore.fetchSingleEntityByTitle(
+            value = (await contentEntityStore.fetchSingleEntity(
                 this.component.parameters.fromTitle as string,
                 'media_file',
+                'title',
             )) as MediaFile;
         }
 

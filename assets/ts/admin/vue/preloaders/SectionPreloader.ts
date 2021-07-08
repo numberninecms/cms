@@ -27,8 +27,8 @@ export class SectionPreloader implements Preloader {
         let value: MediaFile | undefined;
 
         if (parseInt(this.component.parameters.background as string)) {
-            value = (await contentEntityStore.fetchSingleEntityById(
-                this.component.parameters.background as number,
+            value = (await contentEntityStore.fetchSingleEntity(
+                this.component.parameters.background as string,
                 'media_file',
             )) as MediaFile;
         }

@@ -36,6 +36,10 @@ export default defineComponent({
             type: [String, Number],
             default: undefined,
         },
+        findBy: {
+            type: String,
+            default: 'id',
+        },
         color: {
             type: String,
             default: 'primary',
@@ -48,8 +52,10 @@ export default defineComponent({
 
         onMounted(async () => {
             if (props.modelValue) {
-                file.value = (await contentEntityStore.fetchSingleEntityById(
-                    typeof props.modelValue === 'string' ? parseInt(props.modelValue) : props.modelValue ?? 0,
+                file.value = (await contentEntityStore.fetchSingleEntity(
+                    typeof props.modelValue === 'number' ? (props.modelValue ?? 0).toString() : props.modelValue,
+                    'media_file',
+                    props.findBy,
                 )) as MediaFile;
                 emit('input-computed', file.value);
             }

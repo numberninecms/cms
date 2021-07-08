@@ -77,7 +77,6 @@ export default class extends Controller {
 
         const dragOffsetX = Math.max(30, event.clientX - rect.left);
         const dragOffsetY = Math.max(30, event.clientY - rect.top);
-        console.log(dragOffsetX, dragOffsetY);
 
         const dragStop = (): void => {
             window.removeEventListener('mousemove', moveModal);

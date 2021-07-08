@@ -17,6 +17,7 @@
             :value="fieldValue(field)"
             :parameters="control.parameters"
             :field="field"
+            :component="component"
             class="mb-2"
             @input="updateParameter(field, $event)"
             @input-computed="updateComputedParameter(field, $event)"

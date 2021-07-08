@@ -19,7 +19,6 @@ export default class extends Controller {
     private readonly activeUrlValue: string;
 
     public connect(): void {
-        console.log();
         this.menuItemTargets.forEach((menuItem) => {
             if (
                 window.location.pathname === menuItem.getAttribute('href') ||

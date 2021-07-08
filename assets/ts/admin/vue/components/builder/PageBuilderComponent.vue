@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeUnmount, onMounted, reactive, ref, Ref, watch } from 'vue';
+import { computed, defineComponent, onBeforeUnmount, onMounted, PropType, reactive, ref, Ref, watch } from 'vue';
 import { usePageBuilderStore } from 'admin/vue/stores/pageBuilder';
 import { pascalCase } from 'change-case';
 import PageComponent from 'admin/interfaces/PageComponent';
@@ -39,7 +39,7 @@ export default defineComponent({
     name: 'PageBuilderComponent',
     props: {
         component: {
-            type: Object as () => PageComponent,
+            type: Object as PropType<PageComponent>,
             required: true,
         },
     },
