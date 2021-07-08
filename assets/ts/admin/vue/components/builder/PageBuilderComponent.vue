@@ -53,7 +53,7 @@ export default defineComponent({
         const mouse = reactive({ down: false, move: false });
 
         onMounted(() => {
-            preloadComponent(props.component);
+            void preloadComponent(props.component);
 
             elementRef.value!.$el.addEventListener('mouseover', highlight);
             elementRef.value!.$el.addEventListener('mousedown', mouseDown);

@@ -8,5 +8,4 @@
  */
 
 export * from 'admin/vue/preloaders/ImagePreloader';
-export * from 'admin/vue/preloaders/MenuPreloader';
 export * from 'admin/vue/preloaders/SectionPreloader';

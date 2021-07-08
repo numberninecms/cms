@@ -26,7 +26,7 @@ interface PageBuilderHelpers {
         siblingId?: string,
         position?: DropPosition,
     ) => PageComponent[];
-    preloadComponent: (component: PageComponent) => void;
+    preloadComponent: (component: PageComponent) => Promise<void>;
 }
 
 export default function usePageBuilderHelpers(): PageBuilderHelpers {
@@ -147,12 +147,12 @@ export default function usePageBuilderHelpers(): PageBuilderHelpers {
         return tree;
     }
 
-    function preloadComponent(component: PageComponent): void {
+    async function preloadComponent(component: PageComponent): Promise<void> {
         const pascalName = pascalCase(component.name);
 
         if (typeof preloaders[`${pascalName}Preloader`] === 'function') {
-            const preloader: Preloader = new preloaders[pascalName + 'Preloader'](component);
-            void preloader.preload();
+            const preloader: Preloader = new preloaders[`${pascalName}Preloader`](component);
+            await preloader.preload();
         }
     }
 

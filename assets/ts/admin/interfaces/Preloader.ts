@@ -8,5 +8,5 @@
  */
 
 export default interface Preloader {
-    preload: () => void;
+    preload: () => Promise<void>;
 }
