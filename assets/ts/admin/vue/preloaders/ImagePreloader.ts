@@ -42,7 +42,7 @@ export class ImagePreloader implements Preloader {
         if (value) {
             pageBuilderStore.updateComponentComputedParameter({
                 id: this.component.id,
-                parameter: 'image',
+                parameter: 'id',
                 value,
             });
         }
