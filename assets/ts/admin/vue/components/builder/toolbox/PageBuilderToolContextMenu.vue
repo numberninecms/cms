@@ -10,6 +10,7 @@
 <template>
     <div v-show="isContextMenuVisible" id="n9-page-builder-tool-context-menu" :style="styles()">
         <div class="n9-menu-buttons-list">
+            <button ref="editRef"><i class="far fa-edit"></i> Edit</button>
             <button ref="duplicateRef"><i class="far fa-clone"></i> Duplicate</button>
             <button ref="savePresetRef"><i class="far fa-save"></i> Save as preset</button>
             <button ref="showShortcodeRef"><i class="far fa-eye"></i> Show shortcode</button>
@@ -27,18 +28,21 @@ import {
     EVENT_PAGE_BUILDER_REQUEST_FOR_DELETE_COMPONENT,
     EVENT_PAGE_BUILDER_SAVE_PRESET,
     EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_SHORTCODE,
+    EVENT_PAGE_BUILDER_REQUEST_FOR_EDIT_COMPONENT,
 } from 'admin/events/events';
 
 export default defineComponent({
     name: 'PageBuilderToolContextMenu',
     setup() {
         const pageBuilderStore = usePageBuilderStore();
+        const editRef: Ref<HTMLDivElement | null> = ref(null);
         const duplicateRef: Ref<HTMLDivElement | null> = ref(null);
         const savePresetRef: Ref<HTMLDivElement | null> = ref(null);
         const showShortcodeRef: Ref<HTMLDivElement | null> = ref(null);
         const deleteRef: Ref<HTMLDivElement | null> = ref(null);
 
         onMounted(() => {
+            editRef.value?.addEventListener('click', editComponent);
             duplicateRef.value?.addEventListener('click', duplicateComponent);
             savePresetRef.value?.addEventListener('click', savePreset);
             showShortcodeRef.value?.addEventListener('click', showShortcode);
@@ -46,11 +50,20 @@ export default defineComponent({
         });
 
         onBeforeUnmount(() => {
+            editRef.value?.removeEventListener('click', editComponent);
             duplicateRef.value?.removeEventListener('click', duplicateComponent);
             savePresetRef.value?.removeEventListener('click', savePreset);
             showShortcodeRef.value?.removeEventListener('click', showShortcode);
             deleteRef.value?.removeEventListener('click', deleteComponent);
         });
+
+        function editComponent(): void {
+            hideContextMenu();
+
+            eventBus.emit(EVENT_PAGE_BUILDER_REQUEST_FOR_EDIT_COMPONENT, {
+                component: pageBuilderStore.selectedComponent,
+            });
+        }
 
         function duplicateComponent(): void {
             hideContextMenu();
@@ -122,6 +135,7 @@ export default defineComponent({
         );
 
         return {
+            editRef,
             duplicateRef,
             savePresetRef,
             showShortcodeRef,
