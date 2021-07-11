@@ -1,0 +1,34 @@
+{% trans_default_domain 'numbernine' %}
+{% extends '@NumberNine/admin/base.html.twig' %}
+
+{% block title %}{{ 'Menu edition'|trans }}{% endblock %}
+
+{% block active_menu_url %}{{ path('numbernine_admin_menu_index') }}{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col">
+        <turbo-frame id="numbernine_admin_menu">
+            {% include '@NumberNine/admin/util/toolbar.html.twig' with {title: 'Menu edition'|trans} %}
+
+            {% include '@NumberNine/admin/util/flashes.html.twig' %}
+
+            {{ form_start(form, {attr: {class: 'lg:max-w-md', 'data-turbo-frame': '_top'}}) }}
+                {{ form_row(form.name) }}
+
+                <div class="flex">
+                    {{ form_row(form.save) }}
+                    {{ form_row(form.delete, {row_attr: {class: 'mt-4'}, attr: {class: 'btn btn-color-red'}}) }}
+                </div>
+            {{ form_end(form) }}
+
+            <div class="mt-3 px-3">
+                <a href="{{ path('numbernine_admin_menu_index') }}"
+                   class="text-primary hover:underline"
+                   data-turbo-frame="_top"
+                >
+                    {{ 'Back to menus list'|trans }}
+                </a>
+            </div>
+        </turbo-frame>
+    </div>
+{% endblock %}

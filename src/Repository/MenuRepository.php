@@ -12,6 +12,7 @@
 namespace NumberNine\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 use NumberNine\Entity\Menu;
 
@@ -28,32 +29,14 @@ final class MenuRepository extends ServiceEntityRepository
         parent::__construct($registry, Menu::class);
     }
 
-    // /**
-    //  * @return Menu[] Returns an array of Menu objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param array $ids
+     * @throws ORMException
+     */
+    public function removeCollection(array $ids): void
     {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        foreach ($this->findBy(['id' => $ids]) as $menu) {
+            $this->_em->remove($menu);
+        }
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Menu
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

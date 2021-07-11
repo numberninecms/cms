@@ -63,4 +63,4 @@ menus:
                 link: /customizer/
             menus:
                 text: Menus
-                link: /menus/
+                route: numbernine_admin_menu_index
