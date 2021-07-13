@@ -33,6 +33,7 @@ import { PageBuilderRequestForChangeViewportSizeEvent } from 'admin/events/PageB
 import { SplitterDraggingEvent } from 'admin/events/SplitterDraggingEvent';
 import PageBuilderComponentsComponentsSavedEvent from 'admin/events/PageBuilderComponentsComponentsSavedEvent';
 import FlashShowEvent from 'admin/events/FlashShowEvent';
+import MenuAddItemsEvent from 'admin/events/MenuAddItemsEvent';
 
 export const EVENT_MEDIA_UPLOADER_FILE_UPLOADED = 'media-uploader:file-uploaded';
 export const EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_CLICKED = 'media-thumbnails-list:thumbnail-clicked';
@@ -131,10 +132,17 @@ export type FlashEvents = {
     [EVENT_FLASH_SHOW]: FlashShowEvent;
 };
 
+export const EVENT_MENU_ADD_ITEMS = 'menu:add-items';
+
+export type MenuEvents = {
+    [EVENT_MENU_ADD_ITEMS]: MenuAddItemsEvent;
+};
+
 export type Events = MediaLibraryEvents &
     TinyEditorEvents &
     ModalEvents &
     PageBuilderEvents &
     FormComponentEvents &
     SplitterEvents &
-    FlashEvents;
+    FlashEvents &
+    MenuEvents;

@@ -14,12 +14,17 @@ declare(strict_types=1);
 namespace NumberNine\Controller\Admin\Ui\Menu;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
+use NumberNine\Content\ContentService;
 use NumberNine\Entity\Menu;
 use NumberNine\Form\Admin\Menu\AdminMenuFormType;
 use NumberNine\Model\Admin\AdminController;
+use NumberNine\Pagination\Paginator;
+use NumberNine\Repository\ContentEntityRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -28,14 +33,29 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class MenuEditAction extends AbstractController implements AdminController
 {
+    private ContentService $contentService;
+    private ContentEntityRepository $contentEntityRepository;
+    private ?Request $request;
+
+    private const ITEMS_PER_PAGE = 5;
+
+    public function __construct(
+        ContentService $contentService,
+        ContentEntityRepository $contentEntityRepository,
+        RequestStack $requestStack
+    ) {
+        $this->contentService = $contentService;
+        $this->contentEntityRepository = $contentEntityRepository;
+        $this->request = $requestStack->getCurrentRequest();
+    }
+
     public function __invoke(
-        Request $request,
         EntityManagerInterface $entityManager,
         LoggerInterface $logger,
         Menu $menu
     ): Response {
         $form = $this->createForm(AdminMenuFormType::class, $menu, ['mode' => 'edit']);
-        $form->handleRequest($request);
+        $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
@@ -74,6 +94,43 @@ final class MenuEditAction extends AbstractController implements AdminController
 
         return $this->render('@NumberNine/admin/menu/edit.html.twig', [
             'form' => $form->createView(),
+            'content_types' => $this->contentService->getContentTypes(),
+            'entities' => $this->getEntities(),
+            'pages' => $this->getPages(),
         ], $response);
+    }
+
+    private function getEntities(): array
+    {
+        $entities = [];
+
+        foreach ($this->contentService->getContentTypes() as $contentType) {
+            $type = $contentType->getName();
+            $entities[$type] = new Paginator(new DoctrinePaginator(
+                $this->contentEntityRepository->getSimplePaginatedCollectionQueryBuilder(
+                    $type,
+                    $this->request
+                        ? ((int)$this->request->query->get($type . '_page', '1') - 1) * self::ITEMS_PER_PAGE
+                        : 0,
+                    self::ITEMS_PER_PAGE,
+                )
+            ));
+        }
+
+        return $entities;
+    }
+
+    private function getPages(): array
+    {
+        $pages = [];
+
+        foreach ($this->contentService->getContentTypes() as $contentType) {
+            $type = $contentType->getName();
+            $pages[$type] = $this->request
+                ? (int)$this->request->query->get($type . '_page', '1')
+                : 1;
+        }
+
+        return $pages;
     }
 }

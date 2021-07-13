@@ -107,6 +107,10 @@
     &.btn-width-expand {
         @apply w-full;
     }
+
+    &.btn-borders-square {
+        @apply rounded-none;
+    }
 }
 
 .btn-group {

@@ -39,7 +39,7 @@
     font-size: 0.9rem;
 
     &__node {
-        padding: 0 0 3px 0;
+        padding: 0 0 3px 22px;
 
         &:after {
             content: '';
@@ -80,13 +80,13 @@
         position: absolute;
         top: -3px;
         bottom: 50%;
-        width: 13px;
-        left: -13px;
+        width: 35px;
+        left: -35px;
         border-left: 1px solid currentColor;
         border-bottom: 1px solid currentColor;
     }
     &__children {
-        padding-left: 20px;
+        padding-left: 25px;
     }
     &__node-body {
         padding: 5px 0 8px 5px;
@@ -116,6 +116,7 @@
         cursor: pointer;
     }
     &__node-header {
+        padding: 4px;
         margin-top: 3px;
         border-radius: 4px;
         outline: 0;
@@ -123,6 +124,10 @@
     &__node-header-content {
         color: #000;
         transition: color 0.3s;
+
+        i {
+            line-height: 20px;
+        }
     }
     &__node--selected .sortable-tree__node-header-content {
         color: var(--color-primary);
