@@ -13,5 +13,6 @@ export default interface MenuItem {
     title?: string;
     url?: string;
     target?: string;
+    icon?: string;
     children: MenuItem[];
 }
