@@ -12,11 +12,12 @@
 
             {% include '@NumberNine/admin/util/flashes.html.twig' %}
 
-            {{ form_start(form, {attr: {'data-turbo-frame': '_top'}}) }}
+            {{ form_start(form, {attr: {'data-controller': 'menu--watcher', 'data-turbo-frame': '_top'}}) }}
                 {{ form_row(form.name, {attr: {class: 'lg:max-w-md'}}) }}
+                {{ form_row(form.menuItems, {attr: {'data-menu--watcher-target': 'menuItems'}}) }}
 
                 <div class="mt-5 flex flex-wrap gap-3">
-                    <div class="mt-2 px-3 w-full md:w-1/4 lg:w-1/6 flex flex-col gap-1">
+                    <div class="px-3 w-full md:w-1/4 lg:w-1/6 flex flex-col gap-1">
                         {% for content_type in content_types %}
                             <div data-controller="toggle-visibility">
                                 <div
@@ -71,7 +72,7 @@
                     </div>
 
                     <div
-                        class="flex-grow min-h-full"
+                        class="min-h-full"
                         data-controller="menu--editor"
                         data-menu--editor-items-value="{{ form.menuItems.vars.value }}"
                     ></div>

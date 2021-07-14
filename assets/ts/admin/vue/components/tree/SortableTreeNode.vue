@@ -48,7 +48,7 @@
                         <path d="M8,5.14V19.14L19,12.14L8,5.14Z"></path>
                     </svg>
                     <div class="sortable-tree__node-header-content flex-1 flex flex-row flex-nowrap items-center">
-                        <slot name="default-header" :node="element" :label-key="labelKey">
+                        <slot name="default-header" :element="element" :label-key="labelKey">
                             <div v-if="element.avatar" class="sortable-avatar mr-2">
                                 <div
                                     class="sortable-avatar-content flex flex-row justify-center items-center flex-wrap"

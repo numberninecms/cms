@@ -34,6 +34,7 @@ import { SplitterDraggingEvent } from 'admin/events/SplitterDraggingEvent';
 import PageBuilderComponentsComponentsSavedEvent from 'admin/events/PageBuilderComponentsComponentsSavedEvent';
 import FlashShowEvent from 'admin/events/FlashShowEvent';
 import MenuAddItemsEvent from 'admin/events/MenuAddItemsEvent';
+import MenuItemsUpdatedEvent from 'admin/events/MenuItemsUpdatedEvent';
 
 export const EVENT_MEDIA_UPLOADER_FILE_UPLOADED = 'media-uploader:file-uploaded';
 export const EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_CLICKED = 'media-thumbnails-list:thumbnail-clicked';
@@ -133,9 +134,11 @@ export type FlashEvents = {
 };
 
 export const EVENT_MENU_ADD_ITEMS = 'menu:add-items';
+export const EVENT_MENU_ITEMS_UPDATED = 'menu:items-updated';
 
 export type MenuEvents = {
     [EVENT_MENU_ADD_ITEMS]: MenuAddItemsEvent;
+    [EVENT_MENU_ITEMS_UPDATED]: MenuItemsUpdatedEvent;
 };
 
 export type Events = MediaLibraryEvents &

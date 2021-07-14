@@ -78,6 +78,15 @@
         &.btn-style-outline {
             @apply border-2 border-red-700;
         }
+
+        &.btn-style-flat {
+            @apply
+                py-1 px-2
+                shadow-none
+                text-red-600
+                bg-transparent
+                hover:bg-red-600 hover:bg-opacity-10;
+        }
     }
 
     &.btn-case-uppercase {
