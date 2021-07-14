@@ -21,6 +21,7 @@ import FormControlColor from 'admin/vue/form/controls/FormControlColor.vue';
 import FormControlOnOffSwitch from 'admin/vue/form/controls/FormControlOnOffSwitch.vue';
 import FormControlImage from 'admin/vue/form/controls/FormControlImage.vue';
 import FormControlEditor from 'admin/vue/form/controls/FormControlEditor.vue';
+import FormControlMenu from 'admin/vue/form/controls/FormControlMenu.vue';
 
 export default {
     FormControlTextBox,
@@ -37,4 +38,5 @@ export default {
     FormControlOnOffSwitch,
     FormControlImage,
     FormControlEditor,
+    FormControlMenu,
 };
