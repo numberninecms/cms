@@ -10,7 +10,7 @@
 <template>
     <div class="flex flex-col">
         <label class="font-semibold text-quaternary">{{ parameters.label }}</label>
-        <select :value="value" @change="$emit('input', $event.target.value)">
+        <select :value="value" @change="updateMenu">
             <option v-for="menu in menus" :key="menu.id" :value="menu.id">
                 {{ menu.name }}
             </option>
@@ -44,13 +44,22 @@ export default defineComponent({
             await menuStore.fetchMenus();
 
             if (props.value) {
-                const menu = menuStore.menus.find((m) => m.id === props.value);
+                const menu = menuStore.menus.find(
+                    (m) => m.id === (typeof props.value === 'string' ? parseInt(props.value) : props.value),
+                );
                 emit('input-computed', menu);
             }
         });
 
+        function updateMenu(event: Event): void {
+            const menu = menuStore.menus.find((m) => m.id === parseInt((event.target as HTMLSelectElement)!.value));
+            emit('input', (event.target as HTMLSelectElement)!.value);
+            emit('input-computed', menu);
+        }
+
         return {
             menus,
+            updateMenu,
         };
     },
 });
