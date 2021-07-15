@@ -19,53 +19,54 @@
                 <div class="mt-5 flex flex-wrap gap-3">
                     <div class="px-3 w-full md:w-1/4 lg:w-1/6 flex flex-col gap-1">
                         {% for content_type in content_types %}
-                            <div data-controller="toggle-visibility">
-                                <div
-                                    class="px-3 py-1 cursor-pointer rounded text-white bg-primary flex items-center justify-between"
-                                    data-action="click->toggle-visibility#toggle"
-                                >
-                                    <span>{{ content_type.labels.pluralName|capitalize }}</span>
-                                    <span><i class="fas fa-sort-down"></i></span>
-                                </div>
-                                <div
-                                    class="hidden px-3 py-2"
-                                    data-toggle-visibility-target="item"
-                                    data-controller="menu--entities"
-                                >
-                                    <turbo-frame id="numbernine_admin_menu_{{ content_type.name }}">
-                                        {% include '@NumberNine/admin/util/pagination.html.twig' with {
-                                            paginator: entities[content_type.name],
-                                            currentPage: pages[content_type.name],
-                                            url: path('numbernine_admin_menu_edit', {
-                                                id: form.vars.data.id,
-                                                (content_type.name ~ '_page'): '__page__',
-                                            }),
-                                        } %}
+                            {% if content_type.public and entities[content_type.name].count > 0 %}
+                                <div data-controller="toggle-visibility">
+                                    <div
+                                        class="px-3 py-1 cursor-pointer rounded text-white bg-primary flex items-center justify-between"
+                                        data-action="click->toggle-visibility#toggle"
+                                    >
+                                        <span>{{ content_type.labels.pluralName|capitalize }}</span>
+                                        <span><i class="fas fa-sort-down"></i></span>
+                                    </div>
+                                    <div
+                                        class="hidden px-3 py-2"
+                                        data-toggle-visibility-target="item"
+                                        data-controller="menu--entities"
+                                    >
+                                        <turbo-frame id="numbernine_admin_menu_{{ content_type.name }}">
+                                            {% include '@NumberNine/admin/util/pagination.html.twig' with {
+                                                paginator: entities[content_type.name],
+                                                currentPage: pages[content_type.name],
+                                                url: path('numbernine_admin_menu_edit', {
+                                                    id: form.vars.data.id,
+                                                    (content_type.name ~ '_page'): '__page__',
+                                                }),
+                                            } %}
 
-                                        {% for entity in entities[content_type.name] %}
-                                            <label class="flex gap-3 items-center">
-                                                <input
-                                                    type="checkbox"
-                                                    data-menu--entities-target="entity"
-                                                    data-id="{{ entity.id }}"
-                                                    data-title="{{ entity.title }}"
-                                                    data-url="{{ N9_entity_url(entity) }}"
-                                                    data-icon="{{ content_type.icon }}"
-                                                >
-                                                <span>{{ entity.title }}</span>
-                                            </label>
-                                        {% endfor %}
+                                            {% for entity in entities[content_type.name] %}
+                                                <label class="flex gap-3 items-center">
+                                                    <input
+                                                        type="checkbox"
+                                                        data-menu--entities-target="entity"
+                                                        data-id="{{ entity.id }}"
+                                                        data-title="{{ entity.title }}"
+                                                        data-icon="{{ content_type.icon }}"
+                                                    >
+                                                    <span>{{ entity.title }}</span>
+                                                </label>
+                                            {% endfor %}
 
-                                        <button
-                                            type="button"
-                                            class="mt-2 btn btn-color-primary btn-size-xsmall btn-borders-square"
-                                            data-action="menu--entities#addToMenu"
-                                        >
-                                            {{ 'Add to menu'|trans }}
-                                        </button>
-                                    </turbo-frame>
+                                            <button
+                                                type="button"
+                                                class="mt-2 btn btn-color-primary btn-size-xsmall btn-borders-square"
+                                                data-action="menu--entities#addToMenu"
+                                            >
+                                                {{ 'Add to menu'|trans }}
+                                            </button>
+                                        </turbo-frame>
+                                    </div>
                                 </div>
-                            </div>
+                            {% endif %}
                         {% endfor %}
 
                         <div data-controller="toggle-visibility">

@@ -27,7 +27,6 @@ export default class extends Controller {
                     uid: uuidv4(),
                     entityId: e.dataset.id ? parseInt(e.dataset.id) : undefined,
                     title: e.dataset.title,
-                    url: e.dataset.url,
                     icon: e.dataset.icon,
                     children: [],
                 } as MenuItem;

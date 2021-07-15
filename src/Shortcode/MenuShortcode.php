@@ -112,7 +112,7 @@ final class MenuShortcode extends AbstractShortcode implements EditableShortcode
         return array_map(
             function ($menuItem) use ($entities) {
                 if (!empty($menuItem['entityId'])) {
-                    $menuItem['link'] = $this->permalinkGenerator->generateContentEntityPermalink(
+                    $menuItem['url'] = $this->permalinkGenerator->generateContentEntityPermalink(
                         current(array_filter(
                             $entities,
                             fn(ContentEntity $entity) => $entity->getId() === (int)$menuItem['entityId']
