@@ -33,10 +33,10 @@ abstract class AdminTestCase extends DotEnvAwareWebTestCase
     {
         parent::setUp();
 
-        $this->userRoleRepository = self::$container->get(UserRoleRepository::class); // @phpstan-ignore-line
-        $this->userFactory = self::$container->get(UserFactory::class); // @phpstan-ignore-line
-        $this->entityManager = self::$container->get(EntityManagerInterface::class); // @phpstan-ignore-line
-        $this->urlGenerator = self::$container->get(UrlGeneratorInterface::class); // @phpstan-ignore-line
+        $this->userRoleRepository = static::getContainer()->get(UserRoleRepository::class); // @phpstan-ignore-line
+        $this->userFactory = static::getContainer()->get(UserFactory::class); // @phpstan-ignore-line
+        $this->entityManager = static::getContainer()->get(EntityManagerInterface::class); // @phpstan-ignore-line
+        $this->urlGenerator = static::getContainer()->get(UrlGeneratorInterface::class); // @phpstan-ignore-line
 
         $this->testRole = (new UserRole())->setName('TestRole')->setCapabilities([]);
         $this->entityManager->persist($this->testRole); // @phpstan-ignore-line
@@ -62,7 +62,7 @@ abstract class AdminTestCase extends DotEnvAwareWebTestCase
         $this->client->request('GET', $url ?? '/admin/');
 
         /** @var AdminMenuBuilderStore $adminMenuBuilderStore */
-        $adminMenuBuilderStore = self::$container->get(AdminMenuBuilderStore::class);
+        $adminMenuBuilderStore = static::getContainer()->get(AdminMenuBuilderStore::class);
 
         $this->adminMenuBuilder = $adminMenuBuilderStore->getAdminMenuBuilder();
     }

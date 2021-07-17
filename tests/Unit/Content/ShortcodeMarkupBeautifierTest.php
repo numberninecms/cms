@@ -53,8 +53,8 @@ SHORTCODE;
     {
         parent::setUp();
         $this->client->request('GET', '/');
-        $this->shortcodeMarkupBeautifier = self::$container->get(ShortcodeMarkupBeautifier::class);
-        $this->serializer = self::$container->get('serializer');
+        $this->shortcodeMarkupBeautifier = static::getContainer()->get(ShortcodeMarkupBeautifier::class);
+        $this->serializer = static::getContainer()->get('serializer');
     }
 
     public function testShortcodeIsBeautified(): void

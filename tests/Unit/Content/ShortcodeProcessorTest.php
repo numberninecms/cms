@@ -35,8 +35,8 @@ final class ShortcodeProcessorTest extends DotEnvAwareWebTestCase implements The
     {
         parent::setUp();
         $this->client->request('GET', '/');
-        $this->shortcodeProcessor = self::$container->get(ShortcodeProcessor::class);
-        $this->serializer = self::$container->get('serializer');
+        $this->shortcodeProcessor = static::getContainer()->get(ShortcodeProcessor::class);
+        $this->serializer = static::getContainer()->get('serializer');
     }
 
     public function testBuildShortcodeTreeCreatesArray(): void
