@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Tests\Functional\Controller\Admin;
+namespace NumberNine\Tests\Functional\Controller\Admin\Dashboard;
 
 use NumberNine\Security\Capabilities;
 use NumberNine\Tests\Functional\AdminTestCase;
 
-class AdminIndexActionWebTest extends AdminTestCase
+final class AdminIndexActionWebTest extends AdminTestCase
 {
     public function testAdminPageRedirectsToLogin(): void
     {
@@ -24,35 +24,35 @@ class AdminIndexActionWebTest extends AdminTestCase
 
     public function testAdministratorCanAccessAdmin(): void
     {
-        $this->loginThenNavigateToAdminDashboard('Administrator');
+        $this->loginThenNavigateToAdminUrl('Administrator');
         self::assertResponseIsSuccessful();
         self::assertSelectorExists('div.ui-area');
     }
 
     public function testEditorCanAccessAdmin(): void
     {
-        $this->loginThenNavigateToAdminDashboard('Editor');
+        $this->loginThenNavigateToAdminUrl('Editor');
         self::assertResponseIsSuccessful();
         self::assertSelectorExists('div.ui-area');
     }
 
     public function testAuthorCanAccessAdmin(): void
     {
-        $this->loginThenNavigateToAdminDashboard('Author');
+        $this->loginThenNavigateToAdminUrl('Author');
         self::assertResponseIsSuccessful();
         self::assertSelectorExists('div.ui-area');
     }
 
     public function testContributorCanAccessAdmin(): void
     {
-        $this->loginThenNavigateToAdminDashboard('Contributor');
+        $this->loginThenNavigateToAdminUrl('Contributor');
         self::assertResponseIsSuccessful();
         self::assertSelectorExists('div.ui-area');
     }
 
     public function testSubscriberCannotAccessAdmin(): void
     {
-        $this->loginThenNavigateToAdminDashboard('Subscriber');
+        $this->loginThenNavigateToAdminUrl('Subscriber');
         self::assertResponseRedirects('/');
     }
 

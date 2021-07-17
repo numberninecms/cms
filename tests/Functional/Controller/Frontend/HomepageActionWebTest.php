@@ -14,7 +14,7 @@ namespace NumberNine\Tests\Functional\Controller\Frontend;
 use NumberNine\Tests\DotEnvAwareWebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class HomepageActionWebTest extends DotEnvAwareWebTestCase
+final class HomepageActionWebTest extends DotEnvAwareWebTestCase
 {
     public function testHomepageIsAccessible(): void
     {

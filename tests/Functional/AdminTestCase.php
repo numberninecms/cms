@@ -18,6 +18,7 @@ use NumberNine\Model\Menu\Builder\AdminMenuBuilder;
 use NumberNine\Repository\UserRoleRepository;
 use NumberNine\Security\UserFactory;
 use NumberNine\Tests\DotEnvAwareWebTestCase;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 abstract class AdminTestCase extends DotEnvAwareWebTestCase
 {
@@ -25,6 +26,7 @@ abstract class AdminTestCase extends DotEnvAwareWebTestCase
     protected UserFactory $userFactory;
     protected EntityManagerInterface $entityManager;
     protected AdminMenuBuilder $adminMenuBuilder;
+    protected UrlGeneratorInterface $urlGenerator;
     protected UserRole $testRole;
 
     public function setUp(): void
@@ -34,6 +36,7 @@ abstract class AdminTestCase extends DotEnvAwareWebTestCase
         $this->userRoleRepository = self::$container->get(UserRoleRepository::class); // @phpstan-ignore-line
         $this->userFactory = self::$container->get(UserFactory::class); // @phpstan-ignore-line
         $this->entityManager = self::$container->get(EntityManagerInterface::class); // @phpstan-ignore-line
+        $this->urlGenerator = self::$container->get(UrlGeneratorInterface::class); // @phpstan-ignore-line
 
         $this->testRole = (new UserRole())->setName('TestRole')->setCapabilities([]);
         $this->entityManager->persist($this->testRole); // @phpstan-ignore-line
@@ -46,13 +49,17 @@ abstract class AdminTestCase extends DotEnvAwareWebTestCase
         $this->entityManager->persist($this->testRole);
         $this->entityManager->flush();
 
-        $this->loginThenNavigateToAdminDashboard('TestRole');
+        $this->loginThenNavigateToAdminUrl('TestRole');
     }
 
-    protected function loginThenNavigateToAdminDashboard(string $role): void
+    protected function loginThenNavigateToAdminUrl(string $role, ?string $url = null): void
     {
+        if ($url && strpos($url, '/admin/') !== 0) {
+            self::fail('$url parameter must be an admin URL.');
+        }
+
         $this->loginAs($role);
-        $this->client->request('GET', '/admin/');
+        $this->client->request('GET', $url ?? '/admin/');
 
         /** @var AdminMenuBuilderStore $adminMenuBuilderStore */
         $adminMenuBuilderStore = self::$container->get(AdminMenuBuilderStore::class);
