@@ -24,7 +24,7 @@ export default function createTinymceOptions(options: Options): RawEditorSetting
         content_css: options.css ?? false,
         content_style: '#tinymce { padding: 1rem !important; }',
         branding: false,
-        height: 500,
+        min_height: 350,
         menubar: false,
         relative_urls: false,
         plugins: [
