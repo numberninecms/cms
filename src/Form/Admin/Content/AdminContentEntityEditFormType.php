@@ -12,7 +12,6 @@
 namespace NumberNine\Form\Admin\Content;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityRepository;
 use NumberNine\Content\ContentService;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\ContentEntityTerm;

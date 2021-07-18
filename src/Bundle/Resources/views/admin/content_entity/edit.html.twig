@@ -3,13 +3,15 @@
 
 {% block title %}{{ '%1% edition: %2%'|trans({
     '%1%': content_type.labels.singularName|capitalize,
-    '%2%': entity.title,
+    '%2%': entity.title ?? content_type.labels.newItem,
 }) }}{% endblock %}
+
+{% block active_menu_url %}{{ path('numbernine_admin_content_entity_index', {type: type_slug}) }}{% endblock %}
 
 {% block content %}
     <turbo-frame id="numbernine_admin_content_entity_create">
         <div class="flex flex-col" data-controller="dynamic-tabs">
-            {% include '@NumberNine/admin/util/toolbar.html.twig' with {title: entity.title} %}
+            {% include '@NumberNine/admin/util/toolbar.html.twig' with {title: entity.title ?? content_type.labels.newItem} %}
             {% include '@NumberNine/admin/util/flashes.html.twig' %}
 
             {{ form_start(form, {attr: {'data-turbo': 'false'}}) }}
