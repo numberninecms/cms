@@ -12,7 +12,6 @@ security:
     firewalls:
         main:
             stateless: false
-            anonymous: true
             lazy: true
             provider: numbernine_user_provider
             guard:
