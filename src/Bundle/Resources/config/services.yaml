@@ -87,3 +87,9 @@ services:
 
     security.role_hierarchy: '@NumberNine\Security\RoleHierarchy'
     security.access.simple_role_voter: '@NumberNine\Security\Voter\RoleVoter'
+
+    numbernine.login_rate_limiter:
+        class: Symfony\Component\Security\Http\RateLimiter\DefaultLoginRateLimiter
+        arguments:
+            $globalFactory: '@limiter.ip_login'
+            $localFactory: '@limiter.username_ip_login'
