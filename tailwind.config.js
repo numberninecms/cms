@@ -14,7 +14,7 @@ module.exports = {
     mode: 'jit',
     purge: [
         './assets/scss/purge_safelist.txt',
-        './src/Bundle/Resources/views/admin/**/*.twig',
+        './src/Bundle/Resources/views/**/*.twig',
         './assets/ts/**/*.{js,jsx,ts,tsx,vue}',
     ],
     theme: {
