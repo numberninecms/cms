@@ -16,6 +16,7 @@ use NumberNine\Configuration\ConfigurationReadWriter;
 use NumberNine\Exception\NoThemeFoundException;
 use NumberNine\Exception\ThemeNotFoundException;
 use NumberNine\Model\General\Settings;
+use NumberNine\Model\Theme\ThemeWrapper;
 use NumberNine\Repository\ThemeOptionsRepository;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -72,6 +73,7 @@ final class ThemeActivator implements EventSubscriberInterface
                 throw new ThemeNotFoundException($currentThemeName);
             }
         } else {
+            /** @var ThemeWrapper $themeWrapper */
             $themeWrapper = current($this->themeStore->getThemes());
             $this->configurationReadWriter->write(Settings::ACTIVE_THEME, $themeWrapper->getDescriptor()->getName());
         }
@@ -79,12 +81,10 @@ final class ThemeActivator implements EventSubscriberInterface
         $themeOptions = $this->themeOptionsRepository->getOrCreateByThemeName((string)$currentThemeName);
         $themeWrapper->getTheme()->setThemeOptions($themeOptions);
 
-        $themeWrapper->getTheme()->setConfiguration(
-            [
-                'main_entry' => $themeWrapper->getDescriptor()->getMainEntry(),
-                'areas' => $themeWrapper->getDescriptor()->getAreas(),
-            ]
-        );
+        $themeWrapper->getTheme()->setConfiguration([
+            'main_entry' => $themeWrapper->getDescriptor()->getMainEntry(),
+            'areas' => $themeWrapper->getDescriptor()->getAreas(),
+        ]);
 
         $this->themeStore->setCurrentTheme($themeWrapper);
     }

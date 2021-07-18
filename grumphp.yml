@@ -17,6 +17,8 @@ grumphp:
             parse_custom_tags: true
         phplint: ~
         phpparser:
+            ignore_patterns:
+                - tests/bootstrap.php
             visitors:
                 no_exit_statements: ~
                 forbidden_function_calls:
