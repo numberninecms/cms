@@ -1,0 +1,5 @@
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        {% include '@NumberNine/admin/util/flash_single.html.twig' with {label: label, message: message, show: true} %}
+    {% endfor %}
+{% endfor %}

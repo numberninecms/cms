@@ -1,4 +1,6 @@
 security:
+    enable_authenticator_manager: true
+
     encoders:
         NumberNine\Entity\User:
             algorithm: auto
@@ -12,7 +14,6 @@ security:
     firewalls:
         main:
             stateless: false
-            anonymous: true
             lazy: true
             provider: numbernine_user_provider
             guard:
@@ -24,6 +25,8 @@ security:
                 secret:   '%kernel.secret%'
                 lifetime: 31536000 # 1 year in seconds
                 path:     /
+            login_throttling:
+                limiter: numbernine.login_rate_limiter
 
     access_control:
         - { path: ^/admin/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -35,6 +38,7 @@ security:
 twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+    form_themes: ['@NumberNine/form/tailwind_layout.html.twig']
 
 cmf_routing:
     chain:
@@ -73,14 +77,31 @@ framework:
         handler_id: ~
         cookie_secure: auto
         cookie_samesite: lax
+    rate_limiter:
+        username_ip_login:
+            policy: token_bucket
+            limit: 5
+            rate:
+                interval: '5 minutes'
+        ip_login:
+            policy: sliding_window
+            limit: 50
+            interval: '15 minutes'
 
 webpack_encore:
     output_path: '%kernel.project_dir%/public/build'
     preload: true
     builds:
         numbernine: '%kernel.project_dir%/public/bundles/numbernine/build/'
+    script_attributes:
+        defer: true
+        'data-turbo-track': reload
+    link_attributes:
+        'data-turbo-track': reload
 
 doctrine:
+    dbal:
+        url: '%env(resolve:DATABASE_URL)%'
     orm:
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         metadata_cache_driver:

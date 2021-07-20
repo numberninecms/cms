@@ -19,7 +19,7 @@ use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @Shortcode(name="gap", label="Gap", icon="height")
+ * @Shortcode(name="gap", label="Gap", icon="arrows-alt-v")
  */
 final class GapShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {

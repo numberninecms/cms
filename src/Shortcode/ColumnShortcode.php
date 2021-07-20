@@ -23,7 +23,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *     name="col",
  *     label="Column",
  *     container=true,
- *     icon="view_column",
+ *     icon="mdi-view-week",
  *     siblingsPosition={"left", "right"},
  *     siblingsShortcodes={"col"}
  * )

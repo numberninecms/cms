@@ -1,0 +1,281 @@
+/*!
+ * This file is part of the NumberNine package.
+ *
+ * (c) William Arin <williamarin.dev@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/*
+ * This stylesheet comes from Quasar's QTree component.
+ *
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2015-present Razvan Stoenescu
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+.sortable-tree {
+    position: relative;
+    color: #9e9e9e;
+    font-size: 0.9rem;
+
+    &__node {
+        padding: 0 0 3px 22px;
+
+        &:after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            bottom: 0;
+            width: 2px;
+            right: auto;
+            left: -13px;
+            border-left: 1px solid currentColor;
+        }
+        &:last-child:after {
+            display: none;
+        }
+        &--disabled {
+            pointer-events: none;
+
+            .disabled {
+                opacity: 1 !important;
+            }
+            > div,
+            > i,
+            > .disabled {
+                opacity: 0.6 !important;
+
+                .sortable-tree__node--disabled {
+                    > div,
+                    > i,
+                    > .disabled {
+                        opacity: 1 !important;
+                    }
+                }
+            }
+        }
+    }
+    &__node-header:before {
+        content: '';
+        position: absolute;
+        top: -3px;
+        bottom: 50%;
+        width: 35px;
+        left: -35px;
+        border-left: 1px solid currentColor;
+        border-bottom: 1px solid currentColor;
+    }
+    &__children {
+        padding-left: 25px;
+    }
+    &__node-body {
+        padding: 5px 0 8px 5px;
+    }
+    &__node--parent {
+        padding-left: 2px;
+        > .sortable-tree__node-header:before {
+            width: 15px;
+            left: -15px;
+        }
+        > .sortable-tree__node-collapsible > .sortable-tree__node-body {
+            padding: 5px 0 8px 27px;
+            &:after {
+                content: '';
+                position: absolute;
+                top: 0;
+                width: 2px;
+                height: 100%;
+                right: auto;
+                left: 12px;
+                border-left: 1px solid currentColor;
+                bottom: 50px;
+            }
+        }
+    }
+    &__node--link {
+        cursor: pointer;
+    }
+    &__node-header {
+        padding: 4px;
+        margin-top: 3px;
+        border-radius: 4px;
+        outline: 0;
+    }
+    &__node-header-content {
+        color: #000;
+        transition: color 0.3s;
+
+        i {
+            line-height: 20px;
+        }
+    }
+    &__node--selected .sortable-tree__node-header-content {
+        color: var(--color-primary);
+    }
+    &__icon,
+    &__node-header-content .sortable-icon,
+    &__spinner {
+        font-size: 21px;
+    }
+    &__img {
+        height: 42px;
+    }
+    &__avatar,
+    &__node-header-content .sortable-avatar {
+        font-size: 28px;
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+    }
+    &__arrow,
+    &__spinner {
+        font-size: 16px;
+    }
+    &__arrow {
+        transition: transform 0.3s;
+
+        &--rotate {
+            transform: rotate3d(0, 0, 1, 90deg);
+        }
+        // remove connectors before root
+    }
+    > .sortable-tree__node {
+        padding: 0;
+        &:after,
+        > .sortable-tree__node-header:before {
+            display: none;
+        } // leave space for root empty node
+    }
+    > .sortable-tree__node--child > .sortable-tree__node-header {
+        padding-left: 24px;
+    }
+    &--dark .sortable-tree__node-header-content {
+        color: #fff;
+    }
+    &--no-connectors {
+        .sortable-tree__node:after,
+        .sortable-tree__node-header:before,
+        .sortable-tree__node-body:after {
+            display: none !important;
+        }
+    }
+}
+
+.sortable-icon {
+    line-height: 1;
+    width: 1em;
+    height: 1em;
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    text-align: center;
+    position: relative;
+    box-sizing: content-box;
+    fill: currentColor;
+}
+
+.sortable-avatar {
+    position: relative;
+    vertical-align: middle;
+    display: inline-block;
+    border-radius: 50%;
+    font-size: 48px;
+    height: 1em;
+    width: 1em;
+    overflow: hidden;
+
+    &__content,
+    img:not(.sortable-icon) {
+        border-radius: inherit;
+        height: inherit;
+        width: inherit;
+    }
+    &__content {
+        font-size: 0.5em;
+        line-height: 0.5em;
+    }
+}
+
+.sortable-focus-helper {
+    position: absolute;
+    top: 0;
+    left: 0 #{'/* rtl:ignore */'};
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    border-radius: inherit;
+    opacity: 0;
+    transition: background-color 0.3s cubic-bezier(0.25, 0.8, 0.5, 1), opacity 0.4s cubic-bezier(0.25, 0.8, 0.5, 1);
+
+    &:before,
+    &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0 #{'/* rtl:ignore */'};
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        border-radius: inherit;
+        transition: background-color 0.3s cubic-bezier(0.25, 0.8, 0.5, 1), opacity 0.6s cubic-bezier(0.25, 0.8, 0.5, 1);
+    }
+    &:before {
+        background: #000;
+    }
+    &:after {
+        background: #fff;
+    }
+    &--rounded {
+        border-radius: 4px;
+    }
+    &--round {
+        border-radius: 50%;
+    }
+}
+.sortable-focusable,
+.sortable-manual-focusable,
+.sortable-hoverable {
+    outline: 0;
+}
+.sortable-focusable:focus,
+.sortable-manual-focusable--focused,
+.sortable-hoverable:hover {
+    > .sortable-focus-helper {
+        background: currentColor;
+        opacity: 0.15;
+        &:before {
+            opacity: 0.1;
+        }
+        &:after {
+            opacity: 0.4;
+        }
+    }
+}
+.sortable-focusable:focus,
+.sortable-manual-focusable--focused {
+    > .sortable-focus-helper {
+        opacity: 0.22;
+    }
+}

@@ -1,0 +1,78 @@
+/*!
+ * This file is part of the NumberNine package.
+ *
+ * (c) William Arin <williamarin.dev@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+:root {
+    --color-light-blue-rgb: 70, 166, 233;
+    --color-light-blue-h: 205;
+    --color-light-blue-s: 79%;
+    --color-light-blue-l: 59%;
+    --color-light-blue-hsl: var(--color-light-blue-h), var(--color-light-blue-s), var(--color-light-blue-l);
+    --color-light-blue: rgb(var(--color-light-blue-rgb));
+
+    --color-dark-blue-rgb: 26, 88, 177;
+    --color-dark-blue-h: 215;
+    --color-dark-blue-s: 74%;
+    --color-dark-blue-l: 40%;
+    --color-dark-blue-hsl: var(--color-dark-blue-h), var(--color-dark-blue-s), var(--color-dark-blue-l);
+    --color-dark-blue: rgb(var(--color-dark-blue-rgb));
+
+    --color-light-gray-rgb: 90, 90, 91;
+    --color-light-gray-h: 240;
+    --color-light-gray-s: 1%;
+    --color-light-gray-l: 35%;
+    --color-light-gray-hsl: var(--color-light-gray-h), var(--color-light-gray-s), var(--color-light-gray-l);
+    --color-light-gray: rgb(var(--color-light-gray-rgb));
+
+    --color-dark-gray-rgb: 25, 25, 25;
+    --color-dark-gray-h: 0;
+    --color-dark-gray-s: 0%;
+    --color-dark-gray-l: 10%;
+    --color-dark-gray-hsl: var(--color-dark-gray-h), var(--color-dark-gray-s), var(--color-dark-gray-l);
+    --color-dark-gray: rgb(var(--color-dark-gray-rgb));
+
+    --color-primary-rgb: var(--color-light-blue-rgb);
+    --color-primary-h: var(--color-light-blue-h);
+    --color-primary-s: var(--color-light-blue-s);
+    --color-primary-l: var(--color-light-blue-l);
+    --color-primary-hsl: var(--color-primary-h), var(--color-primary-s), var(--color-primary-l);
+    --color-primary: rgb(var(--color-primary-rgb));
+
+    --color-secondary-rgb: var(--color-light-gray-rgb);
+    --color-secondary-h: var(--color-light-gray-h);
+    --color-secondary-s: var(--color-light-gray-s);
+    --color-secondary-l: var(--color-light-gray-l);
+    --color-secondary-hsl: var(--color-secondary-h), var(--color-secondary-s), var(--color-secondary-l);
+    --color-secondary: rgb(var(--color-secondary-rgb));
+
+    --color-tertiary-rgb: var(--color-dark-blue-rgb);
+    --color-tertiary-h: var(--color-dark-blue-h);
+    --color-tertiary-s: var(--color-dark-blue-s);
+    --color-tertiary-l: var(--color-dark-blue-l);
+    --color-tertiary: rgb(var(--color-tertiary-rgb));
+
+    --color-quaternary-rgb: var(--color-dark-gray-rgb);
+    --color-quaternary-h: var(--color-dark-gray-h);
+    --color-quaternary-s: var(--color-dark-gray-s);
+    --color-quaternary-l: var(--color-dark-gray-l);
+    --color-quaternary: rgb(var(--color-quaternary-rgb));
+
+    --color-light-rgb: 243, 243, 243;
+    --color-light: rgb(var(--color-light-rgb));
+
+    --color-dark-rgb: var(--color-quaternary-rgb);
+    --color-dark: rgb(var(--color-dark-rgb));
+}
+
+.bg-black-opacity-25 {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+html {
+    @apply text-gray-800;
+}

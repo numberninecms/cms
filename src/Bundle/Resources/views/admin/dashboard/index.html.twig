@@ -1,0 +1,15 @@
+{% trans_default_domain 'numbernine' %}
+{% extends '@NumberNine/admin/base.html.twig' %}
+
+{% block title %}{{ 'Dashboard'|trans }}{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col flex-grow h-full">
+        {% include '@NumberNine/admin/util/toolbar.html.twig' with {title: 'Dashboard'} %}
+        {% include '@NumberNine/admin/util/flashes.html.twig' %}
+
+        <div class="flex flex-grow items-center justify-center h-full">
+            <img src="{{ preload(asset('bundles/numbernine/build/images/NumberNine512_slogan.png', 'numbernine'), {as: 'image'}) }}" alt="NumberNine CMS">
+        </div>
+    </div>
+{% endblock %}

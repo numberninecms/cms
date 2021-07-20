@@ -1,0 +1,11 @@
+<aside class="menu-sidebar">
+    <nav data-controller="layout--menu" data-layout--menu-active-url-value="{{ active_menu_url }}">
+        {% for item in N9_admin_menu_items() %}
+            {% if item.children|length > 0 %}
+                {% include '@NumberNine/admin/layout/expandable_menu_item.html.twig' with {level: 1} %}
+            {% else %}
+                {% include '@NumberNine/admin/layout/menu_item.html.twig' with {level: 1} %}
+            {% endif %}
+        {% endfor %}
+    </nav>
+</aside>

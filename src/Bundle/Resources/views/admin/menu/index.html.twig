@@ -1,0 +1,69 @@
+{% trans_default_domain 'numbernine' %}
+{% extends '@NumberNine/admin/base.html.twig' %}
+
+{% block title %}{{ 'Menus'|trans }}{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col">
+        <turbo-frame id="numbernine_admin_menu">
+            {% embed '@NumberNine/admin/util/toolbar.html.twig' with {title: 'Menus'|trans} %}
+                {% block tools %}
+                    <a href="{{ path('numbernine_admin_menu_create') }}"
+                       class="btn btn-color-white btn-size-xsmall"
+                       data-turbo-frame="_top"
+                    >
+                        {{ 'Add new menu'|trans }}
+                    </a>
+                {% endblock %}
+            {% endembed %}
+
+            {% include '@NumberNine/admin/util/flashes.html.twig' %}
+
+            <div class="flex-grow p-3">
+                {{ form_start(form) }}
+                    {% if menus|length > 0 %}
+                    <table class="w-full" data-controller="select-all">
+                        <thead>
+                            <tr>
+                                <th class="w-8"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></th>
+                                <th>{{ 'Name'|trans }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for menu in menus %}
+                                <tr>
+                                    <td>{{ form_widget(form['menu_' ~ menu.id], {attr: {'data-select-all-target': 'child'}}) }}</td>
+                                    <td>
+                                        <a href="{{ path('numbernine_admin_menu_edit', {id: menu.id}) }}"
+                                           data-turbo-frame="_top"
+                                        >
+                                            {{ menu.name }}
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4">
+                                        <input type="checkbox" data-action="select-all#toggle" data-select-all-target="child">
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    {% else %}
+                        <p>{{ 'No menu.' }}</p>
+                    {% endif %}
+
+                    {% if menus|length is same as 0 %}
+                        {% do form.delete.setRendered() %}
+                    {% else %}
+                        <div class="flex">
+                            {{ form_row(form.delete, {row_attr: {class: 'mt-4'}, attr: {class: 'btn btn-color-red'}}) }}
+                        </div>
+                    {% endif %}
+                {{ form_end(form) }}
+            </div>
+        </turbo-frame>
+    </div>
+{% endblock %}

@@ -18,14 +18,14 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 use function NumberNine\Common\Util\ArrayUtil\unset_recursive;
 
-class ShortcodeProcessorTest extends DotEnvAwareWebTestCase implements ThemeAwareCommandInterface
+final class ShortcodeProcessorTest extends DotEnvAwareWebTestCase implements ThemeAwareCommandInterface
 {
     private const SAMPLE_SHORTCODE = '
-        [flex_row justify="center" align="center" margin="10px auto 10px auto"]
+        [container justify="center" align="center" margin="10px auto 10px auto"]
             [link href="http://numbernine/" title="NumberNine - The most user friendly CMS based on Symfony"]
                 NumberNine
             [/link]
-        [/flex_row]
+        [/container]
     ';
 
     private ?ShortcodeProcessor $shortcodeProcessor;
@@ -35,8 +35,8 @@ class ShortcodeProcessorTest extends DotEnvAwareWebTestCase implements ThemeAwar
     {
         parent::setUp();
         $this->client->request('GET', '/');
-        $this->shortcodeProcessor = self::$container->get(ShortcodeProcessor::class);
-        $this->serializer = self::$container->get('serializer');
+        $this->shortcodeProcessor = static::getContainer()->get(ShortcodeProcessor::class);
+        $this->serializer = static::getContainer()->get('serializer');
     }
 
     public function testBuildShortcodeTreeCreatesArray(): void
@@ -67,13 +67,14 @@ class ShortcodeProcessorTest extends DotEnvAwareWebTestCase implements ThemeAwar
         self::assertEquals(
             [
                 0 => [
-                    'type' => 'NumberNine\\Shortcode\\FlexRowShortcode',
-                    'name' => 'flex_row',
+                    'type' => 'NumberNine\\Shortcode\\ContainerShortcode',
+                    'name' => 'container',
                     'parameters' => [
                         'justify' => 'center',
                         'align' => 'center',
                         'margin' => '10px auto 10px auto',
                         'padding' => '',
+                        'orientation' => 'horizontal'
                     ],
                     'responsive' => [
                     ],
@@ -81,14 +82,14 @@ class ShortcodeProcessorTest extends DotEnvAwareWebTestCase implements ThemeAwar
                     ],
                     'editable' => true,
                     'container' => true,
-                    'label' => 'Flex row',
+                    'label' => 'Container',
                     'siblingsPosition' => [
                         0 => 'top',
                         1 => 'bottom',
                     ],
                     'siblingsShortcodes' => [
                     ],
-                    'icon' => 'view_stream',
+                    'icon' => 'mdi-table-row',
                     'children' => [
                         0 => [
                             'type' => 'NumberNine\\Shortcode\\LinkShortcode',
@@ -110,7 +111,7 @@ class ShortcodeProcessorTest extends DotEnvAwareWebTestCase implements ThemeAwar
                             ],
                             'siblingsShortcodes' => [
                             ],
-                            'icon' => 'link',
+                            'icon' => 'mdi-link',
                             'children' => [
                                 0 => [
                                     'type' => 'NumberNine\\Shortcode\\TextShortcode',
@@ -131,7 +132,7 @@ class ShortcodeProcessorTest extends DotEnvAwareWebTestCase implements ThemeAwar
                                     ],
                                     'siblingsShortcodes' => [
                                     ],
-                                    'icon' => 'text_fields',
+                                    'icon' => 'mdi-format-text-variant',
                                 ],
                             ],
                         ],

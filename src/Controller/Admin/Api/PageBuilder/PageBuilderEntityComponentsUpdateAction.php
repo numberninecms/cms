@@ -35,7 +35,9 @@ final class PageBuilderEntityComponentsUpdateAction
         ArrayToShortcodeConverter $arrayToShortcodeConverter,
         ContentEntity $contentEntity
     ): JsonResponse {
-        $text = $arrayToShortcodeConverter->convertMany($request->request->get('components'));
+        /** @var array $components */
+        $components = $request->request->get('components');
+        $text = $arrayToShortcodeConverter->convertMany($components);
 
         $contentEntity->setContent($text);
         $entityManager->flush();

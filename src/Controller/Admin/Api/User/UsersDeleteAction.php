@@ -37,10 +37,11 @@ final class UsersDeleteAction extends AbstractController implements AdminControl
 
         /** @var array $ids */
         $ids = $request->request->get('ids');
+        /** @var string $associatedContent */
         $associatedContent = $request->request->get('associatedContent', 'reassign');
 
         try {
-            $userRepository->deleteUsers($ids, $associatedContent);
+            $userRepository->removeCollection($ids, $associatedContent);
         } catch (Exception $e) {
             return $responseFactory->createErrorJsonResponse($e->getMessage());
         }

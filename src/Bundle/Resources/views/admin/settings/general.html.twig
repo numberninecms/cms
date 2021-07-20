@@ -1,0 +1,33 @@
+{% trans_default_domain 'numbernine' %}
+{% extends '@NumberNine/admin/base.html.twig' %}
+
+{% block title %}{{ 'General settings'|trans }}{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col">
+        {% include '@NumberNine/admin/util/toolbar.html.twig' with {title: 'General settings'} %}
+
+        <turbo-frame id="numbernine_admin_settings_general">
+            {% include '@NumberNine/admin/util/flashes.html.twig' %}
+
+            {{ form_start(form, {attr: {'data-controller': 'settings--general', class: 'lg:max-w-md'}}) }}
+                {{ form_row(form.site_title) }}
+                {{ form_row(form.site_description) }}
+                {{ form_row(form.blog_as_homepage, {
+                    label_attr: {'data-action': 'click->settings--general#toggleBlogAsHomepage'},
+                    attr: {'data-settings--general-target': 'blogAsHomepage'}
+                }) }}
+                {{ form_row(form.page_for_front, {
+                    row_attr: {'data-settings--general-target': 'itemContainer'},
+                    attr: {'data-settings--general-target': 'item'}
+                }) }}
+                {{ form_row(form.page_for_posts, {
+                    row_attr: {'data-settings--general-target': 'itemContainer'},
+                    attr: {'data-settings--general-target': 'item'}
+                }) }}
+                {{ form_row(form.page_for_my_account) }}
+                {{ form_row(form.page_for_privacy) }}
+            {{ form_end(form) }}
+        </turbo-frame>
+    </div>
+{% endblock %}

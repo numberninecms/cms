@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace NumberNine\Form\Taxonomy;
 
 use NumberNine\Entity\Term;
@@ -28,16 +30,14 @@ final class TermFormType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(
-            [
-                'data_class' => Term::class,
-                'csrf_protection' => false,
-                'allow_extra_fields' => true,
-            ]
-        );
+        $resolver->setDefaults([
+            'data_class' => Term::class,
+            'csrf_protection' => false,
+            'allow_extra_fields' => true,
+        ]);
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'term';
     }

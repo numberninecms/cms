@@ -1,0 +1,65 @@
+{% trans_default_domain 'numbernine' %}
+{% extends '@NumberNine/admin/base.html.twig' %}
+
+{% block title %}{{ taxonomy_plural_name|capitalize }}{% endblock %}
+
+{% block active_menu_url %}{{ path('numbernine_admin_term_index', {taxonomy: taxonomy.name}) }}{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col">
+        <turbo-frame id="numbernine_admin_term">
+            {% embed '@NumberNine/admin/util/toolbar.html.twig' with {title: taxonomy_plural_name|capitalize} %}
+                {% block tools %}
+                    <a href="{{ path('numbernine_admin_term_create', {taxonomy: taxonomy.name}) }}"
+                       class="btn btn-color-white btn-size-xsmall"
+                       data-turbo-frame="_top"
+                    >
+                        Add new {{ taxonomy.name }}
+                    </a>
+                {% endblock %}
+            {% endembed %}
+
+            {% include '@NumberNine/admin/util/flashes.html.twig' %}
+
+            <div class="flex-grow p-3">
+                {{ form_start(form) }}
+                    <table class="w-full" data-controller="select-all">
+                        <thead>
+                            <tr>
+                                <th class="w-8"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></th>
+                                <th>{{ 'Name'|trans }}</th>
+                                <th>{{ 'Slug'|trans }}</th>
+                                <th>{{ 'Description'|trans }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for term in terms %}
+                                <tr>
+                                    <td>{{ form_widget(form['term_' ~ term.id], {attr: {'data-select-all-target': 'child'}}) }}</td>
+                                    <td>
+                                        <a href="{{ path('numbernine_admin_term_edit', {taxonomy: taxonomy.name, id: term.id}) }}"
+                                           data-turbo-frame="_top"
+                                        >
+                                            {{ term.name }}
+                                        </a>
+                                    </td>
+                                    <td>{{ term.slug }}</td>
+                                    <td>{{ term.description }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="4"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+
+                    <div class="flex">
+                        {{ form_row(form.delete, {row_attr: {class: 'mt-4'}, attr: {class: 'btn btn-color-red'}}) }}
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </turbo-frame>
+    </div>
+{% endblock %}

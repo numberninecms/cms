@@ -19,12 +19,13 @@ final class MediaExtension extends AbstractExtension
     /**
      * @return TwigFunction[]
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('N9_image', [MediaRuntime::class, 'getImage'], ['is_safe' => ['html']]),
             new TwigFunction('N9_image_url', [MediaRuntime::class, 'getImageUrl']),
             new TwigFunction('N9_featured_image', [MediaRuntime::class, 'getFeaturedImage'], ['is_safe' => ['html']]),
+            new TwigFunction('N9_max_upload_size', [MediaRuntime::class, 'getMaxUploadSize']),
         ];
     }
 }

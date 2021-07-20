@@ -28,7 +28,7 @@ use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 use Symfony\WebpackEncoreBundle\WebpackEncoreBundle;
 use SymfonyCasts\Bundle\ResetPassword\SymfonyCastsResetPasswordBundle;
 
-class NumberNineBundleKernel extends Kernel
+final class NumberNineBundleKernel extends Kernel
 {
     use MicroKernelTrait;
 
@@ -69,6 +69,6 @@ class NumberNineBundleKernel extends Kernel
 
     public function getCacheDir(): string
     {
-        return __DIR__ . '/../var/cache/test/' . spl_object_hash($this);
+        return __DIR__ . '/../var/cache/test/';
     }
 }

@@ -23,7 +23,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *     name="recent_posts",
  *     label="Recent posts",
  *     description="Displays the most recent posts.",
- *     icon="description"
+ *     icon="mdi-format-list-bulleted"
  * )
  */
 final class RecentPostsShortcode extends AbstractShortcode implements EditableShortcodeInterface

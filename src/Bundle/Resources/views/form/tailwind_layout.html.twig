@@ -1,0 +1,112 @@
+{% trans_default_domain 'numbernine' %}
+{% use 'form_div_layout.html.twig' %}
+
+{%- block form_row -%}
+    {%- set row_attr = row_attr|merge({class: row_attr.class|default(row_class|default('flex flex-col px-3 mt-2'))}) -%}
+    {{- parent() -}}
+{%- endblock form_row -%}
+
+{% block form_label %}
+    {%- set label_attr = label_attr|merge({class: label_attr.class|default(label_class|default('font-semibold text-quaternary'))}) -%}
+    {{- parent() -}}
+{% endblock form_label %}
+
+{%- block button_row -%}
+    {%- set row_attr = row_attr|merge({class: row_attr.class|default('mt-4 px-3')}) -%}
+    <div{% with {attr: row_attr} %} {{ block('attributes') }}{% endwith %}>
+        {{- form_widget(form, {attr: attr|merge({class: attr.class|default(row_class|default('btn btn-color-primary'))})}) -}}
+    </div>
+{%- endblock button_row -%}
+
+{%- block checkbox_widget -%}
+    {%- set label_attr = label_attr|merge({class: label_attr.class|default(label_class|default('flex flex-row space-x-3 items-center'))}) -%}
+    <label{% with {attr: label_attr} %} {{ block('attributes') }}{% endwith %}>
+        {{- parent() -}}
+        <span>{{- label -}}</span>
+    </label>
+{%- endblock checkbox_widget -%}
+
+{%- block radio_widget -%}
+    {%- set label_attr = label_attr|merge({class: label_attr.class|default(label_class|default('flex flex-row space-x-3 items-center'))}) -%}
+    <label{% with {attr: label_attr} %} {{ block('attributes') }}{% endwith %}>
+        {{- parent() -}}
+        <span>{{- label -}}</span>
+    </label>
+{%- endblock radio_widget -%}
+
+{%- block key_value_row -%}
+    {%- set row_attr = row_attr|merge({class: row_attr.class|default('') ~ ' flex mt-2 space-y-2 md:space-y-0 md:space-x-3 flex-col md:flex-row'}) -%}
+    <div{% with {attr: row_attr} %} {{ block('attributes') }}{% endwith %}>
+        {{- form_row(form.children['key'], {row_attr: {class: 'flex flex-col flex-grow md:max-w-xs'}}) -}}
+        {{- form_row(form.children['value'], {row_attr: {class: 'flex flex-col flex-grow'}}) -}}
+        {% if delete_button %}
+            <div class="self-end">
+                <button
+                    type="button"
+                    class="btn btn-color-red"
+                    data-action="collection#delete"
+                >
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+        {% endif %}
+    </div>
+{%- endblock key_value_row -%}
+
+{%- block key_value_collection_row -%}
+    <div class="flex flex-col" data-controller="collection">
+        {{ form_row(form) }}
+        <button type="button"
+                class="btn btn-color-primary btn-style-outline btn-size-xsmall self-start m-3"
+                data-action="collection#add"
+                data-list-selector="#{{ id }}">{{ add_new_label }}</button>
+    </div>
+{%- endblock key_value_collection_row -%}
+
+{%- block tiny_editor_row -%}
+    {%- set row_attr = row_attr|merge({'data-controller': 'tiny-editor', 'data-tiny-editor-css-value': N9_theme_stylesheet_urls()|join(',')}) -%}
+    {{- block('form_row') -}}
+{%- endblock -%}
+
+{%- block tiny_editor_widget -%}
+    {%- set row_attr = row_attr|merge({'data-tiny-editor-target': 'editor'}) -%}
+    <textarea{% with {attr: row_attr} %} {{ block('widget_attributes') }}{% endwith %}>{{ value }}</textarea>
+{%- endblock -%}
+
+{%- block media_file_widget -%}
+    <div class="flex flex-col items-center gap-3 mt-3" data-controller="media--select">
+        <div class="" data-media--select-target="image">
+            {% if media_file is defined and media_file %}
+                {{ N9_image(media_file, 'preview') }}
+            {% endif %}
+        </div>
+        <p
+            data-media--select-target="text"
+            {% if media_file is defined and media_file %} style="display: none"{% endif %}
+        >
+            {{ 'No image selected'|trans }}
+        </p>
+        <div class="flex gap-3">
+            <button type="button" class="btn btn-color-primary" data-action="media--select#select">
+                {{ 'Select image'|trans }}
+            </button>
+            <button
+                type="button"
+                class="btn btn-color-red"
+                data-action="media--select#remove"
+                data-media--select-target="remove"
+                {% if not (media_file is defined and media_file) %} style="display: none"{% endif %}
+            >
+                <i class="fa fa-trash"></i>
+            </button>
+        </div>
+
+        {%- set type = type|default('hidden') -%}
+        {%- set attr = attr|merge({'data-media--select-target': 'input'}) -%}
+        {{ block('form_widget_simple') }}
+    </div>
+{%- endblock -%}
+
+{%- block content_entity_relationship_row -%}
+    {{- block('form_widget') -}}
+{%- endblock -%}

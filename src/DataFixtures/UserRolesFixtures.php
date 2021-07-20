@@ -36,7 +36,8 @@ final class UserRolesFixtures extends Fixture implements FixtureGroupInterface
             ->setName('Subscriber')
             ->setCapabilities(
                 [
-                    Capabilities::READ
+                    Capabilities::READ,
+                    ...$this->capabilityGenerator->generateMappedSubscriberCapabilities('post'),
                 ]
             );
 

@@ -1,0 +1,91 @@
+/*
+ * This file is part of the NumberNine package.
+ *
+ * (c) William Arin <williamarin.dev@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+[type='text'], [type='email'], [type='url'], [type='password'], [type='number'], [type='date'],
+[type='datetime-local'], [type='month'], [type='search'], [type='tel'], [type='time'], [type='week'],
+[multiple], textarea, select {
+    @apply rounded border-secondary-100 focus:border-primary focus:ring-primary focus:ring-offset-white;
+}
+
+[type='checkbox'], [type='radio'] {
+    @apply text-primary border-secondary-100 focus:text-primary focus:ring-primary focus:ring-offset-white;
+}
+
+[type="range"] {
+    @apply rounded-lg overflow-hidden appearance-none bg-primary-100 h-3 w-80;
+}
+
+form {
+    .help-text {
+        @apply text-gray-400 text-sm mt-2;
+    }
+}
+
+.input-group {
+    input, button {
+        @apply rounded-none;
+    }
+
+    input:not(.append),
+    .prepend {
+        @apply rounded-l;
+    }
+
+    button:not(.prepend),
+    .append {
+        @apply rounded-r;
+    }
+}
+
+.toggle-group {
+    @apply relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in;
+}
+
+.toggle-checkbox {
+    @apply
+        absolute
+        block
+        w-6 h-6
+        rounded-full
+        bg-white
+        border-4 border-gray-300
+        focus:ring-0 focus:ring-offset-0
+        appearance-none
+        cursor-pointer;
+
+    &:checked {
+        @apply
+            right-0
+            bg-none bg-white
+            border-primary
+            hover:bg-white hover:border-primary
+            focus:bg-white focus:border-primary;
+
+        + .toggle-label {
+            @apply bg-primary;
+        }
+    }
+}
+
+.toggle-label {
+    @apply block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    [type="range"]::-webkit-slider-thumb {
+        width: 15px;
+        -webkit-appearance: none;
+        appearance: none;
+        height: 15px;
+        cursor: ew-resize;
+        background: #FFF;
+        box-shadow: -405px 0 0 400px var(--color-primary);
+        border-radius: 50%;
+    }
+}

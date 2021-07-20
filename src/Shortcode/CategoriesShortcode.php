@@ -27,7 +27,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *     name="categories",
  *     label="Categories",
  *     description="Displays the posts categories.",
- *     icon="category"
+ *     icon="mdi-view-list"
  * )
  */
 final class CategoriesShortcode extends AbstractShortcode implements

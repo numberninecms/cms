@@ -1,0 +1,32 @@
+{% trans_default_domain 'numbernine' %}
+<!DOCTYPE html>
+<html class="h-full" lang="{{ app.request.locale }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>{% block title %}{% endblock %}</title>
+
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('admin', 'numbernine', 'numbernine') }}
+    {% endblock %}
+
+    {% block javascripts_head %}
+        {{ encore_entry_script_tags('admin', 'numbernine', 'numbernine') }}
+    {% endblock %}
+</head>
+
+<body class="h-full">
+    {% set topbar_center_menu = block('topbar_center_menu') ?? null %}
+    {% embed '@NumberNine/admin/layout/topbar.html.twig' %}
+        {% block center_menu %}{{ topbar_center_menu|raw }}{% endblock %}
+    {% endembed %}
+
+    <div class="ui-area">
+        {% include '@NumberNine/admin/layout/menu.html.twig' with {active_menu_url: block('active_menu_url') ?? ''} %}
+        <main class="flex-1">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+{% block javascripts_footer %}{% endblock %}
+</body>
+</html>

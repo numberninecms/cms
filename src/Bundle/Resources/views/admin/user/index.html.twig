@@ -1,0 +1,68 @@
+{% trans_default_domain 'numbernine' %}
+{% extends '@NumberNine/admin/base.html.twig' %}
+
+{% block title %}{{ 'Users'|trans }}{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col">
+        <turbo-frame id="numbernine_admin_user_index">
+            {% embed '@NumberNine/admin/util/toolbar.html.twig' with {title: 'Users'|trans} %}
+                {% block tools %}
+                    <a href="{{ path('numbernine_admin_user_create') }}"
+                       class="btn btn-color-white btn-size-xsmall"
+                       data-turbo-frame="_top"
+                    >
+                        Add new user
+                    </a>
+                {% endblock %}
+            {% endembed %}
+
+            {% include '@NumberNine/admin/util/flashes.html.twig' %}
+
+            <div class="flex-grow p-3">
+                {{ form_start(form) }}
+                <table class="w-full" data-controller="select-all">
+                    <thead>
+                    <tr>
+                        <th class="w-8"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></th>
+                        <th>{{ 'Username'|trans }}</th>
+                        <th>{{ 'Name'|trans }}</th>
+                        <th>{{ 'Email'|trans }}</th>
+                        <th>{{ 'Roles'|trans }}</th>
+                        <th>{{ 'Posts'|trans }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ form_widget(form['user_' ~ user.id], {attr: {'data-select-all-target': 'child'}}) }}</td>
+                            <td>
+                                <a href="{{ path('numbernine_admin_user_edit', {id: user.id}) }}"
+                                   data-turbo-frame="_top"
+                                >
+                                    {{ user.username }}
+                                </a>
+                            </td>
+                            <td>{{ user.displayName }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.roles|join(', ') }}</td>
+                            <td>{{ postCounts[user.id] }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="4"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></td>
+                    </tr>
+                    </tfoot>
+                </table>
+
+                <div class="flex flex-col">
+                    {{ form_row(form.mode) }}
+                    {{ form_row(form.delete, {row_attr: {class: 'mt-4'}, attr: {class: 'btn btn-color-red'}}) }}
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </turbo-frame>
+    </div>
+{% endblock %}

@@ -21,7 +21,7 @@ use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @Shortcode(name="button", label="Button", icon="crop_7_5")
+ * @Shortcode(name="button", label="Button", icon="mdi-gesture-tap-button")
  */
 final class ButtonShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {

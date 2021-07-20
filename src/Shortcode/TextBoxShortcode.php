@@ -20,7 +20,7 @@ use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @Shortcode(name="text_box", label="TextBox", container=true, icon="text_fields")
+ * @Shortcode(name="text_box", label="TextBox", container=true, icon="mdi-format-textbox")
  */
 final class TextBoxShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {

@@ -22,6 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * @Shortcode(
  *     name="logo",
  *     label="Site logo",
+ *     icon="mdi-symfony",
  *     description="Displays the site logo with dynamic header tag for better SEO."
  * )
  */

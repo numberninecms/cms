@@ -1,0 +1,25 @@
+{% trans_default_domain 'numbernine' %}
+{% extends '@NumberNine/admin/base.html.twig' %}
+
+{% block title %}{{ 'New user role'|trans }}{% endblock %}
+
+{% block active_menu_url %}{{ path('numbernine_admin_user_role_index') }}{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col">
+        <turbo-frame id="numbernine_admin_user_role_create">
+            {% include '@NumberNine/admin/util/toolbar.html.twig' with {
+                title: 'New user role'|trans,
+            } %}
+
+            {% include '@NumberNine/admin/util/flashes.html.twig' %}
+
+            {{ form_start(form, {attr: {class: 'lg:max-w-md', 'data-turbo-frame': '_top'}}) }}
+                {{ form_row(form.name) }}
+                <div class="flex">
+                    {{ form_row(form.create) }}
+                </div>
+            {{ form_end(form) }}
+        </turbo-frame>
+    </div>
+{% endblock %}

@@ -7,12 +7,12 @@
  * file that was distributed with this source code.
  */
 
-#page-builder-tool-outline {
+#n9-page-builder-tool-outline {
     z-index: 25;
     pointer-events: none;
     border-color: rgba(78, 87, 98, 0.5);
 
-    .wrapper {
+    .n9-wrapper {
         background-color: var(--n9-secondary);
     }
 }

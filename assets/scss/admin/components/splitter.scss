@@ -1,0 +1,21 @@
+/*!
+ * This file is part of the NumberNine package.
+ *
+ * (c) William Arin <williamarin.dev@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+.split {
+    @apply flex flex-row;
+}
+
+.gutter {
+    @apply hidden md:flex bg-gray-100 bg-center bg-no-repeat;
+
+    &.gutter-horizontal {
+        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+        cursor: col-resize;
+    }
+}

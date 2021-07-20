@@ -19,7 +19,7 @@ use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @Shortcode(name="video", label="Video", icon="movie")
+ * @Shortcode(name="video", label="Video", icon="mdi-video")
  */
 final class VideoShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {

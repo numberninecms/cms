@@ -24,6 +24,11 @@ final class AssetExtension extends AbstractExtension
                 [AssetRuntime::class, 'renderStylesheetTag'],
                 ['is_safe' => ['html']]
             ),
+            new TwigFunction(
+                'N9_theme_stylesheet_urls',
+                [AssetRuntime::class, 'getStylesheetUrls'],
+                ['is_safe' => ['html']]
+            ),
             new TwigFunction('N9_theme_script', [AssetRuntime::class, 'renderScriptTag'], ['is_safe' => ['html']]),
             new TwigFunction('N9_theme_assets', [AssetRuntime::class, 'renderEntryTags'], ['is_safe' => ['html']]),
         ];

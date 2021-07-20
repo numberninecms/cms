@@ -23,6 +23,7 @@ use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\User;
 use NumberNine\Event\MainLoopQueryEvent;
 use NumberNine\Event\PaginatorEvent;
+use NumberNine\Exception\ClassNotFoundException;
 use NumberNine\Exception\ContentTypeNotFoundException;
 use NumberNine\Exception\InvalidContentTypeException;
 use NumberNine\Model\Content\ContentType;
@@ -35,6 +36,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
+
+use function Symfony\Component\String\u;
 
 final class ContentService
 {
@@ -43,29 +47,25 @@ final class ContentService
     private Reader $annotationReader;
     private TokenStorageInterface $tokenStorage;
     private EventDispatcherInterface $eventDispatcher;
+    private SluggerInterface $slugger;
 
     /** @var ContentType[] */
     private array $contentTypes = [];
 
-    /**
-     * @param EntityManagerInterface $entityManager
-     * @param FormFactoryInterface $formFactory
-     * @param Reader $annotationReader
-     * @param TokenStorageInterface $tokenStorage
-     * @param EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         FormFactoryInterface $formFactory,
         Reader $annotationReader,
         TokenStorageInterface $tokenStorage,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        SluggerInterface $slugger
     ) {
         $this->entityManager = $entityManager;
         $this->formFactory = $formFactory;
         $this->annotationReader = $annotationReader;
         $this->tokenStorage = $tokenStorage;
         $this->eventDispatcher = $eventDispatcher;
+        $this->slugger = $slugger;
     }
 
     /**
@@ -76,7 +76,11 @@ final class ContentService
     public function getContentType(string $contentType): ContentType
     {
         foreach ($this->contentTypes as $type) {
-            if ($type->getName() === $contentType) {
+            if (
+                $type->getName() === $contentType
+                || u($type->getLabels()->getPluralName())->snake()->toString() === $contentType
+                || $this->slugger->slug((string)$type->getLabels()->getPluralName())->toString() === $contentType
+            ) {
                 return $type;
             }
         }
@@ -114,6 +118,10 @@ final class ContentService
     ): Paginator {
         if (is_string($contentType)) {
             $contentType = $this->getContentType($contentType);
+        }
+
+        if (!class_exists($contentType->getEntityClassName())) {
+            throw new ClassNotFoundException($contentType->getEntityClassName());
         }
 
         /** @var AbstractContentEntityRepository $repository */
@@ -161,12 +169,16 @@ final class ContentService
     /**
      * @param ContentType|string $contentType Either the ContentType object or the content type name as registered
      * @param int $id
-     * @return ContentEntity
+     * @return ContentEntity|object|null
      */
-    public function getEntityOfType($contentType, $id): object
+    public function getEntityOfType($contentType, int $id): ?object
     {
         if (is_string($contentType)) {
             $contentType = $this->getContentType($contentType);
+        }
+
+        if (!class_exists($contentType->getEntityClassName())) {
+            throw new ClassNotFoundException($contentType->getEntityClassName());
         }
 
         return $this->entityManager->getRepository($contentType->getEntityClassName())->find($id);
@@ -175,12 +187,16 @@ final class ContentService
     /**
      * @param ContentType|string $contentType Either the ContentType object or the content type name as registered
      * @param array $criteria Associative array representing the fields to search
-     * @return ContentEntity
+     * @return ContentEntity|object|null
      */
-    public function getEntityOfTypeBy($contentType, array $criteria): object
+    public function getEntityOfTypeBy($contentType, array $criteria): ?object
     {
         if (is_string($contentType)) {
             $contentType = $this->getContentType($contentType);
+        }
+
+        if (!class_exists($contentType->getEntityClassName())) {
+            throw new ClassNotFoundException($contentType->getEntityClassName());
         }
 
         return $this->entityManager->getRepository($contentType->getEntityClassName())->findOneBy($criteria);
@@ -195,6 +211,10 @@ final class ContentService
     {
         if (is_string($contentType)) {
             $contentType = $this->getContentType($contentType);
+        }
+
+        if (!class_exists($contentType->getEntityClassName())) {
+            throw new ClassNotFoundException($contentType->getEntityClassName());
         }
 
         /** @var AbstractContentEntityRepository $repository */
@@ -213,6 +233,10 @@ final class ContentService
             $contentType = $this->getContentType($contentType);
         }
 
+        if (!class_exists($contentType->getEntityClassName())) {
+            throw new ClassNotFoundException($contentType->getEntityClassName());
+        }
+
         /** @var AbstractContentEntityRepository $repository */
         $repository = $this->entityManager->getRepository($contentType->getEntityClassName());
         $repository->hardDeleteAllDeleted($contentType->getName());
@@ -227,6 +251,10 @@ final class ContentService
     {
         if (is_string($contentType)) {
             $contentType = $this->getContentType($contentType);
+        }
+
+        if (!class_exists($contentType->getEntityClassName())) {
+            throw new ClassNotFoundException($contentType->getEntityClassName());
         }
 
         /** @var AbstractContentEntityRepository $repository */

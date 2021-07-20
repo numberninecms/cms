@@ -38,7 +38,9 @@ final class PageBuilderAreaComponentsUpdateAction
         ThemeOptionsReadWriter $themeOptionsReadWriter,
         string $area
     ): JsonResponse {
-        $text = $arrayToShortcodeConverter->convertMany($request->request->get('components'));
+        /** @var array $components */
+        $components = $request->request->get('components');
+        $text = $arrayToShortcodeConverter->convertMany($components);
 
         $areas = $themeOptionsReadWriter->read($themeStore->getCurrentTheme(), 'areas', []);
         $areas[$area] = $text;

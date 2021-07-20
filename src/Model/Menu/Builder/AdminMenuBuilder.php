@@ -11,6 +11,7 @@
 
 namespace NumberNine\Model\Menu\Builder;
 
+use NumberNine\Exception\MenuItemNotFoundException;
 use NumberNine\Model\Menu\MenuItem;
 
 final class AdminMenuBuilder
@@ -23,11 +24,6 @@ final class AdminMenuBuilder
         $this->menuItems = [];
     }
 
-    /**
-     * @param string $key
-     * @param array $itemSchema
-     * @return AdminMenuBuilder
-     */
     public function append(string $key, array $itemSchema): self
     {
         $this->menuItems[$key] = $this->createMenuItemFromSchema($itemSchema);
@@ -35,20 +31,16 @@ final class AdminMenuBuilder
         return $this;
     }
 
-    /**
-     * @param string $keyToSearchFor
-     * @param string $key
-     * @param array $itemSchema
-     * @return $this
-     */
     public function insertBefore(string $keyToSearchFor, string $key, array $itemSchema): self
     {
+        $menuItem = $this->createMenuItemFromSchema($itemSchema);
+
         $offset = array_search($keyToSearchFor, array_keys($this->menuItems), true);
 
         $this->menuItems = array_merge(
             (array)array_slice($this->menuItems, 0, (int)$offset, true),
-            [$key => $this->createMenuItemFromSchema($itemSchema)],
-            array_slice($this->menuItems, (int)$offset, null, true)
+            [$key => $menuItem],
+            array_slice($this->menuItems, (int)$offset, null, true),
         );
 
         return $this;
@@ -56,26 +48,25 @@ final class AdminMenuBuilder
 
     /**
      * @param string $keyToSearchFor Can be either a menu name or a path, e.g. 'settings' or 'settings.general'
-     * @param string $key
-     * @param array $itemSchema
-     * @return $this
      */
     public function insertAfter(string $keyToSearchFor, string $key, array $itemSchema): self
     {
+        $menuItem = $this->createMenuItemFromSchema($itemSchema);
+
         $tokens = explode('.', $keyToSearchFor);
-        $this->insertAfterItem($tokens, $this->menuItems, [$key => $this->createMenuItemFromSchema($itemSchema)]);
+        $this->insertAfterItem($tokens, $this->menuItems, [$key => $menuItem]);
         return $this;
     }
 
     /**
-     * @param array $path
+     * @param string[] $path
      * @param MenuItem[] $items
      * @param array $menuToInsert
      * @return bool
      */
     private function insertAfterItem(array &$path, array &$items, array $menuToInsert): bool
     {
-        $currentPath = array_shift($path);
+        $currentPath = (string)array_shift($path);
 
         if (!array_key_exists($currentPath, $items)) {
             return false;
@@ -107,22 +98,9 @@ final class AdminMenuBuilder
         return true;
     }
 
-    /**
-     * @param array $itemSchema
-     * @return MenuItem
-     */
     private function createMenuItemFromSchema(array $itemSchema): MenuItem
     {
-        $menuItem = new MenuItem(array_merge($itemSchema, ['position' => (count($this->menuItems) + 1) * 100]));
-        $children = $itemSchema['children'] ?? [];
-
-        $i = 0;
-        foreach ($children as $k => $childOptions) {
-            $childMenuItem = new MenuItem(array_merge($childOptions, ['position' => (($i++) + 1) * 100]));
-            $menuItem->addChild($k, $childMenuItem);
-        }
-
-        return $menuItem;
+        return new MenuItem(array_merge($itemSchema, ['position' => (count($this->menuItems) + 1) * 100]));
     }
 
     /**
@@ -131,5 +109,16 @@ final class AdminMenuBuilder
     public function getMenuItems(): array
     {
         return $this->menuItems;
+    }
+
+    public function removeMenuItem(string $key): self
+    {
+        if (!array_key_exists($key, $this->menuItems)) {
+            throw new MenuItemNotFoundException($key);
+        }
+
+        unset($this->menuItems[$key]);
+
+        return $this;
     }
 }

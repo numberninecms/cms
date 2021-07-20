@@ -1,0 +1,114 @@
+{% trans_default_domain 'numbernine' %}
+{% extends '@NumberNine/admin/base.html.twig' %}
+
+{% block title %}{{ '%1% edition'|trans({'%1%': area|capitalize}) }}{% endblock %}
+
+{% block topbar_center_menu %}
+    <div class="flex items-center gap-5" data-controller="customize--builder-toolbar">
+        <div class="flex items-center gap-1">
+            <button type="button"
+                    title="{{ 'Save page'|trans }}"
+                    class="btn btn-color-white btn-style-flat"
+                    data-action="customize--builder-toolbar#save"
+            >
+                <i class="fas fa-save"></i>
+            </button>
+            <button type="button"
+                    title="{{ 'Components tree'|trans }}"
+                    class="btn btn-color-white btn-style-flat"
+                    data-action="customize--builder-toolbar#showTree"
+            >
+                <svg width="16" height="24" viewBox="0 0 16 16" class="fill-current">
+                    <path d="M8 11v1h-1v-2h5v-4h-8v1h-1v-2h6v-4h-9v4h2v3h2v2h2v3h2v2h8v-4z"></path>
+                </svg>
+            </button>
+        </div>
+
+        <div class="flex items-center gap-1">
+            <button type="button"
+                    title="{{ 'Desktop'|trans }}"
+                    class="btn btn-color-white btn-style-flat"
+                    data-action="customize--builder-toolbar#setDesktopSize"
+            >
+                <i class="fas fa-desktop"></i>
+            </button>
+            <button type="button"
+                    title="{{ 'Tablet'|trans }}"
+                    class="btn btn-color-white btn-style-flat"
+                    data-action="customize--builder-toolbar#setTabletSize"
+            >
+                <i class="fas fa-tablet-alt"></i>
+            </button>
+            <button type="button"
+                    title="{{ 'Phone'|trans }}"
+                    class="btn btn-color-white btn-style-flat"
+                    data-action="customize--builder-toolbar#setPhoneSize"
+            >
+                <i class="fas fa-mobile-alt"></i>
+            </button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col min-h-full">
+        {% include '@NumberNine/admin/util/flash_single.html.twig' %}
+        <div class="flex-1 flex min-h-full" data-controller="splitter">
+            <div class="flex-1 flex min-h-full justify-center bg-gray-200"
+                 data-controller="customize--builder customize--builder-watcher"
+                 data-customize--builder-frontend-url-value="{{ path('numbernine_homepage', {n9: 'admin', area: area}) }}"
+                 data-customize--builder-components-api-url-value="{{ path('numbernine_admin_pagebuilder_area_get_components', {area: area}) }}"
+                 data-splitter-target="panel"
+            >
+            </div>
+            <div class="hidden lg:flex flex-col"
+                 data-controller="customize--builder-sidebar"
+                 data-splitter-target="panel"
+                 data-min-size="300"
+            >
+                <div data-customize--builder-sidebar-target="panel" data-id="tree"></div>
+                <div data-customize--builder-sidebar-target="panel" data-id="componentsList" style="display: none">
+                    <div class="flex flex-wrap gap-3 p-3">
+                        {% for name, shortcode in shortcodes %}
+                            <button
+                                type="button"
+                                class="border border-primary flex items-center justify-center h-24 w-24"
+                                data-action="customize--builder-sidebar#select"
+                                data-shortcode="{{ name }}"
+                            >
+                                <span class="flex flex-col text-center text-primary leading-4 gap-2 px-2 text-sm mt-3">
+                                    <i class="{% if shortcode.icon starts with 'mdi' %}mdi mdi-36px {{ shortcode.icon }}{% else %}text-3xl fas fa-{{ shortcode.icon }}{% endif %}"></i>
+                                    <span>{{ shortcode.label }}</span>
+                                </span>
+                            </button>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div data-customize--builder-sidebar-target="panel"
+                     data-controller="customize--builder-form"
+                     data-customize--builder-form-colors-url-value="{{ path('numbernine_admin_theme_colors_get_collection') }}"
+                     data-customize--builder-form-frontend-css-url-value="{{ N9_theme_stylesheet_urls()|join(',') }}"
+                     data-id="componentForm"
+                     style="display: none"
+                >
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% embed '@NumberNine/admin/util/draggable_modal.html.twig' with {
+        id: 'shortcode_viewer',
+        title: 'Shortcode viewer',
+        controller: 'customize--builder-shortcode-viewer',
+        attributes: {
+            'data-customize--builder-shortcode-viewer-render-url-value': path('numbernine_admin_page_builder_generate_shortcode'),
+            style: 'display: none',
+        },
+    } %}
+        {% block content %}
+            <pre class="language-shortcode"><code data-customize--builder-shortcode-viewer-target="content"></code></pre>
+        {% endblock %}
+    {% endembed %}
+
+    {% include '@NumberNine/admin/util/media_library_modal.html.twig' %}
+{% endblock %}

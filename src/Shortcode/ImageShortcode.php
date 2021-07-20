@@ -15,6 +15,7 @@ use NumberNine\Annotation\Shortcode;
 use NumberNine\Entity\MediaFile;
 use NumberNine\Model\PageBuilder\Control\ImageControl;
 use NumberNine\Model\PageBuilder\Control\SliderInputControl;
+use NumberNine\Model\PageBuilder\FormControlCriteria;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
@@ -25,7 +26,7 @@ use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
 use function NumberNine\Common\Util\ArrayUtil\array_set_if_value_exists;
 
 /**
- * @Shortcode(name="image", label="Image", icon="image")
+ * @Shortcode(name="image", label="Image", icon="mdi-image-area")
  */
 final class ImageShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
@@ -39,7 +40,10 @@ final class ImageShortcode extends AbstractShortcode implements EditableShortcod
     public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void
     {
         $builder
-            ->add('id', ImageControl::class, ['label' => 'Image'])
+            ->add('id', ImageControl::class, [
+                'label' => 'Image',
+                'fallback_criteria' => (new FormControlCriteria('fromTitle', 'title')),
+            ])
             ->add('maxWidth', SliderInputControl::class, [
                 'label' => 'Maximum width',
                 'max' => 1000,

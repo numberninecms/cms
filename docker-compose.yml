@@ -6,11 +6,10 @@ version: "3.8"
 
 services:
     php:
-        container_name: cms_php
         image: numberninecms/php:7.4-fpm-dev
         working_dir: /srv/app
         user: '1000:1000'
-        restart: unless-stopped
+        restart: 'no'
         env_file:
             - .env
             - .env.test.local
@@ -19,10 +18,9 @@ services:
             - ./docker/symfony.ini:/etc/php7/conf.d/symfony.ini
 
     mysql:
-        container_name: cms_mysql
         image: mysql:8
         command: --default-authentication-plugin=mysql_native_password
-        restart: unless-stopped
+        restart: 'no'
         environment:
             - MYSQL_USER=test
             - MYSQL_PASSWORD=test
@@ -30,15 +28,6 @@ services:
             - MYSQL_DATABASE=numbernine_test
         volumes:
             - mysql_data:/var/lib/mysql
-
-    node:
-        container_name: cms_node
-        image: node:15-alpine
-        user: '1000:1000'
-        restart: 'no'
-        working_dir: /srv/app
-        volumes:
-            - ./:/srv/app
 
 volumes:
     mysql_data:

@@ -1,0 +1,16 @@
+{% trans_default_domain 'numbernine' %}
+{% extends '@NumberNine/admin/base.html.twig' %}
+
+{% block title %}{{ 'Emails settings'|trans }}{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col">
+        {% include '@NumberNine/admin/util/toolbar.html.twig' with {title: 'Email settings'} %}
+
+        <turbo-frame id="numbernine_admin_settings_emails">
+            {% include '@NumberNine/admin/util/flashes.html.twig' %}
+
+            {{ form(form, {attr: {class: 'lg:max-w-md'}}) }}
+        </turbo-frame>
+    </div>
+{% endblock %}

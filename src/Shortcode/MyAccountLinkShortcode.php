@@ -18,7 +18,7 @@ use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @Shortcode(name="my_account_link", label="My Account Link", icon="person")
+ * @Shortcode(name="my_account_link", label="My Account Link", icon="mdi-account")
  */
 final class MyAccountLinkShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {

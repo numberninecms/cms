@@ -1,0 +1,22 @@
+{% trans_default_domain 'numbernine' %}
+<div class="tabs-toolbar{{ class is defined ? ' ' ~ class : '' }}">
+    <div class="tabs">
+        {% for tab in tabs %}
+            {% if tab.if is not defined or tab.if %}
+                <a href="#"
+                   class="{{ tabClass ?? '' }}"
+                   data-dynamic-tabs-target="tab"
+                   data-action="dynamic-tabs#activate"
+                   data-tab-id="{{ tab.id ?? '' }}"
+                >
+                    <span class="space-x-1">
+                        {% if tab.icon %}
+                            <i class="fa fa-{{ tab.icon }}"></i>
+                        {% endif %}
+                        <span class="hidden md:inline">{{ (tab.text ?? 'Missing title')|trans }}</span>
+                    </span>
+                </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>

@@ -1,0 +1,18 @@
+{% trans_default_domain 'numbernine' %}
+{% extends '@NumberNine/admin/base.html.twig' %}
+
+{% block title %}{{ '%1% edition: %2%'|trans({
+    '%1%': content_type.labels.singularName|capitalize,
+    '%2%': entity.title,
+}) }}{% endblock %}
+
+{% block active_menu_url %}{{ path('numbernine_admin_content_entity_index', {type: type_slug}) }}{% endblock %}
+
+{% block content %}
+    <div class="flex-1 flex min-h-full"
+         data-controller="customize--builder"
+         data-customize--builder-frontend-url-value="{{ path('numbernine_' ~ content_type.name ~ '_show', {slug: entity.slug, n9: 'admin'}) }}"
+         data-customize--builder-components-api-url-value="{{ path('numbernine_admin_pagebuilder_entity_get_components', {id: entity.id}) }}"
+    >
+    </div>
+{% endblock %}

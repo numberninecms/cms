@@ -18,7 +18,7 @@ use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @Shortcode(name="row", container=true, label="Row", icon="view_stream")
+ * @Shortcode(name="row", container=true, label="Row", icon="mdi-table-row")
  */
 final class RowShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {

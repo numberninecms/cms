@@ -1,0 +1,89 @@
+{% trans_default_domain 'numbernine' %}
+{% extends '@NumberNine/admin/base.html.twig' %}
+
+{% block title %}{{ '%1% edition: %2%'|trans({
+    '%1%': content_type.labels.singularName|capitalize,
+    '%2%': entity.title ?? content_type.labels.newItem,
+}) }}{% endblock %}
+
+{% block active_menu_url %}{{ path('numbernine_admin_content_entity_index', {type: type_slug}) }}{% endblock %}
+
+{% block content %}
+    <turbo-frame id="numbernine_admin_content_entity_create">
+        <div class="flex flex-col" data-controller="dynamic-tabs">
+            {% include '@NumberNine/admin/util/toolbar.html.twig' with {title: entity.title ?? content_type.labels.newItem} %}
+            {% include '@NumberNine/admin/util/flashes.html.twig' %}
+
+            {{ form_start(form, {attr: {'data-turbo': 'false'}}) }}
+
+            {% include '@NumberNine/admin/util/dynamic_tabs.html.twig' with {tabs: [
+                {id: 'content', icon: 'edit', text: 'Content'},
+                {id: 'seo', icon: 'search', text: 'SEO'},
+                {id: 'custom-fields', icon: 'wrench', text: 'Custom fields'},
+            ]} %}
+
+            <div class="grid lg:grid-cols-3 grid-cols-5 gap-3">
+                <div class="col-span-5 md:col-span-3 lg:col-span-2">
+                    {% embed '@NumberNine/admin/util/dynamic_tabs_panel.html.twig' with {id: 'content'} %}
+                        {% block content %}
+                            {{ form_row(form.title) }}
+                            {{ form_row(form.content) }}
+                        {% endblock %}
+                    {% endembed %}
+
+                    {% embed '@NumberNine/admin/util/dynamic_tabs_panel.html.twig' with {id: 'seo'} %}
+                        {% block content %}
+                            {{ form_row(form.seoTitle) }}
+                            {{ form_row(form.seoDescription) }}
+                        {% endblock %}
+                    {% endembed %}
+
+                    {% embed '@NumberNine/admin/util/dynamic_tabs_panel.html.twig' with {id: 'custom-fields'} %}
+                        {% block content %}
+                            {{ form_row(form.customFields) }}
+                        {% endblock %}
+                    {% endembed %}
+                </div>
+
+                <div class="col-span-5 md:col-span-2 lg:col-span-1 ml-3 lg:ml-0">
+                    {% embed '@NumberNine/admin/util/card.html.twig' with {title: 'Publish'} %}
+                        {% block content %}
+                            {{ form_row(form.status) }}
+                        {% endblock %}
+                        {% block footer %}
+                            <div class="mt-4 px-3">
+                                <button class="btn btn-color-red" type="button"><i class="fa fa-trash"></i></button>
+                            </div>
+                            {{ form_row(form.submit) }}
+                        {% endblock %}
+                    {% endembed %}
+
+                    {% if form.featuredImage is defined %}
+                        {% embed '@NumberNine/admin/util/card.html.twig' with {title: 'Featured image'} %}
+                            {% block content %}
+                                {{ form_row(form.featuredImage) }}
+                            {% endblock %}
+                        {% endembed %}
+                    {% endif %}
+
+                    {% for taxonomy in form.vars.taxonomies %}
+                        {% embed '@NumberNine/admin/util/card.html.twig' with {title: taxonomy.name|capitalize} %}
+                            {% block content %}
+                                {{ form_row(form[taxonomy.name ~ '_terms']) }}
+                            {% endblock %}
+                        {% endembed %}
+                    {% endfor %}
+
+                    {% embed '@NumberNine/admin/util/card.html.twig' with {title: 'Template'} %}
+                        {% block content %}
+                            {{ form_row(form.customTemplate) }}
+                        {% endblock %}
+                    {% endembed %}
+                </div>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </turbo-frame>
+    {% include '@NumberNine/admin/util/media_library_modal.html.twig' %}
+{% endblock %}

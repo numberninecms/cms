@@ -12,7 +12,14 @@
 namespace NumberNine\Model\PageBuilder\Control;
 
 use NumberNine\Model\PageBuilder\AbstractPageBuilderFormControl;
+use NumberNine\Model\PageBuilder\FormControlCriteria;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ImageControl extends AbstractPageBuilderFormControl
+final class ImageControl extends AbstractPageBuilderFormControl
 {
+    protected function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefined(['fallback_criteria']);
+        $resolver->setAllowedTypes('fallback_criteria', FormControlCriteria::class);
+    }
 }

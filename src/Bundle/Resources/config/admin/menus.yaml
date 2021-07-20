@@ -2,12 +2,13 @@
 menus:
     dashboard:
         text: Dashboard
-        link: /
-        icon: dashboard
+        route: numbernine_admin_index
+        icon: tachometer-alt
     media_library:
         text: Media Library
-        link: /media/
-        icon: photo_library
+        route: numbernine_admin_media_library_index
+        icon: photo-video
+        if_granted: edit_media_files
     #    forms:
     #        text: Forms
     #        route:
@@ -21,40 +22,45 @@ menus:
     #                link: /forms/new
     users:
         text: Users
-        route:
-        icon: person
+        route: numbernine_admin_user_index
+        icon: users
+        if_granted: list_users
         children:
             all:
                 text: All users
-                link: /users/
+                route: numbernine_admin_user_index
             add_new:
                 text: Add new
-                link: /users/new
+                route: numbernine_admin_user_create
+                if_granted: create_users
             roles:
                 text: Roles
-                link: /users/roles/
+                route: numbernine_admin_user_role_index
+                if_granted: manage_roles
     settings:
         text: Settings
         route:
-        icon: settings_applications
+        icon: cogs
+        if_granted: manage_options
         children:
             general:
                 text: General
-                link: /settings/general/
+                route: numbernine_admin_settings_general
             permalinks:
                 text: Permalinks
-                link: /settings/permalinks/
+                route: numbernine_admin_settings_permalinks
             email:
                 text: Emails
-                link: /settings/emails/
+                route: numbernine_admin_settings_emails
     appearance:
         text: Appearance
         route:
-        icon: brush
+        icon: paint-brush
+        if_granted: customize
         children:
             customize:
                 text: Customize
                 link: /customizer/
             menus:
                 text: Menus
-                link: /menus/
+                route: numbernine_admin_menu_index

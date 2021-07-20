@@ -20,7 +20,6 @@ use NumberNine\Theme\TemplateResolver;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Thunder\Shortcode\Parser\ParserInterface;
 use Thunder\Shortcode\Shortcode\ParsedShortcodeInterface;
@@ -34,7 +33,6 @@ class ShortcodeRenderer
     private Environment $twig;
     private TemplateResolver $templateResolver;
     private ShortcodeStore $shortcodeStore;
-    private AuthorizationCheckerInterface $authorizationChecker;
     private TagAwareCacheInterface $cache;
     private ShortcodeProcessor $shortcodeProcessor;
     private ParserInterface $shortcodeParser;
@@ -45,7 +43,6 @@ class ShortcodeRenderer
         Environment $twig,
         TemplateResolver $templateResolver,
         ShortcodeStore $shortcodeStore,
-        AuthorizationCheckerInterface $authorizationChecker,
         ShortcodeProcessor $shortcodeProcessor,
         ParserInterface $parser,
         TagAwareCacheInterface $cache
@@ -53,7 +50,6 @@ class ShortcodeRenderer
         $this->twig = $twig;
         $this->templateResolver = $templateResolver;
         $this->shortcodeStore = $shortcodeStore;
-        $this->authorizationChecker = $authorizationChecker;
         $this->shortcodeProcessor = $shortcodeProcessor;
         $this->shortcodeParser = $parser;
         $this->cache = $cache;

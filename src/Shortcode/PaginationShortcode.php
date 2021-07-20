@@ -18,7 +18,7 @@ use NumberNine\Pagination\Paginator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * @Shortcode(name="pagination", label="Pagination")
+ * @Shortcode(name="pagination", label="Pagination", icon="mdi-book-open-page-variant")
  */
 final class PaginationShortcode extends AbstractShortcode implements EventSubscriberInterface
 {

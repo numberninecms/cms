@@ -23,10 +23,20 @@ final class CapabilityGenerator
         $this->contentService = $contentService;
     }
 
+    public function generateMappedSubscriberCapabilities(string $contentType): array
+    {
+        return $this->contentService->getContentType($contentType)->getMappedCapabilities(
+            [
+                Capabilities::READ_POSTS,
+            ]
+        );
+    }
+
     public function generateMappedContributorCapabilities(string $contentType): array
     {
         return $this->contentService->getContentType($contentType)->getMappedCapabilities(
             [
+                ...$this->generateMappedSubscriberCapabilities($contentType),
                 Capabilities::EDIT_POSTS,
                 Capabilities::DELETE_POSTS,
             ]

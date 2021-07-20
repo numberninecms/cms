@@ -28,16 +28,22 @@ body {
     user-select: none !important;
 }
 
-.px-3 {
+#n9-page-builder-wrapper {
+    &.dragging {
+        cursor: grabbing;
+    }
+}
+
+.n9-px-3 {
     padding-left: 0.75rem;
     padding-right: 0.75rem;
 }
 
-.text-white {
+.n9-text-white {
     color: #fff;
 }
 
-.empty-page-builder {
+.n9-empty-page-builder {
     height: 50px;
     border: 1px dashed #ddd;
     background-color: #eceff1;

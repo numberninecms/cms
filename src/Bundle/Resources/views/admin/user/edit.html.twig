@@ -1,0 +1,40 @@
+{% trans_default_domain 'numbernine' %}
+{% extends '@NumberNine/admin/base.html.twig' %}
+
+{% block title %}{{ 'Editing user %1%'|trans({'%1%': user.id}) }}{% endblock %}
+
+{% block active_menu_url %}{{ path('numbernine_admin_user_index') }}{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col">
+        <turbo-frame id="numbernine_admin_user">
+            {% include '@NumberNine/admin/util/toolbar.html.twig' with {
+                title: 'Editing user %1%'|trans({'%1%': user.id}),
+            } %}
+
+            {% include '@NumberNine/admin/util/flashes.html.twig' %}
+
+            {{ form_start(form, {attr: {class: 'lg:max-w-md', 'data-controller': 'user--form', 'data-turbo-frame': '_top'}}) }}
+                {{ form_row(form.username, {attr: {'data-user--form-target': 'username', 'data-action': 'user--form#updateUsername'}}) }}
+                {{ form_row(form.email) }}
+                {{ form_row(form.firstName, {attr: {'data-user--form-target': 'firstName', 'data-action': 'user--form#updateFirstName'}}) }}
+                {{ form_row(form.lastName, {attr: {'data-user--form-target': 'lastName', 'data-action': 'user--form#updateLastName'}}) }}
+                {{ form_row(form.displayNameFormat, {attr: {'data-user--form-target': 'displayNameFormat'}}) }}
+                {{ form_row(form.userRoles) }}
+                <div class="flex">
+                    {{ form_row(form.save) }}
+                    {{ form_row(form.delete, {row_attr: {class: 'mt-4'}, attr: {class: 'btn btn-color-red'}}) }}
+                </div>
+            {{ form_end(form) }}
+
+            <div class="mt-3 px-3">
+                <a href="{{ path('numbernine_admin_user_index') }}"
+                   class="text-primary hover:underline"
+                   data-turbo-frame="_top"
+                >
+                    {{ 'Back to users list'|trans }}
+                </a>
+            </div>
+        </turbo-frame>
+    </div>
+{% endblock %}

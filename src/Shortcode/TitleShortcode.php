@@ -21,7 +21,7 @@ use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @Shortcode(name="title", label="Title", icon="title")
+ * @Shortcode(name="title", label="Title", icon="mdi-format-title")
  */
 final class TitleShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {

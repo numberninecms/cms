@@ -47,6 +47,7 @@ final class UserCreateUpdateAction extends AbstractController implements AdminCo
     {
         $this->denyAccessUnlessGranted(Capabilities::EDIT_USERS);
 
+        /** @var array $data */
         $data = $request->request->get('user');
         $this->setFields($user, $data);
 
@@ -62,6 +63,7 @@ final class UserCreateUpdateAction extends AbstractController implements AdminCo
     {
         $this->denyAccessUnlessGranted(Capabilities::CREATE_USERS);
 
+        /** @var array $data */
         $data = $request->request->get('user');
         $user = (new User())->setUsername($data['username']);
         $user->setPassword($passwordEncoder->encodePassword($user, $data['password']));

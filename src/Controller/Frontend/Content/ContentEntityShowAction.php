@@ -17,6 +17,7 @@ use NumberNine\Entity\ContentEntity;
 use NumberNine\Event\ContentEntityShowForwardEvent;
 use NumberNine\Event\CurrentContentEntityEvent;
 use NumberNine\Event\TemplateToRenderEvent;
+use NumberNine\Exception\ClassNotFoundException;
 use NumberNine\Model\Content\ContentType;
 use NumberNine\Repository\AbstractContentEntityRepository;
 use NumberNine\Security\Capabilities;
@@ -43,6 +44,10 @@ final class ContentEntityShowAction extends AbstractController
     ): Response {
         /** @var ContentType $contentType */
         $contentType = $request->get('_content_type');
+
+        if (!class_exists($contentType->getEntityClassName())) {
+            throw new ClassNotFoundException($contentType->getEntityClassName());
+        }
 
         /** @var AbstractContentEntityRepository $repository */
         $repository = $entityManager->getRepository($contentType->getEntityClassName());

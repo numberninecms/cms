@@ -111,20 +111,17 @@ final class TagRenderer
     }
 
     /**
-     * @param string $entryName
+     * @param string|null $entryName
      * @param string|null $configName
      * @return string
      * @throws Exception
      */
     public function renderWebpackLinkTags(string $entryName = null, string $configName = null): string
     {
-        $entryName = $entryName ?? $this->getThemeMainEntry($this->themeStore->getCurrentTheme());
-        $configName = $configName ?? $this->themeStore->getCurrentTheme()->getWebpackConfigName();
-
+        $assetPaths = $this->getWebpackLinkStylesheetsPaths($entryName, $configName);
         $scriptTags = [];
-        foreach ($this->getEntrypointLookup($configName)->getCssFiles((string)$entryName) as $filename) {
-            $assetPath = htmlentities($this->getAssetPath($filename, $configName));
 
+        foreach ($assetPaths as $assetPath) {
             if ($this->request) {
                 $linkProvider = $this->request->attributes->get('_links', new GenericLinkProvider());
                 $this->request->attributes->set('_links', $linkProvider->withLink(
@@ -139,6 +136,27 @@ final class TagRenderer
         }
 
         return implode('', $scriptTags);
+    }
+
+    /**
+     * @param string|null $entryName
+     * @param string|null $configName
+     * @return string[]
+     * @throws Exception
+     */
+    public function getWebpackLinkStylesheetsPaths(string $entryName = null, string $configName = null): array
+    {
+        $entryName = $entryName ?? $this->getThemeMainEntry($this->themeStore->getCurrentTheme());
+        $configName = $configName ?? $this->themeStore->getCurrentTheme()->getWebpackConfigName();
+
+        $assetPaths = [];
+
+        foreach ($this->getEntrypointLookup($configName)->getCssFiles((string)$entryName) as $filename) {
+            $assetPath = htmlentities($this->getAssetPath($filename, $configName));
+            $assetPaths[] = $assetPath;
+        }
+
+        return $assetPaths;
     }
 
     /**

@@ -22,11 +22,20 @@ use NumberNine\Entity\ContentEntity;
  */
 final class ContentEntityRepository extends AbstractContentEntityRepository
 {
-    use FindByCustomFieldTrait;
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ContentEntity::class);
+    }
+
+    public function findOneForEdition(int $id): ContentEntity
+    {
+        return $this->createQueryBuilder('e')
+            ->addSelect('cet')
+            ->leftJoin('e.contentEntityTerms', 'cet')
+            ->where('e.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getSingleResult();
     }
 
     /**

@@ -102,8 +102,9 @@ final class ResponseEventSubscriber implements EventSubscriberInterface
         if (
             $this->request
             && (
-                $this->request->attributes->get('_route') === 'numbernine_admin_index'
-                || $this->request->get('n9') === 'admin')
+                strpos($this->request->attributes->get('_route'), 'numbernine_admin_') === 0
+                || $this->request->get('n9') === 'admin'
+            )
         ) {
             $navtopStyles = $this->tagRenderer->renderWebpackLinkTags('adminpreviewmode', 'numbernine');
         } else {

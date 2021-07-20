@@ -58,9 +58,15 @@ jobs:
                     ', github.ref) == false
                 run: composer update --lock
 
+            -   name: Build assets
+                run: yarn install --force && yarn build
+
             -   name: Prepare folders and env files
                 run: |
-                    echo 'DATABASE_URL=mysql://test:test@mysql:3306/numbernine_test?serverVersion=5.7' > .env.test.local
+                    echo 'APP_ENV=test' > .env.test.local
+                    echo 'DATABASE_URL=mysql://test:test@mysql:3306/numbernine_test?serverVersion=5.7' >> .env.test.local
+                    touch .phpunit.result.cache
+                    chmod 0644 .phpunit.result.cache
                     mkdir -p var/cache
                     mkdir -p public/uploads
                     chmod -R 0777 var

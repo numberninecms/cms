@@ -19,7 +19,7 @@ use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @Shortcode(name="banner", label="Banner", container=true, icon="web")
+ * @Shortcode(name="banner", label="Banner", container=true, icon="mdi-view-compact-outline")
  */
 final class BannerShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {

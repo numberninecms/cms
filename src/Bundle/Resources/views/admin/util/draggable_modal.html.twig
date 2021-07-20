@@ -1,0 +1,15 @@
+<div class="modal-card modal-draggable" data-controller="modal {{ controller ?? '' }}" data-modal-id-value="{{ id }}" {{ N9_create_attributes(attributes ?? []) }}>
+    <div class="flex align-items shadow bg-gray-200">
+        <div class="flex-grow p-3 cursor-move" data-modal-target="dragHandle">
+            {{ title ?? '' }}
+        </div>
+        <button class="flex-shrink justify-self-end py-2 px-4 border-l-2 border-gray-300 text-gray-700 hover:bg-gray-300 active:bg-gray-400 focus:outline-none active:ring-gray-100 active:ring-offset-white active:ring-opacity-50"
+                data-action="modal#close"
+        >
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="overflow-hidden flex flex-grow p-3">
+        {% block content %}{% endblock %}
+    </div>
+</div>

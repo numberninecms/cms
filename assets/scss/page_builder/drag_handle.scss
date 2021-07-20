@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-#page-builder-tool-drag-handle {
+#n9-page-builder-tool-drag-handle {
     position: fixed;
     top: 0;
     border: 0;
@@ -38,6 +38,7 @@
             background-color: var(--n9-tertiary);
             backface-visibility: hidden;
             transform-origin: 16px 50%;
+            border-radius: 15px;
         }
     }
 }

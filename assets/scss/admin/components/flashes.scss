@@ -1,0 +1,40 @@
+/*
+ * This file is part of the NumberNine package.
+ *
+ * (c) William Arin <williamarin.dev@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+.flash-success {
+    @apply bg-green-500;
+
+    button {
+        @apply hover:bg-green-400;
+    }
+}
+
+.flash-error {
+    @apply bg-red-600;
+
+    button {
+        @apply hover:bg-red-500;
+    }
+}
+
+.flash-notice {
+    @apply bg-gray-600;
+
+    button {
+        @apply hover:bg-gray-500;
+    }
+}
+
+.flash-warning {
+    @apply bg-yellow-500;
+
+    button {
+        @apply hover:bg-yellow-400;
+    }
+}
