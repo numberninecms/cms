@@ -19,7 +19,6 @@ import PageBuilderRequestForDeleteComponentEvent from 'admin/events/PageBuilderR
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import usePageBuilderHelpers from 'admin/vue/functions/pageBuilderHelpers';
-import '@mdi/font/css/materialdesignicons.min.css';
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
@@ -39,6 +38,7 @@ export default class extends Controller {
         void Swal.fire({
             title: 'Are you sure?',
             icon: 'warning',
+            heightAuto: false,
             showCancelButton: true,
             confirmButtonColor: 'var(--color-primary)',
             cancelButtonColor: '#d33',

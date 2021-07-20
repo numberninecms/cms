@@ -1,9 +1,9 @@
 {% trans_default_domain 'numbernine' %}
-<table class="w-full" data-controller="select-all">
+<table class="w-full" data-controller="select-all content-entity--index">
     <thead>
         <tr>
             <th class="w-8"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></th>
-            {% if content_type is defined and content_type.name != 'media_file' %}
+            {% if content_type.name != 'media_file' %}
                 <th class="w-10"></th>
             {% else %}
                 <th class="w-32">{{ 'Image'|trans }}</th>
@@ -18,7 +18,7 @@
     </thead>
     <tbody>
     {% for entity in entities %}
-        <tr>
+        <tr data-entity-id="{{ entity.id }}">
             <td>{{ form_widget(form['entity_' ~ entity.id], {attr: {'data-select-all-target': 'child'}}) }}</td>
             {% if content_type is defined and content_type.name != 'media_file' %}
                 <td>{{ N9_featured_image(entity, 'thumbnail', {class: 'p-1'}) }}</td>
@@ -26,7 +26,53 @@
                 <td>{{ N9_image(entity, 'thumbnail', {width: '50', height: '50', class: 'p-1'}) }}</td>
             {% endif %}
             <td>
-                <a href="{{ N9_entity_admin_url(entity) }}" data-turbo-frame="_top">{{ entity.title }}</a>
+                <div class="flex items-center justify-between mr-3">
+                    <a href="{{ N9_entity_admin_url(entity) }}" data-turbo-frame="_top">{{ entity.title }}</a>
+                    {% if content_type is defined and content_type.name != 'media_file' %}
+                        <div class="btn-group">
+                            {% if not is_trash %}
+                                <a
+                                    href="{{ path('numbernine_admin_content_entity_page_builder_edit', {
+                                        type: type_slug,
+                                        id: entity.id,
+                                    }) }}"
+                                    class="btn btn-color-primary btn-style-flat"
+                                    title="{{ 'Page builder'|trans }}"
+                                    data-turbo-frame="_top"
+                                >
+                                    <i class="mdi mdi-toy-brick-outline mdi-18px"></i>
+                                </a>
+                            {% else %}
+                                <button
+                                    type="button"
+                                    class="btn btn-color-primary btn-style-flat"
+                                    title="{{ 'Restore'|trans }}"
+                                    data-action="content-entity--index#restoreEntity"
+                                >
+                                    <i class="mdi mdi-backup-restore mdi-18px"></i>
+                                </button>
+                            {% endif %}
+                            <button
+                                type="button"
+                                class="btn btn-color-red btn-style-flat"
+                                title="{{ ('Delete' ~ (is_trash ? ' permanently' : ''))|trans }}"
+                                data-action="content-entity--index#deleteEntity"
+                            >
+                                <i class="mdi mdi-delete-outline mdi-18px"></i>
+                            </button>
+                            {% if not is_trash %}
+                                <a
+                                    href="{{ N9_entity_url(entity) }}"
+                                    class="btn btn-color-secondary btn-style-flat"
+                                    title="{{ 'View'|trans }}"
+                                    target="_blank"
+                                >
+                                    <i class="mdi mdi-eye-outline mdi-18px"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
             </td>
             <td>{{ entity.author }}</td>
             <td>{{ N9_terms_links(entity, 'category') }}</td>

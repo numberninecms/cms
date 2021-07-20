@@ -30,6 +30,16 @@
                 border-2 border-primary
                 hover:bg-primary-700 hover:text-white focus:outline-none;
         }
+
+        &.btn-style-flat {
+            @apply
+                py-1 px-2
+                shadow-none
+                text-primary
+                bg-transparent
+                hover:bg-primary hover:bg-opacity-10
+            ;
+        }
     }
 
     &.btn-color-secondary {
@@ -44,6 +54,16 @@
                 bg-transparent
                 border-2 border-secondary
                 hover:bg-secondary-700 hover:text-white focus:outline-none;
+        }
+
+        &.btn-style-flat {
+            @apply
+            py-1 px-2
+            shadow-none
+            text-secondary
+            bg-transparent
+            hover:bg-secondary hover:bg-opacity-10
+            ;
         }
     }
 
@@ -61,6 +81,7 @@
         &.btn-style-flat {
             @apply
                 py-1 px-2
+                shadow-none
                 text-white
                 bg-transparent
                 hover:bg-white hover:bg-opacity-10
