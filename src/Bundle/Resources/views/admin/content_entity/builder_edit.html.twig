@@ -9,7 +9,9 @@
 {% block active_menu_url %}{{ path('numbernine_admin_content_entity_index', {type: type_slug}) }}{% endblock %}
 
 {% block topbar_center_menu %}
-    {% include '@NumberNine/admin/util/page_builder/page_builder_topbar_menu.html.twig' %}
+    {% include '@NumberNine/admin/util/page_builder/page_builder_topbar_menu.html.twig' with {
+        frontend_url: N9_entity_url(entity),
+    } %}
 {% endblock %}
 
 {% block content %}
