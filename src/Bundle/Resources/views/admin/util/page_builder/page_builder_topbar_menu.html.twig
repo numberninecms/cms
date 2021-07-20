@@ -1,0 +1,45 @@
+{% trans_default_domain 'numbernine' %}
+<div class="flex items-center gap-5" data-controller="customize--builder-toolbar">
+    <div class="flex items-center gap-1">
+        <button type="button"
+                title="{{ 'Save page'|trans }}"
+                class="btn btn-color-white btn-style-flat"
+                data-action="customize--builder-toolbar#save"
+        >
+            <i class="fas fa-save"></i>
+        </button>
+        <button type="button"
+                title="{{ 'Components tree'|trans }}"
+                class="btn btn-color-white btn-style-flat"
+                data-action="customize--builder-toolbar#showTree"
+        >
+            <svg width="16" height="24" viewBox="0 0 16 16" class="fill-current">
+                <path d="M8 11v1h-1v-2h5v-4h-8v1h-1v-2h6v-4h-9v4h2v3h2v2h2v3h2v2h8v-4z"></path>
+            </svg>
+        </button>
+    </div>
+
+    <div class="flex items-center gap-1">
+        <button type="button"
+                title="{{ 'Desktop'|trans }}"
+                class="btn btn-color-white btn-style-flat"
+                data-action="customize--builder-toolbar#setDesktopSize"
+        >
+            <i class="fas fa-desktop"></i>
+        </button>
+        <button type="button"
+                title="{{ 'Tablet'|trans }}"
+                class="btn btn-color-white btn-style-flat"
+                data-action="customize--builder-toolbar#setTabletSize"
+        >
+            <i class="fas fa-tablet-alt"></i>
+        </button>
+        <button type="button"
+                title="{{ 'Phone'|trans }}"
+                class="btn btn-color-white btn-style-flat"
+                data-action="customize--builder-toolbar#setPhoneSize"
+        >
+            <i class="fas fa-mobile-alt"></i>
+        </button>
+    </div>
+</div>
