@@ -85,6 +85,7 @@ final class MediaIndexAction extends AbstractController implements AdminControll
         return $this->render('@NumberNine/admin/media/index.html.twig', [
             'deleted_media_files' => $deletedMediaFiles,
             'form' => $form->createView(),
+            'content_type' => $contentService->getContentType('media_file'),
         ], $response);
     }
 }

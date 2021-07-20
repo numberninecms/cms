@@ -2,7 +2,7 @@
     {{ form_start(form) }}
         {% include '@NumberNine/admin/util/content_entities_table.html.twig' with {
             entities: deleted_media_files,
-            form: form,
+            is_trash: true,
         } %}
 
         <div class="flex">
