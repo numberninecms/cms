@@ -4,7 +4,9 @@
 {% block title %}{{ '%1% edition'|trans({'%1%': area|capitalize}) }}{% endblock %}
 
 {% block topbar_center_menu %}
-    {% include '@NumberNine/admin/util/page_builder/page_builder_topbar_menu.html.twig' %}
+    {% include '@NumberNine/admin/util/page_builder/page_builder_topbar_menu.html.twig' with {
+        frontend_url: path('numbernine_homepage'),
+    } %}
 {% endblock %}
 
 {% block content %}
