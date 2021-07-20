@@ -15,7 +15,6 @@ Visit https://numberninecms.github.io/ for user and developer documentation.
 
 # Contributions
 Feel free to submit issues and pull requests.
-This project uses Git Flow workflow (PR on `develop` branch).
 
 # Credits
 * Login page photo by [Nicolas Becker](https://www.pexels.com/photo/stack-of-stones-in-dry-valley-5530229/)
