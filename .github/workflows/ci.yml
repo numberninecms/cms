@@ -13,6 +13,8 @@ jobs:
                 php: [ 7.4, 8.0 ]
 
         steps:
+            -   uses: FranzDiebold/github-env-vars-action@v2
+
             -   uses: actions/checkout@v2
 
             -   name: Setup PHP
@@ -23,19 +25,11 @@ jobs:
                     extensions: dom, curl, libxml, mbstring, zip
                     tools: composer:v2
                     coverage: none
+                env:
+                    COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             -   name: Validate composer.json and composer.lock
                 run: composer validate
-
-            -   name: Create temporary branch alias
-                if: contains('
-                    refs/heads/master
-                    refs/heads/develop
-                    ', github.ref) == false
-                run: |
-                    composer config --unset extra.branch-alias.dev-develop
-                    composer config --unset extra.branch-alias.dev-master
-                    composer config extra.branch-alias.dev-${{ github.sha }} 0.1.x-dev
 
             -   name: Get composer cache directory
                 id: composer-cache
@@ -49,17 +43,7 @@ jobs:
                     restore-keys: ${{ runner.os }}-composer-
 
             -   name: Install dependencies
-                run: composer install --prefer-dist --no-progress --no-interaction
-
-            -   name: Update composer.lock file
-                if: contains('
-                    refs/heads/master
-                    refs/heads/develop
-                    ', github.ref) == false
-                run: composer update --lock
-
-            -   name: Build assets
-                run: yarn install --force && yarn build
+                run: COMPOSER_ROOT_VERSION=dev-master composer install --prefer-dist --no-progress --no-interaction
 
             -   name: Prepare folders and env files
                 run: |
@@ -87,30 +71,90 @@ jobs:
             -   name: Run unit and functional tests
                 run: docker-compose exec -T php vendor/bin/phpunit
 
-    project:
-        name: New project Docker installation
-
-        needs: bundle_tests
+    project_installation:
+        name: New project installation
 
         runs-on: ubuntu-20.04
 
+        strategy:
+            matrix:
+                php: [ 8.0 ]
+
         steps:
-            -   name: Install with installer
-                run: curl https://raw.githubusercontent.com/numberninecms/numbernine/master/installer | bash -s newproject -v
+            -   uses: FranzDiebold/github-env-vars-action@v2
 
-            -   name: Remove numberninecms/cms vendor
-                run: rm -rf vendor/numberninecms/cms
-                working-directory: newproject
-
-            -   name: Replace numberninecms/cms vendor by current branch version
-                uses: actions/checkout@v2
+            -   uses: actions/checkout@v2
                 with:
-                    path: newproject/vendor/numberninecms/cms
+                    path: temp/cms
 
-            -   name: Install Docker development environment
-                run: bin/console numbernine:docker:install --app-name=newproject -vvv --no-interaction
-                working-directory: newproject
+            -   name: Create temporary branch alias for master and feature branches
+                if: github.ref != 'refs/heads/master' && !startsWith(github.ref, 'refs/pull/')
+                run: |
+                    cd temp/cms
+                    composer config --unset extra.branch-alias.dev-master
+                    composer config extra.branch-alias.dev-$CI_REF_NAME_SLUG 0.1.x-dev
+
+            -   name: Create temporary branch alias for pull requests
+                if: startsWith(github.ref, 'refs/pull/')
+                run: |
+                    cd temp/cms
+                    composer config --unset extra.branch-alias.dev-master
+                    composer config extra.branch-alias.dev-$CI_SHA 0.1.x-dev
+
+            -   name: Setup PHP
+                id: setup-php
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php }}
+                    extensions: dom, curl, libxml, mbstring, zip, redis, sysvsem
+                    tools: composer:v2
+                    coverage: none
+                env:
+                    COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            -   name: Create a new project
+                run: |
+                    composer create-project symfony/website-skeleton newproject
+                    cd newproject
+                    cp -Rp . ../
+                    cd ..
+                    rm -rf newproject
+
+            -   name: Add NumberNine to the project
+                run: |
+                    export SYMFONY_ENDPOINT=https://flex.symfony.com/r/github.com/symfony/recipes-contrib/1049
+                    composer config extra.symfony.allow-contrib true
+                    composer config minimum-stability dev
+                    composer config prefer-stable true
+                    composer config repositories.0 path ./temp/cms
+                    composer require numberninecms/cms:*@dev numberninecms/chapterone --ignore-platform-reqs
+
+            -   name: Create .env.local file
+                run: |
+                    echo "APP_NAME=numbernine" > .env.local
+                    echo "DATABASE_URL=mysql://user:user@mysql:3306/numbernine_app?serverVersion=5.7" >> .env.local
+                    echo "REDIS_URL=redis://redis:6379" >> .env.local
+                    echo "MAILER_DSN=smtp://maildev:25" >> .env.local
+
+            -   name: Install redis bundle
+                run: |
+                    composer require numberninecms/redis --no-scripts --ignore-platform-reqs
+                    php bin/console cache:clear
+                    composer dumpautoload
+
+            -   name: Build Docker installer
+                run: |
+                    wget https://raw.githubusercontent.com/numberninecms/installer/master/.dockerignore
+                    mkdir build
+                    wget -O build/Dockerfile https://raw.githubusercontent.com/numberninecms/installer/master/build/Dockerfile
+                    wget -O build/docker-entrypoint.sh https://raw.githubusercontent.com/numberninecms/installer/master/build/docker-entrypoint.sh
+                    docker build --no-cache -t projectinstaller:latest -f ./build/Dockerfile .
+
+            -   name: Create Docker environment
+                run: |
+                    docker run --rm -t -e HOST_PWD=$PWD \
+                        -v $PWD:/srv/app -v /var/run/docker.sock:/var/run/docker.sock \
+                        projectinstaller testproject
 
             -   name: Check that website is up and running
-                run: wget --spider --no-check-certificate https://localhost:443/
-                working-directory: newproject
+                run: wget --spider --no-check-certificate https://testproject.localhost/
