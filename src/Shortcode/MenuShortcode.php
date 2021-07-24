@@ -65,6 +65,7 @@ final class MenuShortcode extends AbstractShortcode implements EditableShortcode
     {
         $resolver->setDefaults([
             'id' => null,
+            'style' => null,
         ]);
     }
 
