@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests;
 
+use NumberNine\Model\Shortcode\ShortcodeInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class ShortcodeTestCase extends KernelTestCase
 {
     protected const SHORTCODE = '';
-    protected $shortcode;
+    protected ShortcodeInterface $shortcode;
 
     public function setUp(): void
     {

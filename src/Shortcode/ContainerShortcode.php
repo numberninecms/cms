@@ -19,6 +19,7 @@ use NumberNine\Model\PageBuilder\Control\HorizontalAlignmentControl;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
@@ -59,6 +60,26 @@ final class ContainerShortcode extends AbstractShortcode implements EditableShor
             'margin' => '0 auto',
             'padding' => '',
         ]);
+
+        $resolver->setAllowedValues('orientation', ['horizontal', 'vertical']);
+        $resolver->setAllowedValues('justify', ['start', 'center', 'end', 'between', 'around']);
+        $resolver->setAllowedValues('align', ['start', 'center', 'end', 'stretch', 'baseline']);
+
+        $resolver->setNormalizer('margin', static function (Options $options, string $value) {
+            if (!preg_match(self::INLINE_BORDERS_PATTERN, trim($value))) {
+                return '0 auto';
+            }
+
+            return trim($value);
+        });
+
+        $resolver->setNormalizer('padding', static function (Options $options, string $value) {
+            if (!preg_match(self::INLINE_BORDERS_PATTERN, trim($value))) {
+                return '';
+            }
+
+            return trim($value);
+        });
     }
 
     public function processParameters(array $parameters): array
