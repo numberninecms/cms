@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9b14d6f01b2dcaca06695449d2420f96",
+    "content-hash": "aa1ffd3dc6250209e887883a187ff37d",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -9411,19 +9411,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/numberninecms/chapterone.git",
-                "reference": "0ac812cb1a33c1b60be3ac54d222f5047b4b20cf"
+                "reference": "5026789d8282cce9d6f1ba64d6261a27995fa93c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/numberninecms/chapterone/zipball/0ac812cb1a33c1b60be3ac54d222f5047b4b20cf",
-                "reference": "0ac812cb1a33c1b60be3ac54d222f5047b4b20cf",
+                "url": "https://api.github.com/repos/numberninecms/chapterone/zipball/5026789d8282cce9d6f1ba64d6261a27995fa93c",
+                "reference": "5026789d8282cce9d6f1ba64d6261a27995fa93c",
                 "shasum": ""
             },
             "require": {
                 "doctrine/doctrine-bundle": "^2.0",
                 "doctrine/doctrine-fixtures-bundle": "^3.3",
                 "doctrine/orm": "^2.7",
-                "numberninecms/cms": "^0.1.20",
+                "numberninecms/cms": "^0.2",
                 "numberninecms/common": "^0.1",
                 "php": "^7.4 || ^8.0",
                 "symfony/event-dispatcher": "^5.1",
