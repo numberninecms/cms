@@ -15,6 +15,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractShortcode implements ShortcodeInterface
 {
+    protected const INLINE_BORDERS_PATTERN = '@^(?:(?:(?:\d+(?:\.\d*)?(?:em|rem|px|%|))|auto)(?:\s+|$)){1,4}$@i';
+
     public function configureParameters(OptionsResolver $resolver): void
     {
     }

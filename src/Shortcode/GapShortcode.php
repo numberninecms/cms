@@ -16,6 +16,7 @@ use NumberNine\Model\PageBuilder\Control\SliderControl;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -35,6 +36,12 @@ final class GapShortcode extends AbstractShortcode implements EditableShortcodeI
         $resolver->setDefaults([
             'height' => 30,
         ]);
+
+        $resolver->setAllowedTypes('height', ['int', 'float', 'string']);
+
+        $resolver->setNormalizer('height', static function (Options $options, $value) {
+            return is_numeric($value) ? (float)$value : 30;
+        });
     }
 
     public function processParameters(array $parameters): array

@@ -73,8 +73,10 @@ final class ButtonShortcode extends AbstractShortcode implements EditableShortco
 
     public function processParameters(array $parameters): array
     {
+        $text = $parameters['content'] ?: $parameters['text'];
+
         return [
-            'text' => $parameters['text'],
+            'text' => $parameters['text'] === 'View more...' || !$parameters['text'] ? $text : $parameters['text'],
             'case' => $parameters['case'],
             'color' => $parameters['color'],
             'style' => $parameters['style'],

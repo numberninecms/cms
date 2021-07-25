@@ -18,6 +18,7 @@ use NumberNine\Model\PageBuilder\Control\SelectControl;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -64,19 +65,31 @@ final class TitleShortcode extends AbstractShortcode implements EditableShortcod
             'color' => null,
             'style' => 'center',
             'size' => 'normal',
-            'margin' => '30px 0px',
+            'margin' => '30px 0',
         ]);
+
+        $resolver->setAllowedValues('tag', ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div']);
+        $resolver->setAllowedValues('size', ['xsmall', 'small', 'normal', 'large', 'xlarge', 'xxlarge']);
+        $resolver->setAllowedValues('style', ['center', 'left']);
+
+        $resolver->setNormalizer('margin', static function (Options $options, string $value) {
+            if (!preg_match(self::INLINE_BORDERS_PATTERN, trim($value))) {
+                return '30px 0';
+            }
+
+            return trim($value);
+        });
     }
 
     public function processParameters(array $parameters): array
     {
+        $text = $parameters['content'] ?: $parameters['text'];
+
         return [
             'tag' => $parameters['tag'],
             'color' => $parameters['color'],
             'style' => $parameters['style'],
-            'text' => !$parameters['text'] && trim($parameters['content'])
-                ? trim($parameters['content'])
-                : $parameters['text'],
+            'text' => $parameters['text'] === 'Title' || !$parameters['text'] ? $text : $parameters['text'],
             'size' => $parameters['size'],
             'margin' => $parameters['margin'],
         ];
