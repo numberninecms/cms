@@ -51,9 +51,8 @@ final class PermalinkGenerator
 
         $route = $this->routeProvider->getRouteByName($routeName);
 
-        /** @var DateTime $date */
         $date = $contentEntity->getStatus() === PublishingStatusInterface::STATUS_PUBLISH
-            ? $contentEntity->getPublishedAt()
+            ? $contentEntity->getPublishedAt() ?? $contentEntity->getCreatedAt()
             : $contentEntity->getCreatedAt();
 
         $parameters = [];

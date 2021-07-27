@@ -66,6 +66,9 @@ services:
     NumberNine\Theme\CssFramework\CssFrameworkInterface: '@NumberNine\Theme\CssFramework\TailwindCss'
     NumberNine\Theme\TemplateResolverInterface: '@NumberNine\Theme\TemplateResolver'
 
+    NumberNine\EventSubscriber\ContentEntityPublishEventSubscriber:
+        tags:
+            - { name: 'doctrine.event_subscriber' }
 
     NumberNine\EventSubscriber\MediaFileDeletionEventSubscriber:
         tags:
