@@ -92,14 +92,14 @@ jobs:
                 run: |
                     cd temp/cms
                     composer config --unset extra.branch-alias.dev-master
-                    composer config extra.branch-alias.dev-$CI_REF_NAME_SLUG 0.1.x-dev
+                    composer config extra.branch-alias.dev-$CI_REF_NAME_SLUG 0.2.x-dev
 
             -   name: Create temporary branch alias for pull requests
                 if: startsWith(github.ref, 'refs/pull/')
                 run: |
                     cd temp/cms
                     composer config --unset extra.branch-alias.dev-master
-                    composer config extra.branch-alias.dev-$CI_SHA 0.1.x-dev
+                    composer config extra.branch-alias.dev-$CI_SHA 0.2.x-dev
 
             -   name: Setup PHP
                 id: setup-php
