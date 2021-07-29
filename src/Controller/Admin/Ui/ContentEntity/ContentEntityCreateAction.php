@@ -30,6 +30,7 @@ final class ContentEntityCreateAction extends AbstractContentEntityFormAction
 
         $class = $contentType->getEntityClassName();
         $entity = (new $class())
+            ->setAuthor($this->getUser())
             ->setCustomType($contentType->getName())
             ->setCustomFields(null)
         ;
