@@ -5,7 +5,12 @@
 <a {{ N9_create_attributes(attributes) }} data-layout--menu-target="menuItem">
     <div class="space-x-3">
         {% if item.icon %}
-            <i class="fa fa-{{ item.icon }}"></i>
+            {% if item.icon starts with 'mdi-' %}
+                {% set icon = 'mdi mdi-16px ' ~ item.icon %}
+            {% else %}
+                {% set icon = 'fa fa-' ~ item.icon %}
+            {% endif %}
+            <i class="{{ icon }}"></i>
         {% endif %}
         <span>{{ item.text }}</span>
     </div>
