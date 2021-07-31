@@ -36,7 +36,6 @@ trait CustomFieldsTrait
     }
 
     /**
-     * @param string $fieldName
      * @return mixed|null
      */
     public function getCustomField(string $fieldName)
@@ -44,13 +43,29 @@ trait CustomFieldsTrait
         return $this->customFields ? ($this->customFields[$fieldName] ?? null) : null;
     }
 
+    public function getCustomFieldsStartingWith(string $startsWith): array
+    {
+        if (!$this->customFields) {
+            return [];
+        }
+
+        $fields = [];
+
+        foreach ($this->customFields as $field => $value) {
+            if (strpos($field, $startsWith) === 0) {
+                $fields[$field] = $value;
+            }
+        }
+
+        return $fields;
+    }
+
     /**
-     * @param string $fieldName
      * @param mixed|null $value
      */
     public function addCustomField(string $fieldName, $value): self
     {
-        if (!is_array($this->customFields)) {
+        if (!\is_array($this->customFields)) {
             $this->customFields = [];
         }
 
@@ -61,7 +76,7 @@ trait CustomFieldsTrait
 
     public function removeCustomField(string $fieldName): self
     {
-        if (is_array($this->customFields) && array_key_exists($fieldName, $this->customFields)) {
+        if (\is_array($this->customFields) && \array_key_exists($fieldName, $this->customFields)) {
             unset($this->customFields[$fieldName]);
         }
 

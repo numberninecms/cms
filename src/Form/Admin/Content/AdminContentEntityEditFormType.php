@@ -60,6 +60,7 @@ final class AdminContentEntityEditFormType extends AbstractType
 
     /** @var Taxonomy[]|null */
     private ?array $taxonomies = null;
+    private ?array $editorExtensions = null;
 
     public function __construct(
         AssociativeArrayToKeyValueCollectionTransformer $transformer,
@@ -117,16 +118,21 @@ final class AdminContentEntityEditFormType extends AbstractType
         ]));
         $this->hiddenCustomFieldsEvent = $hiddenCustomFieldsEvent;
 
+        $this->editorExtensions = $options['editor_extensions'];
+
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'backupData']);
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'addTemplateField']);
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'addTaxonomyFields']);
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'addFeaturedImageField']);
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'addHiddenCustomFields']);
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'transformCustomFields']);
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'addEditorExtensionsFields']);
         $builder->addEventListener(FormEvents::POST_SET_DATA, [$this, 'setCustomTemplateData']);
         $builder->addEventListener(FormEvents::POST_SET_DATA, [$this, 'setTaxonomyTermsData']);
+        $builder->addEventListener(FormEvents::POST_SET_DATA, [$this, 'setEditorExtensionsData']);
         $builder->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'transformSeo']);
         $builder->addEventListener(FormEvents::SUBMIT, [$this, 'transformTemplate']);
+        $builder->addEventListener(FormEvents::SUBMIT, [$this, 'transformEditorExtensions']);
         $builder->addEventListener(FormEvents::SUBMIT, [$this, 'submitTaxonomyTerms']);
     }
 
@@ -135,6 +141,8 @@ final class AdminContentEntityEditFormType extends AbstractType
         $resolver->setDefaults([
             'data_class' => ContentEntity::class,
         ]);
+
+        $resolver->setRequired('editor_extensions');
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options): void
@@ -157,7 +165,11 @@ final class AdminContentEntityEditFormType extends AbstractType
         $customFields = [];
 
         foreach (($entity->getCustomFields() ?? []) as $key => $value) {
-            if (is_array($value) || in_array($key, $this->hiddenCustomFieldsEvent->getFieldsToHide())) {
+            if (
+                \is_array($value)
+                || \in_array($key, $this->hiddenCustomFieldsEvent->getFieldsToHide(), true)
+                || strpos($key, 'extension.') === 0
+            ) {
                 continue;
             }
 
@@ -177,26 +189,18 @@ final class AdminContentEntityEditFormType extends AbstractType
         $form = $event->getForm();
 
         foreach ($this->hiddenCustomFieldsEvent->getFieldsToHide() as $fieldName) {
-            if (in_array($fieldName, ['page_template'])) {
+            if ($fieldName === 'page_template' || strpos($fieldName, 'extension.') === 0) {
                 continue;
             }
 
             $form->add($fieldName, HiddenType::class, ['mapped' => false]);
+            $form[$fieldName]->setData($this->originalEntity->getCustomField($fieldName));
         }
     }
 
     public function setCustomTemplateData(FormEvent $event): void
     {
         $form = $event->getForm();
-
-        foreach ($this->hiddenCustomFieldsEvent->getFieldsToHide() as $fieldName) {
-            if (in_array($fieldName, ['page_template'])) {
-                continue;
-            }
-
-            $form[$fieldName]->setData($this->originalEntity->getCustomField($fieldName));
-        }
-
         $form['customTemplate']->setData($this->originalEntity->getCustomField('page_template'));
     }
 
@@ -292,7 +296,7 @@ final class AdminContentEntityEditFormType extends AbstractType
             $taxonomyTerms = $this->termRepository->findByTaxonomyName($taxonomy->getName());
 
             $contentEntityTerms = $this->contentEntityTermRepository->findByTaxonomyName($entity, $taxonomy->getName());
-            $existingTermsIds = array_map(function (ContentEntityTerm $cet) {
+            $existingTermsIds = array_map(static function (ContentEntityTerm $cet) {
                 $term = $cet->getTerm();
                 return $term ? $term->getId() : null;
             }, $contentEntityTerms);
@@ -339,7 +343,7 @@ final class AdminContentEntityEditFormType extends AbstractType
         /** @var SupportedContentEntityRelationshipsEvent $event */
         $event = $this->eventDispatcher->dispatch(new SupportedContentEntityRelationshipsEvent(get_class($entity)));
 
-        if (in_array('featured_image', $event->getRelationships())) {
+        if (\in_array('featured_image', $event->getRelationships())) {
             $form->add('featuredImage', ContentEntityRelationshipType::class, [
                 'name' => 'featured_image',
                 'form_type' => MediaFileType::class,
@@ -358,5 +362,74 @@ final class AdminContentEntityEditFormType extends AbstractType
         }
 
         return $this->taxonomies;
+    }
+
+    public function addEditorExtensionsFields(FormEvent $event): void
+    {
+        if (empty($this->editorExtensions)) {
+            return;
+        }
+
+        $form = $event->getForm();
+
+        foreach ($this->editorExtensions as $children) {
+            foreach ($children as $child) {
+                if ($child['form_type'] !== null) {
+                    $form->add('extension_' . $child['name'], $child['form_type'], array_merge(
+                        ['mapped' => false],
+                        $child['options'],
+                    ));
+                }
+            }
+        }
+    }
+
+    public function setEditorExtensionsData(FormEvent $event): void
+    {
+        if (empty($this->editorExtensions)) {
+            return;
+        }
+
+        $form = $event->getForm();
+
+        foreach ($this->editorExtensions as $children) {
+            foreach ($children as $child) {
+                if ($child['form_type'] !== null) {
+                    $data = [];
+
+                    foreach ($this->originalEntity->getCustomFieldsStartingWith('extension.') as $field => $value) {
+                        $key = (string)str_replace(sprintf('extension.%s.', $child['name']), '', $field);
+                        $data[$key] = $value;
+                    }
+
+                    $form['extension_' . $child['name']]->setData($data);
+                }
+            }
+        }
+    }
+
+    public function transformEditorExtensions(FormEvent $event): void
+    {
+        if (empty($this->editorExtensions)) {
+            return;
+        }
+
+        $form = $event->getForm();
+
+        /** @var ContentEntity $entity */
+        $entity = $form->getData();
+
+        foreach ($this->editorExtensions as $children) {
+            foreach ($children as $child) {
+                if ($child['form_type'] !== null) {
+                    foreach ($form['extension_' . $child['name']]->getData() as $field => $value) {
+                        $entity->addCustomField(
+                            sprintf('extension.%s.%s', $child['name'], $field),
+                            $value,
+                        );
+                    }
+                }
+            }
+        }
     }
 }

@@ -110,3 +110,8 @@
 {%- block content_entity_relationship_row -%}
     {{- block('form_widget') -}}
 {%- endblock -%}
+
+{%- block editor_extension_row -%}
+    {%- set row_attr = row_attr|merge({class: row_attr.class|default(row_class|default('flex flex-col'))}) -%}
+    {{- block('form_row') -}}
+{%- endblock -%}
