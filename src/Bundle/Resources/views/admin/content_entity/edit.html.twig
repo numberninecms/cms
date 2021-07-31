@@ -16,11 +16,19 @@
 
             {{ form_start(form, {attr: {'data-turbo': 'false'}}) }}
 
-            {% include '@NumberNine/admin/util/dynamic_tabs.html.twig' with {tabs: [
+            {% set tabs = [
                 {id: 'content', icon: 'edit', text: 'Content'},
                 {id: 'seo', icon: 'search', text: 'SEO'},
                 {id: 'custom-fields', icon: 'wrench', text: 'Custom fields'},
-            ]} %}
+            ] %}
+
+            {% if editor_extensions['tabs'] is defined %}
+                {% for tab in editor_extensions['tabs'] %}
+                    {% set tabs = tabs|merge([{id: tab.name, icon: tab.icon, text: tab.label}]) %}
+                {% endfor %}
+            {% endif %}
+
+            {% include '@NumberNine/admin/util/dynamic_tabs.html.twig' %}
 
             <div class="grid lg:grid-cols-3 grid-cols-5 gap-3">
                 <div class="col-span-5 md:col-span-3 lg:col-span-2">
@@ -43,6 +51,18 @@
                             {{ form_row(form.customFields) }}
                         {% endblock %}
                     {% endembed %}
+
+                    {% if editor_extensions['tabs'] is defined %}
+                        {% for tab in editor_extensions['tabs'] %}
+                            {% embed '@NumberNine/admin/util/dynamic_tabs_panel.html.twig' with {id: tab.name} %}
+                                {% block content %}
+                                    {% if tab.form_type is not null %}
+                                        {{ form_row(form['extension_' ~ tab.name]) }}
+                                    {% endif %}
+                                {% endblock %}
+                            {% endembed %}
+                        {% endfor %}
+                    {% endif %}
                 </div>
 
                 <div class="col-span-5 md:col-span-2 lg:col-span-1 ml-3 lg:ml-0">
@@ -79,6 +99,18 @@
                             {{ form_row(form.customTemplate) }}
                         {% endblock %}
                     {% endembed %}
+
+                    {% if editor_extensions['sidebarComponents'] is defined %}
+                        {% for component in editor_extensions['sidebarComponents'] %}
+                            {% embed '@NumberNine/admin/util/card.html.twig' with {title: component.label} %}
+                                {% block content %}
+                                    {% if component.form_type is not null %}
+                                        {{ form_row(form['extension_' ~ component.name]) }}
+                                    {% endif %}
+                                {% endblock %}
+                            {% endembed %}
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
 

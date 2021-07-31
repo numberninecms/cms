@@ -18,6 +18,8 @@ use NumberNine\Entity\ContentEntity;
 use NumberNine\Form\Admin\Content\AdminContentEntityEditFormType;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Model\Content\ContentType;
+use NumberNine\Model\Content\EditorExtensionBuilder;
+use NumberNine\Model\Content\EditorExtensionInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,8 +44,12 @@ abstract class AbstractContentEntityFormAction extends AbstractController implem
 
     protected function handle(Request $request, ContentType $contentType, ContentEntity $entity): Response
     {
+        $editorExtensions = $this->getEditorExtensions($contentType);
         $type = $this->slugger->slug((string)$contentType->getLabels()->getPluralName());
-        $form = $this->createForm(AdminContentEntityEditFormType::class, $entity);
+        $form = $this->createForm(AdminContentEntityEditFormType::class, $entity, [
+            'editor_extensions' => $editorExtensions,
+        ]);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -79,6 +85,21 @@ abstract class AbstractContentEntityFormAction extends AbstractController implem
             'type_slug' => $type,
             'entity' => $entity,
             'form' => $form->createView(),
+            'editor_extensions' => $editorExtensions,
         ], $response);
+    }
+
+    private function getEditorExtensions(ContentType $contentType): array
+    {
+        if (!($extensionClassName = $contentType->getEditorExtension())) {
+            return [];
+        }
+
+        /** @var EditorExtensionInterface $extension */
+        $extension = new $extensionClassName();
+        $builder = new EditorExtensionBuilder();
+        $extension->build($builder);
+
+        return $builder->all();
     }
 }

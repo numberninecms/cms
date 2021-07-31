@@ -11,7 +11,12 @@
                 >
                     <span class="space-x-1">
                         {% if tab.icon %}
-                            <i class="fa fa-{{ tab.icon }}"></i>
+                            {% if tab.icon starts with 'mdi-' %}
+                                {% set icon = 'mdi mdi-18px ' ~ tab.icon %}
+                            {% else %}
+                                {% set icon = 'fa fa-' ~ tab.icon %}
+                            {% endif %}
+                            <i class="{{ icon }}"></i>
                         {% endif %}
                         <span class="hidden md:inline">{{ (tab.text ?? 'Missing title')|trans }}</span>
                     </span>
