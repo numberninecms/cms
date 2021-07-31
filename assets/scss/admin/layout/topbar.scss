@@ -9,7 +9,7 @@
 
 .topbar {
     @apply
-        sticky top-0
+        fixed top-0 left-0 right-0
         px-2 py-2 z-50 lg:px-6
         text-white bg-quaternary
         shadow-lg
