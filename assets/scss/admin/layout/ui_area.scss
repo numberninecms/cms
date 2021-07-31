@@ -8,6 +8,6 @@
  */
 
 .ui-area {
-    @apply flex w-full;
+    @apply flex w-full mt-ui-area;
     min-height: calc(100% - 48px);
 }
