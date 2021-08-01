@@ -1,0 +1,27 @@
+{% trans_default_domain 'numbernine' %}
+{% extends '@NumberNine/admin/base.html.twig' %}
+
+{% block title %}{{ 'Areas'|trans }}{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col">
+        {% include '@NumberNine/admin/util/toolbar.html.twig' with {title: 'Areas'} %}
+
+        <turbo-frame id="numbernine_admin_areas_index">
+            {% include '@NumberNine/admin/util/flashes.html.twig' %}
+
+            <p class="mt-2 px-3 font-semibold">{{ 'Choose an area to edit'|trans }}</p>
+            <div class="flex flex-wrap gap-3 mt-2 px-3">
+                {% for name, label in areas %}
+                    <a
+                        href="{{ path('numbernine_admin_area_page_builder_edit', {area: name}) }}"
+                        class="border border-gray-300 p-3 hover:bg-gray-300 active:bg-gray-400"
+                        data-turbo-frame="_top"
+                    >
+                        {{ label }}
+                    </a>
+                {% endfor %}
+            </div>
+        </turbo-frame>
+    </div>
+{% endblock %}
