@@ -132,7 +132,7 @@ final class AdminMenuBuilderTest extends AdminTestCase
     {
         $this->setCapabilitiesThenLogin([Capabilities::CUSTOMIZE]);
         self::assertArrayHasKey('appearance', $this->adminMenuBuilder->getMenuItems());
-        self::assertArrayHasKey('customize', $this->adminMenuBuilder->getMenuItems()['appearance']->getChildren());
+        self::assertArrayHasKey('areas', $this->adminMenuBuilder->getMenuItems()['appearance']->getChildren());
         self::assertArrayHasKey('menus', $this->adminMenuBuilder->getMenuItems()['appearance']->getChildren());
     }
 }

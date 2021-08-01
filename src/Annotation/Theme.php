@@ -21,6 +21,7 @@ use Doctrine\Common\Annotations\Annotation\Target;
  * @Target("CLASS")
  * @Attributes({
  *     @Attribute("name", type="string"),
+ *     @Attribute("areas", type="array"),
  * })
  */
 final class Theme implements DescriptorAnnotation

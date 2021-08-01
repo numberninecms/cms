@@ -15,17 +15,16 @@ final class AreaStore
 {
     private array $areas = [];
 
-    /**
-     * @return array
-     */
+    public function getArea(string $id): ?array
+    {
+        return $this->areas[$id] ?? null;
+    }
+
     public function getAreas(): array
     {
         return $this->areas;
     }
 
-    /**
-     * @param array $areas
-     */
     public function setAreas(array $areas): void
     {
         $this->areas = $areas;
