@@ -58,9 +58,9 @@ menus:
         icon: paint-brush
         if_granted: customize
         children:
-            customize:
-                text: Customize
-                link: /customizer/
+            areas:
+                text: Areas
+                route: numbernine_admin_area_page_builder_index
             menus:
                 text: Menus
                 route: numbernine_admin_menu_index
