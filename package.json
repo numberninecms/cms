@@ -35,6 +35,7 @@
         "eslint-plugin-vue": "^7.10.0",
         "exif-js": "^2.3.0",
         "jsviews": "^1.0.11",
+        "lodash.debounce": "^4.0.8",
         "mathjs": "^9.4.1",
         "mitt": "^3.0.0",
         "node-sass": "^6.0.0",
