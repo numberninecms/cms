@@ -3,6 +3,8 @@
 
 {% block title %}{{ '%1% edition'|trans({'%1%': area|capitalize}) }}{% endblock %}
 
+{% block active_menu_url %}{{ path('numbernine_admin_area_page_builder_index') }}{% endblock %}
+
 {% block topbar_center_menu %}
     {% include '@NumberNine/admin/util/page_builder/page_builder_topbar_menu.html.twig' with {
         frontend_url: path('numbernine_homepage'),

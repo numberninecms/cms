@@ -11,7 +11,6 @@
 
 namespace NumberNine\Event;
 
-use NumberNine\Model\Content\ContentType;
 use Symfony\Contracts\EventDispatcher\Event;
 
 final class AreasRegistrationEvent extends Event

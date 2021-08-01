@@ -12,7 +12,6 @@
 namespace NumberNine\EventSubscriber;
 
 use NumberNine\Event\AreasRegistrationEvent;
-use NumberNine\Model\Theme\ThemeInterface;
 use NumberNine\Theme\ThemeStore;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -41,7 +40,7 @@ final class AreasRegistrationEventSubscriber implements EventSubscriberInterface
     {
         $config = $this->themeStore->getCurrentTheme()->getConfiguration() ?? [];
 
-        if (array_key_exists('areas', $config)) {
+        if (\array_key_exists('areas', $config)) {
             $this->eventDispatcher->addListener(
                 AreasRegistrationEvent::class,
                 static function (AreasRegistrationEvent $event) use ($config): void {
