@@ -30,7 +30,7 @@
             "node",
             "webpack-env"
         ],
-        "lib": ["esnext", "dom"]
+        "lib": ["esnext", "dom", "dom.iterable"]
     },
     "include": [
         "assets/ts/**/*"

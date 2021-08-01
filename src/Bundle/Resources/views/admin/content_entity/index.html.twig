@@ -4,38 +4,42 @@
 {% block title %}{{ content_type.labels.pluralName|capitalize }}{% endblock %}
 
 {% block content %}
-    <div class="flex flex-col">
+    <div class="flex flex-col" data-controller="search">
         {% embed '@NumberNine/admin/util/toolbar.html.twig' with {title: content_type.labels.pluralName|capitalize} %}
             {% block tools %}
-                <a href="{{ path('numbernine_admin_content_entity_create', {type: type_slug}) }}"
-                   class="btn btn-color-white btn-size-xsmall"
-                   data-turbo-frame="_top"
-                >
-                    {{ content_type.labels.addNewItem }}
-                </a>
+                <div class="flex flex-grow justify-between">
+                    <a href="{{ path('numbernine_admin_content_entity_create', {type: type_slug}) }}"
+                       class="btn btn-color-white btn-size-xsmall"
+                       data-turbo-frame="_top"
+                    >
+                        {{ content_type.labels.addNewItem }}
+                    </a>
+                    <div>
+                        <label class="flex gap-1">
+                            <input type="text" placeholder="Search..." class="text-xs p-1 text-quaternary" data-search-target="input" autocomplete="off">
+                            <button class="btn btn-style-flat btn-color-white" type="button" data-action="search#reset">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </label>
+                    </div>
+                </div>
             {% endblock %}
         {% endembed %}
 
-        <turbo-frame id="numbernine_admin_content_entity_index">
+        <turbo-frame id="numbernine_admin_content_entity_index" data-search-target="frame">
             {% include '@NumberNine/admin/util/flashes.html.twig' %}
 
             <div class="tabs-toolbar">
                 <div class="tabs" data-controller="tabs">
-                    <a href="{{ path('numbernine_admin_content_entity_index', {type: type_slug}) }}" data-tabs-target="tab">
+                    <a href="{{ path('numbernine_admin_content_entity_index', {type: type_slug}) }}" data-tabs-target="tab" data-action="search#reset">
                         <span>{{ 'All'|trans }}</span>
                     </a>
-                    <a href="{{ path('numbernine_admin_content_entity_index', {type: type_slug, status: 'publish'}) }}" data-tabs-target="tab">
+                    <a href="{{ path('numbernine_admin_content_entity_index', {type: type_slug, status: 'publish'}) }}" data-tabs-target="tab" data-action="search#reset">
                         <span>{{ 'Published'|trans }}</span>
                     </a>
-                    <a href="{{ path('numbernine_admin_content_entity_index', {type: type_slug, status: 'deleted'}) }}" data-tabs-target="tab">
+                    <a href="{{ path('numbernine_admin_content_entity_index', {type: type_slug, status: 'deleted'}) }}" data-tabs-target="tab" data-action="search#reset">
                         <span>{{ 'Trash'|trans }}</span>
                     </a>
-                </div>
-                <div>
-                    <label class="border border-color-secondary border-0 border-bottom">
-                        <input type="text" placeholder="Filter">
-                        <i class="fa fa-search mx-3"></i>
-                    </label>
                 </div>
             </div>
 
