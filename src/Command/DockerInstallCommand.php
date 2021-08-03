@@ -72,7 +72,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
         $this->io = new SymfonyStyle($input, $output);
         $this->envFile = $this->projectPath . '/.env.local';
         $this->reset = (bool)$input->getOption('reset');
-        $this->appName = $input->getOption('app-name'); // @phpstan-ignore-line
+        $this->appName = $input->getOption('app-name');
         $this->verbosity = $this->io->getVerbosity();
 
         $tasks = [

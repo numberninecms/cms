@@ -122,7 +122,6 @@ jobs:
 
             -   name: Add NumberNine to the project
                 run: |
-                    export SYMFONY_ENDPOINT=https://flex.symfony.com/r/github.com/symfony/recipes-contrib/1049
                     composer config extra.symfony.allow-contrib true
                     composer config minimum-stability dev
                     composer config prefer-stable true
