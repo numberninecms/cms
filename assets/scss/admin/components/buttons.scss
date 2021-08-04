@@ -15,7 +15,9 @@
         text-white text-center text-base font-semibold
         shadow-md rounded-lg
         transition ease-in duration-200
-        focus:outline-none focus:ring-2 focus:ring-offset-2;
+        focus:outline-none focus:ring-2 focus:ring-offset-2
+        disabled:opacity-50
+    ;
 
     &.btn-color-primary {
         @apply
