@@ -71,8 +71,8 @@ jobs:
             -   name: Run unit and functional tests
                 run: docker-compose exec -T php vendor/bin/phpunit
 
-    project_installation:
-        name: New project installation
+    project_installation_docker:
+        name: New project installation (Docker)
 
         runs-on: ubuntu-20.04
 
@@ -157,3 +157,85 @@ jobs:
 
             -   name: Check that website is up and running
                 run: wget --spider --no-check-certificate https://testproject.localhost/
+
+    project_installation_manual:
+        name: New project installation (manual)
+
+        runs-on: ubuntu-20.04
+
+        strategy:
+            matrix:
+                php: [ 8.0 ]
+
+        steps:
+            -   uses: FranzDiebold/github-env-vars-action@v2
+
+            -   name: Start MySQL
+                run: sudo systemctl start mysql.service
+
+            -   uses: actions/checkout@v2
+                with:
+                    path: temp/cms
+
+            -   name: Create temporary branch alias for master and feature branches
+                if: github.ref != 'refs/heads/master' && !startsWith(github.ref, 'refs/pull/')
+                run: |
+                    cd temp/cms
+                    composer config --unset extra.branch-alias.dev-master
+                    composer config extra.branch-alias.dev-$CI_REF_NAME_SLUG 0.2.x-dev
+
+            -   name: Create temporary branch alias for pull requests
+                if: startsWith(github.ref, 'refs/pull/')
+                run: |
+                    cd temp/cms
+                    composer config --unset extra.branch-alias.dev-master
+                    composer config extra.branch-alias.dev-$CI_SHA 0.2.x-dev
+
+            -   name: Setup PHP
+                id: setup-php
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php }}
+                    extensions: dom, curl, libxml, mbstring, zip, gd, exif, sysvsem
+                    tools: composer:v2, symfony
+                    coverage: none
+                env:
+                    COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            -   name: Create a new project
+                run: |
+                    symfony new newproject --full --no-git
+                    cd newproject
+                    cp -Rp . ../
+                    cd ..
+                    rm -rf newproject
+
+            -   name: Add NumberNine to the project
+                run: |
+                    composer config extra.symfony.allow-contrib true
+                    composer config repositories.0 path ./temp/cms
+                    composer require numberninecms/cms:*@dev numberninecms/chapterone
+
+            -   name: Create .env.local file
+                run: |
+                    echo "APP_NAME=numbernine" > .env.local
+                    echo "DATABASE_URL=mysql://root:root@localhost:3306/numbernine_app?serverVersion=5.7" >> .env.local
+
+            -   name: Wait for MySQL to be up and running
+                run: php -r "set_time_limit(30); for(;;) { if(@fsockopen('localhost:'.(3306))) { break; } }"
+
+            -   name: Install NumberNine
+                run: |
+                    bin/console assets:install public --symlink
+                    bin/console doctrine:database:create
+                    bin/console doctrine:migrations:diff --no-interaction
+                    bin/console doctrine:migrations:migrate --no-interaction
+                    bin/console doctrine:fixtures:load --no-interaction
+
+            -   name: Run web server
+                run: |
+                    php -S localhost:8080 public/index.php > phpd.log 2>&1 &
+                    sleep 5
+
+            -   name: Check that website is up and running
+                run: wget --spider --no-check-certificate http://localhost:8080/

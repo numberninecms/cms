@@ -39,7 +39,7 @@ class User implements UserInterface, Serializable
 
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(type="integer")
      * @Groups({"user_get", "author_get"})
      */

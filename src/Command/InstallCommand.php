@@ -70,16 +70,6 @@ final class InstallCommand extends Command implements ContentTypeAwareCommandInt
             return Command::SUCCESS;
         }
 
-        $source = $this->publicPath . '/bundles/numbernine/admin';
-
-        if (!file_exists($source)) {
-            $this->io->error('You must call assets:install before calling this command.');
-            return Command::FAILURE;
-        }
-
-        $filesystem = new Filesystem();
-        $filesystem->mirror($source, $this->publicPath . '/admin/');
-
         $envFile = $this->projectPath . '/.env.local';
 
         if ($force || !file_env_variable_exists($envFile, 'APP_NAME')) {
