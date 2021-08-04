@@ -51,7 +51,7 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
 
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(type="integer")
      * @Groups({"content_entity_get", "content_entity_get_full", "menu_get"})
      */

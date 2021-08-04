@@ -29,7 +29,7 @@ class Term
 
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(type="integer")
      * @Groups({"term_get", "content_entity_get", "content_entity_get_full"})
      */
