@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace NumberNine\Controller\Admin\Ui\ContentEntity;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Gedmo\Loggable\Entity\LogEntry;
+use Gedmo\Loggable\Entity\Repository\LogEntryRepository;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Form\Admin\Content\AdminContentEntityEditFormType;
 use NumberNine\Model\Admin\AdminController;
@@ -78,6 +80,9 @@ abstract class AbstractContentEntityFormAction extends AbstractController implem
             }
         }
 
+        /** @var LogEntryRepository $logEntryRepository */
+        $logEntryRepository = $this->entityManager->getRepository(LogEntry::class);
+
         $response = new Response(null, $form->isSubmitted() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK);
 
         return $this->render('@NumberNine/admin/content_entity/edit.html.twig', [
@@ -86,6 +91,7 @@ abstract class AbstractContentEntityFormAction extends AbstractController implem
             'entity' => $entity,
             'form' => $form->createView(),
             'editor_extensions' => $editorExtensions,
+            'has_revisions' => count($logEntryRepository->getLogEntries($entity)) > 1,
         ], $response);
     }
 

@@ -9,7 +9,7 @@
 {% block active_menu_url %}{{ path('numbernine_admin_content_entity_index', {type: type_slug}) }}{% endblock %}
 
 {% block content %}
-    <turbo-frame id="numbernine_admin_content_entity_create">
+    <turbo-frame id="numbernine_admin_content_entity_edit">
         <div class="flex flex-col" data-controller="dynamic-tabs">
             {% include '@NumberNine/admin/util/toolbar.html.twig' with {title: entity.title ?? content_type.labels.newItem} %}
             {% include '@NumberNine/admin/util/flashes.html.twig' %}
@@ -21,6 +21,10 @@
                 {id: 'seo', icon: 'search', text: 'SEO'},
                 {id: 'custom-fields', icon: 'wrench', text: 'Custom fields'},
             ] %}
+
+            {% if has_revisions %}
+                {% set tabs = tabs|merge([{id: 'revisions', icon: 'history', text: 'Revisions'}]) %}
+            {% endif %}
 
             {% if editor_extensions['tabs'] is defined %}
                 {% for tab in editor_extensions['tabs'] %}
@@ -51,6 +55,19 @@
                             {{ form_row(form.customFields) }}
                         {% endblock %}
                     {% endembed %}
+
+                    {% if has_revisions %}
+                        {% embed '@NumberNine/admin/util/dynamic_tabs_panel.html.twig' with {id: 'revisions'} %}
+                            {% block content %}
+                                <div
+                                    data-controller="content-entity--history"
+                                    data-content-entity--history-id-value="{{ entity.id }}"
+                                    data-content-entity--history-content-type-value="{{ content_type.name }}"
+                                    class="pl-3"
+                                ></div>
+                            {% endblock %}
+                        {% endembed %}
+                    {% endif %}
 
                     {% if editor_extensions['tabs'] is defined %}
                         {% for tab in editor_extensions['tabs'] %}

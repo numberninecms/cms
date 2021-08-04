@@ -35,6 +35,7 @@ import PageBuilderComponentsComponentsSavedEvent from 'admin/events/PageBuilderC
 import FlashShowEvent from 'admin/events/FlashShowEvent';
 import MenuAddItemsEvent from 'admin/events/MenuAddItemsEvent';
 import MenuItemsUpdatedEvent from 'admin/events/MenuItemsUpdatedEvent';
+import ContentEntityRevertToRevisionEvent from 'admin/events/ContentEntityRevertToRevisionEvent';
 
 export const EVENT_MEDIA_UPLOADER_FILE_UPLOADED = 'media-uploader:file-uploaded';
 export const EVENT_MEDIA_THUMBNAILS_LIST_THUMBNAIL_CLICKED = 'media-thumbnails-list:thumbnail-clicked';
@@ -141,7 +142,14 @@ export type MenuEvents = {
     [EVENT_MENU_ITEMS_UPDATED]: MenuItemsUpdatedEvent;
 };
 
+export const EVENT_CONTENT_ENTITY_REVERT_TO_REVISION = 'content-entity:revert-to-revision';
+
+export type ContentEntityEvents = {
+    [EVENT_CONTENT_ENTITY_REVERT_TO_REVISION]: ContentEntityRevertToRevisionEvent;
+};
+
 export type Events = MediaLibraryEvents &
+    ContentEntityEvents &
     TinyEditorEvents &
     ModalEvents &
     PageBuilderEvents &
