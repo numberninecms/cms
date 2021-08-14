@@ -14,56 +14,50 @@
 
 @import "~tailwindcss/base";
 @import "~tailwindcss/components";
+
+@import "admin/colors";
+
 @import "~tailwindcss/utilities";
 
-body {
-    @apply bg-gray-400;
+@import "admin/components/buttons";
+@import "admin/components/forms";
 
-    &.login {
-        @apply bg-gradient-to-r from-gray-900 via-blue-700 to-blue-800 bg-cover bg-center;
-        background-image: url(../images/login_background.jpg);
-    }
+body {
+    @apply bg-gradient-to-tr from-primary-900 to-primary-300 bg-cover bg-center;
 }
 
 .card {
-    @apply relative w-full overflow-hidden shadow-lg bg-white rounded p-5 bg-opacity-50;
+    @apply relative overflow-hidden shadow-lg bg-white rounded p-5 w-full md:w-3/4 lg:w-1/2;
+
+    a {
+        @apply inline-block align-baseline font-bold text-sm text-primary hover:text-primary-800;
+    }
 
     h1 {
         @apply font-light text-6xl leading-10 mt-3 mb-6 bg-left-top bg-no-repeat h-12 text-gray-800;
         padding-left: 3.5rem;
         background-image: url(../images/NumberNineWithoutText.png);
         background-size: auto 100%;
+        background-position: left center;
 
         &.small {
-            @apply text-4xl;
+            @apply text-3xl md:text-4xl leading-7 pt-0 md:pt-1;
         }
-    }
-
-    .back-to-front {
-        @apply font-bold text-blue-700 text-sm hover:text-blue-900;
     }
 
     form {
         @apply pt-6;
 
         label {
-            @apply block text-gray-800 text-sm font-bold mb-2 cursor-pointer;
+            @apply block font-semibold text-quaternary;
         }
 
         input[type="text"], input[type="password"], input[type="email"] {
-            @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:ring focus:outline-none;
+            @apply w-full py-2 px-3;
         }
 
         .form-footer {
             @apply flex items-center justify-between;
-
-            button {
-                @apply bg-blue-700 text-white font-bold py-2 px-4 rounded focus:ring focus:outline-none hover:bg-blue-900;
-            }
-
-            a {
-                @apply inline-block align-baseline font-bold text-sm text-blue-700 hover:text-blue-900;
-            }
         }
     }
 }
@@ -72,13 +66,6 @@ body {
     @apply bg-red-200 border-red-600 text-red-600 border-l-4 p-4 mb-3;
 
     p {
-        @apply font-bold;
-    }
-}
-
-/* Medium (md) */
-@media (min-width: 768px) {
-    .card {
-        @apply w-1/2;
+        @apply font-semibold;
     }
 }

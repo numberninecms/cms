@@ -1,6 +1,7 @@
+{% trans_default_domain 'numbernine' %}
 {% extends '@NumberNine/user/base.html.twig' %}
 
-{% block title %}Administration - NumberNine{% endblock %}
+{% block title %}{{ 'Login'|trans }}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -11,7 +12,7 @@
 
 {% block body %}
     <h1>Login</h1>
-    <a href="{{ path('numbernine_homepage') }}" class="back-to-front"><i class="fa fa-arrow-left"></i> Back to front page</a>
+    <a href="{{ path('numbernine_homepage') }}" class="back-to-front"><i class="fa fa-arrow-left"></i> {{ 'Back to front page'|trans }}</a>
 
     <form method="post">
         {% if error %}
@@ -34,14 +35,14 @@
         </div>
         <div class="mb-6">
             <label>
-                <input type="checkbox" name="_remember_me"> Remember me
+                <input type="checkbox" name="_remember_me" class="mr-2"> Remember me
             </label>
         </div>
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
         <div class="form-footer">
-            <button type="submit">
+            <button class="btn btn-color-primary" type="submit">
                 Sign In
             </button>
             <a href="{{ path('numbernine_forgot_password_request') }}">

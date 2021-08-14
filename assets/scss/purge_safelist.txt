@@ -8,6 +8,8 @@ mr-2
 mr-2
 ml-1
 mx-3
+pr-3
+pl-3
 mx-auto
 w-full
 max-w-xs

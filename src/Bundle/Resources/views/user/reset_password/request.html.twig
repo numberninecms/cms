@@ -1,35 +1,35 @@
+{% trans_default_domain 'numbernine' %}
 {% extends '@NumberNine/user/base.html.twig' %}
 
-{% block title %}Reset your password{% endblock %}
+{% block title %}{{ 'Reset your password'|trans }}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
     {{ encore_entry_link_tags('security', 'numbernine', 'numbernine') }}
 {% endblock %}
 
-{% block body_classes %}n9-login{% endblock %}
+{% block body_classes %}login{% endblock %}
 
 {% block body %}
-    <h1 class="n9-small">Reset your password</h1>
-    <a href="{{ path('numbernine_login') }}" class="n9-back-to-front"><i class="n9-fa n9-fa-arrow-left"></i> Back to login page</a>
+    <h1 class="small">{{ 'Reset your password'|trans }}</h1>
+    <a href="{{ path('numbernine_login') }}" class="back-to-front"><i class="fa fa-arrow-left"></i> {{ 'Back to login page'|trans }}</a>
 
     {{ form_start(requestForm) }}
         {% for flash_error in app.flashes('reset_password_error') %}
-            <div class="n9-alert-danger" role="alert">
+            <div class="alert-danger" role="alert">
                 <p>{{ flash_error }}</p>
             </div>
         {% endfor %}
 
         {{ form_row(requestForm.email) }}
-        <div class="n9-mb-4">
-            <small class="n9-text-xs">
-                Enter your email address and we we will send you a
-                link to reset your password.
+        <div class="mb-4">
+            <small class="text-xs">
+                {{ 'Enter your email address and we we will send you a link to reset your password.'|trans }}
             </small>
         </div>
 
-        <div class="n9-form-footer">
-            <button type="submit">Send password reset email</button>
+        <div class="form-footer">
+            <button class="btn btn-color-primary" type="submit">{{ 'Send password reset email'|trans }}</button>
         </div>
     {{ form_end(requestForm) }}
 {% endblock %}

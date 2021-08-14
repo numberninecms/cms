@@ -17,7 +17,6 @@ Visit https://numberninecms.github.io/ for user and developer documentation.
 Feel free to submit issues and pull requests.
 
 # Credits
-* Login page photo by [Nicolas Becker](https://www.pexels.com/photo/stack-of-stones-in-dry-valley-5530229/)
 * Thanks to [JetBrains](https://jb.gg/OpenSource) for supporting this project
 
 [![JetBrains](./assets/images/jetbrains.png)](https://jb.gg/OpenSource)

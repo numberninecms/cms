@@ -12,7 +12,9 @@
 
             {% include '@NumberNine/admin/util/flashes.html.twig' %}
 
-            {{ form(form, {attr: {class: 'lg:max-w-md', 'data-turbo-frame': '_top'}}) }}
+            {{ form_start(form, {attr: {class: 'lg:max-w-md px-3', 'data-turbo-frame': '_top'}}) }}
+                {{ form_widget(form) }}
+            {{ form_end(form) }}
 
             <div class="mt-3 px-3">
                 <a href="{{ path('numbernine_admin_menu_index') }}"
