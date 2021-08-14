@@ -50,7 +50,7 @@
                         {% if is_trash %}
                             {{ form_row(form.restore, {row_attr: {class: 'mt-4'}}) }}
                         {% endif %}
-                        {{ form_row(form.delete, {row_attr: {class: is_trash ? null : 'mt-4'}, attr: {class: 'btn btn-color-red'}}) }}
+                        {{ form_row(form.delete, {row_attr: {class: is_trash ? 'mt-4 pl-3' : 'mt-4'}, attr: {class: 'btn btn-color-red'}}) }}
                     </div>
                 {{ form_end(form) }}
             </div>

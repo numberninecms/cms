@@ -2,7 +2,7 @@
 {% use 'form_div_layout.html.twig' %}
 
 {%- block form_row -%}
-    {%- set row_attr = row_attr|merge({class: row_attr.class|default(row_class|default('flex flex-col px-3 mt-2'))}) -%}
+    {%- set row_attr = row_attr|merge({class: row_attr.class|default(row_class|default('flex flex-col mt-2'))}) -%}
     {{- parent() -}}
 {%- endblock form_row -%}
 
@@ -12,7 +12,7 @@
 {% endblock form_label %}
 
 {%- block button_row -%}
-    {%- set row_attr = row_attr|merge({class: row_attr.class|default('mt-4 px-3')}) -%}
+    {%- set row_attr = row_attr|merge({class: row_attr.class|default('mt-4')}) -%}
     <div{% with {attr: row_attr} %} {{ block('attributes') }}{% endwith %}>
         {{- form_widget(form, {attr: attr|merge({class: attr.class|default(row_class|default('btn btn-color-primary'))})}) -}}
     </div>

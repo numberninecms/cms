@@ -10,7 +10,9 @@
         <turbo-frame id="numbernine_admin_settings_emails">
             {% include '@NumberNine/admin/util/flashes.html.twig' %}
 
-            {{ form(form, {attr: {class: 'lg:max-w-md'}}) }}
+            {{ form_start(form, {attr: {class: 'lg:max-w-md px-3'}}) }}
+                {{ form_widget(form) }}
+            {{ form_end(form) }}
         </turbo-frame>
     </div>
 {% endblock %}
