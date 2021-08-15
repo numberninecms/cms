@@ -43,6 +43,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 use function NumberNine\Common\Util\ArrayUtil\array_merge_recursive_fixed;
 
@@ -57,6 +58,7 @@ final class AdminContentEntityEditFormType extends AbstractType
     private TaxonomyRepository $taxonomyRepository;
     private TermRepository $termRepository;
     private ContentEntityTermRepository $contentEntityTermRepository;
+    private TagAwareCacheInterface $cache;
 
     /** @var Taxonomy[]|null */
     private ?array $taxonomies = null;
@@ -69,7 +71,8 @@ final class AdminContentEntityEditFormType extends AbstractType
         EventDispatcherInterface $eventDispatcher,
         TaxonomyRepository $taxonomyRepository,
         TermRepository $termRepository,
-        ContentEntityTermRepository $contentEntityTermRepository
+        ContentEntityTermRepository $contentEntityTermRepository,
+        TagAwareCacheInterface $cache
     ) {
         $this->associativeArrayToKeyValueCollectionTransformer = $transformer;
         $this->contentService = $contentService;
@@ -78,6 +81,7 @@ final class AdminContentEntityEditFormType extends AbstractType
         $this->taxonomyRepository = $taxonomyRepository;
         $this->termRepository = $termRepository;
         $this->contentEntityTermRepository = $contentEntityTermRepository;
+        $this->cache = $cache;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -134,6 +138,7 @@ final class AdminContentEntityEditFormType extends AbstractType
         $builder->addEventListener(FormEvents::SUBMIT, [$this, 'transformTemplate']);
         $builder->addEventListener(FormEvents::SUBMIT, [$this, 'transformEditorExtensions']);
         $builder->addEventListener(FormEvents::SUBMIT, [$this, 'submitTaxonomyTerms']);
+        $builder->addEventListener(FormEvents::SUBMIT, [$this, 'clearCache']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -431,5 +436,13 @@ final class AdminContentEntityEditFormType extends AbstractType
                 }
             }
         }
+    }
+
+    public function clearCache(FormEvent $event): void
+    {
+        /** @var ContentEntity $entity */
+        $entity = $event->getForm()->getData();
+
+        $this->cache->invalidateTags([sprintf('content_entity_%d', $entity->getId())]);
     }
 }
