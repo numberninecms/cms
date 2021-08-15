@@ -58,8 +58,9 @@ final class NumberNineBundleKernel extends Kernel
     protected function configureContainer(ContainerConfigurator $container): void
     {
         $container->import('../src/Bundle/Resources/config/app.yaml');
-        $container->import('../src/Bundle/Resources/config/{app}_' . $this->environment . '.yaml');
+        $container->import('../src/Bundle/Resources/config/app_test.yaml');
         $container->import('../src/Bundle/Resources/config/services.yaml');
+        $container->import('../src/Bundle/Resources/config/services_test.yaml');
     }
 
     protected function configureRoutes(RoutingConfigurator $routes): void

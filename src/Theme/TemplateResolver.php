@@ -24,7 +24,8 @@ use RuntimeException;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Yaml\Yaml;
-use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\SyntaxError;
@@ -37,7 +38,7 @@ final class TemplateResolver implements TemplateResolverInterface
     private Environment $twig;
     private ThemeStore $themeStore;
     private ContentService $contentService;
-    private CacheInterface $cache;
+    private TagAwareCacheInterface $cache;
     private SluggerInterface $slugger;
     private array $bundles;
     private string $templatePath;
@@ -46,7 +47,7 @@ final class TemplateResolver implements TemplateResolverInterface
         Environment $twig,
         ThemeStore $themeStore,
         ContentService $contentService,
-        CacheInterface $cache,
+        TagAwareCacheInterface $cache,
         SluggerInterface $slugger,
         array $bundles,
         string $templatePath
@@ -60,18 +61,13 @@ final class TemplateResolver implements TemplateResolverInterface
         $this->templatePath = $templatePath;
     }
 
-    /**
-     * @param ContentEntity $entity
-     * @param array $extraTemplates
-     * @return TemplateWrapper
-     * @throws LoaderError
-     * @throws SyntaxError
-     */
     public function resolveSingle(ContentEntity $entity, array $extraTemplates = []): TemplateWrapper
     {
         return $this->cache->get(
             sprintf('single_%s_id_%d', $entity->getCustomType(), $entity->getId()),
-            function () use ($entity, $extraTemplates) {
+            function (ItemInterface $item) use ($entity, $extraTemplates) {
+                $item->tag(sprintf('content_entity_%d', $entity->getId()));
+
                 $themeName = $this->themeStore->getCurrentThemeName();
 
                 $templates = array_merge(
@@ -96,9 +92,9 @@ final class TemplateResolver implements TemplateResolverInterface
                         $this->getContentEntityIndexTemplateCandidates(),
                     );
 
-                    $filename = array_search($pageTemplate, $candidates);
+                    $filename = \array_key_exists($pageTemplate, $candidates) ? $pageTemplate : false;
 
-                    if (is_string($filename) && $filename) {
+                    if (\is_string($filename) && $filename) {
                         if (preg_match('/^index\./', basename($filename))) {
                             array_unshift(
                                 $templates,
@@ -162,9 +158,6 @@ final class TemplateResolver implements TemplateResolverInterface
     }
 
     /**
-     * @param Term $term
-     * @param array $extraTemplates
-     * @return string
      * @throws LoaderError
      * @throws SyntaxError
      */
@@ -206,23 +199,15 @@ final class TemplateResolver implements TemplateResolverInterface
         return $this->twig->resolveTemplate($templates)->getTemplateName();
     }
 
-    /**
-     * @param ComponentInterface $component
-     * @return string
-     * @throws LoaderError
-     * @throws SyntaxError
-     */
     public function resolveComponent(ComponentInterface $component): string
     {
-        return $this->cache->get($this->slugger->slug(get_class($component)), function () use ($component) {
+        return $this->cache->get($this->slugger->slug(\get_class($component)), function () use ($component) {
             $templates = $this->getComponentTemplatesCandidates($component);
             return $this->twig->resolveTemplate($templates)->getTemplateName();
         });
     }
 
     /**
-     * @param ShortcodeInterface $shortcode
-     * @return string
      * @throws LoaderError
      * @throws SyntaxError
      */
@@ -286,7 +271,7 @@ final class TemplateResolver implements TemplateResolverInterface
 
     public function getShortcodeTemplatesCandidates(ShortcodeInterface $shortcode, string $type): array
     {
-        if (!in_array($type, ['html', 'vue'])) {
+        if (!\in_array($type, ['html', 'vue'])) {
             throw new InvalidArgumentException("Type must be 'html' or 'vue'.");
         }
 
@@ -295,7 +280,7 @@ final class TemplateResolver implements TemplateResolverInterface
 
         $subNamespace = sprintf(
             '%s/%s',
-            dirname(
+            \dirname(
                 str_replace(
                     '\\',
                     '/',
@@ -309,20 +294,20 @@ final class TemplateResolver implements TemplateResolverInterface
         );
 
         $templates = [
-            sprintf("@AppShortcodes/%s/template.%s.twig", $subNamespace, $type),
-            sprintf("@%sShortcodes/%s/template.%s.twig", $themeName, $subNamespace, $type),
+            sprintf('@AppShortcodes/%s/template.%s.twig', $subNamespace, $type),
+            sprintf('@%sShortcodes/%s/template.%s.twig', $themeName, $subNamespace, $type),
         ];
 
         foreach ($this->bundles as $bundle => $fqcn) {
             $templates[] = sprintf(
-                "@%sShortcodes/%s/template.%s.twig",
+                '@%sShortcodes/%s/template.%s.twig',
                 str_replace('Bundle', '', $bundle),
                 $subNamespace,
                 $type
             );
         }
 
-        $templates[] = sprintf("@NumberNineShortcodes/%s/template.%s.twig", $subNamespace, $type);
+        $templates[] = sprintf('@NumberNineShortcodes/%s/template.%s.twig', $subNamespace, $type);
 
         return $templates;
     }
@@ -332,7 +317,7 @@ final class TemplateResolver implements TemplateResolverInterface
         $themeName = $this->themeStore->getCurrentThemeName();
         $reflectionClass = new ReflectionClass($component);
 
-        $subNamespace = dirname(
+        $subNamespace = \dirname(
             str_replace(
                 '\\',
                 '/',
@@ -341,13 +326,13 @@ final class TemplateResolver implements TemplateResolverInterface
         );
 
         $templates = [
-            sprintf("@AppComponents/%s/template.html.twig", $subNamespace),
-            sprintf("@%sComponents/%s/template.html.twig", $themeName, $subNamespace),
+            sprintf('@AppComponents/%s/template.html.twig', $subNamespace),
+            sprintf('@%sComponents/%s/template.html.twig', $themeName, $subNamespace),
         ];
 
         foreach ($this->bundles as $bundle => $fqcn) {
             $templates[] = sprintf(
-                "@%sComponents/%s/template.html.twig",
+                '@%sComponents/%s/template.html.twig',
                 str_replace('Bundle', '', $bundle),
                 $subNamespace
             );
@@ -373,7 +358,7 @@ final class TemplateResolver implements TemplateResolverInterface
 
             $finder = new Finder();
             $finder->in($directory)->files()->name('single.*.twig');
-            $templateFiles[] = array_keys(iterator_to_array($finder));
+            $templateFiles[] = array_keys(iterator_to_array($finder, true));
         }
 
         $templateFiles = array_unique(array_merge([], ...$templateFiles));
@@ -388,7 +373,7 @@ final class TemplateResolver implements TemplateResolverInterface
 
             $basename = basename($templateFile);
 
-            if (!empty($templateInfo['template']) && !array_key_exists($basename, $templatesNames)) {
+            if (!empty($templateInfo['template']) && !\array_key_exists($basename, $templatesNames)) {
                 $templatesNames[$basename] = $templateInfo['template'];
             }
         }
@@ -413,7 +398,7 @@ final class TemplateResolver implements TemplateResolverInterface
 
             $finder = new Finder();
             $finder->in($directory)->files()->name('index.*.twig');
-            $templateFiles[] = array_keys(iterator_to_array($finder));
+            $templateFiles[] = array_keys(iterator_to_array($finder, true));
         }
 
         $templateFiles = array_unique(array_merge([], ...$templateFiles));
