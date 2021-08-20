@@ -1,0 +1,42 @@
+{% trans_default_domain 'numbernine' %}
+<div data-controller="content-entity--permalink" class="select-text">
+    {{ form_row(form.title, {attr: {'data-content-entity--permalink-target': 'title'}}) }}
+    {% set url = app.request.getSchemeAndHttpHost() ~ N9_entity_url(form.vars.data) %}
+    <div class="flex flex-wrap items-center break-all mt-2 text-sm gap-2 min-h-10" data-content-entity--permalink-target="link">
+        {{ 'Permalink'|trans }}:
+        <a href="{{ url }}" target="_blank" class="permalink">
+            {{ N9_admin_highlighted_permalink_url(form.vars.data) }}
+        </a>
+        <button
+            type="button"
+            class="btn btn-color-white btn-size-xsmall border border-gray-300"
+            data-action="content-entity--permalink#edit"
+        >
+            {{ 'Edit'|trans }}
+        </button>
+    </div>
+    <div class="hidden flex-wrap items-center break-all mt-2 text-sm gap-2 min-h-10" data-content-entity--permalink-target="editable">
+        {% set slug = form.vars.data.slug ?? content_type.labels.newItem|slug|lower %}
+        {{ 'Permalink'|trans }}:
+        <span>
+            {{ url|replace({(slug): ''}) }}
+        </span>
+        <input type="text" value="{{ slug }}" class="p-1 text-sm" data-content-entity--permalink-target="input">
+        <button
+            type="button"
+            class="btn btn-color-white btn-size-xsmall border border-gray-300"
+            data-action="content-entity--permalink#save"
+        >
+            {{ 'OK'|trans }}
+        </button>
+        <button
+            type="button"
+            class="btn btn-color-white btn-size-xsmall border border-gray-300"
+            data-action="content-entity--permalink#cancel"
+        >
+            {{ 'Cancel'|trans }}
+        </button>
+    </div>
+    {{ form_widget(form.slug, {attr: {'data-content-entity--permalink-target': 'target'}}) }}
+</div>
+{{ form_row(form.content) }}

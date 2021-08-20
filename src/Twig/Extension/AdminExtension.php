@@ -22,6 +22,11 @@ final class AdminExtension extends AbstractExtension
     {
         return [
             new TwigFunction('N9_admin_menu_items', [AdminRuntime::class, 'getAdminMenuItems']),
+            new TwigFunction(
+                'N9_admin_highlighted_permalink_url',
+                [AdminRuntime::class, 'getHighlightedPermalinkUrl'],
+                ['is_safe' => ['html' => true]],
+            ),
         ];
     }
 }

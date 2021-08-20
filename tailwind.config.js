@@ -24,6 +24,9 @@ module.exports = {
             lg: '1024px',
         },
         extend: {
+            minHeight: (theme) => ({
+                ...theme('spacing'),
+            }),
             inset: {
                 'ui-area': '48px',
             },

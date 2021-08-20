@@ -1,0 +1,20 @@
+/*!
+ * This file is part of the NumberNine package.
+ *
+ * (c) William Arin <williamarin.dev@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+#numbernine_admin_content_entity_edit {
+    a.permalink {
+        @apply text-primary underline hover:text-primary-900;
+        text-underline-offset: 0.1rem;
+        text-decoration-thickness: 0.05rem;
+
+        .slug {
+            @apply font-semibold;
+        }
+    }
+}
