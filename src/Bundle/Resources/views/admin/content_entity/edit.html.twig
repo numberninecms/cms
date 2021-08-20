@@ -14,7 +14,7 @@
             {% include '@NumberNine/admin/util/toolbar.html.twig' with {title: entity.title ?? content_type.labels.newItem} %}
             {% include '@NumberNine/admin/util/flashes.html.twig' %}
 
-            {{ form_start(form, {attr: {'data-turbo': 'false'}}) }}
+            {{ form_start(form, {attr: {'data-turbo': 'false', 'data-controller': 'form-no-enter'}}) }}
 
             {% set tabs = [
                 {id: 'content', icon: 'edit', text: 'Content'},
@@ -38,8 +38,7 @@
                 <div class="col-span-5 px-3 md:pr-0 md:col-span-3 lg:col-span-2">
                     {% embed '@NumberNine/admin/util/dynamic_tabs_panel.html.twig' with {id: 'content'} %}
                         {% block content %}
-                            {{ form_row(form.title) }}
-                            {{ form_row(form.content) }}
+                            {% include '@NumberNine/admin/content_entity/edit_tab_content.html.twig' %}
                         {% endblock %}
                     {% endembed %}
 

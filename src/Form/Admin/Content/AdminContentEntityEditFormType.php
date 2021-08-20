@@ -88,6 +88,7 @@ final class AdminContentEntityEditFormType extends AbstractType
     {
         $builder
             ->add('title', TextType::class)
+            ->add('slug', HiddenType::class)
             ->add('content', TinyEditorType::class, ['required' => false])
             ->add('seoTitle', null, ['required' => false])
             ->add('seoDescription', TextareaType::class, ['required' => false])

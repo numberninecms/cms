@@ -23,15 +23,18 @@ final class PermalinkGenerator
 {
     private UrlGeneratorInterface $urlGenerator;
     private RouteProviderInterface $routeProvider;
+    private ContentService $contentService;
     private SluggerInterface $slugger;
 
     public function __construct(
         UrlGeneratorInterface $urlGenerator,
         RouteProviderInterface $routeProvider,
+        ContentService $contentService,
         SluggerInterface $slugger
     ) {
         $this->urlGenerator = $urlGenerator;
         $this->routeProvider = $routeProvider;
+        $this->contentService = $contentService;
         $this->slugger = $slugger;
     }
 
@@ -43,6 +46,8 @@ final class PermalinkGenerator
         int $page = 1,
         bool $absolute = false
     ): string {
+        $contentType = $this->contentService->getContentType((string)$contentEntity->getCustomType());
+
         $routeName = sprintf(
             'numbernine_%s_show%s',
             $contentEntity->getCustomType(),
@@ -51,9 +56,14 @@ final class PermalinkGenerator
 
         $route = $this->routeProvider->getRouteByName($routeName);
 
+        /** @var ?DateTime $date */
         $date = $contentEntity->getStatus() === PublishingStatusInterface::STATUS_PUBLISH
             ? $contentEntity->getPublishedAt() ?? $contentEntity->getCreatedAt()
             : $contentEntity->getCreatedAt();
+
+        if ($date === null) {
+            $date = new DateTime();
+        }
 
         $parameters = [];
         if (strpos($route->getPath(), '{year}') !== false) {
@@ -66,7 +76,8 @@ final class PermalinkGenerator
             $parameters['day'] = $date->format('d');
         }
         if (strpos($route->getPath(), '{slug}') !== false) {
-            $parameters['slug'] = $contentEntity->getSlug();
+            $parameters['slug'] = $contentEntity->getSlug()
+                ?? $this->slugger->slug((string)$contentType->getLabels()->getNewItem())->lower()->toString();
         }
 
         if ($page > 1) {

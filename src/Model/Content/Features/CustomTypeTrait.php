@@ -19,7 +19,7 @@ trait CustomTypeTrait
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected ?string $customType;
+    protected ?string $customType = null;
 
     public function getCustomType(): ?string
     {
