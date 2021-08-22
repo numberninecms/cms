@@ -231,13 +231,20 @@ final class TemplateResolver implements TemplateResolverInterface
      * @param ShortcodeInterface $shortcode
      * @param string $type
      * @return TemplateWrapper
-     * @throws LoaderError
      * @throws SyntaxError
      */
     private function resolveShortcodeTemplate(ShortcodeInterface $shortcode, string $type): TemplateWrapper
     {
         $templates = $this->getShortcodeTemplatesCandidates($shortcode, $type);
-        return $this->twig->resolveTemplate($templates);
+
+        try {
+            return $this->twig->resolveTemplate($templates);
+        } catch (LoaderError $e) {
+            return $this->twig->createTemplate(
+                '<div>Missing template</div>',
+                'missing_template',
+            );
+        }
     }
 
     /**

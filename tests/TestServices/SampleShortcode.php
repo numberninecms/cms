@@ -9,34 +9,45 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Shortcode;
+namespace NumberNine\Tests\TestServices;
 
 use NumberNine\Annotation\Shortcode;
+use NumberNine\Model\PageBuilder\Control\SliderControl;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @Shortcode(name="row", container=true, label="Row", icon="mdi-table-row")
+ * @Shortcode(name="sample", label="Sample", icon="arrows-alt-v")
  */
-final class RowShortcode extends AbstractShortcode implements EditableShortcodeInterface
+final class SampleShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
     public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void
     {
+        $builder
+            ->add('height', SliderControl::class, ['suffix' => 'px'])
+        ;
     }
 
     public function configureParameters(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'content' => '',
+            'height' => 30,
         ]);
+
+        $resolver->setAllowedTypes('height', ['int', 'float', 'string']);
+
+        $resolver->setNormalizer('height', static function (Options $options, $value) {
+            return is_numeric($value) ? (float)$value : 30;
+        });
     }
 
     public function processParameters(array $parameters): array
     {
         return [
-            'content' => $parameters['content'],
+            'height' => $parameters['height'],
         ];
     }
 }

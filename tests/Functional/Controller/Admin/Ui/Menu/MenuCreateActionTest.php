@@ -11,20 +11,20 @@
 
 declare(strict_types=1);
 
-namespace NumberNine\Tests\Functional\Controller\Admin\User;
+namespace NumberNine\Tests\Functional\Controller\Admin\Ui\Menu;
 
 use NumberNine\Tests\Functional\AdminTestCase;
 
-final class AdminUserCreateActionWebTest extends AdminTestCase
+final class MenuCreateActionTest extends AdminTestCase
 {
     public function testAdministratorCanAccessMediaLibrary(): void
     {
         $this->loginThenNavigateToAdminUrl(
             'Administrator',
-            $this->urlGenerator->generate('numbernine_admin_user_create')
+            $this->urlGenerator->generate('numbernine_admin_menu_create')
         );
 
         self::assertResponseIsSuccessful();
-        self::assertSelectorExists('form[name="admin_user_form"]');
+        self::assertSelectorExists('form[name="admin_menu_form"]');
     }
 }

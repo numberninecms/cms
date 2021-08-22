@@ -11,20 +11,20 @@
 
 declare(strict_types=1);
 
-namespace NumberNine\Tests\Functional\Controller\Admin\UserRole;
+namespace NumberNine\Tests\Functional\Controller\Admin\Ui\UserRole;
 
 use NumberNine\Tests\Functional\AdminTestCase;
 
-final class AdminUserRoleCreateActionWebTest extends AdminTestCase
+final class UserRoleIndexActionTest extends AdminTestCase
 {
     public function testAdministratorCanAccessMediaLibrary(): void
     {
         $this->loginThenNavigateToAdminUrl(
             'Administrator',
-            $this->urlGenerator->generate('numbernine_admin_user_role_create')
+            $this->urlGenerator->generate('numbernine_admin_user_role_index')
         );
 
         self::assertResponseIsSuccessful();
-        self::assertSelectorExists('form[name="admin_user_role_form"]');
+        self::assertSelectorExists('form[name="admin_user_role_index_form"]');
     }
 }

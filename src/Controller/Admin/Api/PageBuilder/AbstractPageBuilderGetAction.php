@@ -18,9 +18,10 @@ use NumberNine\Http\ResponseFactory;
 use NumberNine\Content\ShortcodeStore;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilder;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-abstract class AbstractPageBuilderGetAction implements AdminController
+abstract class AbstractPageBuilderGetAction extends AbstractController implements AdminController
 {
     private ResponseFactory $responseFactory;
     private ShortcodeProcessor $shortcodeProcessor;
