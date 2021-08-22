@@ -22,7 +22,7 @@ export default function createTinymceOptions(options: Options): RawEditorSetting
         theme: 'silver',
         skin: false,
         content_css: options.css ?? false,
-        content_style: '#tinymce { padding: 1rem !important; }',
+        content_style: '#tinymce { padding: 1rem !important; font-size: 1rem; }',
         branding: false,
         min_height: 350,
         menubar: false,
@@ -35,14 +35,25 @@ export default function createTinymceOptions(options: Options): RawEditorSetting
             'autoresize',
         ],
         toolbar:
-            'medialibrary | undo redo copy paste | formatselect | bold italic backcolor | \
+            'medialibrary | undo redo copy paste | link | fontsizeselect | formatselect | bold italic backcolor | \
             alignleft aligncenter alignright alignjustify | \
             bullist numlist outdent indent | charmap anchor | searchreplace | \
             removeformat | code | wordcount | help',
+        fontsize_formats:
+            'XSmall=0.75rem Small=0.875rem Normal=1rem Large=1.125rem XLarge=1.25rem X2Large=1.5rem ' +
+            'X3Large=1.875rem X4Large=2.25rem X5Large=3rem X6Large=3.75rem X7Large=4.5rem X8Large=6rem X9Large=8rem',
         formats: {
-            alignleft: { selector: 'img', styles: { float: 'left', margin: '10px 10px 10px 0' } },
-            alignright: { selector: 'img', styles: { float: 'right', margin: '10px 0 10px 10px' } },
-            aligncenter: { selector: 'img', styles: { display: 'block', margin: '10px auto' } },
+            alignleft: { selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,audio,video', classes: 'left' },
+            aligncenter: {
+                selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,audio,video',
+                classes: 'center',
+            },
+            alignright: { selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,audio,video', classes: 'right' },
+            alignfull: { selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,audio,video', classes: 'full' },
+            bold: { inline: 'span', classes: 'bold' },
+            italic: { inline: 'span', classes: 'italic' },
+            underline: { inline: 'span', classes: 'underline', exact: true },
+            strikethrough: { inline: 'del' },
         },
     };
 }
