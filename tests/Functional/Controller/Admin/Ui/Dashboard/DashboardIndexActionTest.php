@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Tests\Functional\Controller\Admin\Dashboard;
+namespace NumberNine\Tests\Functional\Controller\Admin\Ui\Dashboard;
 
 use NumberNine\Security\Capabilities;
 use NumberNine\Tests\Functional\AdminTestCase;
 
-final class AdminIndexActionWebTest extends AdminTestCase
+final class DashboardIndexActionTest extends AdminTestCase
 {
     public function testAdminPageRedirectsToLogin(): void
     {

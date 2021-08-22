@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace NumberNine\Tests\Functional\Controller\Admin\Settings;
+namespace NumberNine\Tests\Functional\Controller\Admin\Ui\Settings;
 
 use NumberNine\Tests\Functional\AdminTestCase;
 
-final class AdminSettingsPermalinksActionWebTest extends AdminTestCase
+final class SettingsPermalinksActionTest extends AdminTestCase
 {
     public function testAdministratorCanAccessMediaLibrary(): void
     {

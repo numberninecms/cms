@@ -18,6 +18,7 @@ use NumberNine\Entity\Taxonomy;
 use NumberNine\Entity\Term;
 use NumberNine\Shortcode\TextShortcode;
 use NumberNine\Tests\DotEnvAwareWebTestCase;
+use NumberNine\Tests\TestServices\SampleShortcode;
 use NumberNine\Theme\TemplateResolver;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -26,6 +27,7 @@ final class TemplateResolverTest extends DotEnvAwareWebTestCase
 {
     private TemplateResolver $templateResolver;
     private TextShortcode $textShortcode;
+    private SampleShortcode $sampleShortcode;
     private Environment $twig;
 
     public function setUp(): void
@@ -34,6 +36,7 @@ final class TemplateResolverTest extends DotEnvAwareWebTestCase
         $this->client->request('GET', '/');
         $this->templateResolver = static::getContainer()->get(TemplateResolver::class);
         $this->textShortcode = static::getContainer()->get(TextShortcode::class);
+        $this->sampleShortcode = static::getContainer()->get(SampleShortcode::class);
         $this->twig = static::getContainer()->get('twig');
     }
 
@@ -177,6 +180,13 @@ final class TemplateResolverTest extends DotEnvAwareWebTestCase
         $template = $this->templateResolver->resolveShortcode($this->textShortcode);
 
         self::assertEquals('@ChapterOneShortcodes/./TextShortcode/template.html.twig', $template);
+    }
+
+    public function testResolveShortcodeWithoutThemeTemplate(): void
+    {
+        $template = $this->templateResolver->resolveShortcode($this->sampleShortcode);
+
+        self::assertStringStartsWith('missing_template (string template', $template);
     }
 
     public function testResolveShortcodePageBuilderTemplate(): void

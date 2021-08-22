@@ -130,7 +130,9 @@ class ShortcodeRenderer
 
         $template = $this->twig->createTemplate(sprintf(
             '{%% apply spaceless %%}%s{%% endapply %%}',
-            file_get_contents($template->getSourceContext()->getPath()),
+            strpos($template->getTemplateName(), 'string template') === false
+                ? file_get_contents($template->getSourceContext()->getPath())
+                : $template->getSourceContext()->getCode(),
         ));
 
         return $this->twig->render($template);

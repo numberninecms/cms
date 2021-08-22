@@ -11,6 +11,7 @@
 
 namespace NumberNine\Controller\Admin\Api\PageBuilder;
 
+use NumberNine\Security\Capabilities;
 use NumberNine\Theme\ThemeOptionsReadWriter;
 use NumberNine\Theme\ThemeStore;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,6 +32,8 @@ final class PageBuilderAreaComponentsGetAction extends AbstractPageBuilderGetAct
         ThemeOptionsReadWriter $themeOptionsReadWriter,
         string $area
     ): JsonResponse {
+        $this->denyAccessUnlessGranted(Capabilities::CUSTOMIZE);
+
         $area = $themeOptionsReadWriter->read($themeStore->getCurrentTheme(), 'areas', [])[$area] ?? '';
 
         return $this->createPageBuilderResponseFromText($area);

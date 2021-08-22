@@ -11,20 +11,20 @@
 
 declare(strict_types=1);
 
-namespace NumberNine\Tests\Functional\Controller\Admin\MediaLibrary;
+namespace NumberNine\Tests\Functional\Controller\Admin\Ui\Menu;
 
 use NumberNine\Tests\Functional\AdminTestCase;
 
-final class AdminMediaLibraryIndexActionWebTest extends AdminTestCase
+final class MenuIndexActionTest extends AdminTestCase
 {
     public function testAdministratorCanAccessMediaLibrary(): void
     {
         $this->loginThenNavigateToAdminUrl(
             'Administrator',
-            $this->urlGenerator->generate('numbernine_admin_media_library_index')
+            $this->urlGenerator->generate('numbernine_admin_menu_index')
         );
 
         self::assertResponseIsSuccessful();
-        self::assertSelectorExists('turbo-frame#numbernine_admin_media_library');
+        self::assertSelectorExists('form[name="admin_menu_index_form"]');
     }
 }

@@ -6,4 +6,5 @@ services:
         bind:
             string $projectPath: '%kernel.project_dir%'
 
-    NumberNine\Tests\Unit\Theme\TestTemplatesTwigLoader: ~
+    NumberNine\Tests\TestServices\TestTemplatesTwigLoader: ~
+    NumberNine\Tests\TestServices\SampleShortcode: ~

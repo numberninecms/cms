@@ -16,24 +16,18 @@ use NumberNine\Model\PageBuilder\Control\SliderControl;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @Shortcode(
- *     name="col",
- *     label="Column",
- *     container=true,
- *     icon="mdi-view-week",
- *     siblingsPosition={"left", "right"},
- *     siblingsShortcodes={"col"}
- * )
+ * @Shortcode(name="grid", container=true, label="Grid", icon="mdi-grid")
  */
-final class ColumnShortcode extends AbstractShortcode implements EditableShortcodeInterface
+final class GridShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
     public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void
     {
         $builder
-            ->add('span', SliderControl::class, ['min' => 0, 'max' => 12])
+            ->add('columnsCount', SliderControl::class, ['min' => 1, 'max' => 12])
         ;
     }
 
@@ -41,28 +35,21 @@ final class ColumnShortcode extends AbstractShortcode implements EditableShortco
     {
         $resolver->setDefaults([
             'content' => '',
-            'span' => '12',
+            'columnsCount' => 3,
         ]);
+
+        $resolver->setAllowedTypes('columnsCount', ['int', 'float', 'string']);
+
+        $resolver->setNormalizer('columnsCount', static function (Options $options, $value) {
+            return is_numeric($value) ? max(1, min(12, (int)$value)) : 3;
+        });
     }
 
     public function processParameters(array $parameters): array
     {
         return [
-            'flexSpan' => $this->getFlexSpan($parameters),
             'content' => $parameters['content'],
+            'columns_count' => $parameters['columnsCount'],
         ];
-    }
-
-    private function getFlexSpan(array $parameters): string
-    {
-        if (preg_match('@1/(\d+?)@', $parameters['span'], $matches)) {
-            return 'col-span-' . (int)(12 / $matches[1]);
-        }
-
-        if (is_numeric($parameters['span']) && (int)$parameters['span'] <= 12) {
-            return 'col-span-' . $parameters['span'];
-        }
-
-        return 'col-span-12';
     }
 }
