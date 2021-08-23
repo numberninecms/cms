@@ -48,7 +48,6 @@ final class SectionShortcode extends AbstractShortcode implements EditableShortc
             ->add('backgroundColor', ColorControl::class)
             ->add('backgroundPosition')
             ->add('backgroundOverlay', ColorControl::class)
-            ->add('height')
             ->add('margin', BordersControl::class)
             ->add('padding', BordersControl::class)
             ->add('color', ButtonToggleControl::class, ['choices' => [
@@ -68,7 +67,6 @@ final class SectionShortcode extends AbstractShortcode implements EditableShortc
             'backgroundColor' => '',
             'backgroundPosition' => '',
             'backgroundOverlay' => [],
-            'height' => 0,
             'margin' => '0px',
             'padding' => '30px',
             'color' => 'light',
@@ -78,6 +76,7 @@ final class SectionShortcode extends AbstractShortcode implements EditableShortc
     public function processParameters(array $parameters): array
     {
         return [
+            'container' => $parameters['container'],
             'color' => $parameters['color'],
             'styles' => $this->getStyles($parameters),
             'backgroundStyles' => $this->getBackgroundStyles($parameters),
