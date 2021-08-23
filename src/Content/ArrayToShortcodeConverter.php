@@ -34,7 +34,7 @@ final class ArrayToShortcodeConverter
 
         $parameters = array_filter(
             $array['parameters'],
-            static fn($v, $k) => $v && $k !== 'content',
+            static fn($v, $k) => !is_array($v) && $v !== '' && $v !== null && $v !== false && $k !== 'content',
             ARRAY_FILTER_USE_BOTH,
         );
 
