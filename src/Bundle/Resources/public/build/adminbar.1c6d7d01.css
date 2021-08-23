@@ -1,0 +1,16 @@
+/*!
+ * This file is part of the NumberNine package.
+ *
+ * (c) William Arin <williamarin.dev@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+/*!
+ * This file is part of the NumberNine package.
+ *
+ * (c) William Arin <williamarin.dev@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */:root{--n9-light-blue-rgb:70,166,233;--n9-light-blue:rgb(var(--n9-light-blue-rgb));--n9-dark-blue-rgb:26,88,177;--n9-dark-blue:rgb(var(--n9-dark-blue-rgb));--n9-light-gray-rgb:90,90,91;--n9-light-gray:rgb(var(--n9-light-gray-rgb));--n9-dark-gray-rgb:25,25,25;--n9-dark-gray:rgb(var(--n9-dark-gray-rgb));--n9-primary-rgb:var(--n9-light-blue-rgb);--n9-primary:rgb(var(--n9-primary-rgb));--n9-secondary-rgb:var(--n9-light-gray-rgb);--n9-secondary:rgb(var(--n9-secondary-rgb));--n9-tertiary-rgb:var(--n9-dark-blue-rgb);--n9-tertiary:rgb(var(--n9-tertiary-rgb));--n9-quaternary-rgb:var(--n9-dark-gray-rgb);--n9-quaternary:rgb(var(--n9-quaternary-rgb))}.text-primary{color:var(--n9-primary)}.text-secondary{color:var(--n9-secondary)}.text-tertiary{color:var(--n9-tertiary)}.text-quaternary{color:var(--n9-quaternary)}.bg-primary{background-color:var(--n9-primary)}.bg-secondary{background-color:var(--n9-secondary)}.bg-tertiary{background-color:var(--n9-tertiary)}.bg-quaternary{background-color:var(--n9-quaternary)}.n9-topbar{align-items:center;background-color:var(--n9-quaternary);color:#fff;display:flex;flex-wrap:wrap;justify-content:space-between;padding:.5rem;position:sticky;top:0;z-index:50}.n9-topbar .n9-topbar-title{align-items:center;display:flex;flex-shrink:0;margin-right:1.5rem}.n9-topbar .n9-topbar-title a{color:#fff;font-size:1.25rem;font-weight:600;letter-spacing:-.025em;line-height:1.75rem}.n9-topbar .n9-topbar-burger-wrapper{display:block}.n9-topbar .n9-topbar-burger-wrapper .n9-topbar-burger{align-items:center;border-color:#9ca3af;border-radius:.25rem;border-width:1px;color:#e5e7eb;cursor:pointer;display:flex;padding:.5rem .75rem}.n9-topbar .n9-topbar-burger-wrapper .n9-topbar-burger:hover{border-color:#fff;color:#fff}.n9-topbar .n9-topbar-burger-wrapper .n9-topbar-burger .n9-topbar-burger-svg{fill:currentColor;height:.75rem;width:.75rem}.n9-topbar .n9-topbar-menu{display:none;width:100%}.n9-topbar .n9-topbar-menu a{color:#e5e7eb;display:block;margin-right:1rem;margin-top:1rem;text-decoration:none}.n9-topbar .n9-topbar-menu a:hover{color:#fff}@media screen and (min-width:1280px){.n9-topbar{padding-left:1.5rem;padding-right:1.5rem}.n9-topbar .n9-topbar-burger-wrapper{display:none}.n9-topbar .n9-topbar-menu{align-items:center;display:flex!important;flex-direction:row;flex-grow:1;justify-content:space-between;width:auto}.n9-topbar .n9-topbar-menu a{display:inline-block;margin-top:0}}

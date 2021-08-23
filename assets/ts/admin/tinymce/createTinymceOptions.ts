@@ -25,7 +25,6 @@ export default function createTinymceOptions(options: Options): RawEditorSetting
         content_style: '#tinymce { padding: 1rem !important; font-size: 1rem; }',
         branding: false,
         min_height: 350,
-        menubar: false,
         relative_urls: false,
         plugins: [
             'advlist autolink lists link image imagetools charmap print preview anchor',
@@ -35,8 +34,8 @@ export default function createTinymceOptions(options: Options): RawEditorSetting
             'autoresize',
         ],
         toolbar:
-            'medialibrary | undo redo copy paste | link | fontsizeselect | formatselect | bold italic backcolor | \
-            alignleft aligncenter alignright alignjustify | \
+            'medialibrary | undo redo copy paste | link | formatselect | styleselect | \
+            bold italic backcolor | alignleft aligncenter alignright alignjustify | \
             bullist numlist outdent indent | charmap anchor | searchreplace | \
             removeformat | code | wordcount | help',
         fontsize_formats:
@@ -50,10 +49,15 @@ export default function createTinymceOptions(options: Options): RawEditorSetting
             },
             alignright: { selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,audio,video', classes: 'right' },
             alignfull: { selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,audio,video', classes: 'full' },
-            bold: { inline: 'span', classes: 'bold' },
+            bold: { inline: 'strong' },
             italic: { inline: 'span', classes: 'italic' },
             underline: { inline: 'span', classes: 'underline', exact: true },
             strikethrough: { inline: 'del' },
         },
+        style_formats: [
+            { title: 'Small text', selector: 'p,ul,ol,span,table,div', classes: 'text-sm' },
+            { title: 'Margin bottom', selector: 'p,h1,h2,h3,h4,h5,h6,ul,ol,span,table,div', classes: 'mb-5' },
+            { title: 'Unstyled list', selector: 'ul,ol', classes: 'list-none' },
+        ],
     };
 }
