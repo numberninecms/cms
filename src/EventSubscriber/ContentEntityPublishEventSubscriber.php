@@ -44,7 +44,11 @@ final class ContentEntityPublishEventSubscriber implements EventSubscriber
         /** @var ContentEntity $entity */
         $entity = $args->getEntity();
 
-        if ($entity instanceof ContentEntity && $entity->getStatus() === PublishingStatusInterface::STATUS_PUBLISH) {
+        if (
+            $entity instanceof ContentEntity
+            && $entity->getStatus() === PublishingStatusInterface::STATUS_PUBLISH
+            && $entity->getPublishedAt() === null
+        ) {
             $entity->setPublishedAt(new \DateTime());
         }
     }
