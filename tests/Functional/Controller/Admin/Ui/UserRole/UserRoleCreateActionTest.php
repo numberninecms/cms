@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Functional\Controller\Admin\Ui\UserRole;
 
-use NumberNine\Tests\Functional\AdminTestCase;
+use NumberNine\Tests\Functional\UserAwareTestCase;
 
-final class UserRoleCreateActionTest extends AdminTestCase
+final class UserRoleCreateActionTest extends UserAwareTestCase
 {
     public function testAdministratorCanAccessMediaLibrary(): void
     {

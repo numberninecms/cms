@@ -13,6 +13,7 @@ namespace NumberNine\Tests\Functional;
 
 use Doctrine\ORM\EntityManagerInterface;
 use NumberNine\Admin\AdminMenuBuilderStore;
+use NumberNine\Entity\User;
 use NumberNine\Entity\UserRole;
 use NumberNine\Model\Menu\Builder\AdminMenuBuilder;
 use NumberNine\Repository\UserRoleRepository;
@@ -20,7 +21,7 @@ use NumberNine\Security\UserFactory;
 use NumberNine\Tests\DotEnvAwareWebTestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-abstract class AdminTestCase extends DotEnvAwareWebTestCase
+abstract class UserAwareTestCase extends DotEnvAwareWebTestCase
 {
     protected UserRoleRepository $userRoleRepository;
     protected UserFactory $userFactory;
@@ -67,7 +68,7 @@ abstract class AdminTestCase extends DotEnvAwareWebTestCase
         $this->adminMenuBuilder = $adminMenuBuilderStore->getAdminMenuBuilder();
     }
 
-    protected function loginAs(string $role): void
+    protected function loginAs(string $role): User
     {
         $user = $this->userFactory->createUser(
             'test',
@@ -77,5 +78,7 @@ abstract class AdminTestCase extends DotEnvAwareWebTestCase
         );
 
         $this->client->loginUser($user);
+
+        return $user;
     }
 }

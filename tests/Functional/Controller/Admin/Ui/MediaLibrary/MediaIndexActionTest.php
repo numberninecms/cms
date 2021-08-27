@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Functional\Controller\Admin\Ui\MediaLibrary;
 
-use NumberNine\Tests\Functional\AdminTestCase;
+use NumberNine\Tests\Functional\UserAwareTestCase;
 
-final class MediaIndexActionTest extends AdminTestCase
+final class MediaIndexActionTest extends UserAwareTestCase
 {
     public function testAdministratorCanAccessMediaLibrary(): void
     {
