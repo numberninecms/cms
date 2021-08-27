@@ -28,6 +28,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
 * The route of this action is dynamically generated
@@ -67,7 +68,11 @@ final class ContentEntityShowAction extends AbstractController
 
         $this->validateUrl($request, $entity, $permalinkGenerator);
 
-        $this->denyAccessUnlessGranted(Capabilities::READ, $entity);
+        try {
+            $this->denyAccessUnlessGranted(Capabilities::READ, $entity);
+        } catch (AccessDeniedException $e) {
+            throw $this->createNotFoundException('This page does not exist.');
+        }
 
         $eventDispatcher->dispatch(new CurrentContentEntityEvent($entity));
 
