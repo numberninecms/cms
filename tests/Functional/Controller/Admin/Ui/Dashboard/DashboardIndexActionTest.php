@@ -12,9 +12,9 @@
 namespace NumberNine\Tests\Functional\Controller\Admin\Ui\Dashboard;
 
 use NumberNine\Security\Capabilities;
-use NumberNine\Tests\Functional\AdminTestCase;
+use NumberNine\Tests\Functional\UserAwareTestCase;
 
-final class DashboardIndexActionTest extends AdminTestCase
+final class DashboardIndexActionTest extends UserAwareTestCase
 {
     public function testAdminPageRedirectsToLogin(): void
     {

@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace NumberNine\Tests\Functional\Model\Menu\Builder;
 
 use NumberNine\Security\Capabilities;
-use NumberNine\Tests\Functional\AdminTestCase;
+use NumberNine\Tests\Functional\UserAwareTestCase;
 
-final class AdminMenuBuilderTest extends AdminTestCase
+final class UserAwareMenuBuilderTest extends UserAwareTestCase
 {
     public function setUp(): void
     {

@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Functional\Controller\Admin\Ui\Menu;
 
-use NumberNine\Tests\Functional\AdminTestCase;
+use NumberNine\Tests\Functional\UserAwareTestCase;
 
-final class MenuCreateActionTest extends AdminTestCase
+final class MenuCreateActionTest extends UserAwareTestCase
 {
     public function testAdministratorCanAccessMediaLibrary(): void
     {
