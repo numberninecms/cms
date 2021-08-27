@@ -22,14 +22,14 @@ trait EditorTrait
      * @Groups({"editor_get", "content_entity_get_full"})
      * @Gedmo\Versioned
      */
-    private ?string $content;
+    private ?string $content = null;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Groups({"editor_get", "content_entity_get_full"})
      * @Gedmo\Versioned
      */
-    private ?string $excerpt;
+    private ?string $excerpt = null;
 
     public function getContent(): ?string
     {

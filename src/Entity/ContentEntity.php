@@ -117,7 +117,7 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
      * @ORM\ManyToOne(targetEntity="NumberNine\Entity\User", inversedBy="contentEntities")
      * @Groups({"author_get", "content_entity_get_full"})
      */
-    protected ?User $author;
+    protected ?User $author = null;
 
     public function __construct()
     {
