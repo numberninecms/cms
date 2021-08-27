@@ -76,7 +76,7 @@ class Comment
      * @ORM\ManyToOne(targetEntity="NumberNine\Entity\User", inversedBy="comments")
      * @Groups("author_get")
      */
-    protected ?User $author;
+    protected ?User $author = null;
 
     /**
      * Comment constructor.

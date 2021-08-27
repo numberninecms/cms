@@ -21,7 +21,7 @@ trait CustomFieldsTrait
      * @Groups({"custom_fields_get", "content_entity_get_full"})
      * @var array|null
      */
-    private ?array $customFields;
+    private ?array $customFields = null;
 
     public function getCustomFields(): ?array
     {

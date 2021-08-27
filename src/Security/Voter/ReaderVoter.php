@@ -11,6 +11,7 @@
 
 namespace NumberNine\Security\Voter;
 
+use NumberNine\Entity\User;
 use NumberNine\Security\Capabilities;
 use NumberNine\Security\Capability\CapabilityInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -36,6 +37,9 @@ final class ReaderVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
-        return $this->readCapability->handle($subject, null) === VoterInterface::ACCESS_GRANTED;
+        /** @var ?User $user */
+        $user = $token->getUser() instanceof User ? $token->getUser() : null;
+
+        return $this->readCapability->handle($subject, $user) === VoterInterface::ACCESS_GRANTED;
     }
 }

@@ -21,7 +21,7 @@ trait AuthorTrait
      * @ORM\ManyToOne(targetEntity="NumberNine\Entity\User")
      * @Groups({"author_get", "content_entity_get_full"})
      */
-    protected ?User $author;
+    protected ?User $author = null;
 
     public function getAuthor(): ?User
     {

@@ -48,7 +48,10 @@ final class ReadCapability implements CapabilityInterface
         $plural = current($this->inflector->pluralize($entity->getType()));
 
         if ($entity->isPrivate()) {
-            if ($this->security->isGranted(sprintf('read_private_%s', $plural))) {
+            if (
+                $this->security->isGranted(sprintf('read_private_%s', $plural))
+                || $entity->getAuthor() === $user
+            ) {
                 return VoterInterface::ACCESS_GRANTED;
             }
 
