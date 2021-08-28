@@ -15,7 +15,7 @@ use NumberNine\Event\ComponentProcessParametersEvent;
 use NumberNine\Content\DataTransformerProcessor;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-final class ShortcodeRenderEventSubscriber implements EventSubscriberInterface
+final class ComponentProcessParametersEventSubscriber implements EventSubscriberInterface
 {
     private DataTransformerProcessor $dataTransformerProcessor;
 
@@ -24,7 +24,7 @@ final class ShortcodeRenderEventSubscriber implements EventSubscriberInterface
         $this->dataTransformerProcessor = $dataTransformerProcessor;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             ComponentProcessParametersEvent::class => 'transformValues'
