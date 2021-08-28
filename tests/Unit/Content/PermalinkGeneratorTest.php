@@ -87,7 +87,7 @@ final class PermalinkGeneratorTest extends DotEnvAwareWebTestCase
         $this->assertEquals(sprintf('/%s/my-awesome-post', date('2016/08/07')), $permalink);
     }
 
-    public function testUnpublishedPostPermalink(): void
+    public function testUnpublishedPostAsDraftPermalink(): void
     {
         $post = (new Post())
             ->setCustomType('post')
@@ -98,7 +98,21 @@ final class PermalinkGeneratorTest extends DotEnvAwareWebTestCase
         ;
 
         $permalink = $this->permalinkGenerator->generateContentEntityPermalink($post);
-        $this->assertEquals(sprintf('/%s/my-awesome-post', date('2013/04/21')), $permalink);
+        $this->assertEquals(sprintf('/%s/my-awesome-post', date('2016/08/07')), $permalink);
+    }
+
+    public function testUnpublishedPostAsPrivatePermalink(): void
+    {
+        $post = (new Post())
+            ->setCustomType('post')
+            ->setSlug('my-awesome-post')
+            ->setStatus(PublishingStatusInterface::STATUS_PRIVATE)
+            ->setCreatedAt(new \DateTime('April 21, 2013'))
+            ->setPublishedAt(new \DateTime('August 7, 2016'))
+        ;
+
+        $permalink = $this->permalinkGenerator->generateContentEntityPermalink($post);
+        $this->assertEquals(sprintf('/%s/my-awesome-post', date('2016/08/07')), $permalink);
     }
 
     public function testPublishedPostPaginationPermalink(): void
