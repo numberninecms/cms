@@ -14,6 +14,7 @@ namespace NumberNine\Content\DataTransformer;
 use Exception;
 use NumberNine\Content\ShortcodeRenderer;
 use NumberNine\Entity\Post;
+use NumberNine\Model\Content\PublishingStatusInterface;
 use NumberNine\Model\DataTransformer\DataTransformerInterface;
 use NumberNine\Http\RequestAnalyzer;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,8 +32,8 @@ final class PostDataTransformer implements DataTransformerInterface
         RequestStack $requestStack
     ) {
         $this->shortcodeRenderer = $shortcodeRenderer;
-        $this->request = $requestStack->getMasterRequest();
         $this->requestAnalyzer = $requestAnalyzer;
+        $this->request = $requestStack->getMainRequest();
     }
 
     public function supports($object): bool
@@ -47,16 +48,30 @@ final class PostDataTransformer implements DataTransformerInterface
      */
     public function transform($object)
     {
+        $this->transformTitle($object);
+        $this->transformContent($object);
+
+        return $object;
+    }
+
+    private function transformTitle(Post $post): void
+    {
+        if ($post->getStatus() === PublishingStatusInterface::STATUS_PRIVATE) {
+            $newTitle = sprintf('Private: %s', $post->getTitle());
+            $post->setTitle($newTitle);
+        }
+    }
+
+    private function transformContent(Post $post): void
+    {
         $isPreviewMode = $this->request
             && $this->requestAnalyzer->isPreviewMode()
             && $this->request->get('area') === null;
 
         $content = $isPreviewMode
             ? '<page-builder></page-builder>'
-            : $this->shortcodeRenderer->applyShortcodes((string)$object->getContent());
+            : $this->shortcodeRenderer->applyShortcodes((string)$post->getContent());
 
-        $object->setContent($content);
-
-        return $object;
+        $post->setContent($content);
     }
 }

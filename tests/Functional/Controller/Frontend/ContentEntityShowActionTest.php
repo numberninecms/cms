@@ -60,7 +60,7 @@ final class ContentEntityShowActionTest extends UserAwareTestCase
         $this->client->request('GET', '/2021/04/15/this-page-is-private');
 
         self::assertResponseStatusCodeSame(Response::HTTP_OK);
-        self::assertSelectorTextSame('h1', 'This page is private');
+        self::assertSelectorTextSame('h1', 'Private: This page is private');
     }
 
     public function testAllowedUsersCanAccessOtherUserPrivatePost(): void
@@ -70,6 +70,6 @@ final class ContentEntityShowActionTest extends UserAwareTestCase
         $this->client->request('GET', '/2021/04/15/this-page-is-private');
 
         self::assertResponseStatusCodeSame(Response::HTTP_OK);
-        self::assertSelectorTextSame('h1', 'This page is private');
+        self::assertSelectorTextSame('h1', 'Private: This page is private');
     }
 }
