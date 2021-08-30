@@ -16,7 +16,7 @@ namespace NumberNine\Tests\Functional\Model\Menu\Builder;
 use NumberNine\Security\Capabilities;
 use NumberNine\Tests\Functional\UserAwareTestCase;
 
-final class UserAwareMenuBuilderTest extends UserAwareTestCase
+final class AdminMenuBuilderTest extends UserAwareTestCase
 {
     public function setUp(): void
     {
