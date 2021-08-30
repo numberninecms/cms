@@ -19,7 +19,7 @@ abstract class DotEnvAwareWebTestCase extends WebTestCase
 {
     protected KernelBrowser $client;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         (new Dotenv())->bootEnv(dirname(__DIR__) . '/.env');
         $this->client = static::createClient();
