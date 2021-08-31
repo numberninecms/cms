@@ -52,6 +52,8 @@ services:
     # Annotation
     NumberNine\Annotation\ExtendedAnnotationReader:
         decorates: annotations.reader
+        arguments:
+            - '@.inner'
     NumberNine\Annotation\ExtendedReader: '@NumberNine\Annotation\ExtendedAnnotationReader'
 
     # Slug
