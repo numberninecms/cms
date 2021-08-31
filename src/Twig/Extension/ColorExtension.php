@@ -16,7 +16,7 @@ use Twig\TwigFunction;
 
 final class ColorExtension extends AbstractExtension
 {
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('N9_hex_to_rgb', [ColorRuntime::class, 'hexToRgb'], ['is_safe' => ['html']]),

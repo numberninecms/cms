@@ -30,8 +30,8 @@ final class RelationshipRuntime implements RuntimeExtensionInterface
     public function hasRelationship(ContentEntity $entity, string $relationshipName): bool
     {
         /** @var SupportedContentEntityRelationshipsEvent $event */
-        $event = $this->eventDispatcher->dispatch(new SupportedContentEntityRelationshipsEvent(get_class($entity)));
+        $event = $this->eventDispatcher->dispatch(new SupportedContentEntityRelationshipsEvent(\get_class($entity)));
 
-        return in_array($relationshipName, $event->getRelationships());
+        return \in_array($relationshipName, $event->getRelationships());
     }
 }

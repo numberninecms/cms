@@ -16,7 +16,6 @@ namespace NumberNine\Form\Type;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\ContentEntityRelationship;
 use NumberNine\Exception\InvalidManyToOneRelationshipTypeException;
-use NumberNine\Form\DataTransformer\ContentEntityToNumberTransformer;
 use NumberNine\Repository\ContentEntityRelationshipRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -28,14 +27,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 final class ContentEntityRelationshipType extends AbstractType
 {
     private ContentEntityRelationshipRepository $contentEntityRelationshipRepository;
-    private ContentEntityToNumberTransformer $contentEntityToNumberTransformer;
 
     public function __construct(
-        ContentEntityRelationshipRepository $contentEntityRelationshipRepository,
-        ContentEntityToNumberTransformer $contentEntityToNumberTransformer
+        ContentEntityRelationshipRepository $contentEntityRelationshipRepository
     ) {
         $this->contentEntityRelationshipRepository = $contentEntityRelationshipRepository;
-        $this->contentEntityToNumberTransformer = $contentEntityToNumberTransformer;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -82,9 +78,9 @@ final class ContentEntityRelationshipType extends AbstractType
         }
 
         if (count($relationships) === 0) {
-            $data = new ContentEntityRelationship();
-            $data->setParent($parent);
-            $data->setName($options['name']);
+            $data = (new ContentEntityRelationship())
+                ->setParent($parent)
+                ->setName($options['name']);
         } else {
             $data = $relationships[0];
         }

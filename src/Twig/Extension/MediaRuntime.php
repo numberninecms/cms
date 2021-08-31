@@ -32,15 +32,11 @@ final class MediaRuntime implements RuntimeExtensionInterface
 
     public function __construct(RequestStack $requestStack, EntityManagerInterface $entityManager)
     {
-        $this->request = $requestStack->getMasterRequest();
+        $this->request = $requestStack->getMainRequest();
         $this->entityManager = $entityManager;
     }
 
     /**
-     * @param ContentEntity $contentEntity
-     * @param string $size
-     * @param array $attributes
-     * @return string
      * @throws RuntimeError
      * @throws InvalidMimeTypeException
      */
@@ -49,12 +45,12 @@ final class MediaRuntime implements RuntimeExtensionInterface
         string $size = 'large',
         array $attributes = []
     ): string {
-        $repository = $this->entityManager->getRepository(get_class($contentEntity));
+        $repository = $this->entityManager->getRepository(\get_class($contentEntity));
 
         if (!method_exists($repository, 'findFeaturedImage')) {
             throw new RuntimeError(sprintf(
                 "Entity of type %s doesn't support featured images.",
-                get_class($contentEntity)
+                \get_class($contentEntity)
             ));
         }
 
@@ -71,12 +67,9 @@ final class MediaRuntime implements RuntimeExtensionInterface
     }
 
     /**
-     * @param MediaFile $mediaFile
-     * @param string $size
-     * @return string
      * @throws InvalidMimeTypeException
      */
-    public function getImageUrl(?MediaFile $mediaFile, string $size = null): string
+    public function getImageUrl(?MediaFile $mediaFile, ?string $size = null): string
     {
         if (!$mediaFile) {
             return '';
@@ -90,10 +83,6 @@ final class MediaRuntime implements RuntimeExtensionInterface
     }
 
     /**
-     * @param MediaFile $mediaFile
-     * @param string $size
-     * @param array $attributes
-     * @return string
      * @throws InvalidMimeTypeException
      */
     public function getImage(MediaFile $mediaFile, string $size = 'large', array $attributes = []): string

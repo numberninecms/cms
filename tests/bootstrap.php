@@ -9,6 +9,13 @@
  * file that was distributed with this source code.
  */
 
+!passthru(
+    sprintf(
+        'rm -rf "%s/../public/uploads"',
+        __DIR__
+    )
+) or exit(1);
+
 if (!empty($_ENV['BOOTSTRAP_RESET_DATABASE'])) {
     echo 'Waiting for MySQL to be ready...';
     !passthru("php -r 'set_time_limit(30); for(;;) { if(@fsockopen(\"mysql:\".(3306))) { break; } }'") or exit(1);
