@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Functional\Controller\Admin\Ui\Menu;
 
-use NumberNine\Tests\Functional\UserAwareTestCase;
+use NumberNine\Tests\UserAwareTestCase;
 
 final class MenuCreateActionTest extends UserAwareTestCase
 {

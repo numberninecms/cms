@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Functional\Controller\Admin\Ui\Settings;
 
-use NumberNine\Tests\Functional\UserAwareTestCase;
+use NumberNine\Tests\UserAwareTestCase;
 
 final class SettingsPermalinksActionTest extends UserAwareTestCase
 {

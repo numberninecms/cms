@@ -17,7 +17,7 @@ use NumberNine\Entity\Post;
 use NumberNine\Entity\User;
 use NumberNine\Model\Content\PublishingStatusInterface;
 use NumberNine\Security\Capabilities;
-use NumberNine\Tests\Functional\UserAwareTestCase;
+use NumberNine\Tests\UserAwareTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ContentEntityShowActionTest extends UserAwareTestCase
