@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace NumberNine\Tests\Functional\Twig\Extension;
+namespace NumberNine\Tests\Unit\Twig\Extension;
 
 use NumberNine\Twig\Extension\AdminExtension;
 use PHPUnit\Framework\TestCase;

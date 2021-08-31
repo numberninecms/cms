@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Tests\Functional;
+namespace NumberNine\Tests;
 
 use Doctrine\ORM\EntityManagerInterface;
 use NumberNine\Admin\AdminMenuBuilderStore;
@@ -18,7 +18,6 @@ use NumberNine\Entity\UserRole;
 use NumberNine\Model\Menu\Builder\AdminMenuBuilder;
 use NumberNine\Repository\UserRoleRepository;
 use NumberNine\Security\UserFactory;
-use NumberNine\Tests\DotEnvAwareWebTestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 abstract class UserAwareTestCase extends DotEnvAwareWebTestCase

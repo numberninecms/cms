@@ -12,7 +12,7 @@
 namespace NumberNine\Tests\Functional\Controller\Admin\Api\PageBuilder;
 
 use NumberNine\Security\Capabilities;
-use NumberNine\Tests\Functional\UserAwareTestCase;
+use NumberNine\Tests\UserAwareTestCase;
 
 final class PageBuilderAreaComponentsGetActionTest extends UserAwareTestCase
 {
