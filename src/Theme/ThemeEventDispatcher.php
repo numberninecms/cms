@@ -13,6 +13,7 @@ namespace NumberNine\Theme;
 
 use NumberNine\Event\Theme\AbstractThemeEvent;
 use NumberNine\Event\Theme\ThemeEventInterface;
+use NumberNine\Exception\ThemeEventNotFoundException;
 use NumberNine\Model\Theme\ThemeInterface;
 use ReflectionClass;
 use ReflectionException;
@@ -36,8 +37,12 @@ final class ThemeEventDispatcher
      */
     public function dispatch(string $eventName, $value = null): object
     {
-        /** @var AbstractThemeEvent $event */
         $event = $this->getThemeEvent($this->themeStore->getCurrentTheme(), $eventName, $value);
+
+        if ($event === null) {
+            throw new ThemeEventNotFoundException($eventName);
+        }
+
         return $this->eventDispatcher->dispatch($event);
     }
 

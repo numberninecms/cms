@@ -11,12 +11,17 @@
 
 namespace NumberNine\Twig\Extension;
 
+use NumberNine\Exception\InvalidHexColorValueException;
 use Twig\Extension\RuntimeExtensionInterface;
 
 final class ColorRuntime implements RuntimeExtensionInterface
 {
     public function hexToRgb(string $hex): string
     {
+        if (!preg_match('/^#[0-9a-fA-F]{6}$/', $hex)) {
+            throw new InvalidHexColorValueException($hex);
+        }
+
         [$red, $green, $blue] = sscanf($hex, "#%02x%02x%02x");
 
         return "$red, $green, $blue";

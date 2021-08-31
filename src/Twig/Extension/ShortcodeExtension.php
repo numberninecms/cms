@@ -16,7 +16,10 @@ use Twig\TwigFunction;
 
 final class ShortcodeExtension extends AbstractExtension
 {
-    public function getFunctions()
+    /**
+     * @return TwigFunction[]
+     */
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('N9_shortcode', [ShortcodeRuntime::class, 'renderShortcode'], ['is_safe' => ['html']])
