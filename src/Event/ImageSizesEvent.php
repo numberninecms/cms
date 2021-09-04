@@ -21,16 +21,12 @@ final class ImageSizesEvent extends Event
 
     /**
      * ImageSizesEvent constructor.
-     * @param array $sizes
      */
     public function __construct(array $sizes = [])
     {
         $this->sizes = $sizes;
     }
 
-    /**
-     * @return array
-     */
     public function getSizes(): array
     {
         return $this->sizes;

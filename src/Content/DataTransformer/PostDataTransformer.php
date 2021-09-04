@@ -22,17 +22,13 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 final class PostDataTransformer implements DataTransformerInterface
 {
-    private ShortcodeRenderer $shortcodeRenderer;
     private ?Request $request;
-    private RequestAnalyzer $requestAnalyzer;
 
     public function __construct(
-        ShortcodeRenderer $shortcodeRenderer,
-        RequestAnalyzer $requestAnalyzer,
+        private ShortcodeRenderer $shortcodeRenderer,
+        private RequestAnalyzer $requestAnalyzer,
         RequestStack $requestStack
     ) {
-        $this->shortcodeRenderer = $shortcodeRenderer;
-        $this->requestAnalyzer = $requestAnalyzer;
         $this->request = $requestStack->getMainRequest();
     }
 

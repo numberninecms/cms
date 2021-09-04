@@ -35,33 +35,8 @@ use Twig\Error\SyntaxError;
 
 final class HeadEventSubscriber implements EventSubscriberInterface
 {
-    private EventDispatcherInterface $eventDispatcher;
-    private TagRenderer $tagRenderer;
-    private AuthorizationCheckerInterface $authorizationChecker;
-    private Environment $twig;
-    private ThemeStore $themeStore;
-    private ConfigurationReadWriter $configurationReadWriter;
-    private ThemeOptionsReadWriter $themeOptionsReadWriter;
-    private RequestAnalyzer $requestAnalyzer;
-
-    public function __construct(
-        EventDispatcherInterface $eventDispatcher,
-        TagRenderer $tagRenderer,
-        AuthorizationCheckerInterface $authorizationChecker,
-        Environment $twig,
-        ThemeStore $themeStore,
-        ConfigurationReadWriter $configurationReadWriter,
-        ThemeOptionsReadWriter $themeOptionsReadWriter,
-        RequestAnalyzer $requestAnalyzer
-    ) {
-        $this->eventDispatcher = $eventDispatcher;
-        $this->tagRenderer = $tagRenderer;
-        $this->authorizationChecker = $authorizationChecker;
-        $this->twig = $twig;
-        $this->themeStore = $themeStore;
-        $this->configurationReadWriter = $configurationReadWriter;
-        $this->themeOptionsReadWriter = $themeOptionsReadWriter;
-        $this->requestAnalyzer = $requestAnalyzer;
+    public function __construct(private EventDispatcherInterface $eventDispatcher, private TagRenderer $tagRenderer, private AuthorizationCheckerInterface $authorizationChecker, private Environment $twig, private ThemeStore $themeStore, private ConfigurationReadWriter $configurationReadWriter, private ThemeOptionsReadWriter $themeOptionsReadWriter, private RequestAnalyzer $requestAnalyzer)
+    {
     }
 
     public static function getSubscribedEvents()
@@ -98,7 +73,6 @@ final class HeadEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param HeadEvent $event
      * @throws ThemeNotFoundException
      * @throws RuntimeError
      * @throws SyntaxError
@@ -111,7 +85,7 @@ final class HeadEventSubscriber implements EventSubscriberInterface
                 sprintf('@%s/customizable_styles.css.twig', $theme->getName()),
                 $this->themeOptionsReadWriter->readAll($theme, false, $this->requestAnalyzer->isPreviewMode())
             );
-        } catch (LoaderError $e) {
+        } catch (LoaderError) {
             $styles = '';
         }
         $stylesEvent = $this->eventDispatcher->dispatch(new HeadThemeCustomStylesEvent($styles));
@@ -120,7 +94,6 @@ final class HeadEventSubscriber implements EventSubscriberInterface
 
     /**
      * Renders page scripts
-     * @param HeadEvent $event
      * @throws Exception
      */
     public function scripts(HeadEvent $event): void

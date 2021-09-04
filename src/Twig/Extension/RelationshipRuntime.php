@@ -20,17 +20,14 @@ use Twig\Extension\RuntimeExtensionInterface;
 
 final class RelationshipRuntime implements RuntimeExtensionInterface
 {
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(EventDispatcherInterface $eventDispatcher)
+    public function __construct(private EventDispatcherInterface $eventDispatcher)
     {
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function hasRelationship(ContentEntity $entity, string $relationshipName): bool
     {
         /** @var SupportedContentEntityRelationshipsEvent $event */
-        $event = $this->eventDispatcher->dispatch(new SupportedContentEntityRelationshipsEvent(\get_class($entity)));
+        $event = $this->eventDispatcher->dispatch(new SupportedContentEntityRelationshipsEvent($entity::class));
 
         return \in_array($relationshipName, $event->getRelationships());
     }

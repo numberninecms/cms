@@ -26,18 +26,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 final class UserCreateUpdateAction extends AbstractController implements AdminController
 {
-    private EntityManagerInterface $entityManager;
-    private UserRoleRepository $userRoleRepository;
-    private ResponseFactory $responseFactory;
-
-    public function __construct(
-        EntityManagerInterface $entityManager,
-        UserRoleRepository $userRoleRepository,
-        ResponseFactory $responseFactory
-    ) {
-        $this->entityManager = $entityManager;
-        $this->userRoleRepository = $userRoleRepository;
-        $this->responseFactory = $responseFactory;
+    public function __construct(private EntityManagerInterface $entityManager, private UserRoleRepository $userRoleRepository, private ResponseFactory $responseFactory)
+    {
     }
 
     /**

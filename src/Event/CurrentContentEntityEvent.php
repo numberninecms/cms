@@ -16,11 +16,8 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 final class CurrentContentEntityEvent extends Event
 {
-    private ContentEntity $contentEntity;
-
-    public function __construct(ContentEntity $contentEntity)
+    public function __construct(private ContentEntity $contentEntity)
     {
-        $this->contentEntity = $contentEntity;
     }
 
     public function getContentEntity(): ContentEntity

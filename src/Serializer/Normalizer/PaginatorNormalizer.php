@@ -18,22 +18,13 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 final class PaginatorNormalizer implements NormalizerInterface
 {
-    private ObjectNormalizer $normalizer;
-
-    /** @var NormalizerInterface[] */
-    private iterable $normalizers;
-
-    public function __construct(ObjectNormalizer $normalizer, iterable $normalizers)
+    public function __construct(private ObjectNormalizer $normalizer, private iterable $normalizers)
     {
-        $this->normalizer = $normalizer;
-        $this->normalizers = $normalizers;
     }
 
     /**
      * @param Paginator $object
      * @param string $format
-     * @param array $context
-     * @return array
      * @throws Exception
      */
     public function normalize($object, ?string $format = null, array $context = []): array

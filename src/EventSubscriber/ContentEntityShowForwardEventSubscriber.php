@@ -24,9 +24,6 @@ final class ContentEntityShowForwardEventSubscriber implements EventSubscriberIn
 {
     use ForwardRequestTrait;
 
-    private ConfigurationReadWriter $configurationReadWriter;
-    private HttpKernelInterface $httpKernel;
-
     public static function getSubscribedEvents(): array
     {
         return [
@@ -34,18 +31,11 @@ final class ContentEntityShowForwardEventSubscriber implements EventSubscriberIn
         ];
     }
 
-    /**
-     * @param ConfigurationReadWriter $configurationReadWriter
-     * @param HttpKernelInterface $httpKernel
-     */
-    public function __construct(ConfigurationReadWriter $configurationReadWriter, HttpKernelInterface $httpKernel)
+    public function __construct(private ConfigurationReadWriter $configurationReadWriter, private HttpKernelInterface $httpKernel)
     {
-        $this->configurationReadWriter = $configurationReadWriter;
-        $this->httpKernel = $httpKernel;
     }
 
     /**
-     * @param ContentEntityShowForwardEvent $event
      * @throws CacheException
      * @throws InvalidArgumentException
      */

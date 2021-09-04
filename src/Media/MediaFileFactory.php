@@ -28,30 +28,18 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class MediaFileFactory
 {
-    private EntityManagerInterface $entityManager;
-    private ImageProcessor $imageProcessor;
-    private ImageSizeStore $imageSizeStore;
-    private Security $security;
-    private ExtendedSluggerInterface $slugger;
-    private string $uploadPath;
     private string $absoluteUploadPath;
     private string $datedAbsoluteUploadPath;
 
     public function __construct(
-        EntityManagerInterface $entityManager,
-        Security $security,
-        ExtendedSluggerInterface $slugger,
-        ImageProcessor $imageProcessor,
-        ImageSizeStore $imageSizeStore,
-        string $uploadPath,
+        private EntityManagerInterface $entityManager,
+        private Security $security,
+        private ExtendedSluggerInterface $slugger,
+        private ImageProcessor $imageProcessor,
+        private ImageSizeStore $imageSizeStore,
+        private string $uploadPath,
         string $publicPath
     ) {
-        $this->entityManager = $entityManager;
-        $this->imageProcessor = $imageProcessor;
-        $this->imageSizeStore = $imageSizeStore;
-        $this->security = $security;
-        $this->slugger = $slugger;
-        $this->uploadPath = $uploadPath;
         $this->absoluteUploadPath = $publicPath . $this->uploadPath;
         $this->datedAbsoluteUploadPath = $publicPath . $uploadPath . '/' . date('Y/m');
     }
@@ -155,7 +143,7 @@ final class MediaFileFactory
             ))
             ->setMimeType($mimeType);
 
-        if (strpos($mimeType, 'image') === 0) {
+        if (str_starts_with($mimeType, 'image')) {
             $processedImage = $this->imageProcessor->processImage(
                 $file->getNewFilename(),
                 $this->imageSizeStore->getImageSizes()
@@ -167,7 +155,7 @@ final class MediaFileFactory
                 ->setHeight($size->getHeight())
                 ->setExif($processedImage->getExif())
                 ->setSizes($processedImage->getSizes());
-        } elseif (strpos($mimeType, 'video') === 0) {
+        } elseif (str_starts_with($mimeType, 'video')) {
             try {
                 $video = MediaFileMetadataReader::open($file->getNewFilename())->getVideo();
 
@@ -184,7 +172,7 @@ final class MediaFileFactory
                         $mediaFile->setDuration($video->getLength());
                     }
                 }
-            } catch (Exception $e) {
+            } catch (Exception) {
                 // just ignore and don't add video metadata
             }
         }

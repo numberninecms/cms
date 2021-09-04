@@ -37,14 +37,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 final class IndexAction extends AbstractController
 {
     /**
-     * @param Request $request
      * @param Serializer $serializer
-     * @param ContentService $contentService
-     * @param ConfigurationReadWriter $configurationReadWriter
-     * @param TemplateResolver $templateResolver
-     * @param CacheInterface $cache
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param Term $term
      * @return Response
      */
     public function __invoke(

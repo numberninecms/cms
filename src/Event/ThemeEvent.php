@@ -17,13 +17,8 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class ThemeEvent extends Event
 {
-    private Response $response;
-    private ThemeInterface $theme;
-
-    public function __construct(Response $response, ThemeInterface $theme)
+    public function __construct(private Response $response, private ThemeInterface $theme)
     {
-        $this->response = $response;
-        $this->theme = $theme;
     }
 
     public function getResponse(): Response

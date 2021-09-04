@@ -30,12 +30,6 @@ use Symfony\Component\Routing\Annotation\Route;
 final class ContentEntityGetByTitleAction
 {
     /**
-     * @param Request $request
-     * @param ContentService $contentService
-     * @param ResponseFactory $responseFactory
-     * @param string $type
-     * @param string $title
-     * @return JsonResponse
      * @throws ReflectionException
      */
     public function __invoke(

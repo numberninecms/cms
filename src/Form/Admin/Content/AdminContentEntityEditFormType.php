@@ -49,39 +49,15 @@ use function NumberNine\Common\Util\ArrayUtil\array_merge_recursive_fixed;
 
 final class AdminContentEntityEditFormType extends AbstractType
 {
-    private AssociativeArrayToKeyValueCollectionTransformer $associativeArrayToKeyValueCollectionTransformer;
-    private ContentService $contentService;
-    private TemplateResolver $templateResolver;
-    private EventDispatcherInterface $eventDispatcher;
     private HiddenCustomFieldsEvent $hiddenCustomFieldsEvent;
     private ContentEntity $originalEntity;
-    private TaxonomyRepository $taxonomyRepository;
-    private TermRepository $termRepository;
-    private ContentEntityTermRepository $contentEntityTermRepository;
-    private TagAwareCacheInterface $cache;
 
     /** @var Taxonomy[]|null */
     private ?array $taxonomies = null;
     private ?array $editorExtensions = null;
 
-    public function __construct(
-        AssociativeArrayToKeyValueCollectionTransformer $transformer,
-        ContentService $contentService,
-        TemplateResolver $templateResolver,
-        EventDispatcherInterface $eventDispatcher,
-        TaxonomyRepository $taxonomyRepository,
-        TermRepository $termRepository,
-        ContentEntityTermRepository $contentEntityTermRepository,
-        TagAwareCacheInterface $cache
-    ) {
-        $this->associativeArrayToKeyValueCollectionTransformer = $transformer;
-        $this->contentService = $contentService;
-        $this->templateResolver = $templateResolver;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->taxonomyRepository = $taxonomyRepository;
-        $this->termRepository = $termRepository;
-        $this->contentEntityTermRepository = $contentEntityTermRepository;
-        $this->cache = $cache;
+    public function __construct(private AssociativeArrayToKeyValueCollectionTransformer $associativeArrayToKeyValueCollectionTransformer, private ContentService $contentService, private TemplateResolver $templateResolver, private EventDispatcherInterface $eventDispatcher, private TaxonomyRepository $taxonomyRepository, private TermRepository $termRepository, private ContentEntityTermRepository $contentEntityTermRepository, private TagAwareCacheInterface $cache)
+    {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -174,7 +150,7 @@ final class AdminContentEntityEditFormType extends AbstractType
             if (
                 \is_array($value)
                 || \in_array($key, $this->hiddenCustomFieldsEvent->getFieldsToHide(), true)
-                || strpos($key, 'extension.') === 0
+                || str_starts_with($key, 'extension.')
             ) {
                 continue;
             }
@@ -195,7 +171,7 @@ final class AdminContentEntityEditFormType extends AbstractType
         $form = $event->getForm();
 
         foreach ($this->hiddenCustomFieldsEvent->getFieldsToHide() as $fieldName) {
-            if ($fieldName === 'page_template' || strpos($fieldName, 'extension.') === 0) {
+            if ($fieldName === 'page_template' || str_starts_with($fieldName, 'extension.')) {
                 continue;
             }
 
@@ -347,7 +323,7 @@ final class AdminContentEntityEditFormType extends AbstractType
         $entity = $event->getData();
 
         /** @var SupportedContentEntityRelationshipsEvent $event */
-        $event = $this->eventDispatcher->dispatch(new SupportedContentEntityRelationshipsEvent(get_class($entity)));
+        $event = $this->eventDispatcher->dispatch(new SupportedContentEntityRelationshipsEvent($entity::class));
 
         if (\in_array('featured_image', $event->getRelationships())) {
             $form->add('featuredImage', ContentEntityRelationshipType::class, [

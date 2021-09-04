@@ -35,12 +35,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 final class ContentEntitiesGetAction
 {
     /**
-     * @param Request $request
      * @param Serializer $serializer
-     * @param ContentService $contentService
-     * @param ResponseFactory $responseFactory
-     * @param string $type
-     * @return JsonResponse
      * @throws ReflectionException
      * @throws ExceptionInterface
      * @throws QueryException

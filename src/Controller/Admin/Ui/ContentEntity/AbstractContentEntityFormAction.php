@@ -30,18 +30,8 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 abstract class AbstractContentEntityFormAction extends AbstractController implements AdminController
 {
-    private EntityManagerInterface $entityManager;
-    private LoggerInterface $logger;
-    private SluggerInterface $slugger;
-
-    public function __construct(
-        EntityManagerInterface $entityManager,
-        LoggerInterface $logger,
-        SluggerInterface $slugger
-    ) {
-        $this->entityManager = $entityManager;
-        $this->logger = $logger;
-        $this->slugger = $slugger;
+    public function __construct(private EntityManagerInterface $entityManager, private LoggerInterface $logger, private SluggerInterface $slugger)
+    {
     }
 
     protected function handle(Request $request, ContentType $contentType, ContentEntity $entity): Response

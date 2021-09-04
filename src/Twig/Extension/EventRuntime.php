@@ -23,15 +23,8 @@ use Twig\Extension\RuntimeExtensionInterface;
 
 final class EventRuntime implements RuntimeExtensionInterface
 {
-    private EventDispatcherInterface $eventDispatcher;
-    private ThemeEventDispatcher $themeEventDispatcher;
-
-    public function __construct(
-        EventDispatcherInterface $eventDispatcher,
-        ThemeEventDispatcher $themeEventDispatcher
-    ) {
-        $this->eventDispatcher = $eventDispatcher;
-        $this->themeEventDispatcher = $themeEventDispatcher;
+    public function __construct(private EventDispatcherInterface $eventDispatcher, private ThemeEventDispatcher $themeEventDispatcher)
+    {
     }
 
     /**

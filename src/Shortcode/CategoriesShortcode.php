@@ -34,7 +34,6 @@ final class CategoriesShortcode extends AbstractShortcode implements
     EditableShortcodeInterface,
     EventSubscriberInterface
 {
-    private TermRepository $termRepository;
     private ?Term $term = null;
 
     public static function getSubscribedEvents(): array
@@ -44,9 +43,8 @@ final class CategoriesShortcode extends AbstractShortcode implements
         ];
     }
 
-    public function __construct(TermRepository $termRepository)
+    public function __construct(private TermRepository $termRepository)
     {
-        $this->termRepository = $termRepository;
     }
 
     public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void

@@ -46,24 +46,12 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 final class ContentEntityUpdateAction extends AbstractController implements AdminController
 {
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(EventDispatcherInterface $eventDispatcher)
+    public function __construct(private EventDispatcherInterface $eventDispatcher)
     {
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     * @param MediaFileRepository $mediaFileRepository
-     * @param TermRepository $termRepository
-     * @param ResponseFactory $responseFactory
-     * @param ContentService $contentService
      * @param Serializer $serializer
-     * @param ContentEntity $entity
-     * @param string $type
-     * @return JsonResponse
      * @throws ExceptionInterface
      */
     public function __invoke(

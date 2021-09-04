@@ -32,35 +32,11 @@ final class ShortcodeProcessor
 {
     private const REGEX_HAS_IMAGE_EXTENSION = '@\.(?:jpe?g|png|gif|bmp|webp)$@i';
 
-    private ShortcodeStore $shortcodeStore;
-    private ExtendedReader $annotationReader;
-    private PresetRepository $presetRepository;
-    private PresetFinderInterface $presetFinder;
-    private ParserInterface $shortcodeParser;
-    private TagAwareCacheInterface $cache;
-
-    public function __construct(
-        ShortcodeStore $shortcodeStore,
-        ExtendedReader $annotationReader,
-        PresetRepository $templateRepository,
-        PresetFinderInterface $presetFinder,
-        ParserInterface $parser,
-        TagAwareCacheInterface $cache
-    ) {
-        $this->shortcodeStore = $shortcodeStore;
-        $this->annotationReader = $annotationReader;
-        $this->presetRepository = $templateRepository;
-        $this->presetFinder = $presetFinder;
-        $this->shortcodeParser = $parser;
-        $this->cache = $cache;
+    public function __construct(private ShortcodeStore $shortcodeStore, private ExtendedReader $annotationReader, private PresetRepository $presetRepository, private PresetFinderInterface $presetFinder, private ParserInterface $shortcodeParser, private TagAwareCacheInterface $cache)
+    {
     }
 
     /**
-     * @param string $text
-     * @param bool $onlyEditables
-     * @param bool $storeShortcodeFullString
-     * @param bool $isSerialization
-     * @return array
      * @throws Exception
      * @throws InvalidArgumentException
      */
@@ -82,7 +58,7 @@ final class ShortcodeProcessor
             try {
                 $shortcode = $this->shortcodeStore->getShortcode($parsedShortcode->getName());
                 $shortcodeMetadata = $this->shortcodeStore->getShortcodeMetadata($parsedShortcode->getName());
-            } catch (InvalidShortcodeException $e) {
+            } catch (InvalidShortcodeException) {
                 continue;
             }
 
@@ -131,10 +107,6 @@ final class ShortcodeProcessor
     }
 
     /**
-     * @param string $shortcodeName
-     * @param array $parameters
-     * @param int $position
-     * @return array
      * @throws ReflectionException
      */
     public function shortcodeToArray(string $shortcodeName, array $parameters = [], int $position = 0): array
@@ -150,7 +122,7 @@ final class ShortcodeProcessor
         $parameters = $resolver->resolve($parameters);
 
         $array = [
-            'type' => get_class($shortcode),
+            'type' => $shortcode::class,
             'name' => $shortcodeMetadata->name,
             'parameters' => $parameters,
             'responsive' => $responsive,
@@ -211,9 +183,6 @@ final class ShortcodeProcessor
     }
 
     /**
-     * @param string $shortcodeType
-     * @param string $text
-     * @return array|null
      * @throws Exception
      */
     public function getFirstShortcodeOfType(string $shortcodeType, string $text): ?array
@@ -241,8 +210,6 @@ final class ShortcodeProcessor
     }
 
     /**
-     * @param ShortcodeInterface $shortcode
-     * @return array
      * @throws ReflectionException
      */
     private function getShortcodeResponsiveParameters(ShortcodeInterface $shortcode): array

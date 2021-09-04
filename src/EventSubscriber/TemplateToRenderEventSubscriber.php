@@ -19,13 +19,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class TemplateToRenderEventSubscriber implements EventSubscriberInterface
 {
-    private ConfigurationReadWriter $configurationReadWriter;
-    private TemplateResolver $templateResolver;
-
-    public function __construct(ConfigurationReadWriter $configurationReadWriter, TemplateResolver $templateResolver)
+    public function __construct(private ConfigurationReadWriter $configurationReadWriter, private TemplateResolver $templateResolver)
     {
-        $this->configurationReadWriter = $configurationReadWriter;
-        $this->templateResolver = $templateResolver;
     }
 
     public static function getSubscribedEvents(): array

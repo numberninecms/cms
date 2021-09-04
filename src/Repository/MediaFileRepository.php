@@ -30,9 +30,6 @@ final class MediaFileRepository extends AbstractContentEntityRepository
         parent::__construct($registry, MediaFile::class);
     }
 
-    /**
-     * @return Query
-     */
     public function findImagesQuery(): Query
     {
         return $this->createQueryBuilder('m')

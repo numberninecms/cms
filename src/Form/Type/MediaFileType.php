@@ -24,15 +24,8 @@ use Symfony\Component\Form\FormView;
 
 final class MediaFileType extends AbstractType
 {
-    private MediaFileRepository $mediaFileRepository;
-    private ContentEntityToNumberTransformer $contentEntityToNumberTransformer;
-
-    public function __construct(
-        MediaFileRepository $mediaFileRepository,
-        ContentEntityToNumberTransformer $contentEntityToNumberTransformer
-    ) {
-        $this->mediaFileRepository = $mediaFileRepository;
-        $this->contentEntityToNumberTransformer = $contentEntityToNumberTransformer;
+    public function __construct(private MediaFileRepository $mediaFileRepository, private ContentEntityToNumberTransformer $contentEntityToNumberTransformer)
+    {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -46,7 +39,7 @@ final class MediaFileType extends AbstractType
             if (($id = $form->getData()) && ($mediaFile = $this->mediaFileRepository->findOneBy(['id' => $id]))) {
                 $view->vars['media_file'] = $mediaFile;
             }
-        } catch (EntityNotFoundException $e) {
+        } catch (EntityNotFoundException) {
             // Don't set variable if entity doesn't exist anymore
         }
     }

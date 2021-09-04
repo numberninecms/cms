@@ -33,10 +33,6 @@ use Symfony\Component\String\Inflector\EnglishInflector;
 final class ContentEntityDeleteAction extends AbstractController implements AdminController
 {
     /**
-     * @param ContentService $contentService
-     * @param ResponseFactory $responseFactory
-     * @param ContentEntity $entity
-     * @return JsonResponse
      * @throws ORMException
      */
     public function __invoke(

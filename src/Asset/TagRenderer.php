@@ -26,20 +26,15 @@ use TypeError;
 
 final class TagRenderer
 {
-    private ThemeStore $themeStore;
-    private Packages $packages;
     private ?Request $request;
     private EntrypointLookupCollection $entrypointLookupCollection;
 
     /**
-     * @param ThemeStore $themeStore
-     * @param Packages $packages
-     * @param RequestStack $requestStack
      * @param EntrypointLookupInterface|EntrypointLookupCollection $entrypointLookupCollection
      */
     public function __construct(
-        ThemeStore $themeStore,
-        Packages $packages,
+        private ThemeStore $themeStore,
+        private Packages $packages,
         RequestStack $requestStack,
         $entrypointLookupCollection
     ) {
@@ -69,17 +64,12 @@ final class TagRenderer
                 'The "$entrypointLookupCollection" argument must be an instance of EntrypointLookupCollection.'
             );
         }
-
-        $this->themeStore = $themeStore;
-        $this->packages = $packages;
         $this->request = $requestStack->getMasterRequest();
     }
 
     /**
      * @param string|null $entryName
      * @param string|null $configName
-     * @param bool $ignoreRuntime
-     * @return string
      */
     public function renderWebpackScriptTags(
         string $entryName = null,
@@ -113,7 +103,6 @@ final class TagRenderer
     /**
      * @param string|null $entryName
      * @param string|null $configName
-     * @return string
      * @throws Exception
      */
     public function renderWebpackLinkTags(string $entryName = null, string $configName = null): string
@@ -159,10 +148,6 @@ final class TagRenderer
         return $assetPaths;
     }
 
-    /**
-     * @param ThemeInterface $theme
-     * @return string|null
-     */
     private function getThemeMainEntry(ThemeInterface $theme): ?string
     {
         return $theme->getConfiguration()['main_entry'] ?? null;

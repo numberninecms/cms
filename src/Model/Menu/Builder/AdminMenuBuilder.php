@@ -61,8 +61,6 @@ final class AdminMenuBuilder
     /**
      * @param string[] $path
      * @param MenuItem[] $items
-     * @param array $menuToInsert
-     * @return bool
      */
     private function insertAfterItem(array &$path, array &$items, array $menuToInsert): bool
     {

@@ -19,20 +19,12 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 final class ContentEntityNormalizer implements NormalizerInterface
 {
-    private ObjectNormalizer $normalizer;
-    private PermalinkGenerator $permalinkGenerator;
-
-    public function __construct(ObjectNormalizer $normalizer, PermalinkGenerator $permalinkGenerator)
+    public function __construct(private ObjectNormalizer $normalizer, private PermalinkGenerator $permalinkGenerator)
     {
-        $this->normalizer = $normalizer;
-        $this->permalinkGenerator = $permalinkGenerator;
     }
 
     /**
      * @param mixed $object
-     * @param string $format
-     * @param array $context
-     * @return array
      * @throws ExceptionInterface
      */
     public function normalize($object, string $format = null, array $context = []): array

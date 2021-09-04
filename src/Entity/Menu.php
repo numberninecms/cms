@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="NumberNine\Repository\MenuRepository")
  */
-class Menu
+class Menu implements \Stringable
 {
     /**
      * @ORM\Id()
@@ -66,10 +66,7 @@ class Menu
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return (string)$this->getName();
     }

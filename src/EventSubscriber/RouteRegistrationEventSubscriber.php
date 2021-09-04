@@ -29,21 +29,8 @@ use function Symfony\Component\String\u;
 
 final class RouteRegistrationEventSubscriber implements EventSubscriberInterface
 {
-    private ContentService $contentService;
-    private TaxonomyRepository $taxonomyRepository;
-    private SluggerInterface $slugger;
-    private ConfigurationReadWriter $configurationReadWriter;
-
-    public function __construct(
-        ContentService $contentService,
-        TaxonomyRepository $taxonomyRepository,
-        SluggerInterface $slugger,
-        ConfigurationReadWriter $configurationReadWriter
-    ) {
-        $this->contentService = $contentService;
-        $this->taxonomyRepository = $taxonomyRepository;
-        $this->slugger = $slugger;
-        $this->configurationReadWriter = $configurationReadWriter;
+    public function __construct(private ContentService $contentService, private TaxonomyRepository $taxonomyRepository, private SluggerInterface $slugger, private ConfigurationReadWriter $configurationReadWriter)
+    {
     }
 
     public static function getSubscribedEvents(): array
@@ -56,7 +43,6 @@ final class RouteRegistrationEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param RouteRegistrationEvent $event
      * @throws CacheException
      * @throws InvalidArgumentException
      */

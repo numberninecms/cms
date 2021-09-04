@@ -24,21 +24,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 final class CommentFormType extends AbstractType
 {
-    private TokenStorageInterface $tokenStorage;
-    private CommentToNumberTransformer $commentToNumberTransformer;
-    private ContentEntityToNumberTransformer $contentEntityToNumberTransformer;
-    private UserToNumberTransformer $userToNumberTransformer;
-
-    public function __construct(
-        TokenStorageInterface $tokenStorage,
-        CommentToNumberTransformer $commentToNumberTransformer,
-        ContentEntityToNumberTransformer $contentEntityToNumberTransformer,
-        UserToNumberTransformer $userToNumberTransformer
-    ) {
-        $this->tokenStorage = $tokenStorage;
-        $this->commentToNumberTransformer = $commentToNumberTransformer;
-        $this->contentEntityToNumberTransformer = $contentEntityToNumberTransformer;
-        $this->userToNumberTransformer = $userToNumberTransformer;
+    public function __construct(private TokenStorageInterface $tokenStorage, private CommentToNumberTransformer $commentToNumberTransformer, private ContentEntityToNumberTransformer $contentEntityToNumberTransformer, private UserToNumberTransformer $userToNumberTransformer)
+    {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void

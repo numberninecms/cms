@@ -19,9 +19,7 @@ use NumberNine\Entity\ContentEntity;
 trait FindByCustomFieldTrait
 {
     /**
-     * @param string $fieldName
      * @param mixed $fieldValue
-     * @return array
      */
     public function findByCustomField(string $fieldName, $fieldValue): array
     {
@@ -31,9 +29,7 @@ trait FindByCustomFieldTrait
     }
 
     /**
-     * @param string $fieldName
      * @param mixed $fieldValue
-     * @return ContentEntity|null
      * @throws NonUniqueResultException
      * @throws NoResultException
      */
@@ -45,9 +41,7 @@ trait FindByCustomFieldTrait
     }
 
     /**
-     * @param string $fieldName
      * @param mixed $fieldValue
-     * @return QueryBuilder
      */
     private function getByCustomFieldQueryBuilder(string $fieldName, $fieldValue): QueryBuilder
     {

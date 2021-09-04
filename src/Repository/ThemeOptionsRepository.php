@@ -30,7 +30,6 @@ final class ThemeOptionsRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string $themeName
      * @return ThemeOptions Returns a ThemeOptions object corresponding to the given theme name
      */
     public function getOrCreateByThemeName(string $themeName): ThemeOptions
@@ -41,7 +40,7 @@ final class ThemeOptionsRepository extends ServiceEntityRepository
             try {
                 $this->_em->persist($themeOptions);
                 $this->_em->flush();
-            } catch (Exception $e) {
+            } catch (Exception) {
             }
         }
 

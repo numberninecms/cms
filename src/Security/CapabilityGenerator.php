@@ -16,11 +16,8 @@ use NumberNine\Content\ContentService;
 
 final class CapabilityGenerator
 {
-    private ContentService $contentService;
-
-    public function __construct(ContentService $contentService)
+    public function __construct(private ContentService $contentService)
     {
-        $this->contentService = $contentService;
     }
 
     public function generateMappedSubscriberCapabilities(string $contentType): array

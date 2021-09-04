@@ -34,9 +34,7 @@ final class TermRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string $fieldName
      * @param mixed $fieldValue
-     * @return Term|null
      * @throws NonUniqueResultException
      */
     public function findOneByCustomField(string $fieldName, $fieldValue): ?Term
@@ -54,8 +52,6 @@ final class TermRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string $taxonomyName
-     * @param bool $includeCount
      * @return Term[]
      */
     public function findByTaxonomyName(string $taxonomyName, bool $includeCount = false): array
@@ -110,7 +106,6 @@ final class TermRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param array $ids
      * @throws ORMException
      */
     public function removeCollection(array $ids): void

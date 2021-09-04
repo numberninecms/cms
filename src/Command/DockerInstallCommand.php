@@ -28,10 +28,6 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
 {
     protected static $defaultName = 'numbernine:docker:install';
 
-    private SluggerInterface $slugger;
-    private string $projectPath;
-    private string $publicPath;
-
     private OutputInterface $output;
     private SymfonyStyle $io;
     private ?string $appName;
@@ -40,12 +36,9 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
     private int $port = 0;
     private int $verbosity;
 
-    public function __construct(SluggerInterface $slugger, string $projectPath, string $publicPath)
+    public function __construct(private SluggerInterface $slugger, private string $projectPath, private string $publicPath)
     {
         parent::__construct();
-        $this->slugger = $slugger;
-        $this->projectPath = $projectPath;
-        $this->publicPath = $publicPath;
     }
 
     protected function configure(): void
@@ -300,7 +293,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
             $composerRequire->mustRun();
             $clearCache->mustRun();
             $composerDumpautoload->mustRun();
-        } catch (ProcessFailedException $exception) {
+        } catch (ProcessFailedException) {
             $this->io->error("Unable to install numberninecms/redis package.");
             return Command::FAILURE;
         }
@@ -334,7 +327,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
                 if (is_resource($connection)) {
                     fclose($connection);
                 }
-            } catch (\Exception $exception) {
+            } catch (\Exception) {
                 $this->port = $port;
                 break;
             }
@@ -371,7 +364,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
 
         try {
             $this->getHelper('process')->mustRun($this->output, $process);
-        } catch (ProcessFailedException $exception) {
+        } catch (ProcessFailedException) {
             $this->io->error("Unable to create Docker containers.");
             return Command::FAILURE;
         }
@@ -439,7 +432,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
                 ->setTimeout(300)
                 ->setTty(Process::isTtySupported());
             $this->getHelper('process')->mustRun($this->output, $process);
-        } catch (ProcessFailedException $exception) {
+        } catch (ProcessFailedException) {
             $this->io->error("Database installation failed.");
             return Command::FAILURE;
         }

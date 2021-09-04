@@ -17,19 +17,12 @@ use Twig\Extension\RuntimeExtensionInterface;
 
 final class AssetRuntime implements RuntimeExtensionInterface
 {
-    private TagRenderer $tagRenderer;
-
-    /**
-     * @param TagRenderer $tagRenderer
-     */
-    public function __construct(TagRenderer $tagRenderer)
+    public function __construct(private TagRenderer $tagRenderer)
     {
-        $this->tagRenderer = $tagRenderer;
     }
 
     /**
      * @param string|null $entryName
-     * @return string
      * @throws Exception
      */
     public function renderStylesheetTag(string $entryName = null): string
@@ -49,7 +42,6 @@ final class AssetRuntime implements RuntimeExtensionInterface
 
     /**
      * @param string|null $entryName
-     * @return string
      * @throws Exception
      */
     public function renderScriptTag(string $entryName = null): string
@@ -59,7 +51,6 @@ final class AssetRuntime implements RuntimeExtensionInterface
 
     /**
      * @param string|null $entryName
-     * @return string
      * @throws Exception
      */
     public function renderEntryTags(string $entryName = null): string

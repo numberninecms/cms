@@ -23,7 +23,6 @@ final class InvalidContentTypeException extends LogicException
 {
     /**
      * InvalidContentTypeException constructor.
-     * @param ContentType $contentType
      */
     public function __construct(ContentType $contentType)
     {

@@ -27,27 +27,8 @@ use Symfony\Component\Mailer\MailerInterface;
 
 final class RegistrationFormSuccessEventSubscriber implements EventSubscriberInterface
 {
-    private MailerInterface $mailer;
-    private AddressFactory $addressFactory;
-    private TemplateResolverInterface $templateResolver;
-    private ConfigurationReadWriter $configurationReadWriter;
-    private PermalinkGenerator $permalinkGenerator;
-    private ContentEntityRepository $contentEntityRepository;
-
-    public function __construct(
-        MailerInterface $mailer,
-        AddressFactory $addressFactory,
-        TemplateResolverInterface $templateResolver,
-        ConfigurationReadWriter $configurationReadWriter,
-        PermalinkGenerator $permalinkGenerator,
-        ContentEntityRepository $contentEntityRepository
-    ) {
-        $this->mailer = $mailer;
-        $this->addressFactory = $addressFactory;
-        $this->templateResolver = $templateResolver;
-        $this->configurationReadWriter = $configurationReadWriter;
-        $this->permalinkGenerator = $permalinkGenerator;
-        $this->contentEntityRepository = $contentEntityRepository;
+    public function __construct(private MailerInterface $mailer, private AddressFactory $addressFactory, private TemplateResolverInterface $templateResolver, private ConfigurationReadWriter $configurationReadWriter, private PermalinkGenerator $permalinkGenerator, private ContentEntityRepository $contentEntityRepository)
+    {
     }
 
     public static function getSubscribedEvents(): array

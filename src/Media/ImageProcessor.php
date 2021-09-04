@@ -20,22 +20,15 @@ use Symfony\Component\Mime\MimeTypes;
 
 final class ImageProcessor
 {
-    private Imagine $imagine;
     private MimeTypes $mimeTypes;
 
-    /**
-     * @param Imagine $imagine
-     */
-    public function __construct(Imagine $imagine)
+    public function __construct(private Imagine $imagine)
     {
-        $this->imagine = $imagine;
         $this->mimeTypes = new MimeTypes();
     }
 
     /**
-     * @param string $filename
      * @param ImageSize[] $imageSizes
-     * @return ProcessedImage
      */
     public function processImage(string $filename, array $imageSizes): ProcessedImage
     {
@@ -70,11 +63,6 @@ final class ImageProcessor
         return new ProcessedImage($image, $sizesInfo, $exif);
     }
 
-    /**
-     * @param string $filename
-     * @param ImageSize $size
-     * @return array
-     */
     public function createImageVariation(string $filename, ImageSize $size): array
     {
         $image = $this->imagine->open($filename);
@@ -102,8 +90,6 @@ final class ImageProcessor
 
     /**
      * Fix orientation according to Exif data
-     * @param ImageInterface $image
-     * @return bool
      */
     private function fixOrientation(ImageInterface $image): bool
     {

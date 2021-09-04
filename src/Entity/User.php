@@ -26,7 +26,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @UniqueEntity(fields={"username"}, message="This username is already taken.")
  * @UniqueEntity(fields={"email"}, message="A user is already registered with this email.")
  */
-class User implements UserInterface, Serializable
+class User implements UserInterface, Serializable, \Stringable
 {
     use CustomFieldsTrait;
     use TimestampableEntity;
@@ -130,9 +130,6 @@ class User implements UserInterface, Serializable
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getEmail(): string
     {
         return (string)$this->email;
@@ -216,23 +213,16 @@ class User implements UserInterface, Serializable
 
     /**
      * @Groups({"user_get", "author_get"})
-     * @return string
      */
     public function getDisplayName(): string
     {
-        switch ($this->displayNameFormat) {
-            case self::DISPLAY_NAME_FIRST_ONLY:
-                return (string)$this->getFirstName();
-            case self::DISPLAY_NAME_LAST_ONLY:
-                return (string)$this->getLastName();
-            case self::DISPLAY_NAME_FIRST_LAST:
-                return trim(sprintf('%s %s', $this->getFirstName(), $this->getLastName()));
-            case self::DISPLAY_NAME_LAST_FIRST:
-                return trim(sprintf('%s %s', $this->getLastName(), $this->getFirstName()));
-            case self::DISPLAY_NAME_USERNAME:
-            default:
-                return $this->getUsername();
-        }
+        return match ($this->displayNameFormat) {
+            self::DISPLAY_NAME_FIRST_ONLY => (string)$this->getFirstName(),
+            self::DISPLAY_NAME_LAST_ONLY => (string)$this->getLastName(),
+            self::DISPLAY_NAME_FIRST_LAST => trim(sprintf('%s %s', $this->getFirstName(), $this->getLastName())),
+            self::DISPLAY_NAME_LAST_FIRST => trim(sprintf('%s %s', $this->getLastName(), $this->getFirstName())),
+            default => $this->getUsername(),
+        };
     }
 
     /**

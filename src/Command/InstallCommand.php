@@ -30,19 +30,12 @@ use function NumberNine\Common\Util\ConfigUtil\file_put_env_variable;
 final class InstallCommand extends Command implements ContentTypeAwareCommandInterface
 {
     protected static $defaultName = 'numbernine:install';
-
-    private SluggerInterface $slugger;
-    private string $projectPath;
-    private string $publicPath;
     private SymfonyStyle $io;
     private OutputInterface $output;
 
-    public function __construct(SluggerInterface $slugger, string $projectPath, string $publicPath)
+    public function __construct(private SluggerInterface $slugger, private string $projectPath, private string $publicPath)
     {
         parent::__construct();
-        $this->slugger = $slugger;
-        $this->projectPath = $projectPath;
-        $this->publicPath = $publicPath;
     }
 
     protected function configure(): void
@@ -204,7 +197,7 @@ final class InstallCommand extends Command implements ContentTypeAwareCommandInt
             if ($exitCode !== Command::SUCCESS) {
                 return Command::SUCCESS;
             }
-        } catch (\Exception $exception) {
+        } catch (\Exception) {
             return Command::SUCCESS;
         }
 

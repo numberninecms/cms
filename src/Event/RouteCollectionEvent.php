@@ -16,22 +16,10 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 final class RouteCollectionEvent extends Event
 {
-    /**
-     * @var RouteCollection
-     */
-    protected $collection;
-
-    /**
-     * @param RouteCollection $collection
-     */
-    public function __construct(RouteCollection $collection)
+    public function __construct(protected RouteCollection $collection)
     {
-        $this->collection = $collection;
     }
 
-    /**
-     * @return RouteCollection
-     */
     public function getCollection(): RouteCollection
     {
         return $this->collection;

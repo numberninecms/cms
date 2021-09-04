@@ -20,18 +20,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class CapabilityStore
 {
-    private CapabilityGenerator $capabilityGenerator;
-    private ContentService $contentService;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(
-        CapabilityGenerator $capabilityGenerator,
-        ContentService $contentService,
-        EventDispatcherInterface $eventDispatcher
-    ) {
-        $this->capabilityGenerator = $capabilityGenerator;
-        $this->contentService = $contentService;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(private CapabilityGenerator $capabilityGenerator, private ContentService $contentService, private EventDispatcherInterface $eventDispatcher)
+    {
     }
 
     /**

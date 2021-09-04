@@ -30,7 +30,6 @@ final class PostRepository extends AbstractContentEntityRepository
     }
 
     /**
-     * @param int $count
      * @return Post[]
      */
     public function getRecentPosts(int $count): array
@@ -44,10 +43,6 @@ final class PostRepository extends AbstractContentEntityRepository
             ->getResult();
     }
 
-    /**
-     * @param Post $post
-     * @return array
-     */
     public function findSiblings(Post $post): array
     {
         $ids = array_column(

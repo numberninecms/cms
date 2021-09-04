@@ -17,11 +17,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class ComponentProcessParametersEventSubscriber implements EventSubscriberInterface
 {
-    private DataTransformerProcessor $dataTransformerProcessor;
-
-    public function __construct(DataTransformerProcessor $dataTransformerProcessor)
+    public function __construct(private DataTransformerProcessor $dataTransformerProcessor)
     {
-        $this->dataTransformerProcessor = $dataTransformerProcessor;
     }
 
     public static function getSubscribedEvents(): array

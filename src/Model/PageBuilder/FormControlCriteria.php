@@ -15,13 +15,8 @@ namespace NumberNine\Model\PageBuilder;
 
 final class FormControlCriteria
 {
-    private string $valueFrom;
-    private string $findBy;
-
-    public function __construct(string $valueFrom, string $findBy)
+    public function __construct(private string $valueFrom, private string $findBy)
     {
-        $this->valueFrom = $valueFrom;
-        $this->findBy = $findBy;
     }
 
     public function getValueFrom(): string

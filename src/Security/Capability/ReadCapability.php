@@ -21,12 +21,10 @@ use Symfony\Component\String\Inflector\EnglishInflector;
 
 final class ReadCapability implements CapabilityInterface
 {
-    private Security $security;
     private EnglishInflector $inflector;
 
-    public function __construct(Security $security)
+    public function __construct(private Security $security)
     {
-        $this->security = $security;
         $this->inflector = new EnglishInflector();
     }
 

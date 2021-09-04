@@ -16,11 +16,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 final class SerializerTransformer implements DataTransformerInterface
 {
-    private SerializerInterface $serializer;
-
-    public function __construct(SerializerInterface $serializer)
+    public function __construct(private SerializerInterface $serializer)
     {
-        $this->serializer = $serializer;
     }
 
     /**

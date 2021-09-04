@@ -13,9 +13,6 @@ namespace NumberNine\Event\Theme;
 
 final class HeadTitleEvent extends GenericEvent
 {
-    /**
-     * @param string $title
-     */
     public function setTitle(string $title): void
     {
         $this->setObject($title);

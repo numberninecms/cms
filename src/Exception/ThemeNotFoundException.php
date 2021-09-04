@@ -21,7 +21,6 @@ final class ThemeNotFoundException extends RuntimeException
 {
     /**
      * ThemeAlreadyExistsException constructor.
-     * @param string $themeName
      */
     public function __construct(string $themeName)
     {

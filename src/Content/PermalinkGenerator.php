@@ -21,21 +21,8 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 final class PermalinkGenerator
 {
-    private UrlGeneratorInterface $urlGenerator;
-    private RouteProviderInterface $routeProvider;
-    private ContentService $contentService;
-    private SluggerInterface $slugger;
-
-    public function __construct(
-        UrlGeneratorInterface $urlGenerator,
-        RouteProviderInterface $routeProvider,
-        ContentService $contentService,
-        SluggerInterface $slugger
-    ) {
-        $this->urlGenerator = $urlGenerator;
-        $this->routeProvider = $routeProvider;
-        $this->contentService = $contentService;
-        $this->slugger = $slugger;
+    public function __construct(private UrlGeneratorInterface $urlGenerator, private RouteProviderInterface $routeProvider, private ContentService $contentService, private SluggerInterface $slugger)
+    {
     }
 
     /**
@@ -64,16 +51,16 @@ final class PermalinkGenerator
         }
 
         $parameters = [];
-        if (strpos($route->getPath(), '{year}') !== false) {
+        if (str_contains($route->getPath(), '{year}')) {
             $parameters['year'] = $date->format('Y');
         }
-        if (strpos($route->getPath(), '{month}') !== false) {
+        if (str_contains($route->getPath(), '{month}')) {
             $parameters['month'] = $date->format('m');
         }
-        if (strpos($route->getPath(), '{day}') !== false) {
+        if (str_contains($route->getPath(), '{day}')) {
             $parameters['day'] = $date->format('d');
         }
-        if (strpos($route->getPath(), '{slug}') !== false) {
+        if (str_contains($route->getPath(), '{slug}')) {
             $parameters['slug'] = $contentEntity->getSlug()
                 ?? $this->slugger->slug((string)$contentType->getLabels()->getNewItem())->lower()->toString();
         }

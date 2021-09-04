@@ -24,9 +24,6 @@ final class ImageSizesEventSubscriber implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param ImageSizesEvent $event
-     */
     public function registerImageSizes(ImageSizesEvent $event): void
     {
         $event

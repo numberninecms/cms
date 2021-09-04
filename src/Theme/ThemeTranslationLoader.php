@@ -18,13 +18,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ThemeTranslationLoader implements EventSubscriberInterface
 {
-    private TranslatorInterface $translator;
-    private ThemeStore $themeStore;
-
-    public function __construct(TranslatorInterface $translator, ThemeStore $themeStore)
+    public function __construct(private TranslatorInterface $translator, private ThemeStore $themeStore)
     {
-        $this->translator = $translator;
-        $this->themeStore = $themeStore;
     }
 
     public static function getSubscribedEvents(): array
@@ -42,7 +37,6 @@ final class ThemeTranslationLoader implements EventSubscriberInterface
 
     /**
      * Loads theme translations and merge its parent's translations
-     * @param ThemeInterface $theme
      * @param string|null $translationDomain
      */
     private function loadThemeTranslations(ThemeInterface $theme, string $translationDomain = null): void

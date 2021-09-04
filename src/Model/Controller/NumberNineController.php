@@ -19,14 +19,10 @@ abstract class NumberNineController extends AbstractController
 {
     use QuickTranslate;
 
-    /** @var TranslatorInterface */
-    private $translator;
-
     /**
      * NumberNineController constructor.
      */
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(private TranslatorInterface $translator)
     {
-        $this->translator = $translator;
     }
 }

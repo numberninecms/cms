@@ -17,21 +17,10 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 final class MainLoopQueryEvent extends Event
 {
-    private QueryBuilder $queryBuilder;
-    private ContentType $contentType;
-
-    /**
-     * @param QueryBuilder $queryBuilder
-     */
-    public function __construct(QueryBuilder $queryBuilder, ContentType $contentType)
+    public function __construct(private QueryBuilder $queryBuilder, private ContentType $contentType)
     {
-        $this->queryBuilder = $queryBuilder;
-        $this->contentType = $contentType;
     }
 
-    /**
-     * @return QueryBuilder
-     */
     public function getQueryBuilder(): QueryBuilder
     {
         return $this->queryBuilder;

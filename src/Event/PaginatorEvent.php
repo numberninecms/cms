@@ -16,11 +16,8 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 final class PaginatorEvent extends Event
 {
-    private Paginator $paginator;
-
-    public function __construct(Paginator $paginator)
+    public function __construct(private Paginator $paginator)
     {
-        $this->paginator = $paginator;
     }
 
     public function getPaginator(): Paginator

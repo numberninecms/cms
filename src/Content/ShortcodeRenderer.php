@@ -30,35 +30,11 @@ use Twig\Error\SyntaxError;
 
 class ShortcodeRenderer
 {
-    private Environment $twig;
-    private TemplateResolver $templateResolver;
-    private ShortcodeStore $shortcodeStore;
-    private TagAwareCacheInterface $cache;
-    private ShortcodeProcessor $shortcodeProcessor;
-    private ParserInterface $shortcodeParser;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(
-        EventDispatcherInterface $eventDispatcher,
-        Environment $twig,
-        TemplateResolver $templateResolver,
-        ShortcodeStore $shortcodeStore,
-        ShortcodeProcessor $shortcodeProcessor,
-        ParserInterface $parser,
-        TagAwareCacheInterface $cache
-    ) {
-        $this->twig = $twig;
-        $this->templateResolver = $templateResolver;
-        $this->shortcodeStore = $shortcodeStore;
-        $this->shortcodeProcessor = $shortcodeProcessor;
-        $this->shortcodeParser = $parser;
-        $this->cache = $cache;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(private EventDispatcherInterface $eventDispatcher, private Environment $twig, private TemplateResolver $templateResolver, private ShortcodeStore $shortcodeStore, private ShortcodeProcessor $shortcodeProcessor, private ParserInterface $shortcodeParser, private TagAwareCacheInterface $cache)
+    {
     }
 
     /**
-     * @param string $text
-     * @return string
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws LoaderError
@@ -82,8 +58,6 @@ class ShortcodeRenderer
     }
 
     /**
-     * @param ParsedShortcodeInterface $parsedShortcode
-     * @return string
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws LoaderError
@@ -94,7 +68,7 @@ class ShortcodeRenderer
     {
         try {
             $shortcode = $this->shortcodeStore->getShortcode($parsedShortcode->getName());
-        } catch (InvalidShortcodeException $exception) {
+        } catch (InvalidShortcodeException) {
             return $parsedShortcode->getText();
         }
 
@@ -130,7 +104,7 @@ class ShortcodeRenderer
 
         $template = $this->twig->createTemplate(sprintf(
             '{%% apply spaceless %%}%s{%% endapply %%}',
-            strpos($template->getTemplateName(), 'string template') === false
+            !str_contains($template->getTemplateName(), 'string template')
                 ? file_get_contents($template->getSourceContext()->getPath())
                 : $template->getSourceContext()->getCode(),
         ));

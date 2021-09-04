@@ -24,17 +24,13 @@ use Symfony\Component\HttpFoundation\RequestStack;
 abstract class AbstractTermController extends AbstractController implements AdminController
 {
     private ?Request $request;
-    private EntityManagerInterface $entityManager;
-    private ResponseFactory $responseFactory;
 
     public function __construct(
         RequestStack $requestStack,
-        EntityManagerInterface $entityManager,
-        ResponseFactory $responseFactory
+        private EntityManagerInterface $entityManager,
+        private ResponseFactory $responseFactory
     ) {
         $this->request = $requestStack->getCurrentRequest();
-        $this->entityManager = $entityManager;
-        $this->responseFactory = $responseFactory;
     }
 
     protected function handle(Term $term): JsonResponse
