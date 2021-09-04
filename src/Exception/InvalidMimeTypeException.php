@@ -17,10 +17,6 @@ use NumberNine\Model\Customizer\Control\ControlInterface;
 
 final class InvalidMimeTypeException extends Exception
 {
-    /**
-     * @param MediaFile $mediaFile
-     * @param string $expectedMimeType
-     */
     public function __construct(MediaFile $mediaFile, string $expectedMimeType)
     {
         parent::__construct(sprintf(

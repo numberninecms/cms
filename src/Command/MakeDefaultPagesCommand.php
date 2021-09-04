@@ -34,25 +34,14 @@ final class MakeDefaultPagesCommand extends Command
 {
     protected static $defaultName = 'numbernine:make:default-pages';
 
-    private EntityManagerInterface $entityManager;
-    private UserRepository $userRepository;
-    private ConfigurationReadWriter $configurationReadWriter;
-    private Environment $twig;
-    private SluggerInterface $slugger;
-
     public function __construct(
-        EntityManagerInterface $entityManager,
-        UserRepository $userRepository,
-        ConfigurationReadWriter $configurationReadWriter,
-        Environment $twig,
-        SluggerInterface $slugger
+        private EntityManagerInterface $entityManager,
+        private UserRepository $userRepository,
+        private ConfigurationReadWriter $configurationReadWriter,
+        private Environment $twig,
+        private SluggerInterface $slugger
     ) {
         parent::__construct();
-        $this->entityManager = $entityManager;
-        $this->userRepository = $userRepository;
-        $this->configurationReadWriter = $configurationReadWriter;
-        $this->twig = $twig;
-        $this->slugger = $slugger;
     }
 
     protected function configure(): void

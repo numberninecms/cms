@@ -104,7 +104,7 @@ final class ContentEntityRevertAction extends AbstractController implements Admi
             ->setParameters(
                 [
                     'id' => $entity->getId(),
-                    'className' => $entityManager->getClassMetadata(get_class($entity))->name,
+                    'className' => $entityManager->getClassMetadata($entity::class)->name,
                     'version' => $version
                 ]
             )

@@ -17,10 +17,6 @@ use NumberNine\Model\Customizer\Control\ControlInterface;
 
 final class InvalidImageSizeException extends Exception
 {
-    /**
-     * @param MediaFile $mediaFile
-     * @param string $size
-     */
     public function __construct(MediaFile $mediaFile, string $size)
     {
         parent::__construct(sprintf(

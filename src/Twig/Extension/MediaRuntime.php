@@ -28,12 +28,10 @@ use function NumberNine\Common\Util\ConfigUtil\get_file_upload_max_size;
 final class MediaRuntime implements RuntimeExtensionInterface
 {
     private ?Request $request;
-    private EntityManagerInterface $entityManager;
 
-    public function __construct(RequestStack $requestStack, EntityManagerInterface $entityManager)
+    public function __construct(RequestStack $requestStack, private EntityManagerInterface $entityManager)
     {
         $this->request = $requestStack->getMainRequest();
-        $this->entityManager = $entityManager;
     }
 
     /**
@@ -45,12 +43,12 @@ final class MediaRuntime implements RuntimeExtensionInterface
         string $size = 'large',
         array $attributes = []
     ): string {
-        $repository = $this->entityManager->getRepository(\get_class($contentEntity));
+        $repository = $this->entityManager->getRepository($contentEntity::class);
 
         if (!method_exists($repository, 'findFeaturedImage')) {
             throw new RuntimeError(sprintf(
                 "Entity of type %s doesn't support featured images.",
-                \get_class($contentEntity)
+                $contentEntity::class
             ));
         }
 

@@ -21,19 +21,12 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class ThemeEventDispatcher
 {
-    private EventDispatcherInterface $eventDispatcher;
-    private ThemeStore $themeStore;
-
-    public function __construct(EventDispatcherInterface $eventDispatcher, ThemeStore $themeStore)
+    public function __construct(private EventDispatcherInterface $eventDispatcher, private ThemeStore $themeStore)
     {
-        $this->eventDispatcher = $eventDispatcher;
-        $this->themeStore = $themeStore;
     }
 
     /**
-     * @param string $eventName
      * @param mixed|null $value
-     * @return object
      */
     public function dispatch(string $eventName, $value = null): object
     {
@@ -47,10 +40,7 @@ final class ThemeEventDispatcher
     }
 
     /**
-     * @param ThemeInterface $theme
-     * @param string $eventName
      * @param mixed|null $value
-     * @return ThemeEventInterface|null
      */
     private function getThemeEvent(ThemeInterface $theme, string $eventName, $value = null): ?ThemeEventInterface
     {
@@ -68,7 +58,7 @@ final class ThemeEventDispatcher
                 $reflect = new ReflectionClass($class);
 
                 // Only parse the theme's own namespace
-                if (strpos($reflect->getNamespaceName(), $reflectTheme->getNamespaceName()) === false) {
+                if (!str_contains($reflect->getNamespaceName(), $reflectTheme->getNamespaceName())) {
                     continue;
                 }
 
@@ -84,7 +74,7 @@ final class ThemeEventDispatcher
                     }
                 }
             }
-        } catch (ReflectionException $e) {
+        } catch (ReflectionException) {
         }
 
         return $event;

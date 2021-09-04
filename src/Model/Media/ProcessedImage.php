@@ -15,9 +15,6 @@ use Imagine\Image\ImageInterface;
 
 final class ProcessedImage
 {
-    /** @var ImageInterface */
-    private $image;
-
     /** @var array */
     private $sizes;
 
@@ -26,35 +23,23 @@ final class ProcessedImage
 
     /**
      * ProcessedImage constructor.
-     * @param ImageInterface $image
-     * @param array $sizes
      */
-    public function __construct(ImageInterface $image, array $sizes, array $exif)
+    public function __construct(private ImageInterface $image, array $sizes, array $exif)
     {
-        $this->image = $image;
         $this->sizes = $sizes;
         $this->exif = $exif;
     }
 
-    /**
-     * @return ImageInterface
-     */
     public function getImage(): ImageInterface
     {
         return $this->image;
     }
 
-    /**
-     * @return array
-     */
     public function getSizes(): array
     {
         return $this->sizes;
     }
 
-    /**
-     * @return array
-     */
     public function getExif(): array
     {
         return $this->exif;

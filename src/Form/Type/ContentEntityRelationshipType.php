@@ -26,12 +26,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class ContentEntityRelationshipType extends AbstractType
 {
-    private ContentEntityRelationshipRepository $contentEntityRelationshipRepository;
-
-    public function __construct(
-        ContentEntityRelationshipRepository $contentEntityRelationshipRepository
-    ) {
-        $this->contentEntityRelationshipRepository = $contentEntityRelationshipRepository;
+    public function __construct(private ContentEntityRelationshipRepository $contentEntityRelationshipRepository)
+    {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void

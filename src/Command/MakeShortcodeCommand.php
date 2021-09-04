@@ -27,14 +27,9 @@ final class MakeShortcodeCommand extends Command
 {
     protected static $defaultName = 'numbernine:make:shortcode';
 
-    private string $shortcodesPath;
-    private string $projectPath;
-
-    public function __construct(string $shortcodesPath, string $projectPath)
+    public function __construct(private string $shortcodesPath, private string $projectPath)
     {
         parent::__construct();
-        $this->shortcodesPath = $shortcodesPath;
-        $this->projectPath = $projectPath;
     }
 
     protected function configure(): void

@@ -23,14 +23,9 @@ final class MakeComponentCommand extends Command
 {
     protected static $defaultName = 'numbernine:make:component';
 
-    private string $componentsPath;
-    private string $projectPath;
-
-    public function __construct(string $componentsPath, string $projectPath)
+    public function __construct(private string $componentsPath, private string $projectPath)
     {
         parent::__construct();
-        $this->componentsPath = $componentsPath;
-        $this->projectPath = $projectPath;
     }
 
     protected function configure(): void

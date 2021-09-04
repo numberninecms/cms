@@ -22,12 +22,9 @@ use function Symfony\Component\String\u;
 
 final class ThemeMetadataFactory extends AbstractMetadataFactory
 {
-    private SluggerInterface $slugger;
-
-    public function __construct(ExtendedReader $annotationReader, SluggerInterface $slugger)
+    public function __construct(ExtendedReader $annotationReader, private SluggerInterface $slugger)
     {
         parent::__construct($annotationReader);
-        $this->slugger = $slugger;
     }
 
     public function getThemeDescriptor(ThemeInterface $theme): ThemeDescriptor

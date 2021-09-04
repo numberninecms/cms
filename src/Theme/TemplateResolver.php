@@ -35,30 +35,8 @@ use function Symfony\Component\String\u;
 
 final class TemplateResolver implements TemplateResolverInterface
 {
-    private Environment $twig;
-    private ThemeStore $themeStore;
-    private ContentService $contentService;
-    private TagAwareCacheInterface $cache;
-    private SluggerInterface $slugger;
-    private array $bundles;
-    private string $templatePath;
-
-    public function __construct(
-        Environment $twig,
-        ThemeStore $themeStore,
-        ContentService $contentService,
-        TagAwareCacheInterface $cache,
-        SluggerInterface $slugger,
-        array $bundles,
-        string $templatePath
-    ) {
-        $this->twig = $twig;
-        $this->themeStore = $themeStore;
-        $this->contentService = $contentService;
-        $this->cache = $cache;
-        $this->slugger = $slugger;
-        $this->bundles = $bundles;
-        $this->templatePath = $templatePath;
+    public function __construct(private Environment $twig, private ThemeStore $themeStore, private ContentService $contentService, private TagAwareCacheInterface $cache, private SluggerInterface $slugger, private array $bundles, private string $templatePath)
+    {
     }
 
     public function resolveSingle(ContentEntity $entity, array $extraTemplates = []): TemplateWrapper
@@ -134,9 +112,6 @@ final class TemplateResolver implements TemplateResolverInterface
     }
 
     /**
-     * @param string $customType
-     * @param array $extraTemplates
-     * @return string
      * @throws LoaderError
      * @throws SyntaxError
      */
@@ -201,7 +176,7 @@ final class TemplateResolver implements TemplateResolverInterface
 
     public function resolveComponent(ComponentInterface $component): string
     {
-        return $this->cache->get($this->slugger->slug(\get_class($component)), function () use ($component) {
+        return $this->cache->get($this->slugger->slug($component::class), function () use ($component) {
             $templates = $this->getComponentTemplatesCandidates($component);
             return $this->twig->resolveTemplate($templates)->getTemplateName();
         });
@@ -217,8 +192,6 @@ final class TemplateResolver implements TemplateResolverInterface
     }
 
     /**
-     * @param ShortcodeInterface $shortcode
-     * @return TemplateWrapper
      * @throws LoaderError
      * @throws SyntaxError
      */
@@ -228,9 +201,6 @@ final class TemplateResolver implements TemplateResolverInterface
     }
 
     /**
-     * @param ShortcodeInterface $shortcode
-     * @param string $type
-     * @return TemplateWrapper
      * @throws SyntaxError
      */
     private function resolveShortcodeTemplate(ShortcodeInterface $shortcode, string $type): TemplateWrapper
@@ -239,7 +209,7 @@ final class TemplateResolver implements TemplateResolverInterface
 
         try {
             return $this->twig->resolveTemplate($templates);
-        } catch (LoaderError $e) {
+        } catch (LoaderError) {
             return $this->twig->createTemplate(
                 '<div>Missing template</div>',
                 'missing_template',
@@ -248,7 +218,6 @@ final class TemplateResolver implements TemplateResolverInterface
     }
 
     /**
-     * @return string
      * @throws LoaderError
      * @throws SyntaxError
      */
@@ -258,8 +227,6 @@ final class TemplateResolver implements TemplateResolverInterface
     }
 
     /**
-     * @param string $path
-     * @return TemplateWrapper
      * @throws LoaderError
      * @throws SyntaxError
      */
@@ -422,7 +389,7 @@ final class TemplateResolver implements TemplateResolverInterface
                     '%s index page',
                     u($contentType->getLabels()->getPluralName())->title(),
                 );
-            } catch (ContentTypeNotFoundException $e) {
+            } catch (ContentTypeNotFoundException) {
             }
         }
 

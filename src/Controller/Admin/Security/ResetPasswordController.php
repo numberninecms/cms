@@ -35,18 +35,8 @@ final class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
 
-    private ResetPasswordHelperInterface $resetPasswordHelper;
-    private TemplateResolverInterface $templateResolver;
-    private AddressFactory $addressFactory;
-
-    public function __construct(
-        ResetPasswordHelperInterface $resetPasswordHelper,
-        TemplateResolverInterface $templateResolver,
-        AddressFactory $addressFactory
-    ) {
-        $this->resetPasswordHelper = $resetPasswordHelper;
-        $this->templateResolver = $templateResolver;
-        $this->addressFactory = $addressFactory;
+    public function __construct(private ResetPasswordHelperInterface $resetPasswordHelper, private TemplateResolverInterface $templateResolver, private AddressFactory $addressFactory)
+    {
     }
 
     /**
@@ -173,7 +163,7 @@ final class ResetPasswordController extends AbstractController
 
         try {
             $resetToken = $this->resetPasswordHelper->generateResetToken($user);
-        } catch (ResetPasswordExceptionInterface $e) {
+        } catch (ResetPasswordExceptionInterface) {
             // If you want to tell the user why a reset email was not sent, uncomment
             // the lines below and change the redirect to 'app_forgot_password_request'.
             // Caution: This may reveal if a user is registered or not.

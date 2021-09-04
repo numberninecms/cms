@@ -16,21 +16,13 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 final class AdminMenuEvent extends Event
 {
-    /** @var AdminMenuBuilder */
-    private $builder;
-
     /**
      * AdminMenuEvent constructor.
-     * @param AdminMenuBuilder $builder
      */
-    public function __construct(AdminMenuBuilder $builder)
+    public function __construct(private AdminMenuBuilder $builder)
     {
-        $this->builder = $builder;
     }
 
-    /**
-     * @return AdminMenuBuilder
-     */
     public function getBuilder(): AdminMenuBuilder
     {
         return $this->builder;

@@ -16,16 +16,13 @@ use NumberNine\Theme\ThemeStore;
 
 final class ComponentStore
 {
-    private ThemeStore $themeStore;
     private string $appComponentsNamespace;
 
     /** @var ComponentInterface[] */
     private array $components = [];
 
-    public function __construct(ThemeStore $themeStore, string $projectPath, string $componentsPath)
+    public function __construct(private ThemeStore $themeStore, string $projectPath, string $componentsPath)
     {
-        $this->themeStore = $themeStore;
-
         $this->appComponentsNamespace = trim('App\\' . str_replace(
             [$projectPath . '/src/', '//', '/'],
             ['', '/', '\\'],
@@ -35,7 +32,7 @@ final class ComponentStore
 
     public function addComponent(ComponentInterface $component): void
     {
-        $this->components[get_class($component)] = $component;
+        $this->components[$component::class] = $component;
     }
 
     public function getComponent(string $componentName): ?ComponentInterface

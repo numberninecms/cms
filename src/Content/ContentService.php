@@ -42,35 +42,14 @@ use function Symfony\Component\String\u;
 
 final class ContentService
 {
-    private EntityManagerInterface $entityManager;
-    private FormFactoryInterface $formFactory;
-    private Reader $annotationReader;
-    private TokenStorageInterface $tokenStorage;
-    private EventDispatcherInterface $eventDispatcher;
-    private SluggerInterface $slugger;
-
     /** @var ContentType[] */
     private array $contentTypes = [];
 
-    public function __construct(
-        EntityManagerInterface $entityManager,
-        FormFactoryInterface $formFactory,
-        Reader $annotationReader,
-        TokenStorageInterface $tokenStorage,
-        EventDispatcherInterface $eventDispatcher,
-        SluggerInterface $slugger
-    ) {
-        $this->entityManager = $entityManager;
-        $this->formFactory = $formFactory;
-        $this->annotationReader = $annotationReader;
-        $this->tokenStorage = $tokenStorage;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->slugger = $slugger;
+    public function __construct(private EntityManagerInterface $entityManager, private FormFactoryInterface $formFactory, private Reader $annotationReader, private TokenStorageInterface $tokenStorage, private EventDispatcherInterface $eventDispatcher, private SluggerInterface $slugger)
+    {
     }
 
     /**
-     * @param string $contentType
-     * @return ContentType
      * @throws ContentTypeNotFoundException
      */
     public function getContentType(string $contentType): ContentType
@@ -96,9 +75,6 @@ final class ContentService
         return $this->contentTypes;
     }
 
-    /**
-     * @param array $contentTypes
-     */
     public function setContentTypes(array $contentTypes): void
     {
         $this->contentTypes = $contentTypes;
@@ -106,13 +82,11 @@ final class ContentService
 
     /**
      * @param ContentType|string $contentType Either the ContentType object, or the content type name as registered
-     * @param PaginationParameters $paginationParameters
      * @param Criteria|null $criteria
-     * @return Paginator
      * @throws QueryException
      */
     public function getEntitiesOfType(
-        $contentType,
+        \NumberNine\Model\Content\ContentType|string $contentType,
         PaginationParameters $paginationParameters,
         Criteria $criteria = null
     ): Paginator {
@@ -149,9 +123,7 @@ final class ContentService
      * At the moment it queries only the first content type of the array.
      *
      * @param ContentType[] $contentTypes
-     * @param PaginationParameters $paginationParameters
      * @param Criteria|null $criteria
-     * @return Paginator
      */
     public function getEntitiesOfMultipleTypes(
         array $contentTypes,
@@ -168,10 +140,9 @@ final class ContentService
 
     /**
      * @param ContentType|string $contentType Either the ContentType object or the content type name as registered
-     * @param int $id
      * @return ContentEntity|object|null
      */
-    public function getEntityOfType($contentType, int $id): ?object
+    public function getEntityOfType(\NumberNine\Model\Content\ContentType|string $contentType, int $id): ?object
     {
         if (is_string($contentType)) {
             $contentType = $this->getContentType($contentType);
@@ -189,7 +160,7 @@ final class ContentService
      * @param array $criteria Associative array representing the fields to search
      * @return ContentEntity|object|null
      */
-    public function getEntityOfTypeBy($contentType, array $criteria): ?object
+    public function getEntityOfTypeBy(\NumberNine\Model\Content\ContentType|string $contentType, array $criteria): ?object
     {
         if (is_string($contentType)) {
             $contentType = $this->getContentType($contentType);
@@ -203,11 +174,9 @@ final class ContentService
     }
 
     /**
-     * @param string|ContentType $contentType
-     * @param array $ids
      * @throws ORMException
      */
-    public function deleteEntitiesOfType($contentType, array $ids): void
+    public function deleteEntitiesOfType(string|\NumberNine\Model\Content\ContentType $contentType, array $ids): void
     {
         if (is_string($contentType)) {
             $contentType = $this->getContentType($contentType);
@@ -224,10 +193,9 @@ final class ContentService
     }
 
     /**
-     * @param string|ContentType $contentType
      * @throws ORMException
      */
-    public function deletePermanentlyAllEntitiesOfType($contentType): void
+    public function deletePermanentlyAllEntitiesOfType(string|\NumberNine\Model\Content\ContentType $contentType): void
     {
         if (is_string($contentType)) {
             $contentType = $this->getContentType($contentType);
@@ -243,11 +211,7 @@ final class ContentService
         $this->entityManager->flush();
     }
 
-    /**
-     * @param string|ContentType $contentType
-     * @param array $ids
-     */
-    public function restoreEntitiesOfType($contentType, array $ids): void
+    public function restoreEntitiesOfType(string|\NumberNine\Model\Content\ContentType $contentType, array $ids): void
     {
         if (is_string($contentType)) {
             $contentType = $this->getContentType($contentType);
@@ -263,16 +227,11 @@ final class ContentService
         $this->entityManager->flush();
     }
 
-    /**
-     * @param ContentType $contentType
-     * @param array $options
-     * @return FormInterface
-     */
     public function getFormTypeNewForType(ContentType $contentType, array $options = []): FormInterface
     {
         try {
             $entityReflection = new ReflectionClass($contentType->getEntityClassName());
-        } catch (ReflectionException $e) {
+        } catch (ReflectionException) {
             throw new InvalidContentTypeException($contentType);
         }
 
@@ -290,12 +249,6 @@ final class ContentService
         return $this->formFactory->create($formType->new, $entity, $options);
     }
 
-    /**
-     * @param ContentType $contentType
-     * @param ContentEntity $entity
-     * @param array $options
-     * @return FormInterface
-     */
     public function getFormTypeEditForType(
         ContentType $contentType,
         ContentEntity $entity,
@@ -303,7 +256,7 @@ final class ContentService
     ): FormInterface {
         try {
             $entityReflection = new ReflectionClass($contentType->getEntityClassName());
-        } catch (ReflectionException $e) {
+        } catch (ReflectionException) {
             throw new InvalidContentTypeException($contentType);
         }
 
@@ -315,10 +268,6 @@ final class ContentService
         return $this->formFactory->create($formType->edit, $entity, $options);
     }
 
-    /**
-     * @param FormType|null $formType
-     * @param ContentType $contentType
-     */
     private function validateFormTypeAnnotation(?FormType $formType, ContentType $contentType): void
     {
         if (!$formType) {
@@ -329,7 +278,7 @@ final class ContentService
 
         try {
             new ReflectionClass($formType->new);
-        } catch (ReflectionException $e) {
+        } catch (ReflectionException) {
             throw new LogicException(sprintf(
                 'Class %s doesn\'t exist in @FormType annotation with parameter "new" for class %s.',
                 $formType->new,
@@ -339,7 +288,7 @@ final class ContentService
 
         try {
             new ReflectionClass($formType->edit);
-        } catch (ReflectionException $e) {
+        } catch (ReflectionException) {
             throw new LogicException(sprintf(
                 'Class %s doesn\'t exist in @FormType annotation with parameter "edit" for class %s.',
                 $formType->edit,

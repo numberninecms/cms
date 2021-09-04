@@ -18,13 +18,8 @@ use NumberNine\Repository\ThemeOptionsRepository;
 
 final class ThemeOptionsReadWriter
 {
-    private EntityManagerInterface $entityManager;
-    private ThemeOptionsRepository $themeOptionsRepository;
-
-    public function __construct(EntityManagerInterface $entityManager, ThemeOptionsRepository $themeOptionsRepository)
+    public function __construct(private EntityManagerInterface $entityManager, private ThemeOptionsRepository $themeOptionsRepository)
     {
-        $this->entityManager = $entityManager;
-        $this->themeOptionsRepository = $themeOptionsRepository;
     }
 
     public function readAll(ThemeInterface $theme, bool $draft = false, bool $merged = false): array
@@ -71,11 +66,7 @@ final class ThemeOptionsReadWriter
     }
 
     /**
-     * @param ThemeInterface $theme
-     * @param string $optionName
      * @param mixed $default
-     * @param bool $draft
-     * @param bool $merged
      * @return mixed
      */
     public function read(
@@ -89,12 +80,7 @@ final class ThemeOptionsReadWriter
     }
 
     /**
-     * @param ThemeInterface $theme
-     * @param string $option
      * @param mixed $value
-     * @param bool $draft
-     * @param bool $flush
-     * @param bool $overwrite
      */
     public function write(
         ThemeInterface $theme,

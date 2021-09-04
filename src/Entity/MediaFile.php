@@ -273,16 +273,15 @@ class MediaFile extends ContentEntity
 
     public function isImage(): bool
     {
-        return strpos((string)$this->getMimeType(), 'image/') === 0;
+        return str_starts_with((string)$this->getMimeType(), 'image/');
     }
 
     public function isVideo(): bool
     {
-        return strpos((string)$this->getMimeType(), 'video/') === 0;
+        return str_starts_with((string)$this->getMimeType(), 'video/');
     }
 
     /**
-     * @param string $size
      * @return array|null Associative array with the following keys: width, height, filename, mime_type
      */
     public function getSize(string $size): ?array

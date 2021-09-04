@@ -13,13 +13,8 @@ namespace NumberNine\Model\Theme;
 
 final class ThemeWrapper
 {
-    private ThemeDescriptor $descriptor;
-    private ThemeInterface $theme;
-
-    public function __construct(ThemeDescriptor $descriptor, ThemeInterface $theme)
+    public function __construct(private ThemeDescriptor $descriptor, private ThemeInterface $theme)
     {
-        $this->descriptor = $descriptor;
-        $this->theme = $theme;
     }
 
     public function getDescriptor(): ThemeDescriptor

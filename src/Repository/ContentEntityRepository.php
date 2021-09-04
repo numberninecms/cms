@@ -39,8 +39,6 @@ final class ContentEntityRepository extends AbstractContentEntityRepository
     }
 
     /**
-     * @param ContentEntity $contentEntity
-     * @param string $customType
      * @return ContentEntity[]
      */
     public function findChildrenContentEntitiesOfType(ContentEntity $contentEntity, string $customType): array

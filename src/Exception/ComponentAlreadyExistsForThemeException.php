@@ -19,14 +19,12 @@ final class ComponentAlreadyExistsForThemeException extends Exception
 {
     /**
      * ComponentAlreadyExistsForThemeException constructor.
-     * @param ThemeInterface $theme
-     * @param ComponentInterface $component
      */
     public function __construct(ThemeInterface $theme, ComponentInterface $component)
     {
         parent::__construct(sprintf(
             'Component "%s" is already registered for theme "%s" which is theoretically impossible.',
-            get_class($component),
+            $component::class,
             $theme->getName()
         ));
     }

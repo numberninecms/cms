@@ -1,12 +1,12 @@
 grumphp:
     tasks:
-        phpstan: ~
+#        phpstan: ~
         twigcs:
             path: './src/'
-        phpcs:
-            standard: PSR12
-            ignore_patterns:
-                - './src/Bundle/Resources/public/*'
+#        phpcs:
+#            standard: PSR12
+#            ignore_patterns:
+#                - './src/Bundle/Resources/public/*'
         composer:
             no_check_lock: true
             no_local_repository: true

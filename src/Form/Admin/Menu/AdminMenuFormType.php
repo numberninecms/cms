@@ -23,11 +23,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class AdminMenuFormType extends AbstractType
 {
-    private SerializerTransformer $serializerTransformer;
-
-    public function __construct(SerializerTransformer $serializerTransformer)
+    public function __construct(private SerializerTransformer $serializerTransformer)
     {
-        $this->serializerTransformer = $serializerTransformer;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void

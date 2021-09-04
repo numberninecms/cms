@@ -30,11 +30,8 @@ use function NumberNine\Common\Util\ArrayUtil\array_set_if_value_exists;
  */
 final class ImageShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
-    private MediaFileRepository $mediaFileRepository;
-
-    public function __construct(MediaFileRepository $mediaFileRepository)
+    public function __construct(private MediaFileRepository $mediaFileRepository)
     {
-        $this->mediaFileRepository = $mediaFileRepository;
     }
 
     public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void

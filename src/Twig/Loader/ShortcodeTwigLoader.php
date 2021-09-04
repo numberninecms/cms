@@ -18,9 +18,6 @@ use Twig\Loader\FilesystemLoader;
 
 final class ShortcodeTwigLoader extends FilesystemLoader implements EventSubscriberInterface
 {
-    private ThemeStore $themeStore;
-    private string $shortcodesPath;
-
     public static function getSubscribedEvents(): array
     {
         return [
@@ -28,11 +25,9 @@ final class ShortcodeTwigLoader extends FilesystemLoader implements EventSubscri
         ];
     }
 
-    public function __construct(ThemeStore $themeStore, string $shortcodesPath)
+    public function __construct(private ThemeStore $themeStore, private string $shortcodesPath)
     {
         parent::__construct();
-        $this->themeStore = $themeStore;
-        $this->shortcodesPath = $shortcodesPath;
     }
 
     public function load(): void

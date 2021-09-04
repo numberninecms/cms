@@ -19,15 +19,10 @@ use RuntimeException;
 abstract class BaseFixture extends Fixture
 {
     private ObjectManager $manager;
-    private ContentService $contentService;
     private array $referencesIndex = [];
 
-    /**
-     * @param ContentService $contentService
-     */
-    public function __construct(ContentService $contentService)
+    public function __construct(private ContentService $contentService)
     {
-        $this->contentService = $contentService;
     }
 
     abstract protected function loadData(ObjectManager $manager): void;
@@ -67,8 +62,6 @@ abstract class BaseFixture extends Fixture
     }
 
     /**
-     * @param string $className
-     * @param array $excludedReferences
      * @return mixed
      */
     protected function getRandomReference(string $className, array $excludedReferences = [])
@@ -77,7 +70,7 @@ abstract class BaseFixture extends Fixture
             $this->referencesIndex[$className] = [];
 
             foreach ($this->referenceRepository->getReferences() as $key => $ref) {
-                if (strpos($key, $className . '_') === 0) {
+                if (str_starts_with($key, $className . '_')) {
                     $this->referencesIndex[$className][] = $key;
                 }
             }

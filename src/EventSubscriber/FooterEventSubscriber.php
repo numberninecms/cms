@@ -20,16 +20,10 @@ use Symfony\Component\HttpKernel\Profiler\Profiler;
 final class FooterEventSubscriber implements EventSubscriberInterface
 {
     private ?Request $request;
-    private ?Profiler $profiler;
 
-    /**
-     * @param RequestStack $requestStack
-     * @param Profiler|null $profiler
-     */
-    public function __construct(RequestStack $requestStack, ?Profiler $profiler)
+    public function __construct(RequestStack $requestStack, private ?\Symfony\Component\HttpKernel\Profiler\Profiler $profiler)
     {
         $this->request = $requestStack->getCurrentRequest();
-        $this->profiler = $profiler;
     }
 
     public static function getSubscribedEvents(): array

@@ -17,13 +17,8 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 final class UpdateContentEntityEvent extends Event
 {
-    private ContentEntity $entity;
-    private Request $request;
-
-    public function __construct(ContentEntity $entity, Request $request)
+    public function __construct(private ContentEntity $entity, private Request $request)
     {
-        $this->entity = $entity;
-        $this->request = $request;
     }
 
     public function getEntity(): ContentEntity

@@ -22,7 +22,6 @@ final class ExistingContentTypeException extends LogicException
 {
     /**
      * ExistingContentTypeException constructor.
-     * @param ContentType $contentType
      */
     public function __construct(ContentType $contentType)
     {

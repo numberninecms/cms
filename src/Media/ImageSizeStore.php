@@ -15,17 +15,11 @@ final class ImageSizeStore
 {
     private array $imageSizes = [];
 
-    /**
-     * @return array
-     */
     public function getImageSizes(): array
     {
         return $this->imageSizes;
     }
 
-    /**
-     * @param array $imageSizes
-     */
     public function setImageSizes(array $imageSizes): void
     {
         $this->imageSizes = $imageSizes;

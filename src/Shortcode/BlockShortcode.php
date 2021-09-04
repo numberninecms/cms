@@ -24,11 +24,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class BlockShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
-    private ContentEntityRenderer $contentEntityRenderer;
-
-    public function __construct(ContentEntityRenderer $contentEntityRenderer)
+    public function __construct(private ContentEntityRenderer $contentEntityRenderer)
     {
-        $this->contentEntityRenderer = $contentEntityRenderer;
     }
 
     public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void

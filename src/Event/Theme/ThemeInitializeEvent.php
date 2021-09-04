@@ -16,30 +16,18 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 final class ThemeInitializeEvent extends Event
 {
-    /** @var ThemeInterface */
-    private $theme;
-
     /**
      * ThemeInitializeEvent constructor.
-     * @param ThemeInterface $theme
      */
-    public function __construct(ThemeInterface $theme)
+    public function __construct(private ThemeInterface $theme)
     {
-        $this->theme = $theme;
     }
 
-    /**
-     * @return ThemeInterface
-     */
     public function getTheme(): ThemeInterface
     {
         return $this->theme;
     }
 
-    /**
-     * @param ThemeInterface $theme
-     * @return ThemeInitializeEvent
-     */
     public function setTheme(ThemeInterface $theme): self
     {
         $this->theme = $theme;

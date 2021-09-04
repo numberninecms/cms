@@ -25,33 +25,11 @@ use function Symfony\Component\String\u;
 
 final class ComponentRenderer
 {
-    private Environment $twig;
-    private TemplateResolver $templateResolver;
-    private ComponentStore $componentStore;
-    private AuthorizationCheckerInterface $authorizationChecker;
-    private TagAwareCacheInterface $cache;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(
-        Environment $twig,
-        TemplateResolver $templateResolver,
-        ComponentStore $componentStore,
-        AuthorizationCheckerInterface $authorizationChecker,
-        TagAwareCacheInterface $cache,
-        EventDispatcherInterface $eventDispatcher
-    ) {
-        $this->twig = $twig;
-        $this->templateResolver = $templateResolver;
-        $this->componentStore = $componentStore;
-        $this->authorizationChecker = $authorizationChecker;
-        $this->cache = $cache;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(private Environment $twig, private TemplateResolver $templateResolver, private ComponentStore $componentStore, private AuthorizationCheckerInterface $authorizationChecker, private TagAwareCacheInterface $cache, private EventDispatcherInterface $eventDispatcher)
+    {
     }
 
     /**
-     * @param string $componentName
-     * @param array $args
-     * @return string
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError

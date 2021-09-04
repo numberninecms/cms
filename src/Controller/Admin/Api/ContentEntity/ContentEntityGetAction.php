@@ -31,10 +31,6 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
 final class ContentEntityGetAction
 {
     /**
-     * @param Request $request
-     * @param ResponseFactory $responseFactory
-     * @param ContentEntity $entity
-     * @return JsonResponse
      * @throws ExceptionInterface
      * @throws ReflectionException
      */

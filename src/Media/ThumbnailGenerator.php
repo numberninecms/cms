@@ -20,37 +20,12 @@ use Symfony\Component\Finder\Finder;
 
 final class ThumbnailGenerator
 {
-    private EntityManagerInterface $entityManager;
-    private MediaFileRepository $mediaFileRepository;
-    private ImageProcessor $imageProcessor;
-    private ImageSizeStore $imageSizeStore;
     private ?SymfonyStyle $io = null;
-    private string $publicPath;
 
-    /**
-     * @param EntityManagerInterface $entityManager
-     * @param MediaFileRepository $mediaFileRepository
-     * @param ImageProcessor $imageProcessor
-     * @param ImageSizeStore $imageSizeStore
-     * @param string $publicPath
-     */
-    public function __construct(
-        EntityManagerInterface $entityManager,
-        MediaFileRepository $mediaFileRepository,
-        ImageProcessor $imageProcessor,
-        ImageSizeStore $imageSizeStore,
-        string $publicPath
-    ) {
-        $this->entityManager = $entityManager;
-        $this->imageProcessor = $imageProcessor;
-        $this->publicPath = $publicPath;
-        $this->imageSizeStore = $imageSizeStore;
-        $this->mediaFileRepository = $mediaFileRepository;
+    public function __construct(private EntityManagerInterface $entityManager, private MediaFileRepository $mediaFileRepository, private ImageProcessor $imageProcessor, private ImageSizeStore $imageSizeStore, private string $publicPath)
+    {
     }
 
-    /**
-     * @param SymfonyStyle $symfonyStyle
-     */
     public function setIo(SymfonyStyle $symfonyStyle): void
     {
         $this->io = $symfonyStyle;

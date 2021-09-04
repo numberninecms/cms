@@ -16,12 +16,10 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 final class ComponentProcessParametersEvent extends Event
 {
-    private ComponentInterface $component;
     private array $parameters;
 
-    public function __construct(ComponentInterface $component, array $parameters)
+    public function __construct(private ComponentInterface $component, array $parameters)
     {
-        $this->component = $component;
         $this->parameters = $parameters;
     }
 

@@ -78,10 +78,7 @@ final class RequestEventSubscriber implements EventSubscriberInterface, ServiceS
         ];
     }
 
-    /**
-     * @param RequestEvent|ConsoleCommandEvent $event
-     */
-    public function registerContentTypes($event): void
+    public function registerContentTypes(\Symfony\Component\HttpKernel\Event\RequestEvent|\Symfony\Component\Console\Event\ConsoleCommandEvent $event): void
     {
         if (
             ($event instanceof ConsoleCommandEvent)
@@ -97,10 +94,7 @@ final class RequestEventSubscriber implements EventSubscriberInterface, ServiceS
         $this->contentService()->setContentTypes($contentTypeRegistrationEvent->getContentTypes());
     }
 
-    /**
-     * @param RequestEvent|ConsoleCommandEvent $event
-     */
-    public function registerImageSizes($event): void
+    public function registerImageSizes(\Symfony\Component\HttpKernel\Event\RequestEvent|\Symfony\Component\Console\Event\ConsoleCommandEvent $event): void
     {
         if (
             ($event instanceof ConsoleCommandEvent)
@@ -118,9 +112,8 @@ final class RequestEventSubscriber implements EventSubscriberInterface, ServiceS
 
     /**
      * Registers dynamic routes
-     * @param RequestEvent|ConsoleCommandEvent $event
      */
-    public function registerRoutes($event): void
+    public function registerRoutes(\Symfony\Component\HttpKernel\Event\RequestEvent|\Symfony\Component\Console\Event\ConsoleCommandEvent $event): void
     {
         if (
             ($event instanceof ConsoleCommandEvent)
@@ -141,9 +134,8 @@ final class RequestEventSubscriber implements EventSubscriberInterface, ServiceS
 
     /**
      * Registers areas
-     * @param RequestEvent|ConsoleCommandEvent $event
      */
-    public function registerAreas($event): void
+    public function registerAreas(\Symfony\Component\HttpKernel\Event\RequestEvent|\Symfony\Component\Console\Event\ConsoleCommandEvent $event): void
     {
         if (
             ($event instanceof ConsoleCommandEvent)

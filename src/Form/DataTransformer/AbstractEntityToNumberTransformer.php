@@ -19,27 +19,21 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 abstract class AbstractEntityToNumberTransformer implements DataTransformerInterface
 {
-    private EntityManagerInterface $entityManager;
-    private string $className;
-
-    public function __construct(EntityManagerInterface $entityManager, string $className)
+    public function __construct(private EntityManagerInterface $entityManager, private string $className)
     {
-        $this->entityManager = $entityManager;
-        $this->className = $className;
     }
 
     /**
      * @param mixed $value
-     * @return int|string
      */
-    public function transform($value)
+    public function transform($value): int|string
     {
         if ($value === null || !is_object($value)) {
             return '';
         }
 
         if (!method_exists($value, 'getId')) {
-            throw new InvalidArgumentException(sprintf("Method getId() doesn't exist on class %s", get_class($value)));
+            throw new InvalidArgumentException(sprintf("Method getId() doesn't exist on class %s", $value::class));
         }
 
         return $value->getId();

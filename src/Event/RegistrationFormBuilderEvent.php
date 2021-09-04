@@ -18,11 +18,8 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 final class RegistrationFormBuilderEvent extends Event
 {
-    private FormBuilderInterface $builder;
-
-    public function __construct(FormBuilderInterface $builder)
+    public function __construct(private FormBuilderInterface $builder)
     {
-        $this->builder = $builder;
     }
 
     public function getBuilder(): FormBuilderInterface

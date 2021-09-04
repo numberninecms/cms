@@ -46,57 +46,36 @@ final class ContentType
         }
     }
 
-    /**
-     * @return string
-     */
     public function getEntityClassName(): string
     {
         return $this->entityClassName;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return ContentTypeLabels
-     */
     public function getLabels(): ContentTypeLabels
     {
         return $this->labels;
     }
 
-    /**
-     * @return string
-     */
     public function getPermalink(): string
     {
         return $this->permalink;
     }
 
-    /**
-     * @return string
-     */
     public function getIcon(): string
     {
         return $this->icon;
     }
 
-    /**
-     * @return bool
-     */
     public function isPublic(): bool
     {
         return $this->public;
     }
 
-    /**
-     * @return bool
-     */
     public function isShownInMenu(): bool
     {
         return $this->shownInMenu;
@@ -205,9 +184,7 @@ final class ContentType
     }
 
     /**
-     * @param Options $options
      * @param mixed $value
-     * @return array
      */
     private function createCapabilitiesArray(Options $options, $value): array
     {

@@ -17,9 +17,6 @@ trait EventDispatcherTrait
 {
     protected EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @param EventDispatcherInterface $eventDispatcher
-     */
     final public function setEventDispatcher(EventDispatcherInterface $eventDispatcher): void
     {
         $this->eventDispatcher = $eventDispatcher;

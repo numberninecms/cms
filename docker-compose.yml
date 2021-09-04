@@ -6,7 +6,7 @@ version: "3.8"
 
 services:
     php:
-        image: numberninecms/php:7.4-fpm-dev
+        image: numberninecms/php:8.1-fpm-dev
         working_dir: /srv/app
         user: '1000:1000'
         restart: 'no'

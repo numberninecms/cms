@@ -36,12 +36,10 @@ final class ExifPurifiedMetadataReader extends ExifMetadataReader
      * Extracts metadata from raw data, merges with existing metadata.
      *
      * @param string $data
-     *
-     * @return array
      */
     private function doReadData($data): array
     {
-        if (strpos($data, 'II') === 0) {
+        if (str_starts_with($data, 'II')) {
             $mime = 'image/tiff';
         } else {
             $mime = 'image/jpeg';
@@ -54,8 +52,6 @@ final class ExifPurifiedMetadataReader extends ExifMetadataReader
      * Performs the exif data extraction given a path or data-URI representation.
      *
      * @param string $path the path to the file or the data-URI representation
-     *
-     * @return array
      */
     protected function extract($path): array
     {
@@ -66,9 +62,9 @@ final class ExifPurifiedMetadataReader extends ExifMetadataReader
                     return @exif_read_data($path, '', true, false);
                 }
             );
-        } catch (Exception $e) {
+        } catch (Exception) {
             $exifData = false;
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             $exifData = false;
         }
         if (!is_array($exifData)) {

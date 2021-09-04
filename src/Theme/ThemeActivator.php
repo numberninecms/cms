@@ -25,11 +25,6 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 final class ThemeActivator implements EventSubscriberInterface
 {
-    private ThemeStore $themeStore;
-    private ConfigurationReadWriter $configurationReadWriter;
-    private ThemeOptionsRepository $themeOptionsRepository;
-    private EventDispatcherInterface $eventDispatcher;
-
     public static function getSubscribedEvents(): array
     {
         return [
@@ -38,22 +33,11 @@ final class ThemeActivator implements EventSubscriberInterface
         ];
     }
 
-    public function __construct(
-        ThemeStore $themeStore,
-        ConfigurationReadWriter $configurationReadWriter,
-        ThemeOptionsRepository $themeOptionsRepository,
-        EventDispatcherInterface $eventDispatcher
-    ) {
-        $this->themeStore = $themeStore;
-        $this->configurationReadWriter = $configurationReadWriter;
-        $this->themeOptionsRepository = $themeOptionsRepository;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(private ThemeStore $themeStore, private ConfigurationReadWriter $configurationReadWriter, private ThemeOptionsRepository $themeOptionsRepository, private EventDispatcherInterface $eventDispatcher)
+    {
     }
 
-    /**
-     * @param ConsoleCommandEvent|RequestEvent $event
-     */
-    public function activateCurrentTheme($event): void
+    public function activateCurrentTheme(\Symfony\Component\Console\Event\ConsoleCommandEvent|\Symfony\Component\HttpKernel\Event\RequestEvent $event): void
     {
         if ($event instanceof ConsoleCommandEvent && !$event->getCommand() instanceof ThemeAwareCommandInterface) {
             return;

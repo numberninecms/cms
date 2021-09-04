@@ -19,11 +19,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 final class AdminSettingsEmailsFormType extends AbstractType
 {
-    private ContentService $contentService;
-
-    public function __construct(ContentService $contentService)
+    public function __construct(private ContentService $contentService)
     {
-        $this->contentService = $contentService;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void

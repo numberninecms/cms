@@ -54,7 +54,7 @@ abstract class UserAwareTestCase extends DotEnvAwareWebTestCase
 
     public function loginThenNavigateToAdminUrl(string $role, ?string $url = null): void
     {
-        if ($url && strpos($url, '/admin/') !== 0) {
+        if ($url && !str_starts_with($url, '/admin/')) {
             self::fail('$url parameter must be an admin URL.');
         }
 

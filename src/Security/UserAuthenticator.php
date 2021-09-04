@@ -20,24 +20,16 @@ use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 final class UserAuthenticator
 {
-    private GuardAuthenticatorHandler $guardHandler;
-    private LoginFormAuthenticator $formAuthenticator;
     private ?Request $request;
 
     public function __construct(
-        GuardAuthenticatorHandler $guardHandler,
-        LoginFormAuthenticator $formAuthenticator,
+        private GuardAuthenticatorHandler $guardHandler,
+        private LoginFormAuthenticator $formAuthenticator,
         RequestStack $requestStack
     ) {
-        $this->guardHandler = $guardHandler;
-        $this->formAuthenticator = $formAuthenticator;
         $this->request = $requestStack->getCurrentRequest();
     }
 
-    /**
-     * @param User $user
-     * @return Response|null
-     */
     public function authenticateUser(User $user): ?Response
     {
         if (!$this->request) {

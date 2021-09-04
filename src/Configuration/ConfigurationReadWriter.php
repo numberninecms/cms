@@ -25,27 +25,12 @@ use function NumberNine\Common\Util\ArrayUtil\array_merge_recursive_fixed;
 
 final class ConfigurationReadWriter
 {
-    private EntityManagerInterface $entityManager;
-    private CoreOptionRepository $coreOptionRepository;
-    private TagAwareCacheInterface $cache;
-    private SerializerInterface $serializer;
-
-    public function __construct(
-        EntityManagerInterface $entityManager,
-        CoreOptionRepository $coreOptionRepository,
-        TagAwareCacheInterface $cache,
-        SerializerInterface $serializer
-    ) {
-
-        $this->entityManager = $entityManager;
-        $this->coreOptionRepository = $coreOptionRepository;
-        $this->cache = $cache;
-        $this->serializer = $serializer;
+    public function __construct(private EntityManagerInterface $entityManager, private CoreOptionRepository $coreOptionRepository, private TagAwareCacheInterface $cache, private SerializerInterface $serializer)
+    {
     }
 
     /**
      * Gets an option value. If the value contains a JSON string, it will be returned as an array.
-     * @param string $optionName
      * @param mixed $default
      * @return mixed|null
      * @throws InvalidArgumentException
@@ -62,7 +47,7 @@ final class ConfigurationReadWriter
 
                 try {
                     $value = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
-                } catch (Exception $e) {
+                } catch (Exception) {
                     // this wasn't a json string
                 }
 
@@ -82,7 +67,6 @@ final class ConfigurationReadWriter
      * - ['option1' => 'default_for_option1', 'option2' => 'default_for_option2']
      *
      * @param array $options Use numeric array for null default values, or associative for custom default values
-     * @param bool $resultAsAssociativeArray
      * @return mixed
      * @throws CacheException
      * @throws InvalidArgumentException
@@ -122,7 +106,7 @@ final class ConfigurationReadWriter
                                 $value = array_merge_recursive_fixed($default, $value);
                             }
                         }
-                    } catch (Exception $e) {
+                    } catch (Exception) {
                         // this wasn't a json string
                     }
 
@@ -144,9 +128,7 @@ final class ConfigurationReadWriter
     }
 
     /**
-     * @param string $optionName
      * @param mixed $value
-     * @param bool $flush
      * @throws InvalidArgumentException
      */
     public function write(string $optionName, $value, bool $flush = true): void
@@ -176,7 +158,6 @@ final class ConfigurationReadWriter
     }
 
     /**
-     * @param array $optionNames
      * @throws InvalidArgumentException
      */
     public function writeMany(array $optionNames): void
@@ -189,7 +170,6 @@ final class ConfigurationReadWriter
     }
 
     /**
-     * @param string $optionName
      * @param mixed $value
      */
     private function saveCache(string $optionName, $value): void
@@ -202,7 +182,7 @@ final class ConfigurationReadWriter
             if (is_string($value)) {
                 $value = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
             }
-        } catch (Exception $e) {
+        } catch (Exception) {
             // this wasn't a json string
         }
 

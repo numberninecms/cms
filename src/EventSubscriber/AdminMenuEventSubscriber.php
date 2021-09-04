@@ -35,18 +35,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 final class AdminMenuEventSubscriber implements EventSubscriberInterface
 {
     use QuickTranslate;
-
-    private TranslatorInterface $translator;
-    private EventDispatcherInterface $eventDispatcher;
-    private UrlGeneratorInterface $urlGenerator;
-    private ContentService $contentService;
-    private AdminMenuBuilderStore $adminMenuBuilderStore;
-    private SluggerInterface $slugger;
-    private TaxonomyRepository $taxonomyRepository;
-    private AuthorizationCheckerInterface $authorizationChecker;
     private EnglishInflector $inflector;
     private string $configFile;
-    private string $environment;
 
     public static function getSubscribedEvents(): array
     {
@@ -58,34 +48,22 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
     }
 
     public function __construct(
-        TranslatorInterface $translator,
-        EventDispatcherInterface $eventDispatcher,
-        UrlGeneratorInterface $urlGenerator,
-        ContentService $contentService,
-        AdminMenuBuilderStore $adminMenuBuilderStore,
-        SluggerInterface $slugger,
-        TaxonomyRepository $taxonomyRepository,
-        AuthorizationCheckerInterface $authorizationChecker,
+        private TranslatorInterface $translator,
+        private EventDispatcherInterface $eventDispatcher,
+        private UrlGeneratorInterface $urlGenerator,
+        private ContentService $contentService,
+        private AdminMenuBuilderStore $adminMenuBuilderStore,
+        private SluggerInterface $slugger,
+        private TaxonomyRepository $taxonomyRepository,
+        private AuthorizationCheckerInterface $authorizationChecker,
         string $adminMenuConfigPath,
-        string $environment
+        private string $environment
     ) {
-        $this->translator = $translator;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->urlGenerator = $urlGenerator;
-        $this->contentService = $contentService;
-        $this->adminMenuBuilderStore = $adminMenuBuilderStore;
-        $this->slugger = $slugger;
-        $this->taxonomyRepository = $taxonomyRepository;
-        $this->authorizationChecker = $authorizationChecker;
         $this->inflector = new EnglishInflector();
         $this->configFile = __DIR__ . '/../Bundle/Resources/config/' . $adminMenuConfigPath . '/menus.yaml';
-        $this->environment = $environment;
     }
 
-    /**
-     * @param ControllerEvent|FinishRequestEvent $event
-     */
-    public function initializeCoreMenus($event): void
+    public function initializeCoreMenus(\Symfony\Component\HttpKernel\Event\ControllerEvent|\Symfony\Component\HttpKernel\Event\FinishRequestEvent $event): void
     {
         if ($this->environment !== 'test' && $event instanceof FinishRequestEvent) {
             return;

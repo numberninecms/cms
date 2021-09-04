@@ -30,7 +30,6 @@ final class MenuRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param array $ids
      * @throws ORMException
      */
     public function removeCollection(array $ids): void

@@ -23,27 +23,11 @@ use Twig\Error\SyntaxError;
 
 final class ContentEntityRenderer
 {
-    private ContentEntityRepository $contentEntityRepository;
-    private AuthorizationCheckerInterface $authorizationChecker;
-    private Environment $twig;
-    private TemplateResolver $templateResolver;
-
-    public function __construct(
-        ContentEntityRepository $contentEntityRepository,
-        AuthorizationCheckerInterface $authorizationChecker,
-        Environment $twig,
-        TemplateResolver $templateResolver
-    ) {
-        $this->contentEntityRepository = $contentEntityRepository;
-        $this->authorizationChecker = $authorizationChecker;
-        $this->twig = $twig;
-        $this->templateResolver = $templateResolver;
+    public function __construct(private ContentEntityRepository $contentEntityRepository, private AuthorizationCheckerInterface $authorizationChecker, private Environment $twig, private TemplateResolver $templateResolver)
+    {
     }
 
     /**
-     * @param string $slug
-     * @param bool $throwException
-     * @return string
      * @throws EntityNotFoundException
      * @throws LoaderError
      * @throws RuntimeError
@@ -71,8 +55,6 @@ final class ContentEntityRenderer
     }
 
     /**
-     * @param ContentEntity $entity
-     * @return string
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError

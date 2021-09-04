@@ -23,21 +23,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 abstract class AbstractPageBuilderGetAction extends AbstractController implements AdminController
 {
-    private ResponseFactory $responseFactory;
-    private ShortcodeProcessor $shortcodeProcessor;
-    private ShortcodeRenderer $shortcodeRenderer;
-    private ShortcodeStore $shortcodeStore;
-
-    public function __construct(
-        ResponseFactory $responseFactory,
-        ShortcodeProcessor $shortcodeProcessor,
-        ShortcodeRenderer $shortcodeRenderer,
-        ShortcodeStore $shortcodeStore
-    ) {
-        $this->responseFactory = $responseFactory;
-        $this->shortcodeProcessor = $shortcodeProcessor;
-        $this->shortcodeRenderer = $shortcodeRenderer;
-        $this->shortcodeStore = $shortcodeStore;
+    public function __construct(private ResponseFactory $responseFactory, private ShortcodeProcessor $shortcodeProcessor, private ShortcodeRenderer $shortcodeRenderer, private ShortcodeStore $shortcodeStore)
+    {
     }
 
     protected function createPageBuilderResponseFromText(string $text): JsonResponse

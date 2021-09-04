@@ -17,12 +17,8 @@ use ReflectionException;
 
 final class DataTransformerProcessor
 {
-    /** @var DataTransformerInterface[] */
-    private iterable $dataTransformers;
-
-    public function __construct(iterable $dataTransformers)
+    public function __construct(private iterable $dataTransformers)
     {
-        $this->dataTransformers = $dataTransformers;
     }
 
     /**

@@ -24,18 +24,9 @@ final class MediaAddCommand extends Command
 {
     protected static $defaultName = 'numbernine:media:add';
 
-    private MediaFileFactory $mediaFileFactory;
-    private UserRepository $userRepository;
-
-    /**
-     * @param MediaFileFactory $mediaFileFactory
-     * @param UserRepository $userRepository
-     */
-    public function __construct(MediaFileFactory $mediaFileFactory, UserRepository $userRepository)
+    public function __construct(private MediaFileFactory $mediaFileFactory, private UserRepository $userRepository)
     {
         parent::__construct();
-        $this->mediaFileFactory = $mediaFileFactory;
-        $this->userRepository = $userRepository;
     }
 
     protected function configure(): void

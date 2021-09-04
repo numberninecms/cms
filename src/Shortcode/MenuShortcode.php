@@ -33,21 +33,8 @@ use function NumberNine\Common\Util\ArrayUtil\array_depth;
  */
 final class MenuShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
-    private MenuRepository $menuRepository;
-    private ContentEntityRepository $contentEntityRepository;
-    private PermalinkGenerator $permalinkGenerator;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(
-        MenuRepository $menuRepository,
-        ContentEntityRepository $contentEntityRepository,
-        PermalinkGenerator $permalinkGenerator,
-        EventDispatcherInterface $eventDispatcher
-    ) {
-        $this->menuRepository = $menuRepository;
-        $this->contentEntityRepository = $contentEntityRepository;
-        $this->permalinkGenerator = $permalinkGenerator;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(private MenuRepository $menuRepository, private ContentEntityRepository $contentEntityRepository, private PermalinkGenerator $permalinkGenerator, private EventDispatcherInterface $eventDispatcher)
+    {
     }
 
     public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void
