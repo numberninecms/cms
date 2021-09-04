@@ -18,8 +18,6 @@ use Twig\Loader\FilesystemLoader;
 
 final class ThemeTwigLoader extends FilesystemLoader implements EventSubscriberInterface
 {
-    private ThemeStore $themeStore;
-
     public static function getSubscribedEvents(): array
     {
         return [
@@ -27,10 +25,9 @@ final class ThemeTwigLoader extends FilesystemLoader implements EventSubscriberI
         ];
     }
 
-    public function __construct(ThemeStore $themeStore)
+    public function __construct(private ThemeStore $themeStore)
     {
         parent::__construct();
-        $this->themeStore = $themeStore;
     }
 
     public function load(): void

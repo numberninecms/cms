@@ -23,24 +23,8 @@ use Twig\Extension\RuntimeExtensionInterface;
 
 final class AdminRuntime implements RuntimeExtensionInterface
 {
-    private AdminMenuBuilderStore $adminMenuBuilderStore;
-    private UrlGeneratorInterface $urlGenerator;
-    private PermalinkGenerator $permalinkGenerator;
-    private ContentService $contentService;
-    private SluggerInterface $slugger;
-
-    public function __construct(
-        AdminMenuBuilderStore $adminMenuBuilderStore,
-        UrlGeneratorInterface $urlGenerator,
-        PermalinkGenerator $permalinkGenerator,
-        ContentService $contentService,
-        SluggerInterface $slugger
-    ) {
-        $this->adminMenuBuilderStore = $adminMenuBuilderStore;
-        $this->urlGenerator = $urlGenerator;
-        $this->permalinkGenerator = $permalinkGenerator;
-        $this->contentService = $contentService;
-        $this->slugger = $slugger;
+    public function __construct(private AdminMenuBuilderStore $adminMenuBuilderStore, private UrlGeneratorInterface $urlGenerator, private PermalinkGenerator $permalinkGenerator, private ContentService $contentService, private SluggerInterface $slugger)
+    {
     }
 
     public function getAdminMenuItems(): array

@@ -52,7 +52,7 @@ trait CustomFieldsTrait
         $fields = [];
 
         foreach ($this->customFields as $field => $value) {
-            if (strpos($field, $startsWith) === 0) {
+            if (str_starts_with($field, $startsWith)) {
                 $fields[$field] = $value;
             }
         }

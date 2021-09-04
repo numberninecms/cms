@@ -22,12 +22,10 @@ use NumberNine\Exception\FileNotDeletedException;
 
 final class MediaFileDeletionEventSubscriber implements EventSubscriber
 {
-    private string $publicPath;
     private array $deletedEntities;
 
-    public function __construct(string $publicPath)
+    public function __construct(private string $publicPath)
     {
-        $this->publicPath = $publicPath;
     }
 
     public function getSubscribedEvents(): array

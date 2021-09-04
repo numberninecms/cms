@@ -15,15 +15,8 @@ namespace NumberNine\Content;
 
 final class ShortcodeMarkupBeautifier
 {
-    private ShortcodeProcessor $shortcodeProcessor;
-    private ArrayToShortcodeConverter $arrayToShortcodeConverter;
-
-    public function __construct(
-        ShortcodeProcessor $shortcodeProcessor,
-        ArrayToShortcodeConverter $arrayToShortcodeConverter
-    ) {
-        $this->shortcodeProcessor = $shortcodeProcessor;
-        $this->arrayToShortcodeConverter = $arrayToShortcodeConverter;
+    public function __construct(private ShortcodeProcessor $shortcodeProcessor, private ArrayToShortcodeConverter $arrayToShortcodeConverter)
+    {
     }
 
     public function beautify(string $text): string

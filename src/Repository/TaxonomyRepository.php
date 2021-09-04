@@ -30,7 +30,6 @@ final class TaxonomyRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param ContentType $contentType
      * @return Taxonomy[]
      */
     public function findByContentType(ContentType $contentType): array

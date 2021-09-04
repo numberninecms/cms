@@ -33,19 +33,15 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class MenuEditAction extends AbstractController implements AdminController
 {
-    private ContentService $contentService;
-    private ContentEntityRepository $contentEntityRepository;
     private ?Request $request;
 
     private const ITEMS_PER_PAGE = 5;
 
     public function __construct(
-        ContentService $contentService,
-        ContentEntityRepository $contentEntityRepository,
+        private ContentService $contentService,
+        private ContentEntityRepository $contentEntityRepository,
         RequestStack $requestStack
     ) {
-        $this->contentService = $contentService;
-        $this->contentEntityRepository = $contentEntityRepository;
         $this->request = $requestStack->getCurrentRequest();
     }
 

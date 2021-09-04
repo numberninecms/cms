@@ -20,11 +20,8 @@ use NumberNine\Security\CapabilityGenerator;
 
 final class UserRolesFixtures extends Fixture implements FixtureGroupInterface
 {
-    private CapabilityGenerator $capabilityGenerator;
-
-    public function __construct(CapabilityGenerator $capabilityGenerator)
+    public function __construct(private CapabilityGenerator $capabilityGenerator)
     {
-        $this->capabilityGenerator = $capabilityGenerator;
     }
 
     public function load(ObjectManager $manager): void

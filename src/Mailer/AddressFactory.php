@@ -20,11 +20,8 @@ use Symfony\Component\Mime\Address;
 
 final class AddressFactory
 {
-    private ConfigurationReadWriter $configurationReadWriter;
-
-    public function __construct(ConfigurationReadWriter $configurationReadWriter)
+    public function __construct(private ConfigurationReadWriter $configurationReadWriter)
     {
-        $this->configurationReadWriter = $configurationReadWriter;
     }
 
     public function createApplicationAddress(): Address

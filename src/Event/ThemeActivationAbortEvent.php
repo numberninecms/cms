@@ -17,11 +17,8 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 final class ThemeActivationAbortEvent extends Event
 {
-    private bool $abort;
-
-    public function __construct(bool $abort)
+    public function __construct(private bool $abort)
     {
-        $this->abort = $abort;
     }
 
     public function getAbort(): bool

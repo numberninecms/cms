@@ -70,7 +70,7 @@ final class ContentEntityShowAction extends AbstractController
 
         try {
             $this->denyAccessUnlessGranted(Capabilities::READ, $entity);
-        } catch (AccessDeniedException $e) {
+        } catch (AccessDeniedException) {
             throw $this->createNotFoundException('This page does not exist.');
         }
 

@@ -18,44 +18,25 @@ use Twig\TemplateWrapper;
 
 final class TemplateToRenderEvent extends Event
 {
-    private Request $request;
-    private ContentEntity $entity;
-    private TemplateWrapper $template;
-
-    public function __construct(Request $request, ContentEntity $entity, TemplateWrapper $template)
+    public function __construct(private Request $request, private ContentEntity $entity, private TemplateWrapper $template)
     {
-        $this->request = $request;
-        $this->entity = $entity;
-        $this->template = $template;
     }
 
-    /**
-     * @return Request
-     */
     public function getRequest(): Request
     {
         return $this->request;
     }
 
-    /**
-     * @return ContentEntity
-     */
     public function getEntity(): ContentEntity
     {
         return $this->entity;
     }
 
-    /**
-     * @return TemplateWrapper
-     */
     public function getTemplate(): TemplateWrapper
     {
         return $this->template;
     }
 
-    /**
-     * @param TemplateWrapper $template
-     */
     public function setTemplate(TemplateWrapper $template): void
     {
         $this->template = $template;

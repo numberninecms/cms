@@ -11,18 +11,14 @@
 
 namespace NumberNine\Event\Theme;
 
-abstract class GenericEvent extends AbstractThemeEvent
+abstract class GenericEvent extends AbstractThemeEvent implements \Stringable
 {
-    /** @var mixed */
-    protected $object;
-
     /**
      * GenericEvent constructor.
      * @param mixed $object
      */
-    public function __construct($object = null)
+    public function __construct(protected $object = null)
     {
-        $this->object = $object;
     }
 
     /**
@@ -41,7 +37,7 @@ abstract class GenericEvent extends AbstractThemeEvent
         $this->object = $object;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return (string)$this->getObject();
     }

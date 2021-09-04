@@ -16,12 +16,10 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 final class ShortcodeProcessParametersEvent extends Event
 {
-    private ShortcodeInterface $shortcode;
     private array $parameters;
 
-    public function __construct(ShortcodeInterface $shortcode, array $parameters)
+    public function __construct(private ShortcodeInterface $shortcode, array $parameters)
     {
-        $this->shortcode = $shortcode;
         $this->parameters = $parameters;
     }
 

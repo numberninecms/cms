@@ -20,19 +20,12 @@ use RuntimeException;
 
 final class ExtendedAnnotationReader implements ExtendedReader
 {
-    private Reader $decoratedAnnotationReader;
-
-    /**
-     * @param Reader $reader
-     */
-    public function __construct(Reader $reader)
+    public function __construct(private Reader $decoratedAnnotationReader)
     {
-        $this->decoratedAnnotationReader = $reader;
     }
 
     /**
      * @param object|string $object
-     * @return array
      * @throws ReflectionException
      */
     public function getAllAnnotations($object): array
@@ -72,8 +65,6 @@ final class ExtendedAnnotationReader implements ExtendedReader
 
     /**
      * @param object|array|string $object
-     * @param string $type
-     * @return array
      * @throws ReflectionException
      */
     public function getAnnotationsOfType($object, string $type): array
@@ -94,8 +85,6 @@ final class ExtendedAnnotationReader implements ExtendedReader
 
     /**
      * @param object|array|string $object
-     * @param string $type
-     * @param bool $throwException
      * @return mixed|null
      * @throws ReflectionException
      */
@@ -112,7 +101,7 @@ final class ExtendedAnnotationReader implements ExtendedReader
                 throw new RuntimeException(sprintf(
                     'Annotation of type "%s" is missing on "%s" class.',
                     $type,
-                    is_string($object) ? $object : get_class($object)
+                    is_string($object) ? $object : $object::class
                 ));
             }
 
@@ -124,9 +113,7 @@ final class ExtendedAnnotationReader implements ExtendedReader
 
     /**
      * @param object|array|string $object
-     * @param string $type
      * @param mixed $default
-     * @param string $property
      * @return mixed|null
      * @throws ReflectionException
      */

@@ -175,7 +175,7 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
      * @return Term[]
      * @Groups({"content_entity_get", "content_entity_get_full"})
      */
-    public function getTerms($taxonomy = null): array
+    public function getTerms(\NumberNine\Entity\Taxonomy|string|null $taxonomy = null): array
     {
         $sorted = $this->contentEntityTerms->toArray();
         usort(
@@ -307,18 +307,11 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
         return $this;
     }
 
-    /**
-     * @return DateTime|null
-     */
     public function getPublishedAt(): ?DateTime
     {
         return $this->publishedAt;
     }
 
-    /**
-     * @param DateTime|null $publishedAt
-     * @return ContentEntity
-     */
     public function setPublishedAt(?DateTime $publishedAt): self
     {
         $this->publishedAt = $publishedAt;

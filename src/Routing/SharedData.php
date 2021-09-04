@@ -21,19 +21,11 @@ final class SharedData
     /** @var RouteCollection[] */
     private array $routes = [];
 
-    /**
-     * @param string $resource
-     * @return RouteCollection|null
-     */
     public function getRoutes(string $resource): ?RouteCollection
     {
         return $this->routes[$resource] ?? null;
     }
 
-    /**
-     * @param string $resource
-     * @param RouteCollection $routes
-     */
     public function setRoutes(string $resource, RouteCollection $routes): void
     {
         $this->routes[$resource] = $routes;

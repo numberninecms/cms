@@ -28,11 +28,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class RecentPostsShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
-    private PostRepository $postRepository;
-
-    public function __construct(PostRepository $postRepository)
+    public function __construct(private PostRepository $postRepository)
     {
-        $this->postRepository = $postRepository;
     }
 
     public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void

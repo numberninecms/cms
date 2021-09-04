@@ -36,9 +36,6 @@ final class PaginationParameters
     /** @var Term[] */
     private $terms = [];
 
-    /**
-     * @return int|null
-     */
     public function getStartRow(): ?int
     {
         return $this->startRow;
@@ -46,7 +43,6 @@ final class PaginationParameters
 
     /**
      * @param int|null $startRow
-     * @return PaginationParameters
      */
     public function setStartRow($startRow): self
     {
@@ -54,9 +50,6 @@ final class PaginationParameters
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getFetchCount(): ?int
     {
         return $this->fetchCount;
@@ -64,7 +57,6 @@ final class PaginationParameters
 
     /**
      * @param int|null $fetchCount
-     * @return PaginationParameters
      */
     public function setFetchCount($fetchCount): self
     {
@@ -72,72 +64,44 @@ final class PaginationParameters
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getFilter(): ?string
     {
         return $this->filter;
     }
 
-    /**
-     * @param string|null $filter
-     * @return PaginationParameters
-     */
     public function setFilter(?string $filter): self
     {
         $this->filter = $filter;
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getStatus(): ?string
     {
         return $this->status;
     }
 
-    /**
-     * @param string|null $status
-     * @return PaginationParameters
-     */
     public function setStatus(?string $status): PaginationParameters
     {
         $this->status = $status;
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getOrderBy(): ?string
     {
         return $this->orderBy;
     }
 
-    /**
-     * @param string|null $orderBy
-     * @return PaginationParameters
-     */
     public function setOrderBy(?string $orderBy): self
     {
         $this->orderBy = $orderBy;
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getOrder(): ?string
     {
         return $this->order;
     }
 
-    /**
-     * @param string|null $order
-     * @return PaginationParameters
-     */
     public function setOrder(?string $order): self
     {
         $this->order = $order;
@@ -154,7 +118,6 @@ final class PaginationParameters
 
     /**
      * @param Term[] $terms
-     * @return PaginationParameters
      */
     public function setTerms(array $terms): self
     {

@@ -17,30 +17,23 @@ interface ExtendedReader extends Reader
 {
     /**
      * @param object|string $object
-     * @return array
      */
     public function getAllAnnotations($object): array;
 
     /**
      * @param object|array|string $object
-     * @param string $type
-     * @return array
      */
     public function getAnnotationsOfType($object, string $type): array;
 
     /**
      * @param object|array|string $object
-     * @param string $type
-     * @param bool $throwException
      * @return mixed|null
      */
     public function getFirstAnnotationOfType($object, string $type, bool $throwException = false);
 
     /**
      * @param object|array|string $object
-     * @param string $type
      * @param mixed $default
-     * @param string $property
      * @return mixed|null
      */
     public function getValueOfFirstAnnotationOfType($object, string $type, $default = null, string $property = 'value');

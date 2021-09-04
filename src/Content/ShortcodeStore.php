@@ -19,8 +19,6 @@ use NumberNine\Theme\ThemeStore;
 
 final class ShortcodeStore
 {
-    private ExtendedReader $annotationReader;
-    private ThemeStore $themeStore;
     private string $appShortcodesNamespace;
 
     /** @var ShortcodeInterface[] */
@@ -30,14 +28,11 @@ final class ShortcodeStore
     private array $shortcodesMetadata = [];
 
     public function __construct(
-        ExtendedReader $annotationReader,
-        ThemeStore $themeStore,
+        private ExtendedReader $annotationReader,
+        private ThemeStore $themeStore,
         string $projectPath,
         string $shortcodesPath
     ) {
-        $this->annotationReader = $annotationReader;
-        $this->themeStore = $themeStore;
-
         $this->appShortcodesNamespace = trim('App\\' . str_replace(
             [$projectPath . '/src/', '//', '/'],
             ['', '/', '\\'],
@@ -79,9 +74,6 @@ final class ShortcodeStore
         return $this->shortcodes[$shortcodeName];
     }
 
-    /**
-     * @param ShortcodeInterface $shortcode
-     */
     public function addShortcode(ShortcodeInterface $shortcode): void
     {
         $metadata = $this->annotationReader->getFirstAnnotationOfType($shortcode, Shortcode::class, true);
@@ -100,9 +92,9 @@ final class ShortcodeStore
 
         foreach ($this->shortcodes as $name => $shortcode) {
             if (
-                strpos(get_class($shortcode), 'NumberNine\\Shortcode\\') === 0
-                || strpos(get_class($shortcode), $theme->getShortcodeNamespace()) === 0
-                || strpos(get_class($shortcode), $this->appShortcodesNamespace) === 0
+                str_starts_with($shortcode::class, 'NumberNine\\Shortcode\\')
+                || str_starts_with($shortcode::class, $theme->getShortcodeNamespace())
+                || str_starts_with($shortcode::class, $this->appShortcodesNamespace)
             ) {
                 return true;
             }

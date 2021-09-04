@@ -18,9 +18,6 @@ use Twig\Loader\FilesystemLoader;
 
 final class ComponentTwigLoader extends FilesystemLoader implements EventSubscriberInterface
 {
-    private ComponentStore $componentStore;
-    private string $componentsPath;
-
     public static function getSubscribedEvents(): array
     {
         return [
@@ -28,11 +25,9 @@ final class ComponentTwigLoader extends FilesystemLoader implements EventSubscri
         ];
     }
 
-    public function __construct(ComponentStore $componentStore, string $componentsPath)
+    public function __construct(private ComponentStore $componentStore, private string $componentsPath)
     {
         parent::__construct();
-        $this->componentStore = $componentStore;
-        $this->componentsPath = $componentsPath;
     }
 
     public function load(): void

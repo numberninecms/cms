@@ -19,11 +19,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 final class ThemeStore implements EventSubscriberInterface
 {
-    private ThemeMetadataFactory $themeMetadataFactory;
     private ThemeWrapper $currentTheme;
-
-    /** @var ThemeInterface[] */
-    private iterable $themes;
 
     /** @var ThemeWrapper[] */
     private array $themeWrappers = [];
@@ -36,12 +32,8 @@ final class ThemeStore implements EventSubscriberInterface
         ];
     }
 
-    public function __construct(
-        ThemeMetadataFactory $themeMetadataFactory,
-        iterable $themes
-    ) {
-        $this->themeMetadataFactory = $themeMetadataFactory;
-        $this->themes = $themes;
+    public function __construct(private ThemeMetadataFactory $themeMetadataFactory, private iterable $themes)
+    {
     }
 
     public function loadThemeWrappers(): void
@@ -50,7 +42,7 @@ final class ThemeStore implements EventSubscriberInterface
             $descriptor = $this->themeMetadataFactory->getThemeDescriptor($theme);
             $theme->setName($descriptor->getName());
             $theme->setSlug($descriptor->getSlug());
-            $this->themeWrappers[get_class($theme)] = new ThemeWrapper($descriptor, $theme);
+            $this->themeWrappers[$theme::class] = new ThemeWrapper($descriptor, $theme);
         }
     }
 

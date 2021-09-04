@@ -19,13 +19,8 @@ use Twig\Error\LoaderError;
 
 final class PresetFinder implements PresetFinderInterface
 {
-    private Environment $twig;
-    private TemplateResolver $templateResolver;
-
-    public function __construct(Environment $twig, TemplateResolver $templateResolver)
+    public function __construct(private Environment $twig, private TemplateResolver $templateResolver)
     {
-        $this->twig = $twig;
-        $this->templateResolver = $templateResolver;
     }
 
     public function findShortcodePresets(ShortcodeInterface $shortcode): array
@@ -41,7 +36,7 @@ final class PresetFinder implements PresetFinderInterface
                 $finder = new Finder();
                 $finder->in($directory)->files()->name('*.yaml');
                 $presetFiles[] = array_keys(iterator_to_array($finder));
-            } catch (LoaderError $e) {
+            } catch (LoaderError) {
                 continue;
             }
         }
@@ -61,7 +56,6 @@ final class PresetFinder implements PresetFinderInterface
 
     /**
      * @param mixed $preset
-     * @return bool
      */
     private function validatePreset($preset): bool
     {

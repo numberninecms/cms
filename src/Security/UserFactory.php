@@ -17,13 +17,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 final class UserFactory
 {
-    private UserPasswordEncoderInterface $passwordEncoder;
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager)
+    public function __construct(private UserPasswordEncoderInterface $passwordEncoder, private EntityManagerInterface $entityManager)
     {
-        $this->passwordEncoder = $passwordEncoder;
-        $this->entityManager = $entityManager;
     }
 
     public function createUser(

@@ -22,11 +22,10 @@ final class ThemeAlreadyExistsException extends Exception
 {
     /**
      * ThemeAlreadyExistsException constructor.
-     * @param ThemeInterface $theme
      */
     public function __construct(ThemeInterface $theme)
     {
-        $class = get_class($theme);
+        $class = $theme::class;
         parent::__construct(sprintf(
             'Theme with name "%s" already exists, please choose a different name for "%s".',
             $theme->getName(),

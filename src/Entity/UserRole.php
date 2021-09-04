@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Table(name="userrole")
  * @UniqueEntity("name")
  */
-class UserRole
+class UserRole implements \Stringable
 {
     /**
      * @ORM\Id()

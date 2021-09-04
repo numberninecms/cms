@@ -22,9 +22,6 @@ final class FrontendHelperExtension extends AbstractExtension
 {
     private ?Request $request;
 
-    /**
-     * @param RequestStack $requestStack
-     */
     public function __construct(RequestStack $requestStack)
     {
         $this->request = $requestStack->getCurrentRequest();

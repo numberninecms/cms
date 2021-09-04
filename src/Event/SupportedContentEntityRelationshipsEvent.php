@@ -17,14 +17,11 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 final class SupportedContentEntityRelationshipsEvent extends Event
 {
-    private string $className;
-
     /** @var string[] */
     private array $relationships = [];
 
-    public function __construct(string $className)
+    public function __construct(private string $className)
     {
-        $this->className = $className;
     }
 
     public function getClassName(): string

@@ -19,9 +19,6 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 final class AreasRegistrationEventSubscriber implements EventSubscriberInterface
 {
-    private ThemeStore $themeStore;
-    private EventDispatcherInterface $eventDispatcher;
-
     public static function getSubscribedEvents(): array
     {
         return [
@@ -30,10 +27,8 @@ final class AreasRegistrationEventSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function __construct(ThemeStore $themeStore, EventDispatcherInterface $eventDispatcher)
+    public function __construct(private ThemeStore $themeStore, private EventDispatcherInterface $eventDispatcher)
     {
-        $this->themeStore = $themeStore;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function registerCurrentThemeAreas(): void

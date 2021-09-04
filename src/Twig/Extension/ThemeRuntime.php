@@ -41,48 +41,24 @@ use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
 
 final class ThemeRuntime implements RuntimeExtensionInterface
 {
-    private ContentEntityRepository $contentEntityRepository;
-    private ThemeStore $themeStore;
-    private ThemeOptionsReadWriter $themeOptionsReadWriter;
-    private ConfigurationReadWriter $configurationReadWriter;
-    private ComponentRenderer $componentRenderer;
-    private PermalinkGenerator $permalinkGenerator;
-    private TemplateResolver $templateResolver;
-    private ShortcodeRenderer $shortcodeRenderer;
     private ?Request $request;
-    private RequestAnalyzer $requestAnalyzer;
-    private UrlGeneratorInterface $urlGenerator;
-    private ContentService $contentService;
-    private SluggerInterface $slugger;
 
     public function __construct(
-        ContentEntityRepository $contentEntityRepository,
-        ThemeStore $themeStore,
-        ThemeOptionsReadWriter $themeOptionsReadWriter,
-        ConfigurationReadWriter $configurationReadWriter,
-        ComponentRenderer $componentRenderer,
-        PermalinkGenerator $permalinkGenerator,
-        TemplateResolver $templateResolver,
-        ShortcodeRenderer $shortcodeRenderer,
+        private ContentEntityRepository $contentEntityRepository,
+        private ThemeStore $themeStore,
+        private ThemeOptionsReadWriter $themeOptionsReadWriter,
+        private ConfigurationReadWriter $configurationReadWriter,
+        private ComponentRenderer $componentRenderer,
+        private PermalinkGenerator $permalinkGenerator,
+        private TemplateResolver $templateResolver,
+        private ShortcodeRenderer $shortcodeRenderer,
         RequestStack $requestStack,
-        RequestAnalyzer $requestAnalyzer,
-        UrlGeneratorInterface $urlGenerator,
-        ContentService $contentService,
-        SluggerInterface $slugger
+        private RequestAnalyzer $requestAnalyzer,
+        private UrlGeneratorInterface $urlGenerator,
+        private ContentService $contentService,
+        private SluggerInterface $slugger
     ) {
-        $this->contentEntityRepository = $contentEntityRepository;
-        $this->themeStore = $themeStore;
-        $this->themeOptionsReadWriter = $themeOptionsReadWriter;
-        $this->configurationReadWriter = $configurationReadWriter;
-        $this->componentRenderer = $componentRenderer;
-        $this->permalinkGenerator = $permalinkGenerator;
-        $this->templateResolver = $templateResolver;
-        $this->shortcodeRenderer = $shortcodeRenderer;
         $this->request = $requestStack->getMasterRequest();
-        $this->requestAnalyzer = $requestAnalyzer;
-        $this->urlGenerator = $urlGenerator;
-        $this->contentService = $contentService;
-        $this->slugger = $slugger;
     }
 
     public function getCurrentTheme(): ThemeInterface
@@ -111,7 +87,6 @@ final class ThemeRuntime implements RuntimeExtensionInterface
     }
 
     /**
-     * @param string $optionName
      * @return mixed|null
      * @throws ThemeNotFoundException
      */
@@ -228,7 +203,7 @@ final class ThemeRuntime implements RuntimeExtensionInterface
         $queryString = $this->request->getQueryString();
 
         if ($page > 1) {
-            $route .= substr($route, -5) === '_page' ? '' : '_page';
+            $route .= str_ends_with($route, '_page') ? '' : '_page';
             $params['page'] = $page;
         } else {
             $route = preg_replace('/_page$/', '', $route);

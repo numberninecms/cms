@@ -136,18 +136,11 @@ class Comment
         return $this;
     }
 
-    /**
-     * @return Comment|null
-     */
     public function getParent(): ?Comment
     {
         return $this->parent;
     }
 
-    /**
-     * @param Comment|null $parent
-     * @return Comment
-     */
     public function setParent(?Comment $parent): self
     {
         $this->parent = $parent;
@@ -163,10 +156,6 @@ class Comment
         return $this->children;
     }
 
-    /**
-     * @param Collection $children
-     * @return Comment
-     */
     public function setChildren(Collection $children): self
     {
         $this->children = $children;
@@ -174,19 +163,12 @@ class Comment
         return $this;
     }
 
-    /**
-     * @return ContentEntity|null
-     */
     public function getContentEntity(): ?ContentEntity
     {
         return $this->contentEntity;
     }
 
-    /**
-     * @param ContentEntity|null $contentEntity
-     * @return Comment
-     */
-    public function setContentEntity(?ContentEntity $contentEntity): Comment
+    public function setContentEntity(?ContentEntity $contentEntity): self
     {
         $this->contentEntity = $contentEntity;
         return $this;

@@ -13,13 +13,8 @@ namespace NumberNine\Model\Primitive;
 
 final class Range
 {
-    private float $min;
-    private float $max;
-
-    public function __construct(float $min = 0.0, float $max = 0.0)
+    public function __construct(private float $min = 0.0, private float $max = 0.0)
     {
-        $this->min = $min;
-        $this->max = $max;
     }
 
     public function getMin(): float

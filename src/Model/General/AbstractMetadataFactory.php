@@ -16,19 +16,16 @@ use NumberNine\Annotation\ExtendedReader;
 
 abstract class AbstractMetadataFactory
 {
-    protected ExtendedReader $annotationReader;
-
     /** @var Descriptor[] */
     private array $loadedMetadata = [];
 
-    public function __construct(ExtendedReader $annotationReader)
+    public function __construct(protected ExtendedReader $annotationReader)
     {
-        $this->annotationReader = $annotationReader;
     }
 
     public function getMetadataFor(object $object, string $annotationClassName, string $metadataClassName): Descriptor
     {
-        $className = get_class($object);
+        $className = $object::class;
 
         if (isset($this->loadedMetadata[$className])) {
             return $this->loadedMetadata[$className];

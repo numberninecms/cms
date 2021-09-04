@@ -32,14 +32,6 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 final class ContentEntitiesDeleteAction extends AbstractController implements AdminController
 {
-    /**
-     * @param Request $request
-     * @param SerializerInterface $serializer
-     * @param ContentService $contentService
-     * @param ResponseFactory $responseFactory
-     * @param string $type
-     * @return JsonResponse
-     */
     public function __invoke(
         Request $request,
         SerializerInterface $serializer,

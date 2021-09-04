@@ -18,18 +18,8 @@ use Twig\Extension\RuntimeExtensionInterface;
 
 final class ShortcodeRuntime implements RuntimeExtensionInterface
 {
-    private ShortcodeRenderer $shortcodeRenderer;
-    private AuthorizationCheckerInterface $authorizationChecker;
-    private string $environment;
-
-    public function __construct(
-        ShortcodeRenderer $shortcodeRenderer,
-        AuthorizationCheckerInterface $authorizationChecker,
-        string $environment
-    ) {
-        $this->shortcodeRenderer = $shortcodeRenderer;
-        $this->authorizationChecker = $authorizationChecker;
-        $this->environment = $environment;
+    public function __construct(private ShortcodeRenderer $shortcodeRenderer, private AuthorizationCheckerInterface $authorizationChecker, private string $environment)
+    {
     }
 
     public function renderShortcode(string $text): string

@@ -22,11 +22,10 @@ final class InvalidThemeException extends Exception
 {
     /**
      * InvalidThemeException constructor.
-     * @param ThemeInterface $theme
      */
     public function __construct(ThemeInterface $theme)
     {
-        $class = get_class($theme);
+        $class = $theme::class;
         parent::__construct("$class is an invalid theme. Check getName() is set correctly and returns a valid name.");
     }
 }

@@ -26,31 +26,12 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 final class ResponseFactory
 {
-    private SerializerInterface $serializer;
-    private ExtendedReader $annotationReader;
-    private ContentService $contentService;
-
-    /** @var NormalizerInterface[] */
-    private iterable $normalizers;
-
-    public function __construct(
-        SerializerInterface $serializer,
-        ExtendedReader $annotationReader,
-        ContentService $contentService,
-        iterable $normalizers
-    ) {
-        $this->serializer = $serializer;
-        $this->annotationReader = $annotationReader;
-        $this->contentService = $contentService;
-        $this->normalizers = $normalizers;
+    public function __construct(private SerializerInterface $serializer, private ExtendedReader $annotationReader, private ContentService $contentService, private iterable $normalizers)
+    {
     }
 
     /**
      * @param mixed|null $data
-     * @param array $context
-     * @param int $status
-     * @param array $headers
-     * @return JsonResponse
      * @throws ExceptionInterface
      */
     public function createSerializedJsonResponse(
@@ -79,11 +60,6 @@ final class ResponseFactory
     /**
      * Creates a json response with paginated data
      *
-     * @param Paginator $data
-     * @param array $context
-     * @param int $status
-     * @param array $headers
-     * @return JsonResponse
      * @throws ReflectionException
      */
     public function createSerializedPaginatedJsonResponse(
@@ -97,7 +73,7 @@ final class ResponseFactory
 
         if (empty($context) && $iterator->count() > 0) {
             $normalizationContext = $this->annotationReader->getFirstAnnotationOfType(
-                get_class($iterator->current()),
+                $iterator->current()::class,
                 NormalizationContext::class
             ) ?? [];
             $context = array_merge_recursive($context, (array)$normalizationContext);
@@ -127,7 +103,6 @@ final class ResponseFactory
     /**
      * @param mixed $data
      * @param string|null $format
-     * @param array $context
      * @return mixed
      * @throws ExceptionInterface
      */

@@ -37,18 +37,13 @@ final class UserRepository extends ServiceEntityRepository
     public const DELETE_MODE_REASSIGN = 'reassign';
     public const DELETE_MODE_DELETE = 'delete';
 
-    private TokenStorageInterface $tokenStorage;
-
-    public function __construct(ManagerRegistry $registry, TokenStorageInterface $tokenStorage)
+    public function __construct(ManagerRegistry $registry, private TokenStorageInterface $tokenStorage)
     {
         parent::__construct($registry, User::class);
-        $this->tokenStorage = $tokenStorage;
     }
 
     /**
-     * @param string $fieldName
      * @param mixed $fieldValue
-     * @return User|null
      * @throws NonUniqueResultException
      * @throws NoResultException
      */
@@ -80,9 +75,7 @@ final class UserRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param PaginationParameters $paginationParameters
      * @param Criteria|null $criteria
-     * @return QueryBuilder
      * @throws QueryException
      */
     public function getPaginatedCollectionQueryBuilder(

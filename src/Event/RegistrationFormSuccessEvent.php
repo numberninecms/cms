@@ -19,13 +19,8 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 final class RegistrationFormSuccessEvent extends Event
 {
-    private User $user;
-    private ?Response $response;
-
-    public function __construct(User $user, ?Response $response)
+    public function __construct(private User $user, private ?\Symfony\Component\HttpFoundation\Response $response)
     {
-        $this->user = $user;
-        $this->response = $response;
     }
 
     public function getUser(): User

@@ -37,27 +37,8 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implem
 {
     use TargetPathTrait;
 
-    private UrlGeneratorInterface $urlGenerator;
-    private CsrfTokenManagerInterface $csrfTokenManager;
-    private UserPasswordEncoderInterface $passwordEncoder;
-    private EventDispatcherInterface $eventDispatcher;
-    private AuthorizationCheckerInterface $authorizationChecker;
-    private TokenStorageInterface $tokenStorage;
-
-    public function __construct(
-        UrlGeneratorInterface $urlGenerator,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        UserPasswordEncoderInterface $passwordEncoder,
-        EventDispatcherInterface $eventDispatcher,
-        AuthorizationCheckerInterface $authorizationChecker,
-        TokenStorageInterface $tokenStorage
-    ) {
-        $this->urlGenerator = $urlGenerator;
-        $this->csrfTokenManager = $csrfTokenManager;
-        $this->passwordEncoder = $passwordEncoder;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->authorizationChecker = $authorizationChecker;
-        $this->tokenStorage = $tokenStorage;
+    public function __construct(private UrlGeneratorInterface $urlGenerator, private CsrfTokenManagerInterface $csrfTokenManager, private UserPasswordEncoderInterface $passwordEncoder, private EventDispatcherInterface $eventDispatcher, private AuthorizationCheckerInterface $authorizationChecker, private TokenStorageInterface $tokenStorage)
+    {
     }
 
     public function supports(Request $request): bool
@@ -103,10 +84,7 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implem
     }
 
     /**
-     * @param Request $request
-     * @param TokenInterface $token
      * @param string $providerKey
-     * @return Response
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): Response
     {

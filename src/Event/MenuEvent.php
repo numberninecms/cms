@@ -16,17 +16,11 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 final class MenuEvent extends Event
 {
-    private ?Menu $menu;
-    private string $location;
-
     /**
      * @param Menu $menu
-     * @param string $location
      */
-    public function __construct(?Menu $menu, string $location)
+    public function __construct(private ?\NumberNine\Entity\Menu $menu, private string $location)
     {
-        $this->menu = $menu;
-        $this->location = $location;
     }
 
     /**
@@ -37,25 +31,16 @@ final class MenuEvent extends Event
         return $this->menu;
     }
 
-    /**
-     * @param Menu $menu
-     */
     public function setMenu(Menu $menu): void
     {
         $this->menu = $menu;
     }
 
-    /**
-     * @return string
-     */
     public function getLocation(): string
     {
         return $this->location;
     }
 
-    /**
-     * @param string $location
-     */
     public function setLocation(string $location): void
     {
         $this->location = $location;

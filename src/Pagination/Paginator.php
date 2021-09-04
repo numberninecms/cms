@@ -31,9 +31,6 @@ final class Paginator implements IteratorAggregate
     private int $maxResults;
     private int $totalItems;
 
-    /**
-     * @param DoctrinePaginator $paginator
-     */
     public function __construct(DoctrinePaginator $paginator)
     {
         $query = $paginator->getQuery();

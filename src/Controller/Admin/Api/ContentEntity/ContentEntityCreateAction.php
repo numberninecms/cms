@@ -32,14 +32,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class ContentEntityCreateAction extends AbstractController implements AdminController
 {
-    /**
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     * @param ContentService $contentService
-     * @param ResponseFactory $responseFactory
-     * @param string $type
-     * @return Response
-     */
     public function __invoke(
         Request $request,
         EntityManagerInterface $entityManager,

@@ -25,14 +25,9 @@ final class CreateUserCommand extends Command
 {
     protected static $defaultName = 'numbernine:user:create';
 
-    private UserFactory $userFactory;
-    private UserRoleRepository $userRoleRepository;
-
-    public function __construct(UserFactory $userFactory, UserRoleRepository $userRoleRepository)
+    public function __construct(private UserFactory $userFactory, private UserRoleRepository $userRoleRepository)
     {
         parent::__construct();
-        $this->userFactory = $userFactory;
-        $this->userRoleRepository = $userRoleRepository;
     }
 
     protected function configure(): void

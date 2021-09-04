@@ -28,36 +28,19 @@ use Twig\Error\SyntaxError;
 
 final class ResponseEventSubscriber implements EventSubscriberInterface
 {
-    private AuthorizationCheckerInterface $authorizationChecker;
-    private TokenStorageInterface $tokenStorage;
-    private Environment $twig;
-    private TagRenderer $tagRenderer;
     private bool $alreadyRendered = false;
     private ?Request $request;
     private ?ContentEntity $currentContentEntity = null;
-    private ContentService $contentService;
 
-    /**
-     * @param RequestStack $requestStack
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param TokenStorageInterface $tokenStorage
-     * @param Environment $twig
-     * @param TagRenderer $tagRenderer
-     */
     public function __construct(
         RequestStack $requestStack,
-        AuthorizationCheckerInterface $authorizationChecker,
-        TokenStorageInterface $tokenStorage,
-        Environment $twig,
-        TagRenderer $tagRenderer,
-        ContentService $contentService
+        private AuthorizationCheckerInterface $authorizationChecker,
+        private TokenStorageInterface $tokenStorage,
+        private Environment $twig,
+        private TagRenderer $tagRenderer,
+        private ContentService $contentService
     ) {
         $this->request = $requestStack->getMasterRequest();
-        $this->authorizationChecker = $authorizationChecker;
-        $this->tokenStorage = $tokenStorage;
-        $this->twig = $twig;
-        $this->tagRenderer = $tagRenderer;
-        $this->contentService = $contentService;
     }
 
     public static function getSubscribedEvents(): array
@@ -69,7 +52,6 @@ final class ResponseEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param ResponseEvent $event
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
@@ -102,7 +84,7 @@ final class ResponseEventSubscriber implements EventSubscriberInterface
         if (
             $this->request
             && (
-                strpos($this->request->attributes->get('_route'), 'numbernine_admin_') === 0
+                str_starts_with($this->request->attributes->get('_route'), 'numbernine_admin_')
                 || $this->request->get('n9') === 'admin'
             )
         ) {

@@ -22,15 +22,9 @@ final class MediaRegenerateCommand extends Command implements ImageSizeAwareComm
 {
     protected static $defaultName = 'numbernine:media:regenerate';
 
-    private ThumbnailGenerator $thumbnailGenerator;
-
-    /**
-     * @param ThumbnailGenerator $thumbnailGenerator
-     */
-    public function __construct(ThumbnailGenerator $thumbnailGenerator)
+    public function __construct(private ThumbnailGenerator $thumbnailGenerator)
     {
         parent::__construct();
-        $this->thumbnailGenerator = $thumbnailGenerator;
     }
 
     protected function configure(): void

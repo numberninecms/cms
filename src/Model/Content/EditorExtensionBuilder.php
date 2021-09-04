@@ -58,15 +58,10 @@ final class EditorExtensionBuilder implements EditorExtensionBuilderInterface
         ];
 
         foreach ($this->children as $child) {
-            switch ($child['type']) {
-                case self::COMPONENT_TYPE_SIDEBAR:
-                    $key = 'sidebarComponents';
-                    break;
-
-                case self::COMPONENT_TYPE_TAB:
-                default:
-                    $key = 'tabs';
-            }
+            $key = match ($child['type']) {
+                self::COMPONENT_TYPE_SIDEBAR => 'sidebarComponents',
+                default => 'tabs',
+            };
 
             unset($child['type']);
             $children[$key][] = $child;
