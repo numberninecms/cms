@@ -24,9 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-/**
- * @Route("/users/", name="numbernine_admin_users_get_collection", options={"expose"=true}, methods={"GET"})
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/users/', name: 'numbernine_admin_users_get_collection', options: ['expose' => true], methods: ['GET'])]
 final class UsersGetAction extends AbstractController implements AdminController
 {
     public function __invoke(

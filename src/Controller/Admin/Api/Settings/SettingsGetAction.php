@@ -22,9 +22,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-/**
- * @Route("settings/", name="numbernine_admin_settings_get_collection", options={"expose"=true}, methods={"GET"})
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'settings/', name: 'numbernine_admin_settings_get_collection', options: ['expose' => true], methods: ['GET'])]
 final class SettingsGetAction extends AbstractController implements AdminController
 {
     public function __invoke(

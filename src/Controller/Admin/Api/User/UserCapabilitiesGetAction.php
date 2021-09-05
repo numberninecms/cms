@@ -24,14 +24,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(
- *     "/users/capabilities/",
- *     name="numbernine_admin_user_capabilities_get_collection",
- *     options={"expose"=true},
- *     methods={"GET"}
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/users/capabilities/', name: 'numbernine_admin_user_capabilities_get_collection', options: ['expose' => true], methods: ['GET'])]
 final class UserCapabilitiesGetAction extends AbstractController implements AdminController
 {
     public function __invoke(

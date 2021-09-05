@@ -25,7 +25,7 @@ class BordersControl extends AbstractPageBuilderFormControl
         ]);
 
         $resolver->setAllowedTypes('borders', 'array');
-        $resolver->addAllowedValues('borders', function (array $value) {
+        $resolver->addAllowedValues('borders', function (array $value): bool {
             return in_array_all($value, ['top', 'right', 'bottom', 'left']);
         });
     }

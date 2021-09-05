@@ -51,7 +51,7 @@ final class TagRenderer
             $this->entrypointLookupCollection = new EntrypointLookupCollection(
                 new ServiceLocator(
                     [
-                        '_default' => function () use ($entrypointLookupCollection) {
+                        '_default' => function () use ($entrypointLookupCollection): \Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface {
                             return $entrypointLookupCollection;
                         }
                     ]

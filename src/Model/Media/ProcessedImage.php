@@ -15,11 +15,9 @@ use Imagine\Image\ImageInterface;
 
 final class ProcessedImage
 {
-    /** @var array */
-    private $sizes;
+    private array $sizes;
 
-    /** @var array */
-    private $exif;
+    private array $exif;
 
     /**
      * ProcessedImage constructor.

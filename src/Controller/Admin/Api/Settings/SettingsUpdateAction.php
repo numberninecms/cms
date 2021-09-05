@@ -19,9 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("settings/", name="numbernine_admin_settings_update_collection", options={"expose"=true}, methods={"PUT"})
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'settings/', name: 'numbernine_admin_settings_update_collection', options: ['expose' => true], methods: ['PUT'])]
 final class SettingsUpdateAction extends AbstractController implements AdminController
 {
     public function __invoke(

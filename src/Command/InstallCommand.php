@@ -92,7 +92,7 @@ final class InstallCommand extends Command implements ContentTypeAwareCommandInt
     {
         $this->io->title('General settings');
 
-        $appName = $this->io->ask('Application name', 'numbernine', function ($appName) {
+        $appName = $this->io->ask('Application name', 'numbernine', function ($appName): \Symfony\Component\String\AbstractUnicodeString {
             if (empty($appName)) {
                 throw new \RuntimeException('Application name cannot be empty.');
             }
@@ -138,7 +138,7 @@ final class InstallCommand extends Command implements ContentTypeAwareCommandInt
             return $host;
         });
 
-        $port = $this->io->ask('Port', '3306', function ($port) {
+        $port = $this->io->ask('Port', '3306', function ($port): int {
             if (!is_numeric($port)) {
                 throw new \RuntimeException('Port must be a number.');
             }
@@ -173,7 +173,7 @@ final class InstallCommand extends Command implements ContentTypeAwareCommandInt
 
         $composerProcess = (new Process(['composer', 'require', 'numberninecms/redis']))
             ->setTty(Process::isTtySupported());
-        $composerProcess->run(function (string $type, string $buffer) {
+        $composerProcess->run(function (string $type, string $buffer): void {
             $this->io->write($buffer);
         });
 

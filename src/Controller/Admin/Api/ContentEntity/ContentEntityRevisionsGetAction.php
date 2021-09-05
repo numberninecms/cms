@@ -20,15 +20,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(
- *     "content_entities/{type}/{id<\d+>}/revisions/",
- *     name="numbernine_admin_contententity_revisions_get_collection",
- *     options={"expose"=true},
- *     methods={"GET"},
- *     priority="100"
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'content_entities/{type}/{id<\d+>}/revisions/', name: 'numbernine_admin_contententity_revisions_get_collection', options: ['expose' => true], methods: ['GET'], priority: 100,)]
 final class ContentEntityRevisionsGetAction
 {
     public function __invoke(

@@ -64,7 +64,7 @@ abstract class BaseFixture extends Fixture
     /**
      * @return mixed
      */
-    protected function getRandomReference(string $className, array $excludedReferences = [])
+    protected function getRandomReference(string $className, array $excludedReferences = []): object
     {
         if (!isset($this->referencesIndex[$className])) {
             $this->referencesIndex[$className] = [];

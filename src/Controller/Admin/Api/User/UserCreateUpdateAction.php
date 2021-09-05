@@ -30,38 +30,28 @@ final class UserCreateUpdateAction extends AbstractController implements AdminCo
     {
     }
 
-    /**
-     * @Route("/users/{id<\d+>}/", name="numbernine_admin_users_update_item", options={"expose"=true}, methods={"PUT"})
-     */
-    public function update(Request $request, User $user): JsonResponse
+    #[\Symfony\Component\Routing\Annotation\Route(path: '/users/{id<\d+>}/', name: 'numbernine_admin_users_update_item', options: ['expose' => true], methods: ['PUT'])]
+    public function update(Request $request, User $user) : JsonResponse
     {
         $this->denyAccessUnlessGranted(Capabilities::EDIT_USERS);
-
         /** @var array $data */
         $data = $request->request->get('user');
         $this->setFields($user, $data);
-
         $this->entityManager->flush();
-
         return $this->responseFactory->createSerializedJsonResponse($user, ['groups' => ['user_get']]);
     }
 
-    /**
-     * @Route("/users/create/", name="numbernine_admin_users_create_item", options={"expose"=true}, methods={"POST"})
-     */
-    public function create(Request $request, UserPasswordEncoderInterface $passwordEncoder): JsonResponse
+    #[\Symfony\Component\Routing\Annotation\Route(path: '/users/create/', name: 'numbernine_admin_users_create_item', options: ['expose' => true], methods: ['POST'])]
+    public function create(Request $request, UserPasswordEncoderInterface $passwordEncoder) : JsonResponse
     {
         $this->denyAccessUnlessGranted(Capabilities::CREATE_USERS);
-
         /** @var array $data */
         $data = $request->request->get('user');
         $user = (new User())->setUsername($data['username']);
         $user->setPassword($passwordEncoder->encodePassword($user, $data['password']));
         $this->setFields($user, $data);
-
         $this->entityManager->persist($user);
         $this->entityManager->flush();
-
         return $this->responseFactory->createSerializedJsonResponse($user, ['groups' => ['user_get']]);
     }
 
@@ -73,7 +63,7 @@ final class UserCreateUpdateAction extends AbstractController implements AdminCo
             ->setDisplayNameFormat($data['displayNameFormat'])
             ->setEmail($data['email']);
 
-        $userRolesIds = array_values(array_map(fn(UserRole $role) => $role->getId(), $user->getUserRoles()->toArray()));
+        $userRolesIds = array_values(array_map(fn(UserRole $role): ?int => $role->getId(), $user->getUserRoles()->toArray()));
         $submittedRolesIds = array_values(array_map(fn($role) => $role['id'], $data['userRoles']));
         $userRoles = $this->userRoleRepository->findBy(['id' => $submittedRolesIds]);
 

@@ -20,14 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(
- *     "/users/roles/{id}/",
- *     name="numbernine_admin_user_roles_delete_item",
- *     options={"expose"=true},
- *     methods={"DELETE"}
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/users/roles/{id}/', name: 'numbernine_admin_user_roles_delete_item', options: ['expose' => true], methods: ['DELETE'])]
 final class UserRolesDeleteAction extends AbstractController implements AdminController
 {
     public function __invoke(

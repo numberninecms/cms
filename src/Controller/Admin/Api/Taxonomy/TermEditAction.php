@@ -17,9 +17,7 @@ use NumberNine\Http\ResponseFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("terms/{taxonomy}/{id}/", name="numbernine_admin_terms_edit_item", options={"expose": true}, methods={"PUT"})
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'terms/{taxonomy}/{id}/', name: 'numbernine_admin_terms_edit_item', options: ['expose' => true], methods: ['PUT'])]
 final class TermEditAction extends AbstractTermController
 {
     public function __invoke(

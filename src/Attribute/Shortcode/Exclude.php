@@ -9,22 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Annotation\Shortcode;
+namespace NumberNine\Attribute\Shortcode;
 
-use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\Annotation\Enum;
-use Doctrine\Common\Annotations\Annotation\Target;
 
-/**
- * @Annotation
- * @Target({"PROPERTY", "METHOD"})
- */
+#[\Attribute(\Attribute::TARGET_METHOD | \Attribute::TARGET_PROPERTY)]
 final class Exclude
 {
     public const ALL = 'all';
     public const VIEW = 'view';
     public const SERIALIZATION = 'serialization';
-
     /**
      * @Enum({"all", "view", "serialization"})
      */

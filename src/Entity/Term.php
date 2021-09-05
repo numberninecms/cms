@@ -15,14 +15,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use NumberNine\Annotation\NormalizationContext;
+use NumberNine\Attribute\NormalizationContext;
 use NumberNine\Model\Content\Features\CustomFieldsTrait;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="NumberNine\Repository\TermRepository")
- * @NormalizationContext(groups={"term_get"})
  */
+#[NormalizationContext(groups: ['term_get'])]
 class Term
 {
     use CustomFieldsTrait;
@@ -189,7 +189,7 @@ class Term
     {
         // @phpstan-ignore-next-line
         return $this->contentEntityTerms->map(
-            static function (ContentEntityTerm $item) {
+            static function (ContentEntityTerm $item): ?\NumberNine\Entity\ContentEntity {
                 return $item->getContentEntity();
             }
         );

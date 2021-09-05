@@ -81,7 +81,7 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
      * @Groups({"content_entity_get", "content_entity_get_full"})
      * @var DateTime|null
      */
-    protected $createdAt = null;
+    protected $createdAt;
 
     /**
      * @Gedmo\Timestampable(on="change", field="status", value="publish")
@@ -171,7 +171,6 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
 
     /**
      * Get terms sorted by their position
-     * @param Taxonomy|string|null $taxonomy
      * @return Term[]
      * @Groups({"content_entity_get", "content_entity_get_full"})
      */
@@ -180,14 +179,14 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
         $sorted = $this->contentEntityTerms->toArray();
         usort(
             $sorted,
-            static function (ContentEntityTerm $a, ContentEntityTerm $b) {
+            static function (ContentEntityTerm $a, ContentEntityTerm $b): int {
                 return $a->getPosition() <=> $b->getPosition();
             }
         );
 
         /** @var Term[] $terms */
         $terms = array_map(
-            static function (ContentEntityTerm $item) {
+            static function (ContentEntityTerm $item): ?\NumberNine\Entity\Term {
                 return $item->getTerm();
             },
             $sorted
@@ -199,7 +198,7 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
 
         return array_filter(
             $terms,
-            static function (Term $term) use ($taxonomy) {
+            static function (Term $term) use ($taxonomy): bool {
                 if ($taxonomy instanceof Taxonomy) {
                     return ($tax = $term->getTaxonomy()) && $tax->getId() === $taxonomy->getId();
                 }
@@ -273,7 +272,7 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
 
     public function getChildrenByRelationshipName(string $name): Collection
     {
-        return $this->children->filter(fn (ContentEntityRelationship $r) => $r->getName() === $name);
+        return $this->children->filter(fn (ContentEntityRelationship $r): bool => $r->getName() === $name);
     }
 
     /**

@@ -62,7 +62,7 @@ final class ThemeStore implements EventSubscriberInterface
 
         return current(array_filter(
             $this->themeWrappers,
-            fn(ThemeWrapper $wrapper) => $wrapper->getDescriptor()->getName() === $themeNameOrClassName
+            fn(ThemeWrapper $wrapper): bool => $wrapper->getDescriptor()->getName() === $themeNameOrClassName
         )) ?: null;
     }
 

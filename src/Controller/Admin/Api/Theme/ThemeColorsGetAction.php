@@ -19,14 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(
- *     "theme/colors/",
- *     name="numbernine_admin_theme_colors_get_collection",
- *     options={"expose"=true},
- *     methods={"GET"}
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'theme/colors/', name: 'numbernine_admin_theme_colors_get_collection', options: ['expose' => true], methods: ['GET'])]
 final class ThemeColorsGetAction implements AdminController
 {
     public function __invoke(
@@ -41,7 +34,7 @@ final class ThemeColorsGetAction implements AdminController
         // The color picker needs them to be ordered.
         $order = ['primary', 'secondary', 'tertiary', 'quaternary', 'success', 'dark', 'light'];
         $colors = array_map(
-            static function ($value, $color) {
+            static function ($value, $color): array {
                 return [
                     'name' => $color,
                     'value' => $value,
@@ -53,7 +46,7 @@ final class ThemeColorsGetAction implements AdminController
 
         usort(
             $colors,
-            static function ($a, $b) use ($order) {
+            static function ($a, $b) use ($order): int {
                 $aIndex = array_search($a['name'], $order, true);
                 $bIndex = array_search($b['name'], $order, true);
 

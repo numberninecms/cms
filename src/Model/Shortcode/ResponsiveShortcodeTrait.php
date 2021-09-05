@@ -11,7 +11,7 @@
 
 namespace NumberNine\Model\Shortcode;
 
-use NumberNine\Annotation\Shortcode\Exclude;
+use NumberNine\Attribute\Shortcode\Exclude;
 
 trait ResponsiveShortcodeTrait
 {

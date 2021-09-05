@@ -58,6 +58,9 @@ final class ContentEntityRelationshipType extends AbstractType
         $resolver->setAllowedTypes('parent', ContentEntity::class);
     }
 
+    /**
+     * @return never
+     */
     public function initialize(FormEvent $event): void
     {
         $options = $event->getForm()->getConfig()->getOptions();

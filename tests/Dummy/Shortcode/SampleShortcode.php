@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Tests\TestServices;
+namespace NumberNine\Tests\Dummy\Shortcode;
 
-use NumberNine\Annotation\Shortcode;
+use NumberNine\Attribute\Shortcode;
 use NumberNine\Model\PageBuilder\Control\SliderControl;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
@@ -19,9 +19,7 @@ use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * @Shortcode(name="sample", label="Sample", icon="arrows-alt-v")
- */
+#[Shortcode(name: 'sample', label: 'Sample', icon: 'arrows-alt-v')]
 final class SampleShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
     public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void
@@ -39,7 +37,7 @@ final class SampleShortcode extends AbstractShortcode implements EditableShortco
 
         $resolver->setAllowedTypes('height', ['int', 'float', 'string']);
 
-        $resolver->setNormalizer('height', static function (Options $options, $value) {
+        $resolver->setNormalizer('height', static function (Options $options, $value): int|float {
             return is_numeric($value) ? (float)$value : 30;
         });
     }

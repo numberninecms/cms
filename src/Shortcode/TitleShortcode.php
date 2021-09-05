@@ -11,7 +11,7 @@
 
 namespace NumberNine\Shortcode;
 
-use NumberNine\Annotation\Shortcode;
+use NumberNine\Attribute\Shortcode;
 use NumberNine\Model\PageBuilder\Control\BordersControl;
 use NumberNine\Model\PageBuilder\Control\ColorControl;
 use NumberNine\Model\PageBuilder\Control\SelectControl;
@@ -21,9 +21,7 @@ use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * @Shortcode(name="title", label="Title", icon="mdi-format-title")
- */
+#[Shortcode(name: 'title', label: 'Title', icon: 'mdi-format-title')]
 final class TitleShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
     public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void
@@ -72,7 +70,7 @@ final class TitleShortcode extends AbstractShortcode implements EditableShortcod
         $resolver->setAllowedValues('size', ['xsmall', 'small', 'normal', 'large', 'xlarge', 'xxlarge']);
         $resolver->setAllowedValues('style', ['center', 'left']);
 
-        $resolver->setNormalizer('margin', static function (Options $options, string $value) {
+        $resolver->setNormalizer('margin', static function (Options $options, string $value): string {
             if (!preg_match(self::INLINE_BORDERS_PATTERN, trim($value))) {
                 return '30px 0';
             }

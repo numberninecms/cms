@@ -15,14 +15,7 @@ use NumberNine\Entity\ContentEntity;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(
- *     "page_builder/{id<\d+>}/components",
- *     name="numbernine_admin_pagebuilder_entity_get_components",
- *     options={"expose"=true},
- *     methods={"GET"}
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'page_builder/{id<\d+>}/components', name: 'numbernine_admin_pagebuilder_entity_get_components', options: ['expose' => true], methods: ['GET'])]
 final class PageBuilderEntityComponentsGetAction extends AbstractPageBuilderGetAction
 {
     public function __invoke(ContentEntity $contentEntity): JsonResponse

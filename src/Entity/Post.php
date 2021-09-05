@@ -12,14 +12,12 @@
 namespace NumberNine\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use NumberNine\Annotation\FormType;
-use NumberNine\Annotation\NormalizationContext;
+use NumberNine\Attribute\NormalizationContext;
 
 /**
- * @NormalizationContext(groups={"content_entity_get", "web_access_get", "author_get"})
  * @ORM\Entity(repositoryClass="NumberNine\Repository\PostRepository")
- * @FormType(new="NumberNine\Form\Content\PostNewType", edit="NumberNine\Form\Content\PostEditType")
  */
+#[NormalizationContext(groups: ['content_entity_get', 'web_access_get', 'author_get'])]
 class Post extends ContentEntity
 {
     public function __construct()

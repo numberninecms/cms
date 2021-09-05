@@ -52,7 +52,7 @@ final class CapabilityStore
         ];
 
         $newCapabilities = array_map(
-            fn (ContentType $contentType) => array_values($contentType->getCapabilities()),
+            fn (ContentType $contentType): array => array_values($contentType->getCapabilities()),
             $this->contentService->getContentTypes()
         );
 

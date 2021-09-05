@@ -19,14 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(
- *     "page_builder/shortcodes/",
- *     name="numbernine_admin_page_builder_generate_shortcode",
- *     options={"expose"=true},
- *     methods={"POST"}
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'page_builder/shortcodes/', name: 'numbernine_admin_page_builder_generate_shortcode', options: ['expose' => true], methods: ['POST'])]
 final class PageBuilderComponentToShortcodeAction implements AdminController
 {
     public function __invoke(

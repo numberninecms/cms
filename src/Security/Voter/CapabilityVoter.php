@@ -25,7 +25,7 @@ final class CapabilityVoter implements VoterInterface
 
     public function __construct(iterable $capabilities)
     {
-        $capabilityNames = array_map(fn(CapabilityInterface $c) => $c->getName(), [...$capabilities]);
+        $capabilityNames = array_map(fn(CapabilityInterface $c): string => $c->getName(), [...$capabilities]);
         $this->capabilities = (array)array_combine($capabilityNames, [...$capabilities]);
     }
 
@@ -40,7 +40,7 @@ final class CapabilityVoter implements VoterInterface
         }
 
         $userCapabilities = array_merge(...array_map(
-            fn(UserRole $role) => $role->getCapabilities(),
+            fn(UserRole $role): array => $role->getCapabilities(),
             $user->getUserRoles()->toArray()
         ));
 

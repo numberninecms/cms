@@ -150,7 +150,7 @@ class User implements UserInterface, Serializable, \Stringable
             $userRoles = $userRoles->toArray();
         }
 
-        return array_map(fn(UserRole $userRole) => (string)$userRole->getName(), $userRoles);
+        return array_map(fn(UserRole $userRole): string => (string)$userRole->getName(), $userRoles);
     }
 
     /**
@@ -235,7 +235,7 @@ class User implements UserInterface, Serializable, \Stringable
     }
 
     /** @see \Serializable::serialize() */
-    public function serialize()
+    public function serialize(): string
     {
         return serialize(
             [
@@ -256,6 +256,24 @@ class User implements UserInterface, Serializable, \Stringable
             $this->username,
             $this->password,
         ] = unserialize($serialized, ['allowed_classes' => []]);
+    }
+
+    public function __serialize(): array
+    {
+        return [
+            $this->id,
+            $this->username,
+            $this->password,
+        ];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        [
+            $this->id,
+            $this->username,
+            $this->password,
+        ] = $data;
     }
 
     /**

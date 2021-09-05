@@ -237,7 +237,7 @@ final class AdminContentEntityEditFormType extends AbstractType
             $form
                 ->add($taxonomy->getName() . '_terms', EntityType::class, [
                     'class' => Term::class,
-                    'query_builder' => function () use ($taxonomy) {
+                    'query_builder' => function () use ($taxonomy): \Doctrine\ORM\QueryBuilder {
                         return $this->termRepository->findByTaxonomyNameQueryBuilder($taxonomy->getName());
                     },
                     'label' => false,
@@ -278,13 +278,13 @@ final class AdminContentEntityEditFormType extends AbstractType
             $taxonomyTerms = $this->termRepository->findByTaxonomyName($taxonomy->getName());
 
             $contentEntityTerms = $this->contentEntityTermRepository->findByTaxonomyName($entity, $taxonomy->getName());
-            $existingTermsIds = array_map(static function (ContentEntityTerm $cet) {
+            $existingTermsIds = array_map(static function (ContentEntityTerm $cet): ?int {
                 $term = $cet->getTerm();
                 return $term ? $term->getId() : null;
             }, $contentEntityTerms);
 
             $checkedIds = array_map(
-                fn (Term $term) => $term->getId(),
+                fn (Term $term): ?int => $term->getId(),
                 $form[$taxonomy->getName() . '_terms']->getData()->toArray(),
             );
 
@@ -292,7 +292,7 @@ final class AdminContentEntityEditFormType extends AbstractType
             $toBeRemovedIds = array_values(array_diff($existingTermsIds, $checkedIds));
 
             $toBeRemoved = $entity->getContentEntityTerms()->filter(
-                function (ContentEntityTerm $contentEntityTerm) use ($toBeRemovedIds) {
+                function (ContentEntityTerm $contentEntityTerm) use ($toBeRemovedIds): bool {
                     $term = $contentEntityTerm->getTerm();
                     return $term && in_array($term->getId(), $toBeRemovedIds);
                 }
@@ -304,7 +304,7 @@ final class AdminContentEntityEditFormType extends AbstractType
 
             foreach ($toBeAddedIds as $id) {
                 /** @var Term $term */
-                $term = current(array_filter($taxonomyTerms, fn (Term $term) => $term->getId() === $id));
+                $term = current(array_filter($taxonomyTerms, fn (Term $term): bool => $term->getId() === $id));
 
                 $contentEntityTerm = (new ContentEntityTerm())
                     ->setContentEntity($entity)

@@ -15,7 +15,7 @@ use InvalidArgumentException;
 use NumberNine\Social\SocialSharer;
 use PHPUnit\Framework\TestCase;
 
-class SocialSharerTest extends TestCase
+final class SocialSharerTest extends TestCase
 {
     private SocialSharer $socialSharer;
 

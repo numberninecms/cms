@@ -31,9 +31,9 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\String\Inflector\EnglishInflector;
 
 /**
- * @Route("/taxonomy/{taxonomy}/", name="numbernine_admin_term_index", methods={"GET", "POST"})
  * @ParamConverter("taxonomy", options={"mapping": {"taxonomy": "name"}})
  */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/taxonomy/{taxonomy}/', name: 'numbernine_admin_term_index', methods: ['GET', 'POST'])]
 final class TermIndexAction extends AbstractController implements AdminController
 {
     public function __invoke(
@@ -66,7 +66,7 @@ final class TermIndexAction extends AbstractController implements AdminControlle
 
         if ($form->isSubmitted() && $form->isValid()) {
             $checkedIds = array_map(
-                fn ($name) => (int)str_replace('term_', '', $name),
+                fn ($name): int => (int)str_replace('term_', '', $name),
                 array_keys(array_filter($form->getData()))
             );
 

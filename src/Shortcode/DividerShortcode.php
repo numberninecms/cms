@@ -11,7 +11,7 @@
 
 namespace NumberNine\Shortcode;
 
-use NumberNine\Annotation\Shortcode;
+use NumberNine\Attribute\Shortcode;
 use NumberNine\Model\PageBuilder\Control\BordersControl;
 use NumberNine\Model\PageBuilder\Control\ColorControl;
 use NumberNine\Model\PageBuilder\Control\OnOffSwitchControl;
@@ -22,9 +22,7 @@ use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * @Shortcode(name="divider", label="Divider", icon="mdi-minus")
- */
+#[Shortcode(name: 'divider', label: 'Divider', icon: 'mdi-minus')]
 final class DividerShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
     public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void

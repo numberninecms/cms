@@ -20,15 +20,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(
- *     "content_entities/{type}/templates/",
- *     name="numbernine_admin_contententity_templates_get_collection",
- *     options={"expose"=true},
- *     methods={"GET"},
- *     priority="200"
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'content_entities/{type}/templates/', name: 'numbernine_admin_contententity_templates_get_collection', options: ['expose' => true], methods: ['GET'], priority: 200,)]
 final class ContentEntityTemplatesGetAction extends AbstractController implements AdminController
 {
     public function __invoke(

@@ -63,7 +63,7 @@ final class MenuItem
             ->setAllowedTypes('children', ['array', MenuItem::class . '[]'])
         ;
 
-        $resolver->setNormalizer('children', static function (Options $options, array $children) {
+        $resolver->setNormalizer('children', static function (Options $options, array $children): array {
             $newChildren = $children;
 
             foreach ($children as $key => $child) {
@@ -73,7 +73,7 @@ final class MenuItem
             }
 
             $i = 0;
-            array_walk($newChildren, function (MenuItem $menuItem) use (&$i) {
+            array_walk($newChildren, function (MenuItem $menuItem) use (&$i): void {
                 $menuItem->setPosition((($i++) + 1) * 100);
             });
 

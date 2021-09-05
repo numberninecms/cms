@@ -27,9 +27,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/users/roles/", name="numbernine_admin_user_role_index", methods={"GET", "POST"}, priority="10")
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/users/roles/', name: 'numbernine_admin_user_role_index', methods: ['GET', 'POST'], priority: 10,)]
 final class UserRoleIndexAction extends AbstractController implements AdminController
 {
     public function __invoke(

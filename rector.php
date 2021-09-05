@@ -11,7 +11,9 @@
 
 declare(strict_types=1);
 
+use PHPStan\Type\Accessory\AccessoryLiteralStringType;
 use Rector\Php80\Rector\Class_\DoctrineAnnotationClassToAttributeRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
 use Symfony\Component\Routing\Annotation\Route;
 use Rector\Core\Configuration\Option;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
@@ -27,11 +29,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/src',
         __DIR__ . '/tests',
     ]);
-    $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, getcwd() . '/phpstan-for-config.neon');
+    $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, getcwd() . '/phpstan.neon');
+    $parameters->set(Option::SKIP, [
+        ReturnNeverTypeRector::class,
+    ]);
 
     $containerConfigurator->import(SetList::PHP_80);
     $containerConfigurator->import(SetList::PHP_81);
-    $containerConfigurator->import(SetList::TYPE_DECLARATION);
+//    $containerConfigurator->import(SetList::TYPE_DECLARATION);
     $containerConfigurator->import(SetList::TYPE_DECLARATION_STRICT);
 
     $services = $containerConfigurator->services();

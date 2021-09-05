@@ -24,9 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/users/{id}/", name="numbernine_admin_user_edit", methods={"GET", "POST"})
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/users/{id}/', name: 'numbernine_admin_user_edit', methods: ['GET', 'POST'])]
 final class UserEditAction extends AbstractController implements AdminController
 {
     public function __invoke(

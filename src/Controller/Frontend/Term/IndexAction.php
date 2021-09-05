@@ -76,7 +76,7 @@ final class IndexAction extends AbstractController
                     $contentTypes = array_values(
                         array_filter(
                             $contentService->getContentTypes(),
-                            static function (ContentType $contentType) use ($taxonomy) {
+                            static function (ContentType $contentType) use ($taxonomy): bool {
                                 return in_array($contentType->getName(), $taxonomy->getContentTypes() ?? [], true);
                             }
                         )

@@ -11,7 +11,7 @@
 
 namespace NumberNine\Model\General;
 
-use NumberNine\Annotation\DescriptorAnnotation;
+use NumberNine\Attribute\DescriptorAnnotation;
 
 interface Descriptor
 {

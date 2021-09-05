@@ -19,13 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(
- *     path="page_builder/{id<\d+>}/components",
- *     name="numbernine_admin_pagebuilder_post_entity_components",
- *     options={"expose"=true}, methods={"POST"}
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'page_builder/{id<\d+>}/components', name: 'numbernine_admin_pagebuilder_post_entity_components', options: ['expose' => true], methods: ['POST'])]
 final class PageBuilderEntityComponentsUpdateAction
 {
     public function __invoke(

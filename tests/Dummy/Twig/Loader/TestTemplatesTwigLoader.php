@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace NumberNine\Tests\TestServices;
+namespace NumberNine\Tests\Dummy\Twig\Loader;
 
 use Twig\Loader\FilesystemLoader;
 

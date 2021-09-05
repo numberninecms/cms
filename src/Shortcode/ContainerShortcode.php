@@ -11,12 +11,13 @@
 
 namespace NumberNine\Shortcode;
 
-use NumberNine\Annotation\Shortcode;
+use NumberNine\Attribute\Shortcode;
 use NumberNine\Model\PageBuilder\Control\BordersControl;
 use NumberNine\Model\PageBuilder\Control\ButtonToggleControl;
 use NumberNine\Model\PageBuilder\Control\VerticalAlignmentControl;
 use NumberNine\Model\PageBuilder\Control\HorizontalAlignmentControl;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
+use NumberNine\Model\PageBuilder\Position;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\Options;
@@ -25,15 +26,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
 use function NumberNine\Common\Util\ArrayUtil\array_set_if_value_exists;
 
-/**
- * @Shortcode(
- *     name="container",
- *     label="Container",
- *     container=true,
- *     icon="mdi-table-row",
- *     siblingsPosition={"top", "bottom"}
- * )
- */
+#[Shortcode(name: 'container', label: 'Container', container: true, icon: 'mdi-table-row', siblingsPosition: [Position::TOP, Position::BOTTOM])]
 final class ContainerShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
     public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void
@@ -65,7 +58,7 @@ final class ContainerShortcode extends AbstractShortcode implements EditableShor
         $resolver->setAllowedValues('justify', ['start', 'center', 'end', 'between', 'around']);
         $resolver->setAllowedValues('align', ['start', 'center', 'end', 'stretch', 'baseline']);
 
-        $resolver->setNormalizer('margin', static function (Options $options, string $value) {
+        $resolver->setNormalizer('margin', static function (Options $options, string $value): string {
             if (!preg_match(self::INLINE_BORDERS_PATTERN, trim($value))) {
                 return '0 auto';
             }
@@ -73,7 +66,7 @@ final class ContainerShortcode extends AbstractShortcode implements EditableShor
             return trim($value);
         });
 
-        $resolver->setNormalizer('padding', static function (Options $options, string $value) {
+        $resolver->setNormalizer('padding', static function (Options $options, string $value): string {
             if (!preg_match(self::INLINE_BORDERS_PATTERN, trim($value))) {
                 return '';
             }

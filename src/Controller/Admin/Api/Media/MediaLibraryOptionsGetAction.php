@@ -17,14 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use function NumberNine\Common\Util\ConfigUtil\get_file_upload_max_size;
 
-/**
- * @Route(
- *     "/media_files/options",
- *     name="numbernine_admin_media_files_get_options",
- *     options={"expose"=true},
- *     methods={"GET"}
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/media_files/options', name: 'numbernine_admin_media_files_get_options', options: ['expose' => true], methods: ['GET'])]
 final class MediaLibraryOptionsGetAction
 {
     public function __invoke(ResponseFactory $responseFactory): JsonResponse

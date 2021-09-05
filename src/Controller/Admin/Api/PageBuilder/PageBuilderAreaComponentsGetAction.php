@@ -17,14 +17,7 @@ use NumberNine\Theme\ThemeStore;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(
- *     "page_builder/{area<(?!\d+)[\w_\-]+>}/components",
- *     name="numbernine_admin_pagebuilder_area_get_components",
- *     options={"expose"=true},
- *     methods={"GET"}
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'page_builder/{area<(?!\d+)[\w_\-]+>}/components', name: 'numbernine_admin_pagebuilder_area_get_components', options: ['expose' => true], methods: ['GET'])]
 final class PageBuilderAreaComponentsGetAction extends AbstractPageBuilderGetAction
 {
     public function __invoke(
