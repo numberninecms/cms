@@ -9,23 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Annotation\Shortcode;
+namespace NumberNine\Attribute\Shortcode;
 
-use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\Annotation\Enum;
-use Doctrine\Common\Annotations\Annotation\Target;
 
-/**
- * @Annotation
- * @Target("CLASS")
- */
-final class ExclusionPolicy
+#[\Attribute(\Attribute::TARGET_METHOD | \Attribute::TARGET_PROPERTY)]
+final class Expose
 {
-    public const NONE = 'none';
     public const ALL = 'all';
-
+    public const VIEW = 'view';
+    public const SERIALIZATION = 'serialization';
     /**
-     * @Enum({"all", "none"})
+     * @Enum({"all", "view", "serialization"})
      */
-    public string $value = 'none';
+    public string $value = 'all';
 }

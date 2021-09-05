@@ -11,15 +11,13 @@
 
 namespace NumberNine\Shortcode;
 
-use NumberNine\Annotation\Shortcode;
+use NumberNine\Attribute\Shortcode;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * @Shortcode(name="iframe", label="Iframe", icon="mdi-iframe-outline")
- */
+#[Shortcode(name: 'iframe', label: 'Iframe', icon: 'mdi-iframe-outline')]
 final class IframeShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
     public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void

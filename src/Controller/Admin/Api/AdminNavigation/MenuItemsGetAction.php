@@ -19,9 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("menu_items", name="numbernine_admin_menuitems_get_collection", options={"expose"=true}, methods={"GET"})
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'menu_items', name: 'numbernine_admin_menuitems_get_collection', options: ['expose' => true], methods: ['GET'])]
 final class MenuItemsGetAction extends AbstractController implements AdminController
 {
     public function __invoke(

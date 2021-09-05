@@ -19,9 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/register", name="numbernine_register")
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/register', name: 'numbernine_register')]
 final class RegisterAction extends AbstractController
 {
     public function __invoke(Request $request, UserFactory $userFactory): Response

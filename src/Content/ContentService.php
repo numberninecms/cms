@@ -18,7 +18,7 @@ use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use LogicException;
-use NumberNine\Annotation\FormType;
+use NumberNine\Attribute\FormType;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\User;
 use NumberNine\Event\MainLoopQueryEvent;
@@ -175,6 +175,7 @@ final class ContentService
 
     /**
      * @throws ORMException
+     * @return never
      */
     public function deleteEntitiesOfType(string|\NumberNine\Model\Content\ContentType $contentType, array $ids): void
     {
@@ -194,6 +195,7 @@ final class ContentService
 
     /**
      * @throws ORMException
+     * @return never
      */
     public function deletePermanentlyAllEntitiesOfType(string|\NumberNine\Model\Content\ContentType $contentType): void
     {
@@ -211,6 +213,9 @@ final class ContentService
         $this->entityManager->flush();
     }
 
+    /**
+     * @return never
+     */
     public function restoreEntitiesOfType(string|\NumberNine\Model\Content\ContentType $contentType, array $ids): void
     {
         if (is_string($contentType)) {
@@ -268,6 +273,9 @@ final class ContentService
         return $this->formFactory->create($formType->edit, $entity, $options);
     }
 
+    /**
+     * @return never
+     */
     private function validateFormTypeAnnotation(?FormType $formType, ContentType $contentType): void
     {
         if (!$formType) {

@@ -19,9 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/users/{id<\d+>}/", name="numbernine_admin_users_get_item", options={"expose"=true}, methods={"GET"})
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/users/{id<\d+>}/', name: 'numbernine_admin_users_get_item', options: ['expose' => true], methods: ['GET'])]
 final class UserGetAction extends AbstractController implements AdminController
 {
     public function __invoke(ResponseFactory $responseFactory, User $user): JsonResponse

@@ -11,7 +11,7 @@
 
 namespace NumberNine\Shortcode;
 
-use NumberNine\Annotation\Shortcode;
+use NumberNine\Attribute\Shortcode;
 use NumberNine\Entity\Term;
 use NumberNine\Event\CurrentRequestTermEvent;
 use NumberNine\Model\PageBuilder\Control\OnOffSwitchControl;
@@ -22,14 +22,7 @@ use NumberNine\Repository\TermRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * @Shortcode(
- *     name="categories",
- *     label="Categories",
- *     description="Displays the posts categories.",
- *     icon="mdi-view-list"
- * )
- */
+#[Shortcode(name: 'categories', label: 'Categories', description: 'Displays the posts categories.', icon: 'mdi-view-list')]
 final class CategoriesShortcode extends AbstractShortcode implements
     EditableShortcodeInterface,
     EventSubscriberInterface

@@ -22,9 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
-/**
- * @Route("/users/", name="numbernine_admin_users_delete_collection", options={"expose"=true}, methods={"POST"})
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/users/', name: 'numbernine_admin_users_delete_collection', options: ['expose' => true], methods: ['POST'])]
 final class UsersDeleteAction extends AbstractController implements AdminController
 {
     public function __invoke(

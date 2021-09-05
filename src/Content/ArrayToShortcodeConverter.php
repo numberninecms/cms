@@ -34,7 +34,7 @@ final class ArrayToShortcodeConverter
 
         $parameters = array_filter(
             $array['parameters'],
-            static fn($v, $k) => !is_array($v) && $v !== '' && $v !== null && $v !== false && $k !== 'content',
+            static fn($v, $k): bool => !is_array($v) && $v !== '' && $v !== null && $v !== false && $k !== 'content',
             ARRAY_FILTER_USE_BOTH,
         );
 
@@ -67,7 +67,7 @@ final class ArrayToShortcodeConverter
 
     public function purifyOutput(string $text): string
     {
-        $text = (string)preg_replace_callback('@\[text](.*)\[/text]@simU', static fn ($m) => trim($m[1]), $text);
+        $text = (string)preg_replace_callback('@\[text](.*)\[/text]@simU', static fn ($m): string => trim($m[1]), $text);
 
         return (string)preg_replace('/\n\n+/m', "\n\n", $text);
     }

@@ -13,14 +13,11 @@ namespace NumberNine\Model\Media;
 
 final class FileDescriptor
 {
-    /** @var string */
-    private $originalFilename;
+    private ?string $originalFilename = null;
 
-    /** @var string */
-    private $newFilename;
+    private ?string $newFilename = null;
 
-    /** @var string */
-    private $slugifiedFilename;
+    private ?string $slugifiedFilename = null;
 
     public function getOriginalFilename(): string
     {

@@ -15,26 +15,20 @@ use Doctrine\Common\Annotations\Reader;
 
 interface ExtendedReader extends Reader
 {
-    /**
-     * @param object|string $object
-     */
-    public function getAllAnnotations($object): array;
+    public function getAllAnnotationsAndAttributes(object|string $object): array;
 
-    /**
-     * @param object|array|string $object
-     */
-    public function getAnnotationsOfType($object, string $type): array;
+    public function getAnnotationsOrAttributesOfType(object|array|string $object, string $type): array;
 
-    /**
-     * @param object|array|string $object
-     * @return mixed|null
-     */
-    public function getFirstAnnotationOfType($object, string $type, bool $throwException = false);
+    public function getFirstAnnotationOrAttributeOfType(
+        object|array|string $object,
+        string $type,
+        bool $throwException = false,
+    ): mixed;
 
-    /**
-     * @param object|array|string $object
-     * @param mixed $default
-     * @return mixed|null
-     */
-    public function getValueOfFirstAnnotationOfType($object, string $type, $default = null, string $property = 'value');
+    public function getValueOfFirstAnnotationOrAttributeOfType(
+        object|array|string $object,
+        string $type,
+        mixed $default = null,
+        string $property = 'value',
+    ): mixed;
 }

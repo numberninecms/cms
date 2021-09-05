@@ -20,14 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(
- *     "/users/check-username-availability/{username}",
- *     name="numbernine_admin_users_check_username_availability",
- *     options={"expose"=true},
- *     methods={"GET"}
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/users/check-username-availability/{username}', name: 'numbernine_admin_users_check_username_availability', options: ['expose' => true], methods: ['GET'])]
 final class UserCheckUsernameAvailabilityAction extends AbstractController implements AdminController
 {
     public function __invoke(

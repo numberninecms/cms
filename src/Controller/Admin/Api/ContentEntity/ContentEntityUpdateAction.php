@@ -36,20 +36,12 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-/**
- * @Route(
- *     "content_entities/{type}/{id<\d+>}/",
- *     name="numbernine_admin_contententity_update_item",
- *     options={"expose"=true},
- *     methods={"PUT"}
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'content_entities/{type}/{id<\d+>}/', name: 'numbernine_admin_contententity_update_item', options: ['expose' => true], methods: ['PUT'])]
 final class ContentEntityUpdateAction extends AbstractController implements AdminController
 {
     public function __construct(private EventDispatcherInterface $eventDispatcher)
     {
     }
-
     /**
      * @param Serializer $serializer
      * @throws ExceptionInterface
@@ -115,7 +107,7 @@ final class ContentEntityUpdateAction extends AbstractController implements Admi
 
         $submittedTermIds = array_map(static fn($term) => $term['id'], $data['terms'] ?? []);
         $existingTermIds = $entity->getContentEntityTerms()->map(
-            fn(ContentEntityTerm $cet) => $cet->getTerm() instanceof Term ? $cet->getTerm()->getId() : null
+            fn(ContentEntityTerm $cet): ?int => $cet->getTerm() instanceof Term ? $cet->getTerm()->getId() : null
         )->toArray();
 
         $termIdsToDelete = array_diff($existingTermIds, $submittedTermIds);
@@ -123,7 +115,7 @@ final class ContentEntityUpdateAction extends AbstractController implements Admi
 
         foreach ($termIdsToDelete as $id) {
             $cet = $entity->getContentEntityTerms()->filter(
-                fn(ContentEntityTerm $cet) => $cet->getTerm() instanceof Term && $cet->getTerm()->getId() === $id
+                fn(ContentEntityTerm $cet): bool => $cet->getTerm() instanceof Term && $cet->getTerm()->getId() === $id
             )->first();
             $entity->removeContentEntityTerm($cet);
         }
@@ -161,7 +153,6 @@ final class ContentEntityUpdateAction extends AbstractController implements Admi
 
         return $responseFactory->createSerializedJsonResponse($entity, $context);
     }
-
     private function validateAccess(ContentEntity $entity, ContentType $contentType): void
     {
         $user = $this->getUser();

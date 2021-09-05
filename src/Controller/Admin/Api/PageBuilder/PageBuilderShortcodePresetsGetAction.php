@@ -17,14 +17,7 @@ use NumberNine\Http\ResponseFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(
- *     "page_builder/shortcodes/{name}/presets/",
- *     name="numbernine_admin_page_builder_shortcode_get_presets",
- *     options={"expose"=true},
- *     methods={"GET"}
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'page_builder/shortcodes/{name}/presets/', name: 'numbernine_admin_page_builder_shortcode_get_presets', options: ['expose' => true], methods: ['GET'])]
 final class PageBuilderShortcodePresetsGetAction implements AdminController
 {
     public function __invoke(
@@ -35,7 +28,7 @@ final class PageBuilderShortcodePresetsGetAction implements AdminController
         $associativePresets = $shortcodeProcessor->getShortcodePresets($name);
 
         $presets = array_map(
-            fn($v, $k) => [
+            fn($v, $k): array => [
                 'name' => $k,
                 'components' => $shortcodeProcessor->buildShortcodeTree($v, true, false, true)
             ],

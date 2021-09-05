@@ -17,11 +17,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-/**
- * @Route("/logout", name="numbernine_logout")
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/logout', name: 'numbernine_logout')]
 final class LogoutAction extends AbstractController
 {
+    /**
+     * @return never
+     */
     public function __invoke(AuthenticationUtils $authenticationUtils): Response
     {
         throw new Exception('This method can be blank - it will be intercepted by the logout key on your firewall');

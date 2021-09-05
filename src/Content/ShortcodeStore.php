@@ -11,7 +11,7 @@
 
 namespace NumberNine\Content;
 
-use NumberNine\Annotation\Shortcode;
+use NumberNine\Attribute\Shortcode;
 use NumberNine\Exception\InvalidShortcodeException;
 use NumberNine\Model\Shortcode\ShortcodeInterface;
 use NumberNine\Annotation\ExtendedReader;
@@ -76,7 +76,7 @@ final class ShortcodeStore
 
     public function addShortcode(ShortcodeInterface $shortcode): void
     {
-        $metadata = $this->annotationReader->getFirstAnnotationOfType($shortcode, Shortcode::class, true);
+        $metadata = $this->annotationReader->getFirstAnnotationOrAttributeOfType($shortcode, Shortcode::class, true);
 
         $this->shortcodes[$metadata->name] = $shortcode;
         $this->shortcodesMetadata[$metadata->name] = $metadata;

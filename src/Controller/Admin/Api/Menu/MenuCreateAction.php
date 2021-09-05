@@ -20,9 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/menus/", name="numbernine_admin_menus_post_item", options={"expose"=true}, methods={"POST"})
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/menus/', name: 'numbernine_admin_menus_post_item', options: ['expose' => true], methods: ['POST'])]
 final class MenuCreateAction implements AdminController
 {
     public function __invoke(

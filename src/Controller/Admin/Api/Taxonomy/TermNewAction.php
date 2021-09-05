@@ -17,9 +17,7 @@ use NumberNine\Http\ResponseFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("terms/{taxonomy}/", name="numbernine_admin_terms_new_item", options={"expose": true}, methods={"POST"})
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'terms/{taxonomy}/', name: 'numbernine_admin_terms_new_item', options: ['expose' => true], methods: ['POST'])]
 final class TermNewAction extends AbstractTermController
 {
     public function __invoke(

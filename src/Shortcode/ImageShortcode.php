@@ -11,7 +11,7 @@
 
 namespace NumberNine\Shortcode;
 
-use NumberNine\Annotation\Shortcode;
+use NumberNine\Attribute\Shortcode;
 use NumberNine\Entity\MediaFile;
 use NumberNine\Model\PageBuilder\Control\ImageControl;
 use NumberNine\Model\PageBuilder\Control\SliderInputControl;
@@ -25,9 +25,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
 use function NumberNine\Common\Util\ArrayUtil\array_set_if_value_exists;
 
-/**
- * @Shortcode(name="image", label="Image", icon="mdi-image-area")
- */
+#[Shortcode(name: 'image', label: 'Image', icon: 'mdi-image-area')]
 final class ImageShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
     public function __construct(private MediaFileRepository $mediaFileRepository)

@@ -11,7 +11,7 @@
 
 namespace NumberNine\Shortcode;
 
-use NumberNine\Annotation\Shortcode;
+use NumberNine\Attribute\Shortcode;
 use NumberNine\Model\PageBuilder\Control\ContentEntityControl;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
@@ -19,9 +19,7 @@ use NumberNine\Content\ContentEntityRenderer;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * @Shortcode(name="block", label="Block", icon="puzzle-piece")
- */
+#[Shortcode(name: 'block', label: 'Block', icon: 'puzzle-piece')]
 final class BlockShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
     public function __construct(private ContentEntityRenderer $contentEntityRenderer)

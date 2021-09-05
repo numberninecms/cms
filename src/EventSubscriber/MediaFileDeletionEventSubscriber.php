@@ -44,6 +44,9 @@ final class MediaFileDeletionEventSubscriber implements EventSubscriber
         $this->deletedEntities = $uow->getScheduledEntityDeletions();
     }
 
+    /**
+     * @return never
+     */
     public function postFlush(PostFlushEventArgs $args): void
     {
         foreach ($this->deletedEntities as $entity) {

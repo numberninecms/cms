@@ -21,9 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/settings/general/", name="numbernine_admin_settings_general", methods={"GET", "POST"})
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/settings/general/', name: 'numbernine_admin_settings_general', methods: ['GET', 'POST'])]
 final class SettingsGeneralAction extends AbstractController implements AdminController
 {
     public function __invoke(

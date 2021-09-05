@@ -17,9 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/{type}/{id<\d+>}/", name="numbernine_admin_content_entity_edit", methods={"GET", "POST"}, priority="-1000")
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/{type}/{id<\d+>}/', name: 'numbernine_admin_content_entity_edit', methods: ['GET', 'POST'], priority: '-1000')]
 final class ContentEntityEditAction extends AbstractContentEntityFormAction
 {
     public function __invoke(

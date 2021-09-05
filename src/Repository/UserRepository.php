@@ -111,6 +111,9 @@ final class UserRepository extends ServiceEntityRepository
         return $queryBuilder;
     }
 
+    /**
+     * @return never
+     */
     public function removeCollection(array $ids, string $associatedContent): void
     {
         if (!in_array($associatedContent, [self::DELETE_MODE_REASSIGN, self::DELETE_MODE_DELETE], true)) {

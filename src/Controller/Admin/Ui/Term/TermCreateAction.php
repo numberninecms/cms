@@ -26,9 +26,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Inflector\EnglishInflector;
 
 /**
- * @Route("/taxonomy/{taxonomy}/term/", name="numbernine_admin_term_create", methods={"GET", "POST"})
  * @ParamConverter("taxonomy", options={"mapping": {"taxonomy": "name"}})
  */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/taxonomy/{taxonomy}/term/', name: 'numbernine_admin_term_create', methods: ['GET', 'POST'])]
 final class TermCreateAction extends AbstractController implements AdminController
 {
     public function __invoke(Request $request, EntityManagerInterface $entityManager, Taxonomy $taxonomy): Response

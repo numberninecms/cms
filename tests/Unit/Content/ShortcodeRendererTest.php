@@ -14,7 +14,7 @@ namespace NumberNine\Tests\Unit\Content;
 use NumberNine\Content\ShortcodeRenderer;
 use NumberNine\Shortcode\TextShortcode;
 use NumberNine\Tests\DotEnvAwareWebTestCase;
-use NumberNine\Tests\TestServices\SampleShortcode;
+use NumberNine\Tests\Dummy\Shortcode\SampleShortcode;
 
 final class ShortcodeRendererTest extends DotEnvAwareWebTestCase
 {

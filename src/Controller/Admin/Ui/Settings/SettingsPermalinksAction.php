@@ -21,9 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/settings/permalinks/", name="numbernine_admin_settings_permalinks", methods={"GET", "POST"})
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/settings/permalinks/', name: 'numbernine_admin_settings_permalinks', methods: ['GET', 'POST'])]
 final class SettingsPermalinksAction extends AbstractController implements AdminController
 {
     public function __invoke(

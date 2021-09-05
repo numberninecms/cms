@@ -11,7 +11,7 @@
 
 namespace NumberNine\Shortcode;
 
-use NumberNine\Annotation\Shortcode;
+use NumberNine\Attribute\Shortcode;
 use NumberNine\Model\PageBuilder\Control\BordersControl;
 use NumberNine\Model\PageBuilder\Control\SliderInputControl;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
@@ -19,9 +19,7 @@ use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * @Shortcode(name="text_box", label="TextBox", container=true, icon="mdi-format-textbox")
- */
+#[Shortcode(name: 'text_box', label: 'TextBox', container: true, icon: 'mdi-format-textbox')]
 final class TextBoxShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
     public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void

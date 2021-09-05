@@ -122,7 +122,7 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implem
         return $credentials['password'];
     }
 
-    public function start(Request $request, AuthenticationException $authException = null)
+    public function start(Request $request, AuthenticationException $authException = null): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         $token = $this->tokenStorage->getToken();
 

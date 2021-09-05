@@ -12,7 +12,6 @@
 namespace NumberNine\Command;
 
 use Exception;
-use ReflectionClass;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -21,14 +20,18 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+use Twig\Environment;
 use function Symfony\Component\String\u;
 
 final class MakeShortcodeCommand extends Command
 {
     protected static $defaultName = 'numbernine:make:shortcode';
 
-    public function __construct(private string $shortcodesPath, private string $projectPath)
-    {
+    public function __construct(
+        private Environment $twig,
+        private string $shortcodesPath,
+        private string $projectPath,
+    ) {
         parent::__construct();
     }
 
@@ -114,12 +117,12 @@ final class MakeShortcodeCommand extends Command
             $shortcodeBasename = basename($shortcodeClassName);
             $shortcodeClassFilename = $shortcodeBasename . '.php';
 
-            $annotation = sprintf(
-                '@Shortcode(name="%s", label="%s"%s%s)',
+            $attribute = sprintf(
+                "#[Shortcode(name: '%s', label: '%s'%s%s)]",
                 $shortcodeName,
                 str_replace('Shortcode', '', $shortcodeBasename),
-                $container ? ', container=true' : '',
-                $editable && $icon ? ', icon="' . $icon . '"' : ''
+                $container ? ', container: true' : '',
+                $editable && $icon ? ", icon: '" . $icon . "'" : ''
             );
 
             $editableInterface = $editable ? "use NumberNine\Model\Shortcode\EditableShortcodeInterface;\n" : '';
@@ -127,71 +130,22 @@ final class MakeShortcodeCommand extends Command
 
             file_put_contents(
                 $this->shortcodesPath . $shortcodeClassFilename,
-                <<<SHORTCODE
-<?php
-
-namespace $namespace;
-
-use NumberNine\Annotation\Shortcode;
-use NumberNine\Model\PageBuilder\Control\SliderControl;
-use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
-use NumberNine\Model\Shortcode\ShortcodeInterface;
-$editableInterface
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
-/**
- * $annotation
- */
-final class $shortcodeBasename implements ShortcodeInterface$implementsEditable
-{
-    public function buildPageBuilderForm(PageBuilderFormBuilderInterface \$builder): void
-    {
-        \$builder
-            ->add('title')
-            ->add('age', SliderControl::class)
-        ;
-    }
-
-    public function configureParameters(OptionsResolver \$resolver): void
-    {
-        \$resolver->setDefaults([
-            'title' => 'Welcome to the Turtle Age Show',
-            'age' => 40,
-        ]);
-    }
-
-    public function processParameters(array \$parameters): array
-    {
-        return [
-            'title' => \$parameters['title'],
-            'age' => \$parameters['age'],
-        ];
-    }
-}
-
-SHORTCODE
+                $this->twig->render('@NumberNine/templates/shortcode.php.twig', compact(
+                    'namespace',
+                    'attribute',
+                    'editableInterface',
+                    'implementsEditable',
+                ))
             );
 
-            file_put_contents(
-                $shortcodeTemplatesPath . 'template.html.twig',
-                <<<TEMPLATE
-<h3>{{ title }}</h3>
-<p>The turtle is {{ age }} years-old.</p>
-
-TEMPLATE
+            copy(
+                __DIR__ . '/../Bundle/Resources/views/templates/shortcode_template.html.twig',
+                $shortcodeTemplatesPath . 'template.html.twig'
             );
 
-            file_put_contents(
-                $shortcodeTemplatesPath . 'template.vue.twig',
-                <<<TEMPLATE
-{% verbatim %}
-<div>
-    <h3>{{ parameters.title }}</h3>
-    <p>The turtle is {{ parameters.age }} years-old.</p>
-</div>
-{% endverbatim %}
-
-TEMPLATE
+            copy(
+                __DIR__ . '/../Bundle/Resources/views/templates/shortcode_template.vue.twig',
+                $shortcodeTemplatesPath . 'template.vue.twig'
             );
         } catch (Exception $e) {
             $io->error('Shortcode cannot be created.');

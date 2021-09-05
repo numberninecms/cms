@@ -11,15 +11,13 @@
 
 namespace NumberNine\Shortcode;
 
-use NumberNine\Annotation\Shortcode;
+use NumberNine\Attribute\Shortcode;
 use NumberNine\Event\PaginatorEvent;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Pagination\Paginator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-/**
- * @Shortcode(name="pagination", label="Pagination", icon="mdi-book-open-page-variant")
- */
+#[Shortcode(name: 'pagination', label: 'Pagination', icon: 'mdi-book-open-page-variant')]
 final class PaginationShortcode extends AbstractShortcode implements EventSubscriberInterface
 {
     private ?Paginator $paginator = null;

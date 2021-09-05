@@ -177,7 +177,7 @@ final class ContentType
 
         $resolver->setNormalizer(
             'capabilities',
-            function (Options $options, $value) {
+            function (Options $options, $value): array {
                 return $this->createCapabilitiesArray($options, $value);
             }
         );
@@ -225,7 +225,7 @@ final class ContentType
         ];
 
         $mappedCapabilities = array_map(
-            static fn($capability) => str_replace(
+            static fn($capability): string => str_replace(
                 'posts',
                 u($options['labels']->getPluralName())->snake()->toString(),
                 $capability

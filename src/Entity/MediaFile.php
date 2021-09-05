@@ -12,14 +12,14 @@
 namespace NumberNine\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use NumberNine\Annotation\NormalizationContext;
+use NumberNine\Attribute\NormalizationContext;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="NumberNine\Repository\MediaFileRepository")
  * @ORM\Table(name="mediafile")
- * @NormalizationContext(groups={"content_entity_get", "web_access_get", "author_get", "media_file_get"})
  */
+#[NormalizationContext(groups: ['content_entity_get', 'web_access_get', 'author_get', 'media_file_get'])]
 class MediaFile extends ContentEntity
 {
     /**

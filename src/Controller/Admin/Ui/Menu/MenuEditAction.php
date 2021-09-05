@@ -28,15 +28,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/menus/{id}/", name="numbernine_admin_menu_edit", methods={"GET", "POST"})
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/menus/{id}/', name: 'numbernine_admin_menu_edit', methods: ['GET', 'POST'])]
 final class MenuEditAction extends AbstractController implements AdminController
 {
     private ?Request $request;
-
     private const ITEMS_PER_PAGE = 5;
-
     public function __construct(
         private ContentService $contentService,
         private ContentEntityRepository $contentEntityRepository,
@@ -44,7 +40,6 @@ final class MenuEditAction extends AbstractController implements AdminController
     ) {
         $this->request = $requestStack->getCurrentRequest();
     }
-
     public function __invoke(
         EntityManagerInterface $entityManager,
         LoggerInterface $logger,
@@ -95,7 +90,6 @@ final class MenuEditAction extends AbstractController implements AdminController
             'pages' => $this->getPages(),
         ], $response);
     }
-
     private function getEntities(): array
     {
         $entities = [];
@@ -115,7 +109,6 @@ final class MenuEditAction extends AbstractController implements AdminController
 
         return $entities;
     }
-
     private function getPages(): array
     {
         $pages = [];

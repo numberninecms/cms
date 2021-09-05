@@ -19,15 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(
- *     "/users/roles/",
- *     name="numbernine_admin_user_roles_get_collection",
- *     options={"expose"=true},
- *     methods={"GET"},
- *     priority=1000
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/users/roles/', name: 'numbernine_admin_user_roles_get_collection', options: ['expose' => true], methods: ['GET'], priority: 1000)]
 final class UserRolesGetAction extends AbstractController implements AdminController
 {
     public function __invoke(ResponseFactory $responseFactory, UserRoleRepository $userRoleRepository): JsonResponse

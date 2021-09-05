@@ -1,0 +1,38 @@
+<?php
+
+namespace {{ namespace }};
+
+use NumberNine\Attribute\Shortcode;
+use NumberNine\Model\PageBuilder\Control\SliderControl;
+use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
+use NumberNine\Model\Shortcode\ShortcodeInterface;
+{{ editableInterface }}
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+{{ attribute }}
+final class $shortcodeBasename implements ShortcodeInterface{{ implementsEditable }}
+{
+    public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void
+    {
+        $builder
+            ->add('title')
+            ->add('age', SliderControl::class)
+        ;
+    }
+
+    public function configureParameters(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'title' => 'Welcome to the Turtle Age Show',
+            'age' => 40,
+        ]);
+    }
+
+    public function processParameters(array $parameters): array
+    {
+        return [
+            'title' => $parameters['title'],
+            'age' => $parameters['age'],
+        ];
+    }
+}

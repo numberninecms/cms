@@ -9,16 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Annotation;
+namespace NumberNine\Attribute;
 
-use Doctrine\Common\Annotations\Annotation;
-
-/**
- * @Annotation
- * @Target("CLASS")
- */
-final class FormType
+#[\Attribute(\Attribute::TARGET_CLASS)]
+final class NormalizationContext
 {
-    public string $new;
-    public string $edit;
+    public function __construct(public array $groups)
+    {
+    }
 }

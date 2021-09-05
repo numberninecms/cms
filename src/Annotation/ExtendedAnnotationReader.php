@@ -12,11 +12,11 @@
 namespace NumberNine\Annotation;
 
 use Doctrine\Common\Annotations\Reader;
+use NumberNine\Exception\AnnotationOrAttributeMissingException;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
 use ReflectionProperty;
-use RuntimeException;
 
 final class ExtendedAnnotationReader implements ExtendedReader
 {
@@ -28,14 +28,14 @@ final class ExtendedAnnotationReader implements ExtendedReader
      * @param object|string $object
      * @throws ReflectionException
      */
-    public function getAllAnnotations($object): array
+    public function getAllAnnotationsAndAttributes(object|string $object): array
     {
         $annotations = [];
 
         $reflection = new ReflectionClass($object);
 
         if ($parent = $reflection->getParentClass()) {
-            $annotations = array_merge($annotations, $this->getAllAnnotations($parent->getName()));
+            $annotations = array_merge($annotations, $this->getAllAnnotationsAndAttributes($parent->getName()));
         }
 
         $classAnnotations = $this->decoratedAnnotationReader->getClassAnnotations($reflection);
@@ -44,11 +44,33 @@ final class ExtendedAnnotationReader implements ExtendedReader
             $annotations[$reflection->getName()] = $classAnnotations;
         }
 
+        $classAttributes = $reflection->getAttributes();
+
+        if (!empty($classAttributes)) {
+            $annotations[$reflection->getName()] = array_merge(
+                $annotations[$reflection->getName()] ?? [],
+                array_map(static function (\ReflectionAttribute $attribute) {
+                    return $attribute->newInstance();
+                }, $classAttributes),
+            );
+        }
+
         foreach ($reflection->getProperties() as $property) {
             $propertyAnnotations = $this->decoratedAnnotationReader->getPropertyAnnotations($property);
 
             if (!empty($propertyAnnotations)) {
                 $annotations[$property->getName()] = $propertyAnnotations;
+            }
+
+            $propertyAttributes = $property->getAttributes();
+
+            if (!empty($propertyAttributes)) {
+                $annotations[$property->getName()] = array_merge(
+                    $annotations[$property->getName()] ?? [],
+                    array_map(static function (\ReflectionAttribute $attribute) {
+                        return $attribute->newInstance();
+                    }, $propertyAttributes),
+                );
             }
         }
 
@@ -57,6 +79,17 @@ final class ExtendedAnnotationReader implements ExtendedReader
 
             if (!empty($methodAnnotations)) {
                 $annotations[$method->getName()] = $methodAnnotations;
+            }
+
+            $methodAttributes = $method->getAttributes();
+
+            if (!empty($methodAttributes)) {
+                $annotations[$method->getName()] = array_merge(
+                    $annotations[$method->getName()] ?? [],
+                    array_map(static function (\ReflectionAttribute $attribute) {
+                        return $attribute->newInstance();
+                    }, $methodAttributes),
+                );
             }
         }
 
@@ -67,9 +100,9 @@ final class ExtendedAnnotationReader implements ExtendedReader
      * @param object|array|string $object
      * @throws ReflectionException
      */
-    public function getAnnotationsOfType($object, string $type): array
+    public function getAnnotationsOrAttributesOfType(object|array|string $object, string $type): array
     {
-        $groups = is_array($object) ? $object : $this->getAllAnnotations($object);
+        $groups = \is_array($object) ? $object : $this->getAllAnnotationsAndAttributes($object);
         $annotationsOfType = [];
 
         foreach ($groups as $target => $annotations) {
@@ -84,25 +117,25 @@ final class ExtendedAnnotationReader implements ExtendedReader
     }
 
     /**
-     * @param object|array|string $object
-     * @return mixed|null
      * @throws ReflectionException
      */
-    public function getFirstAnnotationOfType($object, string $type, bool $throwException = false)
-    {
-        $annotationsOfType = $this->getAnnotationsOfType($object, $type);
+    public function getFirstAnnotationOrAttributeOfType(
+        object|array|string $object,
+        string $type,
+        bool $throwException = false,
+    ): mixed {
+        $annotationsOfType = $this->getAnnotationsOrAttributesOfType($object, $type);
 
         if (empty($annotationsOfType)) {
             if ($throwException) {
-                if (is_array($object)) {
-                    throw new RuntimeException(sprintf('Annotation of type "%s" is missing.', $type));
+                if (\is_array($object)) {
+                    throw new AnnotationOrAttributeMissingException($type);
                 }
 
-                throw new RuntimeException(sprintf(
-                    'Annotation of type "%s" is missing on "%s" class.',
+                throw new AnnotationOrAttributeMissingException(
                     $type,
-                    is_string($object) ? $object : $object::class
-                ));
+                    \is_string($object) ? $object : $object::class,
+                );
             }
 
             return null;
@@ -112,14 +145,15 @@ final class ExtendedAnnotationReader implements ExtendedReader
     }
 
     /**
-     * @param object|array|string $object
-     * @param mixed $default
-     * @return mixed|null
      * @throws ReflectionException
      */
-    public function getValueOfFirstAnnotationOfType($object, string $type, $default = null, string $property = 'value')
-    {
-        $annotation = $this->getFirstAnnotationOfType($object, $type);
+    public function getValueOfFirstAnnotationOrAttributeOfType(
+        object|array|string $object,
+        string $type,
+        mixed $default = null,
+        string $property = 'value',
+    ): mixed {
+        $annotation = $this->getFirstAnnotationOrAttributeOfType($object, $type);
 
         if ($annotation && property_exists($type, $property)) {
             return $annotation->$property;

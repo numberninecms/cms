@@ -11,12 +11,10 @@
 
 namespace NumberNine\Shortcode;
 
-use NumberNine\Annotation\Shortcode;
+use NumberNine\Attribute\Shortcode;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 
-/**
- * @Shortcode(name="unknown_shortcode")
- */
+#[Shortcode(name: 'unknown_shortcode')]
 final class UnknownShortcode extends AbstractShortcode
 {
 }

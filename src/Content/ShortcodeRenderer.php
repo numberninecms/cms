@@ -46,7 +46,7 @@ class ShortcodeRenderer
         $text = $this->shortcodeProcessor->insertTextShortcodes($text);
 
         /** @var ParsedShortcodeInterface[] $parsedShortcodes */
-        $parsedShortcodes = $this->cache->get(md5($text), fn () => $this->shortcodeParser->parse($text));
+        $parsedShortcodes = $this->cache->get(md5($text), fn (): array => $this->shortcodeParser->parse($text));
 
         $renderedText = '';
 

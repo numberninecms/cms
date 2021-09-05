@@ -21,9 +21,9 @@ abstract class AbstractSelectControl extends AbstractPageBuilderFormControl
     {
         $resolver->setRequired('choices');
         $resolver->setAllowedTypes('choices', 'array');
-        $resolver->setNormalizer('choices', static function (Options $options, array $choices) {
+        $resolver->setNormalizer('choices', static function (Options $options, array $choices): array {
             return array_map(
-                static fn ($choice, $label) => ['label' => $label, 'value' => $choice],
+                static fn ($choice, $label): array => ['label' => $label, 'value' => $choice],
                 array_keys($choices),
                 $choices,
             );

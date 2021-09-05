@@ -20,14 +20,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(
- *     "terms/{taxonomy}/delete-collection",
- *     name="numbernine_admin_terms_delete_collection",
- *     options={"expose": true},
- *     methods={"POST"}
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'terms/{taxonomy}/delete-collection', name: 'numbernine_admin_terms_delete_collection', options: ['expose' => true], methods: ['POST'])]
 final class TermDeleteAction implements AdminController
 {
     public function __invoke(

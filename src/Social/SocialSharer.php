@@ -51,6 +51,9 @@ final class SocialSharer
             rawurlencode($subject) . '&body=Check%20this%20out:%20' . $url;
     }
 
+    /**
+     * @return never
+     */
     private function validateUrl(string $url): void
     {
         if (!filter_var($url, FILTER_VALIDATE_URL)) {

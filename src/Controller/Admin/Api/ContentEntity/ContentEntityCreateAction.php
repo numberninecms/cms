@@ -21,15 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(
- *     "content_entities/{type}/new/",
- *     name="numbernine_admin_contententity_new_item",
- *     options={"expose"=true},
- *     methods={"GET"},
- *     priority="50"
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'content_entities/{type}/new/', name: 'numbernine_admin_contententity_new_item', options: ['expose' => true], methods: ['GET'], priority: 50,)]
 final class ContentEntityCreateAction extends AbstractController implements AdminController
 {
     public function __invoke(

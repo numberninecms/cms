@@ -17,9 +17,7 @@ use NumberNine\Http\ResponseFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/menus/", name="numbernine_admin_menus_get_collection", options={"expose"=true}, methods={"GET"})
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/menus/', name: 'numbernine_admin_menus_get_collection', options: ['expose' => true], methods: ['GET'])]
 final class MenusGetAction implements AdminController
 {
     public function __invoke(ResponseFactory $responseFactory, MenuRepository $menuRepository): JsonResponse

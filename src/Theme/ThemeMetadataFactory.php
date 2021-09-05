@@ -12,7 +12,7 @@
 namespace NumberNine\Theme;
 
 use NumberNine\Annotation\ExtendedReader;
-use NumberNine\Annotation\Theme;
+use NumberNine\Attribute\Theme;
 use NumberNine\Model\General\AbstractMetadataFactory;
 use NumberNine\Model\Theme\ThemeInterface;
 use NumberNine\Model\Theme\ThemeDescriptor;
@@ -30,7 +30,7 @@ final class ThemeMetadataFactory extends AbstractMetadataFactory
     public function getThemeDescriptor(ThemeInterface $theme): ThemeDescriptor
     {
         /** @var ThemeDescriptor $descriptor */
-        $descriptor = parent::getMetadataFor($theme, Theme::class, ThemeDescriptor::class);
+        $descriptor = $this->getMetadataFor($theme, Theme::class, ThemeDescriptor::class);
 
         $descriptor->setSlug(u($this->slugger->slug($descriptor->getName()))->lower());
 

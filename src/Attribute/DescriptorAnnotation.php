@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Annotation;
+namespace NumberNine\Attribute;
 
 interface DescriptorAnnotation
 {

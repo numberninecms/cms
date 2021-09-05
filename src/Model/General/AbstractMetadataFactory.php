@@ -35,7 +35,7 @@ abstract class AbstractMetadataFactory
             throw new InvalidArgumentException();
         }
 
-        $metadata = $this->annotationReader->getFirstAnnotationOfType($object, $annotationClassName, true);
+        $metadata = $this->annotationReader->getFirstAnnotationOrAttributeOfType($object, $annotationClassName, true);
         $this->loadedMetadata[$className] = new $metadataClassName($metadata);
 
         return $this->loadedMetadata[$className];
