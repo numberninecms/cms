@@ -26,7 +26,7 @@ final class ReaderVoter extends Voter
     {
         $this->readCapability = array_filter(
             [...$capabilities],
-            fn(CapabilityInterface $c) => $c->getName() === Capabilities::READ
+            fn(CapabilityInterface $c): bool => $c->getName() === Capabilities::READ
         )[0];
     }
 

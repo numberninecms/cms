@@ -22,6 +22,9 @@ final class ContentTypeRegistrationEvent extends Event
     /** @var ContentType[] */
     private array $contentTypes = [];
 
+    /**
+     * @return never
+     */
     public function addContentType(ContentType $contentType): void
     {
         if (!is_subclass_of($contentType->getEntityClassName(), ContentEntity::class)) {

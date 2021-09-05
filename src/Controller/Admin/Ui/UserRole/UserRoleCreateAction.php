@@ -22,11 +22,8 @@ use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/users/roles/new/", name="numbernine_admin_user_role_create", methods={"GET", "POST"}, priority="10")
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/users/roles/new/', name: 'numbernine_admin_user_role_create', methods: ['GET', 'POST'], priority: 10)]
 final class UserRoleCreateAction extends AbstractController implements AdminController
 {
     public function __invoke(

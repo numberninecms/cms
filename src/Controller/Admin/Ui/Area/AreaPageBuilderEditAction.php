@@ -19,10 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(
- *     "/area/{area}/builder/", name="numbernine_admin_area_page_builder_edit", methods={"GET"})
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/area/{area}/builder/', name: 'numbernine_admin_area_page_builder_edit', methods: ['GET'])]
 final class AreaPageBuilderEditAction extends AbstractController implements AdminController
 {
     public function __invoke(

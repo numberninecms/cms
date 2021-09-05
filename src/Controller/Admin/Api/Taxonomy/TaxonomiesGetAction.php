@@ -17,9 +17,7 @@ use NumberNine\Http\ResponseFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("taxonomies/", name="numbernine_admin_taxonomies_get_collection", options={"expose": true}, methods={"GET"})
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'taxonomies/', name: 'numbernine_admin_taxonomies_get_collection', options: ['expose' => true], methods: ['GET'])]
 final class TaxonomiesGetAction implements AdminController
 {
     public function __invoke(TaxonomyRepository $taxonomyRepository, ResponseFactory $responseFactory): JsonResponse

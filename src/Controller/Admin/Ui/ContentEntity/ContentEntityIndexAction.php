@@ -24,9 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-/**
- * @Route("/{type}/", name="numbernine_admin_content_entity_index", methods={"GET", "POST"}, priority="-1000")
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/{type}/', name: 'numbernine_admin_content_entity_index', methods: ['GET', 'POST'], priority: '-1000')]
 final class ContentEntityIndexAction extends AbstractController implements AdminController
 {
     public function __invoke(
@@ -59,7 +57,7 @@ final class ContentEntityIndexAction extends AbstractController implements Admin
 
         if ($form->isSubmitted() && $form->isValid()) {
             $checkedIds = array_map(
-                fn ($name) => (int)str_replace('entity_', '', $name),
+                fn ($name): int => (int)str_replace('entity_', '', $name),
                 array_keys(array_filter($form->getData()))
             );
 

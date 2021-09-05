@@ -124,7 +124,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
         if (!$this->appName) {
             $this->io->title('General settings');
 
-            $this->appName = $this->io->ask('Application name', 'numbernine', function ($appName) {
+            $this->appName = $this->io->ask('Application name', 'numbernine', function ($appName): \Symfony\Component\String\AbstractUnicodeString {
                 if (empty($appName)) {
                     throw new \RuntimeException('Application name cannot be empty.');
                 }

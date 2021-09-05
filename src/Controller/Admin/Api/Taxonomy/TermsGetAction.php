@@ -22,9 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-/**
- * @Route("terms/{taxonomy}/", name="numbernine_admin_terms_get_collection", options={"expose": true}, methods={"GET"})
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'terms/{taxonomy}/', name: 'numbernine_admin_terms_get_collection', options: ['expose' => true], methods: ['GET'])]
 final class TermsGetAction implements AdminController
 {
     public function __invoke(

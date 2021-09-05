@@ -25,14 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-/**
- * @Route(
- *     "/users/roles/",
- *     name="numbernine_admin_user_roles_update_collection",
- *     options={"expose"=true},
- *     methods={"PUT"}
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/users/roles/', name: 'numbernine_admin_user_roles_update_collection', options: ['expose' => true], methods: ['PUT'])]
 final class UserRolesUpdateAction extends AbstractController implements AdminController
 {
     public function __invoke(

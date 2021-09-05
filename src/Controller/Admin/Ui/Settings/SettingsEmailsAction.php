@@ -21,9 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/settings/emails/", name="numbernine_admin_settings_emails", methods={"GET", "POST"})
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/settings/emails/', name: 'numbernine_admin_settings_emails', methods: ['GET', 'POST'])]
 final class SettingsEmailsAction extends AbstractController implements AdminController
 {
     public function __invoke(

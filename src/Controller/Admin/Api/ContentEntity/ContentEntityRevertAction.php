@@ -26,14 +26,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(
- *     "content_entities/{type}/{id<\d+>}/revert/{version}/",
- *     name="numbernine_admin_contententity_revert_item",
- *     options={"expose"=true},
- *     methods={"POST"}
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'content_entities/{type}/{id<\d+>}/revert/{version}/', name: 'numbernine_admin_contententity_revert_item', options: ['expose' => true], methods: ['POST'])]
 final class ContentEntityRevertAction extends AbstractController implements AdminController
 {
     public function __invoke(
@@ -75,7 +68,6 @@ final class ContentEntityRevertAction extends AbstractController implements Admi
 
         return $responseFactory->createSerializedJsonResponse($entity, $context);
     }
-
     private function validateAccess(ContentEntity $entity, ContentType $contentType): void
     {
         $user = $this->getUser();
@@ -89,7 +81,6 @@ final class ContentEntityRevertAction extends AbstractController implements Admi
             $this->denyAccessUnlessGranted($contentType->getMappedCapability(Capabilities::EDIT_OTHERS_POSTS));
         }
     }
-
     private function deleteNewerVersions(
         EntityManagerInterface $entityManager,
         LogEntryRepository $logEntryRepository,

@@ -13,7 +13,7 @@ namespace NumberNine\Http;
 
 use ArrayIterator;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use NumberNine\Annotation\NormalizationContext;
+use NumberNine\Attribute\NormalizationContext;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Pagination\Paginator as NumberNinePaginator;
 use NumberNine\Annotation\ExtendedReader;
@@ -44,7 +44,7 @@ final class ResponseFactory
             $type = $this->contentService->getContentType((string)$data->getCustomType());
 
             if (empty($context)) {
-                $normalizationContext = $this->annotationReader->getFirstAnnotationOfType(
+                $normalizationContext = $this->annotationReader->getFirstAnnotationOrAttributeOfType(
                     $type->getEntityClassName(),
                     NormalizationContext::class
                 ) ?? [];
@@ -72,7 +72,7 @@ final class ResponseFactory
         $iterator = $data->getIterator();
 
         if (empty($context) && $iterator->count() > 0) {
-            $normalizationContext = $this->annotationReader->getFirstAnnotationOfType(
+            $normalizationContext = $this->annotationReader->getFirstAnnotationOrAttributeOfType(
                 $iterator->current()::class,
                 NormalizationContext::class
             ) ?? [];

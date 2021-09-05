@@ -20,14 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(
- *     "content-types/{type}/editor-extension/",
- *     name="numbernine_admin_contenttype_editor_extension_get_item",
- *     options={"expose"=true},
- *     methods={"GET"}
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'content-types/{type}/editor-extension/', name: 'numbernine_admin_contenttype_editor_extension_get_item', options: ['expose' => true], methods: ['GET'])]
 final class ContentTypeEditorExtensionGetAction extends AbstractController implements AdminController
 {
     public function __invoke(

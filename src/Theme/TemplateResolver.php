@@ -43,7 +43,7 @@ final class TemplateResolver implements TemplateResolverInterface
     {
         return $this->cache->get(
             sprintf('single_%s_id_%d', $entity->getCustomType(), $entity->getId()),
-            function (ItemInterface $item) use ($entity, $extraTemplates) {
+            function (ItemInterface $item) use ($entity, $extraTemplates): \Twig\TemplateWrapper {
                 $item->tag(sprintf('content_entity_%d', $entity->getId()));
 
                 $themeName = $this->themeStore->getCurrentThemeName();
@@ -176,7 +176,7 @@ final class TemplateResolver implements TemplateResolverInterface
 
     public function resolveComponent(ComponentInterface $component): string
     {
-        return $this->cache->get($this->slugger->slug($component::class), function () use ($component) {
+        return $this->cache->get($this->slugger->slug($component::class), function () use ($component): string {
             $templates = $this->getComponentTemplatesCandidates($component);
             return $this->twig->resolveTemplate($templates)->getTemplateName();
         });

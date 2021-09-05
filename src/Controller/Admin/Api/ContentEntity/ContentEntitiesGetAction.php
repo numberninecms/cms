@@ -24,14 +24,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-/**
- * @Route(
- *     "content_entities/{type}",
- *     name="numbernine_admin_contententity_get_collection",
- *     options={"expose"=true},
- *     methods={"GET"}
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'content_entities/{type}', name: 'numbernine_admin_contententity_get_collection', options: ['expose' => true], methods: ['GET'])]
 final class ContentEntitiesGetAction
 {
     /**

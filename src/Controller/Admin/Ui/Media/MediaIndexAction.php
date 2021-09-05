@@ -24,9 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-/**
- * @Route("/media/", name="numbernine_admin_media_library_index", methods={"GET", "POST"})
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/media/', name: 'numbernine_admin_media_library_index', methods: ['GET', 'POST'])]
 final class MediaIndexAction extends AbstractController implements AdminController
 {
     public function __invoke(
@@ -60,7 +58,7 @@ final class MediaIndexAction extends AbstractController implements AdminControll
 
         if ($form->isSubmitted() && $form->isValid()) {
             $checkedIds = array_map(
-                fn ($name) => (int)str_replace('entity_', '', $name),
+                fn ($name): int => (int)str_replace('entity_', '', $name),
                 array_keys(array_filter($form->getData()))
             );
 

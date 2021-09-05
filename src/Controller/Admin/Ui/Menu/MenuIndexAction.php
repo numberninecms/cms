@@ -24,9 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
-/**
- * @Route("/menus/", name="numbernine_admin_menu_index")
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/menus/', name: 'numbernine_admin_menu_index')]
 final class MenuIndexAction extends AbstractController implements AdminController
 {
     public function __invoke(
@@ -42,7 +40,7 @@ final class MenuIndexAction extends AbstractController implements AdminControlle
 
         if ($form->isSubmitted() && $form->isValid()) {
             $checkedIds = array_map(
-                fn ($name) => (int)str_replace('menu_', '', $name),
+                fn ($name): int => (int)str_replace('menu_', '', $name),
                 array_keys(array_filter($form->getData()))
             );
 

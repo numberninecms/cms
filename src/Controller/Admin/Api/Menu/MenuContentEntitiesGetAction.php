@@ -19,14 +19,7 @@ use NumberNine\Http\ResponseFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(
- *     "/menus/entities/{type}/{page<\d+>}/",
- *     name="numbernine_admin_menus_get_entities",
- *     options={"expose"=true},
- *     methods={"GET"}
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/menus/entities/{type}/{page<\d+>}/', name: 'numbernine_admin_menus_get_entities', options: ['expose' => true], methods: ['GET'])]
 final class MenuContentEntitiesGetAction implements AdminController
 {
     public function __invoke(

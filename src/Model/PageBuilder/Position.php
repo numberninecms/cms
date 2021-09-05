@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Annotation\Form;
+declare(strict_types=1);
 
-use Doctrine\Common\Annotations\Annotation;
+namespace NumberNine\Model\PageBuilder;
 
-/**
- * @Annotation
- * @Target("PROPERTY")
- */
-final class Responsive
+enum Position: string
 {
+    case LEFT = 'left';
+    case RIGHT = 'right';
+    case TOP = 'top';
+    case BOTTOM = 'bottom';
 }

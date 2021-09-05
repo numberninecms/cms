@@ -100,6 +100,9 @@ final class MediaFileFactory
             ->setOriginalFilename($filename);
     }
 
+    /**
+     * @return never
+     */
     private function moveOrCopy(FileDescriptor $file, bool $move = false, bool $overwrite = true): void
     {
         if (!file_exists($file->getOriginalFilename())) {

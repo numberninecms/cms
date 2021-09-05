@@ -89,12 +89,12 @@ final class ConfigurationReadWriter
                 md5(serialize($options)),
                 $resultAsAssociativeArray ? 'true' : 'false',
             ),
-            function (ItemInterface $item) use ($resultAsAssociativeArray, $optionNames, $defaults) {
+            function (ItemInterface $item) use ($resultAsAssociativeArray, $optionNames, $defaults): array {
                 $result = $this->coreOptionRepository->findBy(['name' => $optionNames]);
                 $finalArray = [];
 
                 foreach ($optionNames as $optionName) {
-                    $coreOption = current(array_filter($result, fn(CoreOption $i) => $i->getName() === $optionName));
+                    $coreOption = current(array_filter($result, fn(CoreOption $i): bool => $i->getName() === $optionName));
                     $default = array_key_exists($optionName, $defaults) ? $defaults[$optionName] : null;
                     $value = $coreOption && $coreOption->getValue() ? $coreOption->getValue() : $default;
 

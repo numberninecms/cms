@@ -29,9 +29,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-/**
- * @Route("/users/", name="numbernine_admin_user_index", methods={"GET", "POST"})
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: '/users/', name: 'numbernine_admin_user_index', methods: ['GET', 'POST'])]
 final class UserIndexAction extends AbstractController implements AdminController
 {
     public function __invoke(
@@ -66,7 +64,7 @@ final class UserIndexAction extends AbstractController implements AdminControlle
             $this->denyAccessUnlessGranted(Capabilities::DELETE_USERS);
 
             $checkedIds = array_map(
-                fn ($name) => (int)str_replace('user_', '', $name),
+                fn ($name): int => (int)str_replace('user_', '', $name),
                 array_keys(array_filter($form->getData()))
             );
 

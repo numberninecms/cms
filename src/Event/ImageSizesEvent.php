@@ -16,8 +16,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 final class ImageSizesEvent extends Event
 {
-    /** @var array */
-    private $sizes = [];
+    private array $sizes = [];
 
     /**
      * ImageSizesEvent constructor.

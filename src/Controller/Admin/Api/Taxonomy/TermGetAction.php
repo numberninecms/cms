@@ -18,9 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("terms/{taxonomy}/{id}/", name="numbernine_admin_terms_get_item", options={"expose": true}, methods={"GET"})
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'terms/{taxonomy}/{id}/', name: 'numbernine_admin_terms_get_item', options: ['expose' => true], methods: ['GET'])]
 final class TermGetAction extends AbstractController implements AdminController
 {
     public function __invoke(ResponseFactory $responseFactory, Term $term): JsonResponse

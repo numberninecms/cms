@@ -21,14 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-/**
- * @Route(
- *     "content_entities/{type}/restore-collection",
- *     name="numbernine_admin_contententity_restore_collection",
- *     options={"expose"=true},
- *     methods={"POST"}
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'content_entities/{type}/restore-collection', name: 'numbernine_admin_contententity_restore_collection', options: ['expose' => true], methods: ['POST'])]
 final class ContentEntitiesRestoreAction
 {
     public function __invoke(

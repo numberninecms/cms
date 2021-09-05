@@ -22,14 +22,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Inflector\EnglishInflector;
 
-/**
- * @Route(
- *     "content_entities/{type}/{id<\d+>}/",
- *     name="numbernine_admin_contententity_delete_item",
- *     options={"expose"=true},
- *     methods={"DELETE"}
- * )
- */
+#[\Symfony\Component\Routing\Annotation\Route(path: 'content_entities/{type}/{id<\d+>}/', name: 'numbernine_admin_contententity_delete_item', options: ['expose' => true], methods: ['DELETE'])]
 final class ContentEntityDeleteAction extends AbstractController implements AdminController
 {
     /**

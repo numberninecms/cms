@@ -35,7 +35,7 @@ final class RouteProvider implements RouteProviderInterface
         $this->collection->add($name, $route);
     }
 
-    public function getRouteCollectionForRequest(Request $request)
+    public function getRouteCollectionForRequest(Request $request): \Symfony\Component\Routing\RouteCollection
     {
         return $this->collection;
     }

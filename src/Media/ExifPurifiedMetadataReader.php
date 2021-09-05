@@ -58,7 +58,7 @@ final class ExifPurifiedMetadataReader extends ExifMetadataReader
         try {
             $exifData = ErrorHandling::ignoring(
                 -1,
-                static function () use ($path) {
+                static function () use ($path): array|bool {
                     return @exif_read_data($path, '', true, false);
                 }
             );

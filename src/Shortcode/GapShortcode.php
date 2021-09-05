@@ -11,7 +11,7 @@
 
 namespace NumberNine\Shortcode;
 
-use NumberNine\Annotation\Shortcode;
+use NumberNine\Attribute\Shortcode;
 use NumberNine\Model\PageBuilder\Control\SliderControl;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\Shortcode\AbstractShortcode;
@@ -19,9 +19,7 @@ use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * @Shortcode(name="gap", label="Gap", icon="arrows-alt-v")
- */
+#[Shortcode(name: 'gap', label: 'Gap', icon: 'arrows-alt-v')]
 final class GapShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
     public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void
@@ -39,7 +37,7 @@ final class GapShortcode extends AbstractShortcode implements EditableShortcodeI
 
         $resolver->setAllowedTypes('height', ['int', 'float', 'string']);
 
-        $resolver->setNormalizer('height', static function (Options $options, $value) {
+        $resolver->setNormalizer('height', static function (Options $options, $value): int|float {
             return is_numeric($value) ? (float)$value : 30;
         });
     }

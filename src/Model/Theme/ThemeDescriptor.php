@@ -12,8 +12,8 @@
 namespace NumberNine\Model\Theme;
 
 use InvalidArgumentException;
-use NumberNine\Annotation\DescriptorAnnotation;
-use NumberNine\Annotation\Theme;
+use NumberNine\Attribute\DescriptorAnnotation;
+use NumberNine\Attribute\Theme;
 use NumberNine\Model\General\Descriptor;
 
 final class ThemeDescriptor implements Descriptor
@@ -23,6 +23,9 @@ final class ThemeDescriptor implements Descriptor
     private string $mainEntry;
     private array $areas;
 
+    /**
+     * @return never
+     */
     public function __construct(DescriptorAnnotation $metadata)
     {
         if (!$metadata instanceof Theme) {

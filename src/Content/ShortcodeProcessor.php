@@ -13,7 +13,7 @@ namespace NumberNine\Content;
 
 use Exception;
 use NumberNine\Annotation\ExtendedReader;
-use NumberNine\Annotation\Form\Responsive;
+use NumberNine\Attribute\Form\Responsive;
 use NumberNine\Entity\Preset;
 use NumberNine\Exception\InvalidShortcodeException;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
@@ -21,7 +21,6 @@ use NumberNine\Model\Shortcode\ShortcodeInterface;
 use NumberNine\Repository\PresetRepository;
 use NumberNine\Theme\PresetFinderInterface;
 use Psr\Cache\InvalidArgumentException;
-use ReflectionException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Symfony\Component\Uid\Uuid;
@@ -49,7 +48,7 @@ final class ShortcodeProcessor
         $text = $this->insertTextShortcodes($text);
 
         /** @var ParsedShortcodeInterface[] $parsedShortcodes */
-        $parsedShortcodes = $this->cache->get(md5($text), fn () => $this->shortcodeParser->parse($text));
+        $parsedShortcodes = $this->cache->get(md5($text), fn (): array => $this->shortcodeParser->parse($text));
 
         $node = [];
         static $position = 0;
@@ -106,9 +105,6 @@ final class ShortcodeProcessor
         return $node;
     }
 
-    /**
-     * @throws ReflectionException
-     */
     public function shortcodeToArray(string $shortcodeName, array $parameters = [], int $position = 0): array
     {
         $shortcode = $this->shortcodeStore->getShortcode($shortcodeName);
@@ -209,12 +205,9 @@ final class ShortcodeProcessor
         return array_merge($builtInPresets, $presets);
     }
 
-    /**
-     * @throws ReflectionException
-     */
     private function getShortcodeResponsiveParameters(ShortcodeInterface $shortcode): array
     {
-        $annotations = $this->annotationReader->getAnnotationsOfType($shortcode, Responsive::class);
+        $annotations = $this->annotationReader->getAnnotationsOrAttributesOfType($shortcode, Responsive::class);
 
         return array_keys($annotations);
     }

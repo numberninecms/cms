@@ -161,7 +161,7 @@ final class ThemeRuntime implements RuntimeExtensionInterface
         array $attributes = []
     ): array {
         return array_map(
-            fn(Term $term) => $this->getTermLink($term, $attributes),
+            fn(Term $term): string => $this->getTermLink($term, $attributes),
             $contentEntity->getTerms($taxonomyName)
         );
     }

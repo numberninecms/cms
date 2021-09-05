@@ -15,23 +15,17 @@ use NumberNine\Entity\Term;
 
 final class PaginationParameters
 {
-    /** @var int|null */
-    private $startRow;
+    private ?int $startRow = null;
 
-    /** @var int|null */
-    private $fetchCount;
+    private ?int $fetchCount = null;
 
-    /** @var string|null */
-    private $filter;
+    private ?string $filter = null;
 
-    /** @var string|null */
-    private $status;
+    private ?string $status = null;
 
-    /** @var string|null */
-    private $orderBy;
+    private ?string $orderBy = null;
 
-    /** @var string|null */
-    private $order;
+    private ?string $order = null;
 
     /** @var Term[] */
     private $terms = [];
