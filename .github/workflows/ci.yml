@@ -72,7 +72,7 @@ jobs:
 
         strategy:
             matrix:
-                php: [ 8.1 ]
+                php: [ '8.1' ]
 
         steps:
             -   uses: FranzDiebold/github-env-vars-action@v2
@@ -129,7 +129,7 @@ jobs:
             -   name: Create .env.local file
                 run: |
                     echo "APP_NAME=numbernine" > .env.local
-                    echo "DATABASE_URL=mysql://user:user@mysql:3306/numbernine_app?serverVersion=5.7" >> .env.local
+                    echo "DATABASE_URL=mysql://user:user@mysql:3306/numbernine_app?serverVersion=8.0" >> .env.local
                     echo "REDIS_URL=redis://redis:6379" >> .env.local
                     echo "MAILER_DSN=smtp://maildev:25" >> .env.local
 
@@ -163,7 +163,7 @@ jobs:
 
         strategy:
             matrix:
-                php: [ 8.0 ]
+                php: [ '8.1' ]
 
         steps:
             -   uses: FranzDiebold/github-env-vars-action@v2
@@ -201,6 +201,7 @@ jobs:
                     COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             -   name: Create a new project
+                continue-on-error: true
                 run: |
                     symfony new newproject --full --no-git
                     cd newproject
@@ -211,13 +212,18 @@ jobs:
             -   name: Add NumberNine to the project
                 run: |
                     composer config extra.symfony.allow-contrib true
-                    composer config repositories.0 path ./temp/cms
-                    composer require numberninecms/cms:*@dev numberninecms/chapterone
+                    composer config minimum-stability dev
+                    composer config prefer-stable true
+                    composer config repositories.0 vcs https://github.com/derrabus/laminas-code
+                    cp composer.json temp.json
+                    jq --indent 4 -r '.require += {"laminas/laminas-code": "dev-bugfix/return-type-will-change as 4.5.x-dev"}' temp.json > composer.json
+                    composer config repositories.1 path ./temp/cms
+                    composer require numberninecms/cms:*@dev numberninecms/chapterone:dev-php8
 
             -   name: Create .env.local file
                 run: |
                     echo "APP_NAME=numbernine" > .env.local
-                    echo "DATABASE_URL=mysql://root:root@localhost:3306/numbernine_app?serverVersion=5.7" >> .env.local
+                    echo "DATABASE_URL=mysql://root:root@localhost:3306/numbernine_app?serverVersion=8.0" >> .env.local
 
             -   name: Wait for MySQL to be up and running
                 run: php -r "set_time_limit(30); for(;;) { if(@fsockopen('localhost:'.(3306))) { break; } }"
