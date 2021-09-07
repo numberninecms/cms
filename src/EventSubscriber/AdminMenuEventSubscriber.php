@@ -34,6 +34,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 final class AdminMenuEventSubscriber implements EventSubscriberInterface
 {
     use QuickTranslate;
+
     private EnglishInflector $inflector;
     private string $configFile;
 
