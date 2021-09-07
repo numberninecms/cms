@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace NumberNine\Exception;
 
-final class FileNotDeletedException extends \Exception
+use Exception;
+
+final class FileNotDeletedException extends Exception
 {
     public function __construct(string $filename)
     {

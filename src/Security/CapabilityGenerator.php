@@ -11,7 +11,6 @@
 
 namespace NumberNine\Security;
 
-use NumberNine\Security\Capabilities;
 use NumberNine\Content\ContentService;
 
 final class CapabilityGenerator
@@ -23,9 +22,7 @@ final class CapabilityGenerator
     public function generateMappedSubscriberCapabilities(string $contentType): array
     {
         return $this->contentService->getContentType($contentType)->getMappedCapabilities(
-            [
-                Capabilities::READ_POSTS,
-            ]
+            [Capabilities::READ_POSTS]
         );
     }
 

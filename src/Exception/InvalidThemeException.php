@@ -15,8 +15,7 @@ use Exception;
 use NumberNine\Model\Theme\ThemeInterface;
 
 /**
- * Class InvalidThemeException
- * @package NumberNine\Exception
+ * Class InvalidThemeException.
  */
 final class InvalidThemeException extends Exception
 {
@@ -26,6 +25,6 @@ final class InvalidThemeException extends Exception
     public function __construct(ThemeInterface $theme)
     {
         $class = $theme::class;
-        parent::__construct("$class is an invalid theme. Check getName() is set correctly and returns a valid name.");
+        parent::__construct("{$class} is an invalid theme. Check getName() is set correctly and returns a valid name.");
     }
 }

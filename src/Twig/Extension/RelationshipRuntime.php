@@ -29,6 +29,6 @@ final class RelationshipRuntime implements RuntimeExtensionInterface
         /** @var SupportedContentEntityRelationshipsEvent $event */
         $event = $this->eventDispatcher->dispatch(new SupportedContentEntityRelationshipsEvent($entity::class));
 
-        return \in_array($relationshipName, $event->getRelationships());
+        return \in_array($relationshipName, $event->getRelationships(), true);
     }
 }

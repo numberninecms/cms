@@ -31,7 +31,7 @@ final class PresetFinder implements PresetFinderInterface
 
         foreach ($templates as $template) {
             try {
-                $directory = dirname($this->twig->getLoader()->getSourceContext($template)->getPath());
+                $directory = \dirname($this->twig->getLoader()->getSourceContext($template)->getPath());
 
                 $finder = new Finder();
                 $finder->in($directory)->files()->name('*.yaml');
@@ -59,6 +59,6 @@ final class PresetFinder implements PresetFinderInterface
      */
     private function validatePreset($preset): bool
     {
-        return is_array($preset) && !empty($preset['name']) && !empty($preset['content']);
+        return \is_array($preset) && !empty($preset['name']) && !empty($preset['content']);
     }
 }

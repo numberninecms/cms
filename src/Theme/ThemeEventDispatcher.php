@@ -11,7 +11,6 @@
 
 namespace NumberNine\Theme;
 
-use NumberNine\Event\Theme\AbstractThemeEvent;
 use NumberNine\Event\Theme\ThemeEventInterface;
 use NumberNine\Exception\ThemeEventNotFoundException;
 use NumberNine\Model\Theme\ThemeInterface;
@@ -70,6 +69,7 @@ final class ThemeEventDispatcher
                 foreach ($candidates as $candidate) {
                     if (class_exists($candidate)) {
                         $event = $value ? new $candidate($value) : new $candidate();
+
                         break 2;
                     }
                 }

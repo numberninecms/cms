@@ -25,7 +25,7 @@ final class PaginationShortcode extends AbstractShortcode implements EventSubscr
     public static function getSubscribedEvents(): array
     {
         return [
-            PaginatorEvent::class => 'initPaginator'
+            PaginatorEvent::class => 'initPaginator',
         ];
     }
 

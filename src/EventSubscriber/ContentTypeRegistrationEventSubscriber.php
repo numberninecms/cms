@@ -22,7 +22,7 @@ final class ContentTypeRegistrationEventSubscriber implements EventSubscriberInt
     public static function getSubscribedEvents(): array
     {
         return [
-            ContentTypeRegistrationEvent::class => 'registerContentTypes'
+            ContentTypeRegistrationEvent::class => 'registerContentTypes',
         ];
     }
 
@@ -38,14 +38,10 @@ final class ContentTypeRegistrationEventSubscriber implements EventSubscriberInt
             )
         );
 
-        $event->addContentType(
-            new ContentType(
-                [
-                    'name' => 'page',
-                    'entity_class_name' => Post::class,
-                ]
-            )
-        );
+        $event->addContentType(new ContentType([
+            'name' => 'page',
+            'entity_class_name' => Post::class,
+        ]));
 
         $event->addContentType(
             new ContentType(

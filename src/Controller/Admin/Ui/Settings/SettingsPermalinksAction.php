@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/settings/permalinks/', name: 'numbernine_admin_settings_permalinks', methods: ['GET', 'POST'])]
+#[Route(path: '/settings/permalinks/', name: 'numbernine_admin_settings_permalinks', methods: ['GET', 'POST'])]
 final class SettingsPermalinksAction extends AbstractController implements AdminController
 {
     public function __invoke(
@@ -48,6 +48,7 @@ final class SettingsPermalinksAction extends AbstractController implements Admin
             ]);
 
             $this->addFlash('success', 'Permalinks successfully saved.');
+
             return $this->redirectToRoute('numbernine_admin_settings_permalinks', [], Response::HTTP_SEE_OTHER);
         }
 

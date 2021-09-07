@@ -19,7 +19,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-
 use Twig\Environment;
 use function Symfony\Component\String\u;
 
@@ -57,7 +56,8 @@ final class MakeShortcodeCommand extends Command
                 'Material Design or MDI icon for the shortcode editor in page builder ' .
                 '(see material.io or materialdesignicons.com)'
             )
-            ->addOption('no-sample-data', null, InputOption::VALUE_NONE, "Don't create sample data");
+            ->addOption('no-sample-data', null, InputOption::VALUE_NONE, "Don't create sample data")
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -65,8 +65,8 @@ final class MakeShortcodeCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $shortcodeClassName = $input->getArgument('shortcode-class-name');
         $shortcodeName = $input->getArgument('shortcode-name');
-        $editable = (bool)$input->getOption('editable');
-        $container = (bool)$input->getOption('container');
+        $editable = (bool) $input->getOption('editable');
+        $container = (bool) $input->getOption('container');
         $icon = $input->getOption('icon');
 
         if (!$shortcodeClassName || !$shortcodeName) {
@@ -84,11 +84,11 @@ final class MakeShortcodeCommand extends Command
             }
 
             if ($editable === false) {
-                $editable = (bool)$io->confirm('Will this shortcode be editable in page builder?', true);
+                $editable = (bool) $io->confirm('Will this shortcode be editable in page builder?', true);
             }
 
             if ($container === false) {
-                $container = (bool)$io->confirm('Can this shortcode contain other shortcodes?', false);
+                $container = (bool) $io->confirm('Can this shortcode contain other shortcodes?', false);
             }
 
             if ($editable && !$icon) {
@@ -101,7 +101,7 @@ final class MakeShortcodeCommand extends Command
 
         try {
             $shortcodeTemplatesPath = $this->shortcodesPath . $shortcodeClassName . '/';
-            $relativeShortcodePath = substr($this->shortcodesPath, (int)strpos($this->shortcodesPath, 'src/'));
+            $relativeShortcodePath = substr($this->shortcodesPath, (int) strpos($this->shortcodesPath, 'src/'));
             $namespace = trim('App\\' . str_replace(
                 [$this->projectPath . '/src/', '//', '/'],
                 ['', '/', '\\'],
@@ -110,7 +110,7 @@ final class MakeShortcodeCommand extends Command
 
             if (!file_exists($shortcodeTemplatesPath)) {
                 if (!mkdir($shortcodeTemplatesPath, 0755, true) && !is_dir($shortcodeTemplatesPath)) {
-                    throw new RuntimeException("Unable to create directory $shortcodeTemplatesPath.");
+                    throw new RuntimeException("Unable to create directory {$shortcodeTemplatesPath}.");
                 }
             }
 
@@ -125,7 +125,7 @@ final class MakeShortcodeCommand extends Command
                 $editable && $icon ? ", icon: '" . $icon . "'" : ''
             );
 
-            $editableInterface = $editable ? "use NumberNine\Model\Shortcode\EditableShortcodeInterface;\n" : '';
+            $editableInterface = $editable ? "use NumberNine\\Model\\Shortcode\\EditableShortcodeInterface;\n" : '';
             $implementsEditable = $editable ? ', EditableShortcodeInterface' : '';
 
             file_put_contents(
@@ -150,11 +150,12 @@ final class MakeShortcodeCommand extends Command
         } catch (Exception $e) {
             $io->error('Shortcode cannot be created.');
             $io->writeln($e->getMessage());
+
             return Command::FAILURE;
         }
 
-        $io->success("Shortcode $shortcodeClassName has been created.");
-        $io->writeln("<info>$relativeShortcodePath$shortcodeClassFilename</info>");
+        $io->success("Shortcode {$shortcodeClassName} has been created.");
+        $io->writeln("<info>{$relativeShortcodePath}{$shortcodeClassFilename}</info>");
         $io->writeln("<info>{$relativeShortcodePath}{$shortcodeClassName}/template.html.twig</info>");
         $io->writeln("<info>{$relativeShortcodePath}{$shortcodeClassName}/template.vue.twig</info>");
         $io->newLine();

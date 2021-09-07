@@ -25,7 +25,7 @@ final class CapabilitiesListEvent extends Event
 
     public function addCapability(string $capability): void
     {
-        if (!in_array($capability, $this->capabilities, true)) {
+        if (!\in_array($capability, $this->capabilities, true)) {
             $this->capabilities[] = $capability;
         }
     }

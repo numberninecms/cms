@@ -16,5 +16,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 interface ShortcodeInterface
 {
     public function configureParameters(OptionsResolver $resolver): void;
+
     public function processParameters(array $parameters): array;
 }

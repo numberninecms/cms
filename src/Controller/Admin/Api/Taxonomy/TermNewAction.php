@@ -12,12 +12,14 @@
 namespace NumberNine\Controller\Admin\Api\Taxonomy;
 
 use NumberNine\Entity\Term;
-use NumberNine\Repository\TaxonomyRepository;
 use NumberNine\Http\ResponseFactory;
+use NumberNine\Repository\TaxonomyRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'terms/{taxonomy}/', name: 'numbernine_admin_terms_new_item', options: ['expose' => true], methods: ['POST'])]
+#[Route(path: 'terms/{taxonomy}/', name: 'numbernine_admin_terms_new_item', options: ['expose' => true], methods: [
+    'POST',
+])]
 final class TermNewAction extends AbstractTermController
 {
     public function __invoke(

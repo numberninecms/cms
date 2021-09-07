@@ -17,11 +17,15 @@ use NumberNine\Twig\Extension\ColorExtension;
 use PHPUnit\Framework\TestCase;
 use Twig\TwigFunction;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class ColorExtensionTest extends TestCase
 {
     public function testGetFunctions(): void
     {
         $functions = (new ColorExtension())->getFunctions();
-        $this->assertContainsOnlyInstancesOf(TwigFunction::class, $functions);
+        static::assertContainsOnlyInstancesOf(TwigFunction::class, $functions);
     }
 }

@@ -15,8 +15,11 @@ namespace NumberNine\Tests\Unit\Shortcode;
 
 use NumberNine\Shortcode\GapShortcode;
 use NumberNine\Tests\ShortcodeTestCase;
-use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class GapShortcodeTest extends ShortcodeTestCase
 {
     protected const SHORTCODE = GapShortcode::class;
@@ -25,7 +28,7 @@ final class GapShortcodeTest extends ShortcodeTestCase
     {
         $parameters = $this->processParameters([]);
 
-        self::assertEquals([
+        static::assertSame([
             'height' => 30,
         ], $parameters);
     }
@@ -33,18 +36,18 @@ final class GapShortcodeTest extends ShortcodeTestCase
     public function testValidHeight(): void
     {
         $parameters = $this->processParameters(['height' => 123]);
-        self::assertEquals(123, $parameters['height']);
+        static::assertSame(123, $parameters['height']);
     }
 
     public function testHeightAsString(): void
     {
         $parameters = $this->processParameters(['height' => '123']);
-        self::assertEquals(123, $parameters['height']);
+        static::assertSame(123, $parameters['height']);
     }
 
     public function testInvalidHeight(): void
     {
         $parameters = $this->processParameters(['height' => 'invalid']);
-        self::assertEquals(30, $parameters['height']);
+        static::assertSame(30, $parameters['height']);
     }
 }

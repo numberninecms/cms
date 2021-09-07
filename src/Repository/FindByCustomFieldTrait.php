@@ -25,11 +25,13 @@ trait FindByCustomFieldTrait
     {
         return $this->getByCustomFieldQueryBuilder($fieldName, $fieldValue)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     /**
      * @param mixed $fieldValue
+     *
      * @throws NonUniqueResultException
      * @throws NoResultException
      */
@@ -37,7 +39,8 @@ trait FindByCustomFieldTrait
     {
         return $this->getByCustomFieldQueryBuilder($fieldName, $fieldValue)
             ->getQuery()
-            ->getSingleResult();
+            ->getSingleResult()
+        ;
     }
 
     /**
@@ -45,15 +48,14 @@ trait FindByCustomFieldTrait
      */
     private function getByCustomFieldQueryBuilder(string $fieldName, $fieldValue): QueryBuilder
     {
-        $expression = is_array($fieldValue) ? 'IN (:fieldValue)' : '= :fieldValue';
+        $expression = \is_array($fieldValue) ? 'IN (:fieldValue)' : '= :fieldValue';
 
         return $this->createQueryBuilder('c')
             ->where('JSON_EXTRACT(c.customFields, :fieldName) ' . $expression)
-            ->setParameters(
-                [
-                    'fieldName' => '$.' . $fieldName,
-                    'fieldValue' => $fieldValue
-                ]
-            );
+            ->setParameters([
+                'fieldName' => '$.' . $fieldName,
+                'fieldValue' => $fieldValue,
+            ])
+        ;
     }
 }

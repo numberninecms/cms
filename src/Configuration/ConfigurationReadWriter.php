@@ -20,7 +20,6 @@ use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
-
 use function NumberNine\Common\Util\ArrayUtil\array_merge_recursive_fixed;
 
 final class ConfigurationReadWriter
@@ -31,10 +30,13 @@ final class ConfigurationReadWriter
 
     /**
      * Gets an option value. If the value contains a JSON string, it will be returned as an array.
+     *
      * @param mixed $default
-     * @return mixed|null
+     *
      * @throws InvalidArgumentException
      * @throws CacheException
+     *
+     * @return mixed|null
      */
     public function read(string $optionName, $default = null)
     {
@@ -67,9 +69,11 @@ final class ConfigurationReadWriter
      * - ['option1' => 'default_for_option1', 'option2' => 'default_for_option2']
      *
      * @param array $options Use numeric array for null default values, or associative for custom default values
-     * @return mixed
+     *
      * @throws CacheException
      * @throws InvalidArgumentException
+     *
+     * @return mixed
      */
     public function readMany(array $options, bool $resultAsAssociativeArray = true)
     {
@@ -94,15 +98,17 @@ final class ConfigurationReadWriter
                 $finalArray = [];
 
                 foreach ($optionNames as $optionName) {
-                    $coreOption = current(array_filter($result, fn(CoreOption $i): bool => $i->getName() === $optionName));
-                    $default = array_key_exists($optionName, $defaults) ? $defaults[$optionName] : null;
+                    $coreOption = current(
+                        array_filter($result, fn (CoreOption $i): bool => $i->getName() === $optionName)
+                    );
+                    $default = \array_key_exists($optionName, $defaults) ? $defaults[$optionName] : null;
                     $value = $coreOption && $coreOption->getValue() ? $coreOption->getValue() : $default;
 
                     try {
-                        if (is_string($value)) {
+                        if (\is_string($value)) {
                             $value = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
 
-                            if (is_array($default)) {
+                            if (\is_array($default)) {
                                 $value = array_merge_recursive_fixed($default, $value);
                             }
                         }
@@ -115,7 +121,7 @@ final class ConfigurationReadWriter
                     } else {
                         $finalArray[] = [
                             'name' => $optionName,
-                            'value' => $value
+                            'value' => $value,
                         ];
                     }
 
@@ -129,6 +135,7 @@ final class ConfigurationReadWriter
 
     /**
      * @param mixed $value
+     *
      * @throws InvalidArgumentException
      */
     public function write(string $optionName, $value, bool $flush = true): void
@@ -179,7 +186,7 @@ final class ConfigurationReadWriter
         }
 
         try {
-            if (is_string($value)) {
+            if (\is_string($value)) {
                 $value = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
             }
         } catch (Exception) {
@@ -188,7 +195,8 @@ final class ConfigurationReadWriter
 
         $cacheItem = $this->cache
             ->getItem(sprintf('coreoption_value_%s', $optionName))
-            ->set($value);
+            ->set($value)
+        ;
 
         $this->cache->save($cacheItem);
     }

@@ -11,16 +11,17 @@
 
 namespace NumberNine\Controller\Frontend\Content;
 
+use NumberNine\Configuration\ConfigurationReadWriter;
+use NumberNine\Content\ContentService;
 use NumberNine\EventSubscriber\RouteRegistrationEventSubscriber;
 use NumberNine\Model\General\Settings;
-use NumberNine\Content\ContentService;
-use NumberNine\Configuration\ConfigurationReadWriter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * The route of this action is dynamically generated
+ * The route of this action is dynamically generated.
+ *
  * @see RouteRegistrationEventSubscriber
  */
 final class HomepageAction extends AbstractController
@@ -39,7 +40,7 @@ final class HomepageAction extends AbstractController
                     $request->attributes->get('_route_params'),
                     [
                         '_content_type' => $contentService->getContentType('page'),
-                        'id' => $homepage
+                        'id' => $homepage,
                     ]
                 )
             );
@@ -47,12 +48,9 @@ final class HomepageAction extends AbstractController
 
         return $this->forward(
             ContentEntityIndexAction::class,
-            array_merge(
-                $request->attributes->get('_route_params'),
-                [
-                    'type' => 'post'
-                ]
-            )
+            array_merge($request->attributes->get('_route_params'), [
+                'type' => 'post',
+            ])
         );
     }
 }

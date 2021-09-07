@@ -11,13 +11,15 @@
 
 namespace NumberNine\Controller\Admin\Api\Taxonomy;
 
+use NumberNine\Http\ResponseFactory;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Repository\TaxonomyRepository;
-use NumberNine\Http\ResponseFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'taxonomies/', name: 'numbernine_admin_taxonomies_get_collection', options: ['expose' => true], methods: ['GET'])]
+#[Route(path: 'taxonomies/', name: 'numbernine_admin_taxonomies_get_collection', options: ['expose' => true], methods: [
+    'GET',
+])]
 final class TaxonomiesGetAction implements AdminController
 {
     public function __invoke(TaxonomyRepository $taxonomyRepository, ResponseFactory $responseFactory): JsonResponse

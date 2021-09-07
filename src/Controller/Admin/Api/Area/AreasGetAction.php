@@ -11,15 +11,17 @@
 
 namespace NumberNine\Controller\Admin\Api\Area;
 
+use NumberNine\Content\AreaStore;
+use NumberNine\Http\ResponseFactory;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Security\Capabilities;
-use NumberNine\Http\ResponseFactory;
-use NumberNine\Content\AreaStore;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/areas/', name: 'numbernine_admin_areas_get_collection', options: ['expose' => true], methods: ['GET'])]
+#[Route(path: '/areas/', name: 'numbernine_admin_areas_get_collection', options: ['expose' => true], methods: [
+    'GET',
+])]
 final class AreasGetAction extends AbstractController implements AdminController
 {
     public function __invoke(ResponseFactory $responseFactory, AreaStore $areaStore): JsonResponse
@@ -28,7 +30,7 @@ final class AreasGetAction extends AbstractController implements AdminController
 
         $areas = $areaStore->getAreas();
         asort($areas);
-        $areas = array_map(fn($v, $k): array => ['id' => $k, 'name' => $v], $areas, array_keys($areas));
+        $areas = array_map(fn ($v, $k): array => ['id' => $k, 'name' => $v], $areas, array_keys($areas));
 
         return $responseFactory->createSerializedJsonResponse($areas);
     }

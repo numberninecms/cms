@@ -23,11 +23,13 @@ use NumberNine\Model\PageBuilder\Position;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
 use function NumberNine\Common\Util\ArrayUtil\array_set_if_value_exists;
 
-#[Shortcode(name: 'section', label: 'Section', container: true, icon: 'mdi-rectangle-outline', siblingsPosition: [Position::TOP, Position::BOTTOM])]
+#[Shortcode(name: 'section', label: 'Section', container: true, icon: 'mdi-rectangle-outline', siblingsPosition: [
+    Position::TOP,
+    Position::BOTTOM,
+])]
 final class SectionShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
     public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void

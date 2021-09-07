@@ -12,16 +12,18 @@
 namespace NumberNine\Controller\Admin\Api\ContentEntity;
 
 use Doctrine\ORM\EntityManagerInterface;
-use NumberNine\Entity\ContentEntity;
-use NumberNine\Model\Admin\AdminController;
 use NumberNine\Content\ContentService;
+use NumberNine\Entity\ContentEntity;
 use NumberNine\Http\ResponseFactory;
+use NumberNine\Model\Admin\AdminController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'content_entities/{type}/new/', name: 'numbernine_admin_contententity_new_item', options: ['expose' => true], methods: ['GET'], priority: 50,)]
+#[Route(path: 'content_entities/{type}/new/', name: 'numbernine_admin_contententity_new_item', options: ['expose' => true], methods: [
+    'GET',
+], priority: 50, )]
 final class ContentEntityCreateAction extends AbstractController implements AdminController
 {
     public function __invoke(
@@ -38,17 +40,15 @@ final class ContentEntityCreateAction extends AbstractController implements Admi
         $entity = (new $class())
             ->setCustomType($type)
             ->setAuthor($this->getUser())
-            ->setTitle(sprintf('New %s', $contentType->getLabels()->getSingularName()));
+            ->setTitle(sprintf('New %s', $contentType->getLabels()->getSingularName()))
+        ;
 
         $entityManager->persist($entity);
         $entityManager->flush();
 
-        return $this->forward(
-            ContentEntityGetAction::class,
-            [
-                'type' => $type,
-                'id' => $entity->getId()
-            ]
-        );
+        return $this->forward(ContentEntityGetAction::class, [
+            'type' => $type,
+            'id' => $entity->getId(),
+        ]);
     }
 }

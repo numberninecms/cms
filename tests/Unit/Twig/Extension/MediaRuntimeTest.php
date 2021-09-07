@@ -20,6 +20,10 @@ use NumberNine\Media\MediaFileFactory;
 use NumberNine\Tests\UserAwareTestCase;
 use NumberNine\Twig\Extension\MediaRuntime;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class MediaRuntimeTest extends UserAwareTestCase
 {
     private MediaRuntime $runtime;
@@ -34,12 +38,13 @@ final class MediaRuntimeTest extends UserAwareTestCase
         $this->mediaFileFactory = static::getContainer()->get(MediaFileFactory::class);
 
         $this->mediaFile = $this->mediaFileFactory
-            ->createMediaFileFromFilename(__DIR__ . '/../../../../assets/images/NumberNine512_slogan.png', null);
+            ->createMediaFileFromFilename(__DIR__ . '/../../../../assets/images/NumberNine512_slogan.png', null)
+        ;
     }
 
     public function testGetMaxUploadSize(): void
     {
-        self::assertIsInt($this->runtime->getMaxUploadSize());
+        static::assertIsInt($this->runtime->getMaxUploadSize());
     }
 
     public function testGetFeaturedImage(): void
@@ -49,13 +54,14 @@ final class MediaRuntimeTest extends UserAwareTestCase
         $data = (new ContentEntityRelationship())
             ->setParent($post)
             ->setChild($this->mediaFile)
-            ->setName('featured_image');
+            ->setName('featured_image')
+        ;
 
         $this->entityManager->persist($post);
         $this->entityManager->persist($data);
         $this->entityManager->flush();
 
-        self::assertMatchesRegularExpression(
+        static::assertMatchesRegularExpression(
             sprintf(
                 '@^<img src="/uploads/%s/NumberNine512-slogan(-\d+)?.png.512x140.png" ' .
                 'width="512" height="140" alt="%s">$@',
@@ -68,7 +74,7 @@ final class MediaRuntimeTest extends UserAwareTestCase
 
     public function testGetImageUrl(): void
     {
-        self::assertMatchesRegularExpression(
+        static::assertMatchesRegularExpression(
             '@^/uploads/2021/09/NumberNine512-slogan(-\d+)?.png$@',
             $this->runtime->getImageUrl($this->mediaFile),
         );
@@ -76,7 +82,7 @@ final class MediaRuntimeTest extends UserAwareTestCase
 
     public function testGetImageThumbnailUrl(): void
     {
-        self::assertMatchesRegularExpression(
+        static::assertMatchesRegularExpression(
             '@^/uploads/2021/09/NumberNine512-slogan(-\d+)?.png.150x140.png$@',
             $this->runtime->getImageUrl($this->mediaFile, 'thumbnail'),
         );
@@ -84,7 +90,7 @@ final class MediaRuntimeTest extends UserAwareTestCase
 
     public function testGetImage(): void
     {
-        self::assertMatchesRegularExpression(
+        static::assertMatchesRegularExpression(
             sprintf(
                 '@^<img src="/uploads/%s/NumberNine512-slogan(-\d+)?.png.512x140.png" ' .
                 'width="512" height="140" alt="%s">$@',

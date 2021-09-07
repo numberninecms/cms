@@ -38,7 +38,8 @@ final class CreateUserCommand extends Command
             ->addArgument('username', InputArgument::OPTIONAL, 'Username')
             ->addArgument('email', InputArgument::OPTIONAL, 'Email')
             ->addArgument('password', InputArgument::OPTIONAL, 'Password')
-            ->addOption('admin', null, InputOption::VALUE_NONE, 'Admin role for this user');
+            ->addOption('admin', null, InputOption::VALUE_NONE, 'Admin role for this user')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -74,10 +75,11 @@ final class CreateUserCommand extends Command
         } catch (Exception $e) {
             $io->error('User cannot be created. This username is probably already in use.');
             $io->writeln($e->getMessage());
+
             return 0;
         }
 
-        $io->success("User $username has been created.");
+        $io->success("User {$username} has been created.");
 
         return 0;
     }

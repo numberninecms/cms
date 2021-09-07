@@ -15,6 +15,10 @@ namespace NumberNine\Tests\Functional\Controller\Admin\Ui\UserRole;
 
 use NumberNine\Tests\UserAwareTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class UserRoleIndexActionTest extends UserAwareTestCase
 {
     public function testAdministratorCanAccessMediaLibrary(): void

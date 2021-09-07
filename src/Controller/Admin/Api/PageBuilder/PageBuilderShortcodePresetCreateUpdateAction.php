@@ -13,15 +13,17 @@ namespace NumberNine\Controller\Admin\Api\PageBuilder;
 
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
-use NumberNine\Entity\Preset;
-use NumberNine\Repository\PresetRepository;
 use NumberNine\Content\ArrayToShortcodeConverter;
+use NumberNine\Entity\Preset;
 use NumberNine\Http\ResponseFactory;
+use NumberNine\Repository\PresetRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'page_builder/shortcodes/{name}/presets/', name: 'numbernine_admin_page_builder_shortcode_post_presets', options: ['expose' => true], methods: ['POST'])]
+#[Route(path: 'page_builder/shortcodes/{name}/presets/', name: 'numbernine_admin_page_builder_shortcode_post_presets', options: ['expose' => true], methods: [
+    'POST',
+])]
 final class PageBuilderShortcodePresetCreateUpdateAction
 {
     public function __invoke(
@@ -47,7 +49,8 @@ final class PageBuilderShortcodePresetCreateUpdateAction
         if (!$preset) {
             $preset = (new Preset())
                 ->setName($name)
-                ->setShortcodeName($shortcodeName);
+                ->setShortcodeName($shortcodeName)
+            ;
         }
 
         $preset->setContent($content);

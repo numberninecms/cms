@@ -34,16 +34,12 @@ final class AdminRuntime implements RuntimeExtensionInterface
 
     public function getHighlightedPermalinkUrl(ContentEntity $entity): string
     {
-        $contentType = $this->contentService->getContentType((string)$entity->getCustomType());
-        $defaultSlug = $this->slugger->slug((string)$contentType->getLabels()->getNewItem())->lower()->toString();
+        $contentType = $this->contentService->getContentType((string) $entity->getCustomType());
+        $defaultSlug = $this->slugger->slug((string) $contentType->getLabels()->getNewItem())->lower()->toString();
         $slug = $entity->getSlug() ?: $defaultSlug;
 
         $relativeUrl = $this->permalinkGenerator->generateContentEntityPermalink($entity);
-        $highlightedRelativeUrl = str_replace(
-            $slug,
-            sprintf('<span class="slug">%s</span>', $slug),
-            $relativeUrl,
-        );
+        $highlightedRelativeUrl = str_replace($slug, sprintf('<span class="slug">%s</span>', $slug), $relativeUrl,);
 
         return sprintf(
             '%s%s',

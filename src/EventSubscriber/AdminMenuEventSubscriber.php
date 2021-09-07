@@ -11,20 +11,19 @@
 
 namespace NumberNine\EventSubscriber;
 
+use NumberNine\Admin\AdminMenuBuilderStore;
+use NumberNine\Content\ContentService;
 use NumberNine\Event\AdminMenuEvent;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Model\Content\ContentType;
 use NumberNine\Model\Menu\Builder\AdminMenuBuilder;
 use NumberNine\Model\Translation\QuickTranslate;
 use NumberNine\Repository\TaxonomyRepository;
-use NumberNine\Content\ContentService;
-use NumberNine\Admin\AdminMenuBuilderStore;
 use NumberNine\Security\Capabilities;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\String\Inflector\EnglishInflector;
@@ -37,15 +36,6 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
     use QuickTranslate;
     private EnglishInflector $inflector;
     private string $configFile;
-
-    public static function getSubscribedEvents(): array
-    {
-        return [
-            ControllerEvent::class => ['initializeCoreMenus', 96],
-            FinishRequestEvent::class => ['initializeCoreMenus', 0],
-            AdminMenuEvent::class => 'insertContentEntities',
-        ];
-    }
 
     public function __construct(
         private TranslatorInterface $translator,
@@ -63,7 +53,16 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
         $this->configFile = __DIR__ . '/../Bundle/Resources/config/' . $adminMenuConfigPath . '/menus.yaml';
     }
 
-    public function initializeCoreMenus(\Symfony\Component\HttpKernel\Event\ControllerEvent|\Symfony\Component\HttpKernel\Event\FinishRequestEvent $event): void
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            ControllerEvent::class => ['initializeCoreMenus', 96],
+            FinishRequestEvent::class => ['initializeCoreMenus', 0],
+            AdminMenuEvent::class => 'insertContentEntities',
+        ];
+    }
+
+    public function initializeCoreMenus(ControllerEvent|FinishRequestEvent $event): void
     {
         if ($this->environment !== 'test' && $event instanceof FinishRequestEvent) {
             return;
@@ -103,12 +102,14 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
         foreach ($builder->getMenuItems() as $key => $menuItem) {
             if ($menuItem->getIfGranted() && !$this->authorizationChecker->isGranted($menuItem->getIfGranted())) {
                 $builder->removeMenuItem($key);
+
                 continue;
             }
 
             foreach ($menuItem->getChildren() as $childKey => $child) {
                 if ($child->getIfGranted() && !$this->authorizationChecker->isGranted($child->getIfGranted())) {
                     $menuItem->removeChild($childKey);
+
                     continue;
                 }
             }
@@ -129,11 +130,11 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
             $taxonomiesMenus = $this->getContentTypeTaxonomiesMenus($contentType);
 
             $linkIndex = $this->urlGenerator->generate('numbernine_admin_content_entity_index', [
-                'type' => $this->slugger->slug((string)$contentType->getLabels()->getPluralName())
+                'type' => $this->slugger->slug((string) $contentType->getLabels()->getPluralName()),
             ]);
 
             $linkNew = $this->urlGenerator->generate('numbernine_admin_content_entity_create', [
-                'type' => $this->slugger->slug((string)$contentType->getLabels()->getPluralName())
+                'type' => $this->slugger->slug((string) $contentType->getLabels()->getPluralName()),
             ]);
 
             $builder->insertAfter(
@@ -153,7 +154,7 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
                             'add_new' => [
                                 'text' => $this->__($contentType->getLabels()->getAddNew()),
                                 'link' => $linkNew,
-                            ]
+                            ],
                         ],
                         $taxonomiesMenus
                     ),
@@ -169,13 +170,13 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
 
         foreach ($taxonomies as $taxonomy) {
             $name = $taxonomy->getName();
-            $plural = (string)current($this->inflector->pluralize((string)$name));
+            $plural = (string) current($this->inflector->pluralize((string) $name));
 
             $menus[$name . '_taxonomy'] = [
                 'text' => $this->__(ucfirst($plural)),
                 'link' => $this->urlGenerator->generate('numbernine_admin_term_index', [
                     'taxonomy' => $name,
-                ])
+                ]),
             ];
         }
 

@@ -29,15 +29,14 @@ final class LoginFormType extends AbstractType
             ->add('password', PasswordVirginType::class)
             ->add('_remember_me', CheckboxVirginType::class, ['label' => 'Remember me', 'required' => false])
             ->add('_csrf_token', HiddenVirginType::class)
-            ->add('submit', SubmitType::class, ['label' => 'Sign in', 'attr' => ['forgotten' => true]]);
+            ->add('submit', SubmitType::class, ['label' => 'Sign in', 'attr' => ['forgotten' => true]])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(
-            [
-                'csrf_protection' => true,
-            ]
-        );
+        $resolver->setDefaults([
+            'csrf_protection' => true,
+        ]);
     }
 }

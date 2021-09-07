@@ -14,8 +14,8 @@ namespace NumberNine\Controller\Admin\Api\Taxonomy;
 use Doctrine\ORM\EntityManagerInterface;
 use NumberNine\Entity\Term;
 use NumberNine\Form\Taxonomy\TermFormType;
-use NumberNine\Model\Admin\AdminController;
 use NumberNine\Http\ResponseFactory;
+use NumberNine\Model\Admin\AdminController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,6 +52,6 @@ abstract class AbstractTermController extends AbstractController implements Admi
             return $this->responseFactory->createSerializedJsonResponse($term, ['groups' => ['term_get']]);
         }
 
-        return $this->responseFactory->createErrorJsonResponse((string)$form->getErrors(true));
+        return $this->responseFactory->createErrorJsonResponse((string) $form->getErrors(true));
     }
 }

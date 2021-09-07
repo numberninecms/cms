@@ -16,11 +16,15 @@ namespace NumberNine\Tests\Unit\Form\DataTransformer;
 use NumberNine\Form\DataTransformer\SerializerTransformer;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class SerializerTransformerTest extends KernelTestCase
 {
     private SerializerTransformer $serializerTransformer;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->serializerTransformer = static::getContainer()->get(SerializerTransformer::class);
@@ -36,7 +40,7 @@ final class SerializerTransformerTest extends KernelTestCase
 
         $expected = '{"id":2,"name":"Sample name","children":[]}';
 
-        self::assertEquals($expected, $transformed);
+        static::assertSame($expected, $transformed);
     }
 
     public function testReverseTransformWorks(): void
@@ -49,6 +53,6 @@ final class SerializerTransformerTest extends KernelTestCase
             'children' => [],
         ];
 
-        self::assertEquals($expected, $transformed);
+        static::assertSame($expected, $transformed);
     }
 }

@@ -28,27 +28,27 @@ use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/reset-password')]
+#[Route(path: '/reset-password')]
 final class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
+
     public function __construct(private ResetPasswordHelperInterface $resetPasswordHelper, private TemplateResolverInterface $templateResolver, private AddressFactory $addressFactory)
     {
     }
+
     /**
      * Display & process form to request a password reset.
      */
-    #[\Symfony\Component\Routing\Annotation\Route(path: '', name: 'numbernine_forgot_password_request')]
-    public function request(Request $request, MailerInterface $mailer) : Response
+    #[Route(path: '', name: 'numbernine_forgot_password_request')]
+    public function request(Request $request, MailerInterface $mailer): Response
     {
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            return $this->processSendingPasswordResetEmail(
-                $form->get('email')->getData(),
-                $mailer
-            );
+            return $this->processSendingPasswordResetEmail($form->get('email')->getData(), $mailer);
         }
+
         return $this->render(
             $this->templateResolver->resolvePath('user/reset_password/request.html.twig')->getTemplateName(),
             [
@@ -56,16 +56,18 @@ final class ResetPasswordController extends AbstractController
             ]
         );
     }
+
     /**
      * Confirmation page after a user has requested a password reset.
      */
-    #[\Symfony\Component\Routing\Annotation\Route(path: '/check-email', name: 'numbernine_check_email')]
-    public function checkEmail() : Response
+    #[Route(path: '/check-email', name: 'numbernine_check_email')]
+    public function checkEmail(): Response
     {
         // We prevent users from directly accessing this page
         if (null === ($resetToken = $this->getTokenObjectFromSession())) {
             return $this->redirectToRoute('numbernine_forgot_password_request');
         }
+
         return $this->render(
             $this->templateResolver->resolvePath('user/reset_password/check_email.html.twig')->getTemplateName(),
             [
@@ -73,12 +75,16 @@ final class ResetPasswordController extends AbstractController
             ]
         );
     }
+
     /**
      * Validates and process the reset URL that the user clicked in their email.
      */
-    #[\Symfony\Component\Routing\Annotation\Route(path: '/reset/{token}', name: 'numbernine_reset_password')]
-    public function reset(Request $request, UserPasswordEncoderInterface $passwordEncoder, string $token = null) : Response
-    {
+    #[Route(path: '/reset/{token}', name: 'numbernine_reset_password')]
+    public function reset(
+        Request $request,
+        UserPasswordEncoderInterface $passwordEncoder,
+        string $token = null
+    ): Response {
         if ($token) {
             // We store the token in session and remove it from the URL, to avoid the URL being
             // loaded in a browser and potentially leaking the token to 3rd party JavaScript.
@@ -87,9 +93,10 @@ final class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('numbernine_reset_password');
         }
         $token = $this->getTokenFromSession();
-        if (null === $token) {
+        if ($token === null) {
             throw $this->createNotFoundException('No reset password token found in the URL or in the session.');
         }
+
         try {
             /** @var User $user */
             $user = $this->resetPasswordHelper->validateTokenAndFetchUser($token);
@@ -109,10 +116,7 @@ final class ResetPasswordController extends AbstractController
             $this->resetPasswordHelper->removeResetRequest($token);
 
             // Encode the plain password, and set it.
-            $encodedPassword = $passwordEncoder->encodePassword(
-                $user,
-                $form->get('plainPassword')->getData()
-            );
+            $encodedPassword = $passwordEncoder->encodePassword($user, $form->get('plainPassword')->getData());
 
             $user->setPassword($encodedPassword);
             $this->getDoctrine()->getManager()->flush();
@@ -122,6 +126,7 @@ final class ResetPasswordController extends AbstractController
 
             return $this->redirectToRoute('numbernine_login');
         }
+
         return $this->render(
             $this->templateResolver->resolvePath('user/reset_password/reset.html.twig')->getTemplateName(),
             [
@@ -129,6 +134,7 @@ final class ResetPasswordController extends AbstractController
             ]
         );
     }
+
     private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer): RedirectResponse
     {
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([

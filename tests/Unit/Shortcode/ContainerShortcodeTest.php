@@ -17,6 +17,10 @@ use NumberNine\Shortcode\ContainerShortcode;
 use NumberNine\Tests\ShortcodeTestCase;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class ContainerShortcodeTest extends ShortcodeTestCase
 {
     protected const SHORTCODE = ContainerShortcode::class;
@@ -25,7 +29,7 @@ final class ContainerShortcodeTest extends ShortcodeTestCase
     {
         $parameters = $this->processParameters([]);
 
-        self::assertEquals([
+        static::assertSame([
             'content' => '',
             'align' => 'start',
             'justify' => 'start',
@@ -36,7 +40,7 @@ final class ContainerShortcodeTest extends ShortcodeTestCase
     public function testShortcodeWithContent(): void
     {
         $parameters = $this->processParameters(['content' => 'Sample content']);
-        self::assertEquals('Sample content', $parameters['content']);
+        static::assertSame('Sample content', $parameters['content']);
     }
 
     public function testOrientation(): void
@@ -75,72 +79,72 @@ final class ContainerShortcodeTest extends ShortcodeTestCase
     public function testMarginWithSingleValue(): void
     {
         $parameters = $this->processParameters(['margin' => '10px']);
-        self::assertEquals(' style="margin:10px"', $parameters['styles']);
+        static::assertSame(' style="margin:10px"', $parameters['styles']);
     }
 
     public function testMarginWithTwoValues(): void
     {
         $parameters = $this->processParameters(['margin' => '10px auto']);
-        self::assertEquals(' style="margin:10px auto"', $parameters['styles']);
+        static::assertSame(' style="margin:10px auto"', $parameters['styles']);
     }
 
     public function testMarginWithThreeValues(): void
     {
         $parameters = $this->processParameters(['margin' => '10px auto 13rem']);
-        self::assertEquals(' style="margin:10px auto 13rem"', $parameters['styles']);
+        static::assertSame(' style="margin:10px auto 13rem"', $parameters['styles']);
     }
 
     public function testMarginWithFourValues(): void
     {
         $parameters = $this->processParameters(['margin' => '10px auto 13rem 0']);
-        self::assertEquals(' style="margin:10px auto 13rem 0"', $parameters['styles']);
+        static::assertSame(' style="margin:10px auto 13rem 0"', $parameters['styles']);
     }
 
     public function testMarginWithFiveValues(): void
     {
         $parameters = $this->processParameters(['margin' => '10px auto 13rem 0 25px']);
-        self::assertEquals(' style="margin:0 auto"', $parameters['styles']);
+        static::assertSame(' style="margin:0 auto"', $parameters['styles']);
     }
 
     public function testMarginWithInvalidValue(): void
     {
         $parameters = $this->processParameters(['margin' => 'invalid']);
-        self::assertEquals(' style="margin:0 auto"', $parameters['styles']);
+        static::assertSame(' style="margin:0 auto"', $parameters['styles']);
     }
 
     public function testPaddingWithSingleValue(): void
     {
         $parameters = $this->processParameters(['padding' => '10px']);
-        self::assertEquals(' style="margin:0 auto;padding:10px"', $parameters['styles']);
+        static::assertSame(' style="margin:0 auto;padding:10px"', $parameters['styles']);
     }
 
     public function testPaddingWithTwoValues(): void
     {
         $parameters = $this->processParameters(['padding' => '10px auto']);
-        self::assertEquals(' style="margin:0 auto;padding:10px auto"', $parameters['styles']);
+        static::assertSame(' style="margin:0 auto;padding:10px auto"', $parameters['styles']);
     }
 
     public function testPaddingWithThreeValues(): void
     {
         $parameters = $this->processParameters(['padding' => '10px auto 13rem']);
-        self::assertEquals(' style="margin:0 auto;padding:10px auto 13rem"', $parameters['styles']);
+        static::assertSame(' style="margin:0 auto;padding:10px auto 13rem"', $parameters['styles']);
     }
 
     public function testPaddingWithFourValues(): void
     {
         $parameters = $this->processParameters(['padding' => '10px auto 13rem 0']);
-        self::assertEquals(' style="margin:0 auto;padding:10px auto 13rem 0"', $parameters['styles']);
+        static::assertSame(' style="margin:0 auto;padding:10px auto 13rem 0"', $parameters['styles']);
     }
 
     public function testPaddingWithFiveValues(): void
     {
         $parameters = $this->processParameters(['padding' => '10px auto 13rem 0 25px']);
-        self::assertEquals(' style="margin:0 auto"', $parameters['styles']);
+        static::assertSame(' style="margin:0 auto"', $parameters['styles']);
     }
 
     public function testPaddingWithInvalidValue(): void
     {
         $parameters = $this->processParameters(['padding' => 'invalid']);
-        self::assertEquals(' style="margin:0 auto"', $parameters['styles']);
+        static::assertSame(' style="margin:0 auto"', $parameters['styles']);
     }
 }

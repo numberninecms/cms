@@ -11,8 +11,8 @@
 
 namespace NumberNine\Serializer\Normalizer;
 
-use NumberNine\Entity\ContentEntity;
 use NumberNine\Content\PermalinkGenerator;
+use NumberNine\Entity\ContentEntity;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -25,6 +25,7 @@ final class ContentEntityNormalizer implements NormalizerInterface
 
     /**
      * @param mixed $object
+     *
      * @throws ExceptionInterface
      */
     public function normalize($object, string $format = null, array $context = []): array
@@ -32,7 +33,7 @@ final class ContentEntityNormalizer implements NormalizerInterface
         /** @var array $data */
         $data = $this->normalizer->normalize($object, $format, $context);
 
-        if (is_array($data) && array_key_exists('publicUrl', $data)) {
+        if (\is_array($data) && \array_key_exists('publicUrl', $data)) {
             $data['publicUrl'] = $this->permalinkGenerator->generateContentEntityPermalink($object, 1, true);
         }
 

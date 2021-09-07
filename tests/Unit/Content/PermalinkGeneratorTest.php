@@ -20,11 +20,15 @@ use NumberNine\Exception\ContentTypeNotFoundException;
 use NumberNine\Model\Content\PublishingStatusInterface;
 use NumberNine\Tests\DotEnvAwareWebTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class PermalinkGeneratorTest extends DotEnvAwareWebTestCase
 {
     private PermalinkGenerator $permalinkGenerator;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->client->request('GET', '/');
@@ -46,7 +50,7 @@ final class PermalinkGeneratorTest extends DotEnvAwareWebTestCase
         ;
 
         $permalink = $this->permalinkGenerator->generateContentEntityPermalink($post);
-        $this->assertEquals(sprintf('/%s/new-post', date('Y/m/d')), $permalink);
+        static::assertSame(sprintf('/%s/new-post', date('Y/m/d')), $permalink);
     }
 
     public function testPostWithSlugPermalink(): void
@@ -57,7 +61,7 @@ final class PermalinkGeneratorTest extends DotEnvAwareWebTestCase
         ;
 
         $permalink = $this->permalinkGenerator->generateContentEntityPermalink($post);
-        $this->assertEquals(sprintf('/%s/my-awesome-post', date('Y/m/d')), $permalink);
+        static::assertSame(sprintf('/%s/my-awesome-post', date('Y/m/d')), $permalink);
     }
 
     public function testNeverPublishedPostPermalink(): void
@@ -70,7 +74,7 @@ final class PermalinkGeneratorTest extends DotEnvAwareWebTestCase
         ;
 
         $permalink = $this->permalinkGenerator->generateContentEntityPermalink($post);
-        $this->assertEquals(sprintf('/%s/my-awesome-post', date('2013/04/21')), $permalink);
+        static::assertSame(sprintf('/%s/my-awesome-post', date('2013/04/21')), $permalink);
     }
 
     public function testPublishedPostPermalink(): void
@@ -84,7 +88,7 @@ final class PermalinkGeneratorTest extends DotEnvAwareWebTestCase
         ;
 
         $permalink = $this->permalinkGenerator->generateContentEntityPermalink($post);
-        $this->assertEquals(sprintf('/%s/my-awesome-post', date('2016/08/07')), $permalink);
+        static::assertSame(sprintf('/%s/my-awesome-post', date('2016/08/07')), $permalink);
     }
 
     public function testUnpublishedPostAsDraftPermalink(): void
@@ -98,7 +102,7 @@ final class PermalinkGeneratorTest extends DotEnvAwareWebTestCase
         ;
 
         $permalink = $this->permalinkGenerator->generateContentEntityPermalink($post);
-        $this->assertEquals(sprintf('/%s/my-awesome-post', date('2016/08/07')), $permalink);
+        static::assertSame(sprintf('/%s/my-awesome-post', date('2016/08/07')), $permalink);
     }
 
     public function testUnpublishedPostAsPrivatePermalink(): void
@@ -112,7 +116,7 @@ final class PermalinkGeneratorTest extends DotEnvAwareWebTestCase
         ;
 
         $permalink = $this->permalinkGenerator->generateContentEntityPermalink($post);
-        $this->assertEquals(sprintf('/%s/my-awesome-post', date('2016/08/07')), $permalink);
+        static::assertSame(sprintf('/%s/my-awesome-post', date('2016/08/07')), $permalink);
     }
 
     public function testPublishedPostPaginationPermalink(): void
@@ -126,7 +130,7 @@ final class PermalinkGeneratorTest extends DotEnvAwareWebTestCase
         ;
 
         $permalink = $this->permalinkGenerator->generateContentEntityPermalink($post, 3);
-        $this->assertEquals(sprintf('/%s/my-awesome-post/page/3/', date('2016/08/07')), $permalink);
+        static::assertSame(sprintf('/%s/my-awesome-post/page/3/', date('2016/08/07')), $permalink);
     }
 
     public function testPublishedPostAbsoluteUrlPermalink(): void
@@ -140,7 +144,7 @@ final class PermalinkGeneratorTest extends DotEnvAwareWebTestCase
         ;
 
         $permalink = $this->permalinkGenerator->generateContentEntityPermalink($post, 1, true);
-        $this->assertEquals(sprintf('http://localhost/%s/my-awesome-post', date('2016/08/07')), $permalink);
+        static::assertSame(sprintf('http://localhost/%s/my-awesome-post', date('2016/08/07')), $permalink);
     }
 
     public function testPublishedPostPaginationAbsoluteUrlPermalink(): void
@@ -154,6 +158,6 @@ final class PermalinkGeneratorTest extends DotEnvAwareWebTestCase
         ;
 
         $permalink = $this->permalinkGenerator->generateContentEntityPermalink($post, 3, true);
-        $this->assertEquals(sprintf('http://localhost/%s/my-awesome-post/page/3/', date('2016/08/07')), $permalink);
+        static::assertSame(sprintf('http://localhost/%s/my-awesome-post/page/3/', date('2016/08/07')), $permalink);
     }
 }

@@ -11,9 +11,10 @@
 
 namespace NumberNine\Attribute\Shortcode;
 
+use Attribute;
 use Doctrine\Common\Annotations\Annotation\Enum;
 
-#[\Attribute(\Attribute::TARGET_CLASS)]
+#[Attribute(Attribute::TARGET_CLASS)]
 final class ExclusionPolicy
 {
     public const NONE = 'none';

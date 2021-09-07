@@ -18,11 +18,15 @@ use NumberNine\Entity\ContentEntity;
 use NumberNine\Model\Content\PublishingStatusInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class ContentEntityTest extends KernelTestCase
 {
     private EntityManagerInterface $entityManager;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->entityManager = static::getContainer()->get('doctrine.orm.entity_manager');
@@ -40,7 +44,7 @@ final class ContentEntityTest extends KernelTestCase
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
 
-        $this->assertEquals('2018-02-26', $entity->getPublishedAt()->format('Y-m-d'));
+        static::assertSame('2018-02-26', $entity->getPublishedAt()->format('Y-m-d'));
     }
 
     public function testPublishingDateIsSetAfterFirstPublish(): void
@@ -54,7 +58,7 @@ final class ContentEntityTest extends KernelTestCase
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
 
-        $this->assertEquals(date('Y-m-d'), $entity->getPublishedAt()->format('Y-m-d'));
+        static::assertSame(date('Y-m-d'), $entity->getPublishedAt()->format('Y-m-d'));
     }
 
     public function testPublishingDateIsNotSetIfSavedAsDraft(): void
@@ -68,6 +72,6 @@ final class ContentEntityTest extends KernelTestCase
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
 
-        $this->assertEquals(null, $entity->getPublishedAt());
+        static::assertNull($entity->getPublishedAt());
     }
 }

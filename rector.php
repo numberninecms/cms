@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 use PHPStan\Type\Accessory\AccessoryLiteralStringType;
 use Rector\Php80\Rector\Class_\DoctrineAnnotationClassToAttributeRector;
+use Rector\PostRector\Rector\NameImportingPostRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
 use Symfony\Component\Routing\Annotation\Route;
 use Rector\Core\Configuration\Option;
@@ -27,12 +28,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::PATHS, [
         __DIR__ . '/src',
-        __DIR__ . '/tests',
     ]);
     $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, getcwd() . '/phpstan.neon');
     $parameters->set(Option::SKIP, [
+        __DIR__ . '/src/Entity/ContentEntity.php',
         ReturnNeverTypeRector::class,
     ]);
+    $parameters->set(Option::AUTO_IMPORT_NAMES, true);
 
     $containerConfigurator->import(SetList::PHP_80);
     $containerConfigurator->import(SetList::PHP_81);
@@ -57,4 +59,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             DoctrineAnnotationClassToAttributeRector::REMOVE_ANNOTATIONS => false,
         ]]);
+
+    $services->set(NameImportingPostRector::class);
 };

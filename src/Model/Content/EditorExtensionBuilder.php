@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace NumberNine\Model\Content;
 
+use LogicException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use function Symfony\Component\String\u;
 
 final class EditorExtensionBuilder implements EditorExtensionBuilderInterface
@@ -24,7 +24,7 @@ final class EditorExtensionBuilder implements EditorExtensionBuilderInterface
     public function add(string $child, ?string $formType = null, array $options = [], ?string $type = null): self
     {
         if ($type !== null && !\in_array($type, [self::COMPONENT_TYPE_TAB, self::COMPONENT_TYPE_SIDEBAR], true)) {
-            throw new \LogicException(
+            throw new LogicException(
                 'Parameter $type must be one of EditorExtensionBuilderInterface::COMPONENT_TYPE_TAB or ' .
                 'EditorExtensionBuilderInterface::COMPONENT_TYPE_SIDEBAR'
             );

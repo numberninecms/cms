@@ -60,7 +60,7 @@ final class AdminUserFormType extends AbstractType
                             'max' => 4096,
                         ]),
                     ],
-                    'label' => 'Password'
+                    'label' => 'Password',
                 ])
             ;
         } else {
@@ -94,8 +94,8 @@ final class AdminUserFormType extends AbstractType
         $username = $user->getUsername() ?? 'Username';
         $firstName = $user->getFirstName() ?? 'First name';
         $lastName = $user->getLastName() ?? 'Last name';
-        $firstLast = "$firstName $lastName";
-        $lastFirst = "$lastName $firstName";
+        $firstLast = "{$firstName} {$lastName}";
+        $lastFirst = "{$lastName} {$firstName}";
 
         $form->add('displayNameFormat', ChoiceType::class, ['choices' => [
             $username => 'username',

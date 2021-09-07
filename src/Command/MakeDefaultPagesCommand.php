@@ -27,7 +27,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Twig\Environment;
-
 use function Symfony\Component\String\u;
 
 final class MakeDefaultPagesCommand extends Command
@@ -48,7 +47,8 @@ final class MakeDefaultPagesCommand extends Command
     {
         $this
             ->setDescription('Creates default pages')
-            ->setHelp(<<<HELP
+            ->setHelp(
+                <<<'HELP'
 
 This command creates the following pages:
 
@@ -69,8 +69,9 @@ HELP
         if ($username) {
             $user = $this->userRepository->findOneBy(['username' => $username]);
 
-            if (!$user || !in_array('Administrator', $user->getRoles())) {
+            if (!$user || !\in_array('Administrator', $user->getRoles(), true)) {
                 $io->error(sprintf('Unknown administrator user "%s"', $username));
+
                 return Command::FAILURE;
             }
         } else {
@@ -82,6 +83,7 @@ HELP
                     ' * <fg=blue>Run</> <comment>bin/console numbernine:user:create --admin</comment> ' .
                      'to create one.'
                 );
+
                 return Command::FAILURE;
             }
         }
@@ -91,6 +93,7 @@ HELP
             $this->createPrivacyPage($user);
         } catch (Exception $e) {
             $io->error('Unable to create default pages. ' . $e->getMessage());
+
             return 1;
         }
 
@@ -108,7 +111,8 @@ HELP
             ->setAuthor($user)
             ->setStatus(PublishingStatusInterface::STATUS_PUBLISH)
             ->setCreatedAt(new DateTime())
-            ->setPublishedAt(new DateTime());
+            ->setPublishedAt(new DateTime())
+        ;
 
         $this->entityManager->persist($page);
         $this->entityManager->flush();
@@ -132,7 +136,8 @@ HELP
             ->setAuthor($user)
             ->setStatus(PublishingStatusInterface::STATUS_PUBLISH)
             ->setCreatedAt(new DateTime())
-            ->setPublishedAt(new DateTime());
+            ->setPublishedAt(new DateTime())
+        ;
 
         $this->entityManager->persist($page);
         $this->entityManager->flush();

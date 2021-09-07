@@ -12,14 +12,16 @@
 namespace NumberNine\Controller\Admin\Api\Settings;
 
 use NumberNine\Configuration\ConfigurationReadWriter;
-use NumberNine\Model\Admin\AdminController;
 use NumberNine\Http\ResponseFactory;
+use NumberNine\Model\Admin\AdminController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'settings/', name: 'numbernine_admin_settings_update_collection', options: ['expose' => true], methods: ['PUT'])]
+#[Route(path: 'settings/', name: 'numbernine_admin_settings_update_collection', options: ['expose' => true], methods: [
+    'PUT',
+])]
 final class SettingsUpdateAction extends AbstractController implements AdminController
 {
     public function __invoke(
@@ -30,7 +32,7 @@ final class SettingsUpdateAction extends AbstractController implements AdminCont
         $settings = $request->request->all();
 
         if (!empty($settings)) {
-            $configurationReadWriter->writeMany((array)array_combine(
+            $configurationReadWriter->writeMany((array) array_combine(
                 array_column($settings, 'name'),
                 array_column($settings, 'value')
             ));

@@ -11,15 +11,17 @@
 
 namespace NumberNine\Controller\Admin\Api\Media;
 
-use NumberNine\Media\MediaFileFactory;
 use NumberNine\Http\ResponseFactory;
+use NumberNine\Media\MediaFileFactory;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/media_files/upload', name: 'numbernine_admin_media_files_upload', options: ['expose' => true], methods: ['POST'])]
+#[Route(path: '/media_files/upload', name: 'numbernine_admin_media_files_upload', options: ['expose' => true], methods: [
+    'POST',
+])]
 final class MediaFileUploadAction
 {
     public function __invoke(

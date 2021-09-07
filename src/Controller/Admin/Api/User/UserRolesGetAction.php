@@ -11,15 +11,17 @@
 
 namespace NumberNine\Controller\Admin\Api\User;
 
+use NumberNine\Http\ResponseFactory;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Repository\UserRoleRepository;
 use NumberNine\Security\Capabilities;
-use NumberNine\Http\ResponseFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/users/roles/', name: 'numbernine_admin_user_roles_get_collection', options: ['expose' => true], methods: ['GET'], priority: 1000)]
+#[Route(path: '/users/roles/', name: 'numbernine_admin_user_roles_get_collection', options: ['expose' => true], methods: [
+    'GET',
+], priority: 1000)]
 final class UserRolesGetAction extends AbstractController implements AdminController
 {
     public function __invoke(ResponseFactory $responseFactory, UserRoleRepository $userRoleRepository): JsonResponse

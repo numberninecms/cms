@@ -15,8 +15,9 @@ namespace NumberNine\Exception;
 
 use NumberNine\Entity\Taxonomy;
 use NumberNine\Entity\Term;
+use RuntimeException;
 
-final class InvalidTermTaxonomyException extends \RuntimeException
+final class InvalidTermTaxonomyException extends RuntimeException
 {
     public function __construct(Taxonomy $taxonomy, Term $term)
     {

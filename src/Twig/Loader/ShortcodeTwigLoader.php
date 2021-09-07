@@ -18,16 +18,16 @@ use Twig\Loader\FilesystemLoader;
 
 final class ShortcodeTwigLoader extends FilesystemLoader implements EventSubscriberInterface
 {
+    public function __construct(private ThemeStore $themeStore, private string $shortcodesPath)
+    {
+        parent::__construct();
+    }
+
     public static function getSubscribedEvents(): array
     {
         return [
             RequestEvent::class => ['load', 4700],
         ];
-    }
-
-    public function __construct(private ThemeStore $themeStore, private string $shortcodesPath)
-    {
-        parent::__construct();
     }
 
     public function load(): void

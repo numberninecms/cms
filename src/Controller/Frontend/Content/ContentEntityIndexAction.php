@@ -12,10 +12,10 @@
 namespace NumberNine\Controller\Frontend\Content;
 
 use Doctrine\Common\Collections\Criteria;
+use NumberNine\Configuration\ConfigurationReadWriter;
+use NumberNine\Content\ContentService;
 use NumberNine\Model\General\Settings;
 use NumberNine\Model\Pagination\PaginationParameters;
-use NumberNine\Content\ContentService;
-use NumberNine\Configuration\ConfigurationReadWriter;
 use NumberNine\Theme\TemplateResolver;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,10 +50,12 @@ final class ContentEntityIndexAction extends AbstractController
             ->setStartRow($perPage * ($page - 1))
             ->setFetchCount($perPage)
             ->setOrderBy('createdAt')
-            ->setOrder('DESC');
+            ->setOrder('DESC')
+        ;
 
         $criteria = (new Criteria())
-            ->andWhere((Criteria::expr())->eq('c.status', 'publish'));
+            ->andWhere((Criteria::expr())->eq('c.status', 'publish'))
+        ;
 
         $contentEntities = $contentService->getEntitiesOfType(
             $contentService->getContentType($type),
@@ -62,7 +64,7 @@ final class ContentEntityIndexAction extends AbstractController
         );
 
         return $this->render($template ?? $templateResolver->resolveIndex($type), [
-                'entities' => $contentEntities,
+            'entities' => $contentEntities,
         ]);
     }
 }

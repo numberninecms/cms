@@ -36,8 +36,7 @@ final class ThemeTranslationLoader implements EventSubscriberInterface
     }
 
     /**
-     * Loads theme translations and merge its parent's translations
-     * @param string|null $translationDomain
+     * Loads theme translations and merge its parent's translations.
      */
     private function loadThemeTranslations(ThemeInterface $theme, string $translationDomain = null): void
     {

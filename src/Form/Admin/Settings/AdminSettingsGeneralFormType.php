@@ -35,7 +35,7 @@ final class AdminSettingsGeneralFormType extends AbstractType
             ->add('site_description', null, ['label' => 'Tagline', 'required' => false])
             ->add('blog_as_homepage', CheckboxType::class, [
                 'label' => 'Use posts archive as homepage',
-                'required' => false
+                'required' => false,
             ])
             ->add('page_for_front', ChoiceType::class, ['choices' => $pages, 'required' => false])
             ->add('page_for_posts', ChoiceType::class, ['choices' => $pages, 'required' => false])

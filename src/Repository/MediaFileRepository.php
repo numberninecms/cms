@@ -35,6 +35,7 @@ final class MediaFileRepository extends AbstractContentEntityRepository
         return $this->createQueryBuilder('m')
             ->where('m.mimeType IN (:mimeTypes)')
             ->setParameter('mimeTypes', ['image/jpeg', 'image/png', 'image/gif'])
-            ->getQuery();
+            ->getQuery()
+        ;
     }
 }

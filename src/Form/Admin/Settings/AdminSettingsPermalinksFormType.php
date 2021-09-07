@@ -27,7 +27,7 @@ final class AdminSettingsPermalinksFormType extends AbstractType
         foreach ($this->contentService->getContentTypes() as $contentType) {
             $builder->add($contentType->getName(), null, [
                 'required' => false,
-                'label' => ucfirst((string)$contentType->getLabels()->getPluralName()),
+                'label' => ucfirst((string) $contentType->getLabels()->getPluralName()),
             ]);
         }
 

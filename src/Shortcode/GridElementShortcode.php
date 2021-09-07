@@ -39,7 +39,7 @@ final class GridElementShortcode extends AbstractShortcode implements EditableSh
         $resolver->setAllowedTypes('span', ['int', 'float', 'string']);
 
         $resolver->setNormalizer('span', static function (Options $options, $value): int {
-            return is_numeric($value) ? max(1, min(12, (int)$value)) : 1;
+            return is_numeric($value) ? max(1, min(12, (int) $value)) : 1;
         });
     }
 

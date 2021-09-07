@@ -30,10 +30,7 @@ final class MediaFileDeletionEventSubscriber implements EventSubscriber
 
     public function getSubscribedEvents(): array
     {
-        return [
-            Events::onFlush,
-            Events::postFlush,
-        ];
+        return [Events::onFlush, Events::postFlush];
     }
 
     public function onFlush(OnFlushEventArgs $args): void

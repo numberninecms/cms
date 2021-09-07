@@ -21,7 +21,7 @@ final class JsonTransformerEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            RequestEvent::class => 'onKernelRequest'
+            RequestEvent::class => 'onKernelRequest',
         ];
     }
 

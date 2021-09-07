@@ -18,8 +18,6 @@ use InvalidArgumentException;
 use IteratorAggregate;
 use Traversable;
 
-use function count;
-
 final class Paginator implements IteratorAggregate
 {
     private DoctrinePaginator $paginator;
@@ -46,8 +44,8 @@ final class Paginator implements IteratorAggregate
         }
 
         $this->paginator = $paginator;
-        $this->firstResult = (int)$firstResult;
-        $this->maxResults = (int)$maxResults;
+        $this->firstResult = (int) $firstResult;
+        $this->maxResults = (int) $maxResults;
     }
 
     public function getCurrentPage(): int
@@ -56,7 +54,7 @@ final class Paginator implements IteratorAggregate
             return 1;
         }
 
-        return (int)(floor($this->firstResult / $this->maxResults) + 1);
+        return (int) (floor($this->firstResult / $this->maxResults) + 1);
     }
 
     public function getItemsPerPage(): int
@@ -70,12 +68,12 @@ final class Paginator implements IteratorAggregate
             return 1;
         }
 
-        return (int)ceil($this->getTotalItems() / $this->maxResults) ?: 1;
+        return (int) ceil($this->getTotalItems() / $this->maxResults) ?: 1;
     }
 
     public function getTotalItems(): int
     {
-        return $this->totalItems ?? $this->totalItems = count($this->paginator);
+        return $this->totalItems ?? $this->totalItems = \count($this->paginator);
     }
 
     public function getQuery(): Query

@@ -27,16 +27,15 @@ final class UserRolesFixtures extends Fixture implements FixtureGroupInterface
     public function load(ObjectManager $manager): void
     {
         $banned = (new UserRole())
-            ->setName('Banned');
+            ->setName('Banned')
+        ;
 
         $subscriber = (new UserRole())
             ->setName('Subscriber')
             ->setCapabilities(
-                [
-                    Capabilities::READ,
-                    ...$this->capabilityGenerator->generateMappedSubscriberCapabilities('post'),
-                ]
-            );
+                [Capabilities::READ, ...$this->capabilityGenerator->generateMappedSubscriberCapabilities('post')]
+            )
+        ;
 
         $contributor = (new UserRole())
             ->setName('Contributor')
@@ -46,7 +45,8 @@ final class UserRolesFixtures extends Fixture implements FixtureGroupInterface
                     Capabilities::ACCESS_ADMIN,
                     ...$this->capabilityGenerator->generateMappedContributorCapabilities('post'),
                 ]
-            );
+            )
+        ;
 
         $author = (new UserRole())
             ->setName('Author')
@@ -58,7 +58,8 @@ final class UserRolesFixtures extends Fixture implements FixtureGroupInterface
                     ...$this->capabilityGenerator->generateMappedAuthorCapabilities('post'),
                     ...$this->capabilityGenerator->generateMappedAuthorCapabilities('media_file'),
                 ]
-            );
+            )
+        ;
 
         $editor = (new UserRole())
             ->setName('Editor')
@@ -74,7 +75,8 @@ final class UserRolesFixtures extends Fixture implements FixtureGroupInterface
                     ...$this->capabilityGenerator->generateMappedEditorCapabilities('block'),
                     ...$this->capabilityGenerator->generateMappedEditorCapabilities('media_file'),
                 ]
-            );
+            )
+        ;
 
         $administrator = (new UserRole())
             ->setName('Administrator')
@@ -100,7 +102,8 @@ final class UserRolesFixtures extends Fixture implements FixtureGroupInterface
                     ...$this->capabilityGenerator->generateMappedEditorCapabilities('block'),
                     ...$this->capabilityGenerator->generateMappedEditorCapabilities('media_file'),
                 ]
-            );
+            )
+        ;
 
         $this->setReference(UserRole::class . '_subscriber', $subscriber);
         $this->setReference(UserRole::class . '_contributor', $contributor);

@@ -12,17 +12,19 @@
 namespace NumberNine\Controller\Admin\Api\User;
 
 use Exception;
+use NumberNine\Http\ResponseFactory;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Repository\UserRepository;
 use NumberNine\Security\Capabilities;
-use NumberNine\Http\ResponseFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/users/', name: 'numbernine_admin_users_delete_collection', options: ['expose' => true], methods: ['POST'])]
+#[Route(path: '/users/', name: 'numbernine_admin_users_delete_collection', options: ['expose' => true], methods: [
+    'POST',
+])]
 final class UsersDeleteAction extends AbstractController implements AdminController
 {
     public function __invoke(

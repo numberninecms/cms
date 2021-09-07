@@ -16,6 +16,10 @@ namespace NumberNine\Tests\Unit\Shortcode;
 use NumberNine\Shortcode\GridElementShortcode;
 use NumberNine\Tests\ShortcodeTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class GridElementShortcodeTest extends ShortcodeTestCase
 {
     protected const SHORTCODE = GridElementShortcode::class;
@@ -24,7 +28,7 @@ final class GridElementShortcodeTest extends ShortcodeTestCase
     {
         $parameters = $this->processParameters([]);
 
-        self::assertEquals([
+        static::assertSame([
             'content' => '',
             'span' => 1,
         ], $parameters);
@@ -33,33 +37,33 @@ final class GridElementShortcodeTest extends ShortcodeTestCase
     public function testValidSpan(): void
     {
         $parameters = $this->processParameters(['span' => 12]);
-        self::assertEquals(12, $parameters['span']);
+        static::assertSame(12, $parameters['span']);
     }
 
     public function testSpanAsString(): void
     {
         $parameters = $this->processParameters(['span' => '12']);
-        self::assertEquals(12, $parameters['span']);
+        static::assertSame(12, $parameters['span']);
     }
 
     public function testColumnsCountOutOfRangeUpper(): void
     {
         $parameters = $this->processParameters(['span' => 13]);
-        self::assertEquals(12, $parameters['span']);
+        static::assertSame(12, $parameters['span']);
     }
 
     public function testColumnsCountOutOfRangeLower(): void
     {
         $parameters = $this->processParameters(['span' => 0]);
-        self::assertEquals(1, $parameters['span']);
+        static::assertSame(1, $parameters['span']);
     }
 
     public function testInvalidSpan(): void
     {
         $parameters = $this->processParameters(['span' => 'invalid']);
-        self::assertEquals(1, $parameters['span']);
+        static::assertSame(1, $parameters['span']);
 
         $parameters = $this->processParameters(['span' => 6.75]);
-        self::assertEquals(6, $parameters['span']);
+        static::assertSame(6, $parameters['span']);
     }
 }

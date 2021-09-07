@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace NumberNine\Exception;
 
-final class AnnotationOrAttributeMissingException extends \LogicException
+use LogicException;
+
+final class AnnotationOrAttributeMissingException extends LogicException
 {
     public function __construct(string $missingType, ?string $objectClassName = null)
     {

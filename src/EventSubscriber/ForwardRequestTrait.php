@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
- * Requires HttpKernelInterface injection
+ * Requires HttpKernelInterface injection.
  */
 trait ForwardRequestTrait
 {

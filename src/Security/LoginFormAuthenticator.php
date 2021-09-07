@@ -47,7 +47,7 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implem
         $loginPathsEvent = $this->eventDispatcher->dispatch(new LoginPathsEvent());
 
         return ($request->attributes->get('_route') === 'numbernine_login'
-                || in_array($request->getRequestUri(), $loginPathsEvent->getPaths()))
+                || \in_array($request->getRequestUri(), $loginPathsEvent->getPaths(), true))
             && $request->isMethod('POST')
             && $request->request->get('username');
     }
@@ -59,10 +59,7 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implem
             'password' => $request->request->get('password'),
             'csrf_token' => $request->request->get('_csrf_token'),
         ];
-        $request->getSession()->set(
-            Security::LAST_USERNAME,
-            $credentials['username']
-        );
+        $request->getSession()->set(Security::LAST_USERNAME, $credentials['username']);
         $this->saveTargetPath($request->getSession(), 'main', $request->getUri());
 
         return $credentials;
@@ -112,17 +109,12 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implem
         return new RedirectResponse($request->getUri());
     }
 
-    protected function getLoginUrl(): string
-    {
-        return $this->urlGenerator->generate('numbernine_login');
-    }
-
     public function getPassword($credentials): ?string
     {
         return $credentials['password'];
     }
 
-    public function start(Request $request, AuthenticationException $authException = null): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function start(Request $request, AuthenticationException $authException = null): RedirectResponse
     {
         $token = $this->tokenStorage->getToken();
 
@@ -131,5 +123,10 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implem
             : $this->getLoginUrl();
 
         return new RedirectResponse($url);
+    }
+
+    protected function getLoginUrl(): string
+    {
+        return $this->urlGenerator->generate('numbernine_login');
     }
 }

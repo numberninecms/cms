@@ -14,19 +14,21 @@ namespace NumberNine\Shortcode;
 use NumberNine\Attribute\Shortcode;
 use NumberNine\Model\PageBuilder\Control\BordersControl;
 use NumberNine\Model\PageBuilder\Control\ButtonToggleControl;
-use NumberNine\Model\PageBuilder\Control\VerticalAlignmentControl;
 use NumberNine\Model\PageBuilder\Control\HorizontalAlignmentControl;
+use NumberNine\Model\PageBuilder\Control\VerticalAlignmentControl;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\PageBuilder\Position;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
 use function NumberNine\Common\Util\ArrayUtil\array_set_if_value_exists;
 
-#[Shortcode(name: 'container', label: 'Container', container: true, icon: 'mdi-table-row', siblingsPosition: [Position::TOP, Position::BOTTOM])]
+#[Shortcode(name: 'container', label: 'Container', container: true, icon: 'mdi-table-row', siblingsPosition: [
+    Position::TOP,
+    Position::BOTTOM,
+])]
 final class ContainerShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
     public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void

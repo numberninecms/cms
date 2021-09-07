@@ -17,6 +17,10 @@ use NumberNine\Entity\Post;
 use NumberNine\Tests\DotEnvAwareWebTestCase;
 use NumberNine\Twig\Extension\RelationshipRuntime;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class RelationshipRuntimeTest extends DotEnvAwareWebTestCase
 {
     private RelationshipRuntime $runtime;
@@ -30,11 +34,11 @@ final class RelationshipRuntimeTest extends DotEnvAwareWebTestCase
 
     public function testPostHasFeaturedImageRelationship(): void
     {
-        self::assertTrue($this->runtime->hasRelationship(new Post(), 'featured_image'));
+        static::assertTrue($this->runtime->hasRelationship(new Post(), 'featured_image'));
     }
 
     public function testInvalidRelationshipReturnsFalse(): void
     {
-        self::assertFalse($this->runtime->hasRelationship(new Post(), 'invalid'));
+        static::assertFalse($this->runtime->hasRelationship(new Post(), 'invalid'));
     }
 }

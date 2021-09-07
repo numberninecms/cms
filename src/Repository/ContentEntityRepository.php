@@ -35,7 +35,8 @@ final class ContentEntityRepository extends AbstractContentEntityRepository
             ->where('e.id = :id')
             ->setParameter('id', $id)
             ->getQuery()
-            ->getSingleResult();
+            ->getSingleResult()
+        ;
     }
 
     /**
@@ -47,14 +48,13 @@ final class ContentEntityRepository extends AbstractContentEntityRepository
             ->innerJoin('c.parents', 'p')
             ->where('c.customType = :type')
             ->andWhere('p.id = :id')
-            ->setParameters(
-                [
-                    'type' => $customType,
-                    'id' => $contentEntity->getId()
-                ]
-            )
+            ->setParameters([
+                'type' => $customType,
+                'id' => $contentEntity->getId(),
+            ])
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     /**
@@ -66,14 +66,12 @@ final class ContentEntityRepository extends AbstractContentEntityRepository
             ->select('JSON_KEYS(c.customFields) AS custom_fields')
             ->groupBy('custom_fields')
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
 
         return array_unique(
             array_merge(
-                ...array_map(
-                    fn($json) => json_decode($json) ?? [],
-                    array_column($result, 'custom_fields')
-                )
+                ...array_map(fn ($json) => json_decode($json) ?? [], array_column($result, 'custom_fields'))
             )
         );
     }

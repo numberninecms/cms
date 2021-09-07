@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/', name: 'numbernine_admin_index', methods: ['GET'])]
+#[Route(path: '/', name: 'numbernine_admin_index', methods: ['GET'])]
 final class DashboardIndexAction extends AbstractController implements AdminController
 {
     public function __invoke(string $publicPath): Response

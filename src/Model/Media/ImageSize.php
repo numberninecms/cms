@@ -11,7 +11,9 @@
 
 namespace NumberNine\Model\Media;
 
-final class ImageSize implements \Stringable
+use Stringable;
+
+final class ImageSize implements Stringable
 {
     private ?int $width;
     private ?int $height;
@@ -20,6 +22,11 @@ final class ImageSize implements \Stringable
     {
         $this->width = $width ?? $height;
         $this->height = $height ?? $width;
+    }
+
+    public function __toString(): string
+    {
+        return sprintf('%sx%s', $this->getWidth(), $this->getHeight());
     }
 
     public function getWidth(): ?int
@@ -35,10 +42,5 @@ final class ImageSize implements \Stringable
     public function isCrop(): bool
     {
         return $this->crop;
-    }
-
-    public function __toString(): string
-    {
-        return sprintf('%sx%s', $this->getWidth(), $this->getHeight());
     }
 }

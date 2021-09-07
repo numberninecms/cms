@@ -12,9 +12,9 @@
 namespace NumberNine\Controller\Admin\Api\ContentEntity;
 
 use Doctrine\ORM\Query\QueryException;
-use NumberNine\Model\Pagination\PaginationParameters;
 use NumberNine\Content\ContentService;
 use NumberNine\Http\ResponseFactory;
+use NumberNine\Model\Pagination\PaginationParameters;
 use ReflectionException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,11 +24,14 @@ use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'content_entities/{type}', name: 'numbernine_admin_contententity_get_collection', options: ['expose' => true], methods: ['GET'])]
+#[Route(path: 'content_entities/{type}', name: 'numbernine_admin_contententity_get_collection', options: ['expose' => true], methods: [
+    'GET',
+])]
 final class ContentEntitiesGetAction
 {
     /**
      * @param Serializer $serializer
+     *
      * @throws ReflectionException
      * @throws ExceptionInterface
      * @throws QueryException

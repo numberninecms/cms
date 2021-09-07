@@ -12,17 +12,18 @@
 namespace NumberNine\Controller\Admin\Api\ContentEntity;
 
 use Doctrine\ORM\ORMException;
+use NumberNine\Content\ContentService;
 use NumberNine\Entity\ContentEntity;
+use NumberNine\Http\ResponseFactory;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Security\Capabilities;
-use NumberNine\Content\ContentService;
-use NumberNine\Http\ResponseFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\String\Inflector\EnglishInflector;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'content_entities/{type}/{id<\d+>}/', name: 'numbernine_admin_contententity_delete_item', options: ['expose' => true], methods: ['DELETE'])]
+#[Route(path: 'content_entities/{type}/{id<\d+>}/', name: 'numbernine_admin_contententity_delete_item', options: ['expose' => true], methods: [
+    'DELETE',
+])]
 final class ContentEntityDeleteAction extends AbstractController implements AdminController
 {
     /**

@@ -30,7 +30,8 @@ final class MediaRegenerateCommand extends Command implements ImageSizeAwareComm
     protected function configure(): void
     {
         $this
-            ->setDescription('Regenerates all images variations');
+            ->setDescription('Regenerates all images variations')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -43,6 +44,7 @@ final class MediaRegenerateCommand extends Command implements ImageSizeAwareComm
         } catch (Exception $e) {
             $io->error('Unable to regenerate images variations. ' . $e->getMessage());
             $io->text($e->getTraceAsString());
+
             return 1;
         }
 

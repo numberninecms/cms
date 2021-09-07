@@ -11,18 +11,18 @@
 
 namespace NumberNine\EventSubscriber;
 
+use NumberNine\Command\AreaAwareCommandInterface;
 use NumberNine\Command\ContentTypeAwareCommandInterface;
 use NumberNine\Command\ImageSizeAwareCommandInterface;
 use NumberNine\Command\RouteAwareCommandInterface;
-use NumberNine\Command\AreaAwareCommandInterface;
+use NumberNine\Content\AreaStore;
+use NumberNine\Content\ContentService;
+use NumberNine\Event\AreasRegistrationEvent;
 use NumberNine\Event\ContentTypeRegistrationEvent;
 use NumberNine\Event\ImageSizesEvent;
 use NumberNine\Event\RouteRegistrationEvent;
-use NumberNine\Event\AreasRegistrationEvent;
-use NumberNine\Routing\RouteProvider;
-use NumberNine\Content\ContentService;
-use NumberNine\Content\AreaStore;
 use NumberNine\Media\ImageSizeStore;
+use NumberNine\Routing\RouteProvider;
 use Symfony\Cmf\Component\Routing\RouteProviderInterface;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -34,6 +34,94 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 final class RequestEventSubscriber implements EventSubscriberInterface, ServiceSubscriberInterface
 {
     use ServiceSubscriberTrait;
+
+    public static function getSubscribedEvents(): array
+    {
+        $listeners = [
+            ['registerContentTypes', 500],
+            ['registerImageSizes', 450],
+            ['registerRoutes', 400],
+            ['registerAreas', 350],
+        ];
+
+        return [
+            RequestEvent::class => $listeners,
+            ConsoleCommandEvent::class => $listeners,
+        ];
+    }
+
+    public function registerContentTypes(RequestEvent|ConsoleCommandEvent $event): void
+    {
+        if (
+            ($event instanceof ConsoleCommandEvent)
+            && ($command = $event->getCommand())
+            && !$command instanceof ContentTypeAwareCommandInterface
+            && $command->getName() !== 'doctrine:fixtures:load'
+        ) {
+            return;
+        }
+
+        /** @var ContentTypeRegistrationEvent $contentTypeRegistrationEvent */
+        $contentTypeRegistrationEvent = $this->eventDispatcher()->dispatch(new ContentTypeRegistrationEvent());
+        $this->contentService()->setContentTypes($contentTypeRegistrationEvent->getContentTypes());
+    }
+
+    public function registerImageSizes(RequestEvent|ConsoleCommandEvent $event): void
+    {
+        if (
+            ($event instanceof ConsoleCommandEvent)
+            && ($command = $event->getCommand())
+            && !$command instanceof ImageSizeAwareCommandInterface
+            && $command->getName() !== 'doctrine:fixtures:load'
+        ) {
+            return;
+        }
+
+        /** @var ImageSizesEvent $imageSizesEvent */
+        $imageSizesEvent = $this->eventDispatcher()->dispatch(new ImageSizesEvent());
+        $this->imageSizeStore()->setImageSizes($imageSizesEvent->getSizes());
+    }
+
+    /**
+     * Registers dynamic routes.
+     */
+    public function registerRoutes(RequestEvent|ConsoleCommandEvent $event): void
+    {
+        if (
+            ($event instanceof ConsoleCommandEvent)
+            && ($command = $event->getCommand())
+            && !$command instanceof RouteAwareCommandInterface
+            && $command->getName() !== 'doctrine:fixtures:load'
+        ) {
+            return;
+        }
+
+        /** @var RouteRegistrationEvent $routeRegistrationEvent */
+        $routeRegistrationEvent = $this->eventDispatcher()->dispatch(new RouteRegistrationEvent());
+
+        foreach ($routeRegistrationEvent->getRoutes() as $name => $route) {
+            $this->routeProvider()->addRoute($name, $route);
+        }
+    }
+
+    /**
+     * Registers areas.
+     */
+    public function registerAreas(RequestEvent|ConsoleCommandEvent $event): void
+    {
+        if (
+            ($event instanceof ConsoleCommandEvent)
+            && ($command = $event->getCommand())
+            && !$command instanceof AreaAwareCommandInterface
+            && $command->getName() !== 'doctrine:fixtures:load'
+        ) {
+            return;
+        }
+
+        /** @var AreasRegistrationEvent $areasRegistrationEvent */
+        $areasRegistrationEvent = $this->eventDispatcher()->dispatch(new AreasRegistrationEvent());
+        $this->areaStore()->setAreas($areasRegistrationEvent->getAreas());
+    }
 
     private function eventDispatcher(): EventDispatcherInterface
     {
@@ -61,93 +149,5 @@ final class RequestEventSubscriber implements EventSubscriberInterface, ServiceS
     private function areaStore(): AreaStore
     {
         return $this->container->get(__METHOD__);
-    }
-
-    public static function getSubscribedEvents(): array
-    {
-        $listeners = [
-            ['registerContentTypes', 500],
-            ['registerImageSizes', 450],
-            ['registerRoutes', 400],
-            ['registerAreas', 350],
-        ];
-
-        return [
-            RequestEvent::class => $listeners,
-            ConsoleCommandEvent::class => $listeners
-        ];
-    }
-
-    public function registerContentTypes(\Symfony\Component\HttpKernel\Event\RequestEvent|\Symfony\Component\Console\Event\ConsoleCommandEvent $event): void
-    {
-        if (
-            ($event instanceof ConsoleCommandEvent)
-            && ($command = $event->getCommand())
-            && !$command instanceof ContentTypeAwareCommandInterface
-            && $command->getName() !== 'doctrine:fixtures:load'
-        ) {
-            return;
-        }
-
-        /** @var ContentTypeRegistrationEvent $contentTypeRegistrationEvent */
-        $contentTypeRegistrationEvent = $this->eventDispatcher()->dispatch(new ContentTypeRegistrationEvent());
-        $this->contentService()->setContentTypes($contentTypeRegistrationEvent->getContentTypes());
-    }
-
-    public function registerImageSizes(\Symfony\Component\HttpKernel\Event\RequestEvent|\Symfony\Component\Console\Event\ConsoleCommandEvent $event): void
-    {
-        if (
-            ($event instanceof ConsoleCommandEvent)
-            && ($command = $event->getCommand())
-            && !$command instanceof ImageSizeAwareCommandInterface
-            && $command->getName() !== 'doctrine:fixtures:load'
-        ) {
-            return;
-        }
-
-        /** @var ImageSizesEvent $imageSizesEvent */
-        $imageSizesEvent = $this->eventDispatcher()->dispatch(new ImageSizesEvent());
-        $this->imageSizeStore()->setImageSizes($imageSizesEvent->getSizes());
-    }
-
-    /**
-     * Registers dynamic routes
-     */
-    public function registerRoutes(\Symfony\Component\HttpKernel\Event\RequestEvent|\Symfony\Component\Console\Event\ConsoleCommandEvent $event): void
-    {
-        if (
-            ($event instanceof ConsoleCommandEvent)
-            && ($command = $event->getCommand())
-            && !$command instanceof RouteAwareCommandInterface
-            && $command->getName() !== 'doctrine:fixtures:load'
-        ) {
-            return;
-        }
-
-        /** @var RouteRegistrationEvent $routeRegistrationEvent */
-        $routeRegistrationEvent = $this->eventDispatcher()->dispatch(new RouteRegistrationEvent());
-
-        foreach ($routeRegistrationEvent->getRoutes() as $name => $route) {
-            $this->routeProvider()->addRoute($name, $route);
-        }
-    }
-
-    /**
-     * Registers areas
-     */
-    public function registerAreas(\Symfony\Component\HttpKernel\Event\RequestEvent|\Symfony\Component\Console\Event\ConsoleCommandEvent $event): void
-    {
-        if (
-            ($event instanceof ConsoleCommandEvent)
-            && ($command = $event->getCommand())
-            && !$command instanceof AreaAwareCommandInterface
-            && $command->getName() !== 'doctrine:fixtures:load'
-        ) {
-            return;
-        }
-
-        /** @var AreasRegistrationEvent $areasRegistrationEvent */
-        $areasRegistrationEvent = $this->eventDispatcher()->dispatch(new AreasRegistrationEvent());
-        $this->areaStore()->setAreas($areasRegistrationEvent->getAreas());
     }
 }

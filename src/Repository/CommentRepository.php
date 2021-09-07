@@ -39,7 +39,8 @@ final class CommentRepository extends ServiceEntityRepository
             ->orderBy('c.createdAt', 'asc')
             ->setParameter('contentEntityId', $contentEntityId)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     public function removeCommentAuthor(Comment $comment): void
@@ -48,6 +49,7 @@ final class CommentRepository extends ServiceEntityRepository
             ->setGuestAuthorName($this->translator->trans('Deleted user', [], 'numbernine'))
             ->setGuestAuthorEmail(null)
             ->setGuestAuthorUrl(null)
-            ->setAuthor(null);
+            ->setAuthor(null)
+        ;
     }
 }

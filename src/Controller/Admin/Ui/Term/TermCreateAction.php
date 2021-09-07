@@ -28,7 +28,7 @@ use Symfony\Component\String\Inflector\EnglishInflector;
 /**
  * @ParamConverter("taxonomy", options={"mapping": {"taxonomy": "name"}})
  */
-#[\Symfony\Component\Routing\Annotation\Route(path: '/taxonomy/{taxonomy}/term/', name: 'numbernine_admin_term_create', methods: ['GET', 'POST'])]
+#[Route(path: '/taxonomy/{taxonomy}/term/', name: 'numbernine_admin_term_create', methods: ['GET', 'POST'])]
 final class TermCreateAction extends AbstractController implements AdminController
 {
     public function __invoke(Request $request, EntityManagerInterface $entityManager, Taxonomy $taxonomy): Response
@@ -47,7 +47,7 @@ final class TermCreateAction extends AbstractController implements AdminControll
                 'numbernine_admin_term_edit',
                 [
                     'taxonomy' => $taxonomy->getName(),
-                    'id' => $term->getId()
+                    'id' => $term->getId(),
                 ],
                 Response::HTTP_SEE_OTHER
             );
@@ -57,7 +57,7 @@ final class TermCreateAction extends AbstractController implements AdminControll
 
         return $this->render('@NumberNine/admin/term/new.html.twig', [
             'taxonomy' => $taxonomy,
-            'taxonomy_plural_name' => (string)current($inflector->pluralize((string)$taxonomy->getName())),
+            'taxonomy_plural_name' => (string) current($inflector->pluralize((string) $taxonomy->getName())),
             'form' => $form->createView(),
         ], $response);
     }

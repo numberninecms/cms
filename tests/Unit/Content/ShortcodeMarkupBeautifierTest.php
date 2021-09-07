@@ -16,6 +16,10 @@ use NumberNine\Content\ShortcodeMarkupBeautifier;
 use NumberNine\Tests\DotEnvAwareWebTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class ShortcodeMarkupBeautifierTest extends DotEnvAwareWebTestCase implements ThemeAwareCommandInterface
 {
     private const SAMPLE_SHORTCODE_DIRTY = '[section backgroundSize="original" margin="0px" padding="0px 0px 0px 0px"' .
@@ -49,7 +53,7 @@ SHORTCODE;
     private ?ShortcodeMarkupBeautifier $shortcodeMarkupBeautifier;
     private ?SerializerInterface $serializer;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->client->request('GET', '/');
@@ -61,6 +65,6 @@ SHORTCODE;
     {
         $beautified = $this->shortcodeMarkupBeautifier->beautify(self::SAMPLE_SHORTCODE_DIRTY);
 
-        self::assertEquals(self::SAMPLE_SHORTCODE_EXPECTED, $beautified);
+        static::assertSame(self::SAMPLE_SHORTCODE_EXPECTED, $beautified);
     }
 }

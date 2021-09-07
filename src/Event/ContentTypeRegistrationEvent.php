@@ -31,7 +31,7 @@ final class ContentTypeRegistrationEvent extends Event
             throw new InvalidContentTypeException($contentType);
         }
 
-        if (array_key_exists($contentType->getName(), $this->contentTypes)) {
+        if (\array_key_exists($contentType->getName(), $this->contentTypes)) {
             throw new ExistingContentTypeException($contentType);
         }
 

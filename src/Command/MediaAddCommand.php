@@ -12,8 +12,8 @@
 namespace NumberNine\Command;
 
 use Exception;
-use NumberNine\Repository\UserRepository;
 use NumberNine\Media\MediaFileFactory;
+use NumberNine\Repository\UserRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,7 +34,8 @@ final class MediaAddCommand extends Command
         $this
             ->setDescription('Adds a file to the media library')
             ->addArgument('filename', InputArgument::OPTIONAL, 'Absolute filename of the file to add')
-            ->addArgument('username', InputArgument::OPTIONAL, "Username of the media file's author");
+            ->addArgument('username', InputArgument::OPTIONAL, "Username of the media file's author")
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -60,6 +61,7 @@ final class MediaAddCommand extends Command
 
         if (!$user) {
             $io->error('Unknown user');
+
             return 1;
         }
 
@@ -67,6 +69,7 @@ final class MediaAddCommand extends Command
             $this->mediaFileFactory->createMediaFileFromFilename($filename, $user);
         } catch (Exception $e) {
             $io->error('Unable to add the file to media library. ' . $e->getMessage());
+
             return 1;
         }
 

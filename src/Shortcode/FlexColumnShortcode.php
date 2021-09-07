@@ -12,16 +12,19 @@
 namespace NumberNine\Shortcode;
 
 use NumberNine\Attribute\Shortcode;
-use NumberNine\Model\PageBuilder\Control\VerticalAlignmentControl;
 use NumberNine\Model\PageBuilder\Control\HorizontalAlignmentControl;
 use NumberNine\Model\PageBuilder\Control\SelectControl;
+use NumberNine\Model\PageBuilder\Control\VerticalAlignmentControl;
 use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
 use NumberNine\Model\PageBuilder\Position;
 use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-#[Shortcode(name: 'flex_column', label: 'Flex column', container: true, icon: 'mdi-view-week', siblingsPosition: [Position::LEFT, Position::RIGHT], siblingsShortcodes: ['flex_column'])]
+#[Shortcode(name: 'flex_column', label: 'Flex column', container: true, icon: 'mdi-view-week', siblingsPosition: [
+    Position::LEFT,
+    Position::RIGHT,
+], siblingsShortcodes: ['flex_column'])]
 final class FlexColumnShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
     public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void

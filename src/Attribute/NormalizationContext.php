@@ -11,7 +11,9 @@
 
 namespace NumberNine\Attribute;
 
-#[\Attribute(\Attribute::TARGET_CLASS)]
+use Attribute;
+
+#[Attribute(Attribute::TARGET_CLASS)]
 final class NormalizationContext
 {
     public function __construct(public array $groups)

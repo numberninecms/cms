@@ -15,6 +15,7 @@ namespace NumberNine\Controller\Admin\Ui\UserRole;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
+use Exception;
 use NumberNine\Form\Admin\UserRole\AdminUserRoleIndexFormType;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Repository\UserRoleRepository;
@@ -27,7 +28,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/users/roles/', name: 'numbernine_admin_user_role_index', methods: ['GET', 'POST'], priority: 10,)]
+#[Route(path: '/users/roles/', name: 'numbernine_admin_user_role_index', methods: [
+    'GET',
+    'POST',
+], priority: 10, )]
 final class UserRoleIndexAction extends AbstractController implements AdminController
 {
     public function __invoke(
@@ -61,13 +65,13 @@ final class UserRoleIndexAction extends AbstractController implements AdminContr
                     $this->addFlash('success', 'Roles saved successfully.');
 
                     return $this->redirectToRoute('numbernine_admin_user_role_index', [], Response::HTTP_SEE_OTHER);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $logger->error($e->getMessage());
                     $this->addFlash('error', "Roles couldn't be saved.");
                 }
             } else {
                 try {
-                    $id = (int)str_replace('delete_', '', $clickedButtonName);
+                    $id = (int) str_replace('delete_', '', $clickedButtonName);
                     $userRole = $userRoleRepository->find($id);
 
                     if (!$userRole) {
@@ -79,7 +83,7 @@ final class UserRoleIndexAction extends AbstractController implements AdminContr
                     $this->addFlash('success', 'Role deleted successfully.');
 
                     return $this->redirectToRoute('numbernine_admin_user_role_index', [], Response::HTTP_SEE_OTHER);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $logger->error($e->getMessage());
                     $this->addFlash('error', 'Unable to delete the role.');
                 }

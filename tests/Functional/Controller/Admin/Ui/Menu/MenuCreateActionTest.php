@@ -15,6 +15,10 @@ namespace NumberNine\Tests\Functional\Controller\Admin\Ui\Menu;
 
 use NumberNine\Tests\UserAwareTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class MenuCreateActionTest extends UserAwareTestCase
 {
     public function testAdministratorCanAccessMediaLibrary(): void

@@ -22,8 +22,8 @@ use NumberNine\Repository\PresetRepository;
 use NumberNine\Theme\PresetFinderInterface;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Thunder\Shortcode\Parser\ParserInterface;
 use Thunder\Shortcode\Shortcode\ParsedShortcodeInterface;
 
@@ -75,11 +75,7 @@ final class ShortcodeProcessor
 
             $child = array_merge(
                 $isSerialization ? [] : ['shortcode' => $shortcode],
-                $this->shortcodeToArray(
-                    $parsedShortcode->getName(),
-                    $parameters,
-                    $position++
-                )
+                $this->shortcodeToArray($parsedShortcode->getName(), $parameters, $position++)
             );
 
             if ($editable) {
@@ -88,7 +84,7 @@ final class ShortcodeProcessor
 
             if ($shortcodeMetadata->container) {
                 $child['children'] = $this->buildShortcodeTree(
-                    (string)$parsedShortcode->getContent(),
+                    (string) $parsedShortcode->getContent(),
                     $onlyEditables,
                     $storeShortcodeFullString,
                     $isSerialization
@@ -165,17 +161,17 @@ final class ShortcodeProcessor
             $text = preg_replace(
                 '/' . preg_quote($placeholder, '/') . '/',
                 $parsedShortcode->getText(),
-                (string)$text,
+                (string) $text,
                 1
             );
         }
 
         // Remove things such as :
         // <p>[/text]  or  [text]</p>
-        $text = preg_replace('@(<\s*[a-zA-Z]+[^>]*>)\s*?\[/text]@simU', '[/text]', (string)$text);
-        $text = preg_replace('@\[text]\s*(</\s*[a-zA-Z]+\s*>)@sim', '[text]', (string)$text);
+        $text = preg_replace('@(<\s*[a-zA-Z]+[^>]*>)\s*?\[/text]@simU', '[/text]', (string) $text);
+        $text = preg_replace('@\[text]\s*(</\s*[a-zA-Z]+\s*>)@sim', '[text]', (string) $text);
 
-        return (string)$text;
+        return (string) $text;
     }
 
     /**
@@ -198,7 +194,7 @@ final class ShortcodeProcessor
     {
         $builtInPresets = $this->presetFinder->findShortcodePresets($this->shortcodeStore->getShortcode($name));
         $presets = array_merge([], ...array_map(
-            fn(Preset $preset) => [$preset->getName() => $preset->getContent()],
+            fn (Preset $preset) => [$preset->getName() => $preset->getContent()],
             $this->presetRepository->findBy(['shortcodeName' => $name])
         ));
 

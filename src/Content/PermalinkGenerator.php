@@ -14,7 +14,6 @@ namespace NumberNine\Content;
 use DateTime;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\Term;
-use NumberNine\Model\Content\PublishingStatusInterface;
 use Symfony\Cmf\Component\Routing\RouteProviderInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -26,20 +25,16 @@ final class PermalinkGenerator
     }
 
     /**
-     * Generates a permalink for a given ContentEntity object
+     * Generates a permalink for a given ContentEntity object.
      */
     public function generateContentEntityPermalink(
         ContentEntity $contentEntity,
         int $page = 1,
         bool $absolute = false
     ): string {
-        $contentType = $this->contentService->getContentType((string)$contentEntity->getCustomType());
+        $contentType = $this->contentService->getContentType((string) $contentEntity->getCustomType());
 
-        $routeName = sprintf(
-            'numbernine_%s_show%s',
-            $contentEntity->getCustomType(),
-            $page > 1 ? '_page' : ''
-        );
+        $routeName = sprintf('numbernine_%s_show%s', $contentEntity->getCustomType(), $page > 1 ? '_page' : '');
 
         $route = $this->routeProvider->getRouteByName($routeName);
 
@@ -62,7 +57,7 @@ final class PermalinkGenerator
         }
         if (str_contains($route->getPath(), '{slug}')) {
             $parameters['slug'] = $contentEntity->getSlug()
-                ?? $this->slugger->slug((string)$contentType->getLabels()->getNewItem())->lower()->toString();
+                ?? $this->slugger->slug((string) $contentType->getLabels()->getNewItem())->lower()->toString();
         }
 
         if ($page > 1) {
@@ -84,7 +79,7 @@ final class PermalinkGenerator
 
         $routeName = sprintf(
             'numbernine_taxonomy_%s_term_index',
-            $this->slugger->slug((string)$taxonomy->getName(), '_')
+            $this->slugger->slug((string) $taxonomy->getName(), '_')
         );
         $parameters = ['slug' => $term->getSlug()];
 

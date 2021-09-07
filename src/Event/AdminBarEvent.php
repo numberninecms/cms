@@ -15,5 +15,4 @@ use NumberNine\Event\Theme\GenericEvent;
 
 final class AdminBarEvent extends GenericEvent
 {
-
 }

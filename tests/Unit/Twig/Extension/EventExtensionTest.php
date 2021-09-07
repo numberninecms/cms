@@ -18,17 +18,21 @@ use PHPUnit\Framework\TestCase;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class EventExtensionTest extends TestCase
 {
     public function testGetFunctions(): void
     {
         $functions = (new EventExtension())->getFunctions();
-        $this->assertContainsOnlyInstancesOf(TwigFunction::class, $functions);
+        static::assertContainsOnlyInstancesOf(TwigFunction::class, $functions);
     }
 
     public function testGetFilters(): void
     {
         $functions = (new EventExtension())->getFilters();
-        $this->assertContainsOnlyInstancesOf(TwigFilter::class, $functions);
+        static::assertContainsOnlyInstancesOf(TwigFilter::class, $functions);
     }
 }

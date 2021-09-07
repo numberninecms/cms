@@ -31,6 +31,7 @@ final class ThemeInitializeEvent extends Event
     public function setTheme(ThemeInterface $theme): self
     {
         $this->theme = $theme;
+
         return $this;
     }
 }

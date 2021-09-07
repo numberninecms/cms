@@ -11,7 +11,9 @@
 
 namespace NumberNine\Attribute;
 
-#[\Attribute]
+use Attribute;
+
+#[Attribute]
 final class FormType
 {
     public function __construct(public string $new, public string $edit)

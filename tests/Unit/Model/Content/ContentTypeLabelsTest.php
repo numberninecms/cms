@@ -14,17 +14,21 @@ namespace NumberNine\Tests\Unit\Model\Content;
 use NumberNine\Model\Content\ContentTypeLabels;
 use PHPUnit\Framework\TestCase;
 
-class ContentTypeLabelsTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class ContentTypeLabelsTest extends TestCase
 {
     public function testSingularName(): void
     {
         $labels = new ContentTypeLabels('media_file');
-        self::assertEquals('media file', $labels->getSingularName());
+        static::assertSame('media file', $labels->getSingularName());
     }
 
     public function testPluralName(): void
     {
         $labels = new ContentTypeLabels('media_file');
-        self::assertEquals('media files', $labels->getPluralName());
+        static::assertSame('media files', $labels->getPluralName());
     }
 }

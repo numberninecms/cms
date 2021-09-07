@@ -15,9 +15,12 @@ use NumberNine\Command\ThemeAwareCommandInterface;
 use NumberNine\Content\ShortcodeProcessor;
 use NumberNine\Tests\DotEnvAwareWebTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
-
 use function NumberNine\Common\Util\ArrayUtil\unset_recursive;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class ShortcodeProcessorTest extends DotEnvAwareWebTestCase implements ThemeAwareCommandInterface
 {
     private const SAMPLE_SHORTCODE = '
@@ -31,7 +34,7 @@ final class ShortcodeProcessorTest extends DotEnvAwareWebTestCase implements The
     private ?ShortcodeProcessor $shortcodeProcessor;
     private ?SerializerInterface $serializer;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->client->request('GET', '/');
@@ -43,7 +46,7 @@ final class ShortcodeProcessorTest extends DotEnvAwareWebTestCase implements The
     {
         $tree = $this->shortcodeProcessor->buildShortcodeTree(self::SAMPLE_SHORTCODE, true, false, true);
 
-        self::assertIsArray($tree);
+        static::assertIsArray($tree);
     }
 
     public function testBuildShortcodeTreeCanBeSerialized(): void
@@ -53,7 +56,7 @@ final class ShortcodeProcessorTest extends DotEnvAwareWebTestCase implements The
             'json',
         );
 
-        self::assertIsArray(json_decode($serialized, true));
+        static::assertIsArray(json_decode($serialized, true));
     }
 
     public function testBuildShortcodeTreeOutputIsCorrect(): void
@@ -64,7 +67,7 @@ final class ShortcodeProcessorTest extends DotEnvAwareWebTestCase implements The
         unset_recursive($tree, 'content');
         unset_recursive($tree, 'position');
 
-        self::assertEquals(
+        static::assertSame(
             [
                 0 => [
                     'type' => 'NumberNine\\Shortcode\\ContainerShortcode',
@@ -74,12 +77,10 @@ final class ShortcodeProcessorTest extends DotEnvAwareWebTestCase implements The
                         'align' => 'center',
                         'margin' => '10px auto 10px auto',
                         'padding' => '',
-                        'orientation' => 'horizontal'
+                        'orientation' => 'horizontal',
                     ],
-                    'responsive' => [
-                    ],
-                    'computed' => [
-                    ],
+                    'responsive' => [],
+                    'computed' => [],
                     'editable' => true,
                     'container' => true,
                     'label' => 'Container',
@@ -87,8 +88,7 @@ final class ShortcodeProcessorTest extends DotEnvAwareWebTestCase implements The
                         0 => 'top',
                         1 => 'bottom',
                     ],
-                    'siblingsShortcodes' => [
-                    ],
+                    'siblingsShortcodes' => [],
                     'icon' => 'mdi-table-row',
                     'children' => [
                         0 => [
@@ -98,10 +98,8 @@ final class ShortcodeProcessorTest extends DotEnvAwareWebTestCase implements The
                                 'href' => 'http://numbernine/',
                                 'title' => 'NumberNine - The most user friendly CMS based on Symfony',
                             ],
-                            'responsive' => [
-                            ],
-                            'computed' => [
-                            ],
+                            'responsive' => [],
+                            'computed' => [],
                             'editable' => true,
                             'container' => true,
                             'label' => 'Link',
@@ -109,19 +107,15 @@ final class ShortcodeProcessorTest extends DotEnvAwareWebTestCase implements The
                                 0 => 'top',
                                 1 => 'bottom',
                             ],
-                            'siblingsShortcodes' => [
-                            ],
+                            'siblingsShortcodes' => [],
                             'icon' => 'mdi-link',
                             'children' => [
                                 0 => [
                                     'type' => 'NumberNine\\Shortcode\\TextShortcode',
                                     'name' => 'text',
-                                    'parameters' => [
-                                    ],
-                                    'responsive' => [
-                                    ],
-                                    'computed' => [
-                                    ],
+                                    'parameters' => [],
+                                    'responsive' => [],
+                                    'computed' => [],
                                     'editable' => true,
                                     'container' => false,
                                     'leaf' => true,
@@ -130,8 +124,7 @@ final class ShortcodeProcessorTest extends DotEnvAwareWebTestCase implements The
                                         0 => 'top',
                                         1 => 'bottom',
                                     ],
-                                    'siblingsShortcodes' => [
-                                    ],
+                                    'siblingsShortcodes' => [],
                                     'icon' => 'mdi-format-text-variant',
                                 ],
                             ],

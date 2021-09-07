@@ -11,12 +11,14 @@
 
 declare(strict_types=1);
 
+use PhpCsFixer\Fixer\ControlStructure\SwitchCaseSemicolonToColonFixer;
 use PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer;
+use PhpCsFixer\Fixer\Import\NoUnusedImportsFixer;
 use PhpCsFixer\Fixer\Import\OrderedImportsFixer;
 use PhpCsFixer\Fixer\Operator\ConcatSpaceFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocTypesOrderFixer;
-use PHPStan\Type\Accessory\AccessoryLiteralStringType;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 use Symplify\EasyCodingStandard\ValueObject\Option;
 
@@ -29,9 +31,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
 
     $parameters->set(Option::SKIP, [
-        AccessoryLiteralStringType::class,
+        SwitchCaseSemicolonToColonFixer::class,
     ]);
 
+    $containerConfigurator->import(SetList::PSR_12);
     $containerConfigurator->import(SetList::PHP_CS_FIXER);
     $containerConfigurator->import(SetList::PHP_CS_FIXER_RISKY);
     $containerConfigurator->import(SetList::DOCTRINE_ANNOTATIONS);
@@ -60,4 +63,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             'spacing' => 'one',
         ]]);
+
+    $services->set(LineLengthFixer::class)
+        ->property('lineLimit', 120)
+        ->property('absoluteLineLimit', 120);
+
+    $services->set(NoUnusedImportsFixer::class);
 };

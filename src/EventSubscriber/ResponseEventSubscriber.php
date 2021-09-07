@@ -11,10 +11,10 @@
 
 namespace NumberNine\EventSubscriber;
 
+use NumberNine\Asset\TagRenderer;
 use NumberNine\Content\ContentService;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Event\CurrentContentEntityEvent;
-use NumberNine\Asset\TagRenderer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -60,7 +60,7 @@ final class ResponseEventSubscriber implements EventSubscriberInterface
     {
         if (
             !(
-            !$this->alreadyRendered
+                !$this->alreadyRendered
             && $this->tokenStorage->getToken()
             && $this->authorizationChecker->isGranted('Administrator')
             && $event->getResponse()->getStatusCode() === 200
@@ -92,13 +92,13 @@ final class ResponseEventSubscriber implements EventSubscriberInterface
         } else {
             $navtopStyles = $this->tagRenderer->renderWebpackLinkTags('adminbar', 'numbernine');
             $navtopScript = $this->tagRenderer->renderWebpackScriptTags('adminbar', 'numbernine', true);
-            $response->setContent(preg_replace('@(<body.*>)@simU', '$1' . $navtop, (string)$response->getContent()));
+            $response->setContent(preg_replace('@(<body.*>)@simU', '$1' . $navtop, (string) $response->getContent()));
         }
 
         $response->setContent(preg_replace(
             '@</head>@i',
             $navtopStyles . $navtopScript . '</head>',
-            (string)$response->getContent()
+            (string) $response->getContent()
         ));
 
         $this->alreadyRendered = true;

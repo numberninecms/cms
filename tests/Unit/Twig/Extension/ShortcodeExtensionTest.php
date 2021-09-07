@@ -17,11 +17,15 @@ use NumberNine\Twig\Extension\ShortcodeExtension;
 use PHPUnit\Framework\TestCase;
 use Twig\TwigFunction;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class ShortcodeExtensionTest extends TestCase
 {
     public function testGetFunctions(): void
     {
         $functions = (new ShortcodeExtension())->getFunctions();
-        $this->assertContainsOnlyInstancesOf(TwigFunction::class, $functions);
+        static::assertContainsOnlyInstancesOf(TwigFunction::class, $functions);
     }
 }

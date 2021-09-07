@@ -17,11 +17,15 @@ use NumberNine\Model\Menu\Builder\AdminMenuBuilder;
 use NumberNine\Model\Menu\MenuItem;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class AdminMenuBuilderTest extends TestCase
 {
     private AdminMenuBuilder $adminMenuBuilder;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->adminMenuBuilder = new AdminMenuBuilder();
     }
@@ -36,10 +40,10 @@ final class AdminMenuBuilderTest extends TestCase
 
         $menuItems = $this->adminMenuBuilder->getMenuItems();
 
-        self::assertArrayHasKey('dashboard', $menuItems);
-        self::assertEquals('Dashboard', $menuItems['dashboard']->getText());
-        self::assertEquals('/admin/', $menuItems['dashboard']->getLink());
-        self::assertEquals('tachometer-alt', $menuItems['dashboard']->getIcon());
+        static::assertArrayHasKey('dashboard', $menuItems);
+        static::assertSame('Dashboard', $menuItems['dashboard']->getText());
+        static::assertSame('/admin/', $menuItems['dashboard']->getLink());
+        static::assertSame('tachometer-alt', $menuItems['dashboard']->getIcon());
     }
 
     public function testCreateSimpleMenuItemWithChildren(): void
@@ -62,8 +66,8 @@ final class AdminMenuBuilderTest extends TestCase
 
         $menuItems = $this->adminMenuBuilder->getMenuItems();
 
-        self::assertCount(2, $menuItems['settings']->getChildren());
-        self::assertInstanceOf(MenuItem::class, $menuItems['settings']->getChildren()['general']);
+        static::assertCount(2, $menuItems['settings']->getChildren());
+        static::assertInstanceOf(MenuItem::class, $menuItems['settings']->getChildren()['general']);
     }
 
     public function testAppendSibling(): void
@@ -82,9 +86,9 @@ final class AdminMenuBuilderTest extends TestCase
 
         $menuItems = $this->adminMenuBuilder->getMenuItems();
 
-        self::assertCount(2, $menuItems);
-        self::assertArrayHasKey('dashboard', $menuItems);
-        self::assertArrayHasKey('settings', $menuItems);
+        static::assertCount(2, $menuItems);
+        static::assertArrayHasKey('dashboard', $menuItems);
+        static::assertArrayHasKey('settings', $menuItems);
     }
 
     public function testInsertAfter(): void
@@ -109,8 +113,8 @@ final class AdminMenuBuilderTest extends TestCase
 
         $menuItems = $this->adminMenuBuilder->getMenuItems();
 
-        self::assertCount(3, $menuItems);
-        self::assertEquals(['dashboard', 'users', 'settings'], array_keys($menuItems));
+        static::assertCount(3, $menuItems);
+        static::assertSame(['dashboard', 'users', 'settings'], array_keys($menuItems));
     }
 
     public function testInsertBefore(): void
@@ -135,8 +139,8 @@ final class AdminMenuBuilderTest extends TestCase
 
         $menuItems = $this->adminMenuBuilder->getMenuItems();
 
-        self::assertCount(3, $menuItems);
-        self::assertEquals(['dashboard', 'users', 'settings'], array_keys($menuItems));
+        static::assertCount(3, $menuItems);
+        static::assertSame(['dashboard', 'users', 'settings'], array_keys($menuItems));
     }
 
     public function testInsertAfterChild(): void
@@ -164,8 +168,8 @@ final class AdminMenuBuilderTest extends TestCase
 
         $menuItems = $this->adminMenuBuilder->getMenuItems();
 
-        self::assertCount(1, $menuItems);
-        self::assertCount(3, $menuItems['settings']->getChildren());
-        self::assertEquals(['general', 'emails', 'permalinks'], array_keys($menuItems['settings']->getChildren()));
+        static::assertCount(1, $menuItems);
+        static::assertCount(3, $menuItems['settings']->getChildren());
+        static::assertSame(['general', 'emails', 'permalinks'], array_keys($menuItems['settings']->getChildren()));
     }
 }

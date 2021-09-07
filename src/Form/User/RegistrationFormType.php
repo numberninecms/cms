@@ -49,17 +49,16 @@ final class RegistrationFormType extends AbstractType
                             ]
                         ),
                     ],
-                    'label' => 'Password'
+                    'label' => 'Password',
                 ]
-            );
+            )
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(
-            [
-                'data_class' => User::class,
-            ]
-        );
+        $resolver->setDefaults([
+            'data_class' => User::class,
+        ]);
     }
 }

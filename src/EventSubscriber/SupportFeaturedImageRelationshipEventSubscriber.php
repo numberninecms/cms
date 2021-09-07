@@ -22,7 +22,7 @@ final class SupportFeaturedImageRelationshipEventSubscriber implements EventSubs
     public static function getSubscribedEvents(): array
     {
         return [
-            SupportedContentEntityRelationshipsEvent::class => 'allowPosts'
+            SupportedContentEntityRelationshipsEvent::class => 'allowPosts',
         ];
     }
 

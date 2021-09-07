@@ -20,7 +20,7 @@ final class MainLoopQueryEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            MainLoopQueryEvent::class => 'fetchJoinFeaturedImage'
+            MainLoopQueryEvent::class => 'fetchJoinFeaturedImage',
         ];
     }
 

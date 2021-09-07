@@ -15,6 +15,10 @@ namespace NumberNine\Tests\Functional\Controller\Admin\Ui\User;
 
 use NumberNine\Tests\UserAwareTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class UserCreateActionTest extends UserAwareTestCase
 {
     public function testAdministratorCanAccessMediaLibrary(): void

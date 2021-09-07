@@ -11,10 +11,10 @@
 
 namespace NumberNine\EventSubscriber;
 
+use NumberNine\Configuration\ConfigurationReadWriter;
 use NumberNine\Controller\Frontend\Content\ContentEntityIndexAction;
 use NumberNine\Event\ContentEntityShowForwardEvent;
 use NumberNine\Model\General\Settings;
-use NumberNine\Configuration\ConfigurationReadWriter;
 use Psr\Cache\CacheException;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -24,15 +24,15 @@ final class ContentEntityShowForwardEventSubscriber implements EventSubscriberIn
 {
     use ForwardRequestTrait;
 
+    public function __construct(private ConfigurationReadWriter $configurationReadWriter, private HttpKernelInterface $httpKernel)
+    {
+    }
+
     public static function getSubscribedEvents(): array
     {
         return [
-            ContentEntityShowForwardEvent::class => 'forwardPageForPost'
+            ContentEntityShowForwardEvent::class => 'forwardPageForPost',
         ];
-    }
-
-    public function __construct(private ConfigurationReadWriter $configurationReadWriter, private HttpKernelInterface $httpKernel)
-    {
     }
 
     /**
@@ -43,7 +43,7 @@ final class ContentEntityShowForwardEventSubscriber implements EventSubscriberIn
     {
         $pageForPosts = $this->configurationReadWriter->read(Settings::PAGE_FOR_POSTS);
 
-        if ((int)$pageForPosts === $event->getEntity()->getId()) {
+        if ((int) $pageForPosts === $event->getEntity()->getId()) {
             $response = $this->getForwardResponse($event, ContentEntityIndexAction::class);
             $event->setResponse($response);
         }

@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace NumberNine\Exception;
 
-final class MenuItemNotFoundException extends \LogicException
+use LogicException;
+
+final class MenuItemNotFoundException extends LogicException
 {
     public function __construct(string $key)
     {

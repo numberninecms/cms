@@ -15,6 +15,7 @@ namespace NumberNine\Controller\Admin\Ui\Term;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Exception;
 use NumberNine\Entity\Taxonomy;
 use NumberNine\Form\Admin\Term\AdminTermIndexFormType;
 use NumberNine\Model\Admin\AdminController;
@@ -33,7 +34,7 @@ use Symfony\Component\String\Inflector\EnglishInflector;
 /**
  * @ParamConverter("taxonomy", options={"mapping": {"taxonomy": "name"}})
  */
-#[\Symfony\Component\Routing\Annotation\Route(path: '/taxonomy/{taxonomy}/', name: 'numbernine_admin_term_index', methods: ['GET', 'POST'])]
+#[Route(path: '/taxonomy/{taxonomy}/', name: 'numbernine_admin_term_index', methods: ['GET', 'POST'])]
 final class TermIndexAction extends AbstractController implements AdminController
 {
     public function __invoke(
@@ -55,7 +56,7 @@ final class TermIndexAction extends AbstractController implements AdminControlle
         );
 
         $queryBuilder = $termRepository->getByTaxonomyPaginatedCollectionQueryBuilder(
-            (string)$taxonomy->getName(),
+            (string) $taxonomy->getName(),
             $paginationParameters,
         );
 
@@ -66,7 +67,7 @@ final class TermIndexAction extends AbstractController implements AdminControlle
 
         if ($form->isSubmitted() && $form->isValid()) {
             $checkedIds = array_map(
-                fn ($name): int => (int)str_replace('term_', '', $name),
+                fn ($name): int => (int) str_replace('term_', '', $name),
                 array_keys(array_filter($form->getData()))
             );
 
@@ -78,13 +79,10 @@ final class TermIndexAction extends AbstractController implements AdminControlle
 
                 return $this->redirectToRoute(
                     'numbernine_admin_term_index',
-                    array_merge(
-                        ['taxonomy' => $taxonomy->getName()],
-                        $request->query->all()
-                    ),
+                    array_merge(['taxonomy' => $taxonomy->getName()], $request->query->all()),
                     Response::HTTP_SEE_OTHER,
                 );
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $logger->error($e->getMessage());
                 $this->addFlash('error', 'An unknown error occured.');
             }
@@ -94,7 +92,7 @@ final class TermIndexAction extends AbstractController implements AdminControlle
 
         return $this->render('@NumberNine/admin/term/index.html.twig', [
             'taxonomy' => $taxonomy,
-            'taxonomy_plural_name' => (string)current($inflector->pluralize((string)$taxonomy->getName())),
+            'taxonomy_plural_name' => (string) current($inflector->pluralize((string) $taxonomy->getName())),
             'terms' => $terms,
             'form' => $form->createView(),
         ], $response);

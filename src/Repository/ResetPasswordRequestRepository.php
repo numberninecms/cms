@@ -2,9 +2,10 @@
 
 namespace NumberNine\Repository;
 
-use NumberNine\Entity\ResetPasswordRequest;
+use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use NumberNine\Entity\ResetPasswordRequest;
 use NumberNine\Entity\User;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 use SymfonyCasts\Bundle\ResetPassword\Persistence\Repository\ResetPasswordRequestRepositoryTrait;
@@ -27,11 +28,11 @@ class ResetPasswordRequestRepository extends ServiceEntityRepository implements 
 
     public function createResetPasswordRequest(
         object $user,
-        \DateTimeInterface $expiresAt,
+        DateTimeInterface $expiresAt,
         string $selector,
         string $hashedToken
     ): ResetPasswordRequestInterface {
-        /** @var User $user */
+        // @var User $user
         return new ResetPasswordRequest($user, $expiresAt, $selector, $hashedToken);
     }
 }

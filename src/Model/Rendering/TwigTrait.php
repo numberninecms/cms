@@ -17,14 +17,15 @@ trait TwigTrait
 {
     private Environment $twig;
 
-    final protected function getTwig(): Environment
-    {
-        return $this->twig;
-    }
-
     final public function setTwig(Environment $twig): self
     {
         $this->twig = $twig;
+
         return $this;
+    }
+
+    final protected function getTwig(): Environment
+    {
+        return $this->twig;
     }
 }
