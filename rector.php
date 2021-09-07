@@ -31,6 +31,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
     $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, getcwd() . '/phpstan.neon');
     $parameters->set(Option::SKIP, [
+        __DIR__ . '/src/Bundle/Resources/public',
         __DIR__ . '/src/Entity/ContentEntity.php',
         ReturnNeverTypeRector::class,
     ]);
