@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Twig\Extension;
 
-use NumberNine\Exception\InvalidTimestampException;
 use NumberNine\Tests\DotEnvAwareWebTestCase;
 use NumberNine\Twig\Extension\DateTimeRuntime;
 
@@ -32,12 +31,6 @@ final class DateTimeRuntimeTest extends DotEnvAwareWebTestCase
         $this->runtime = static::getContainer()->get(DateTimeRuntime::class);
     }
 
-    public function testGetTimeLeftInWordsWithInvalidTimestampThrowsException(): void
-    {
-        $this->expectException(InvalidTimestampException::class);
-        $this->runtime->getTimeLeftInWords('invalid');
-    }
-
     public function testGetTimeLeftInWordsWithTimestampWorks(): void
     {
         $date = new \DateTime();
@@ -52,12 +45,6 @@ final class DateTimeRuntimeTest extends DotEnvAwareWebTestCase
         $date->modify('+30 minutes');
 
         static::assertSame('30 minutes left', $this->runtime->getTimeLeftInWords($date));
-    }
-
-    public function testGetTimeAgoInWordsWithInvalidTimestampThrowsException(): void
-    {
-        $this->expectException(InvalidTimestampException::class);
-        $this->runtime->getTimeAgoInWords('invalid');
     }
 
     public function testGetTimeAgoInWordsWithTimestampWorks(): void

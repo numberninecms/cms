@@ -62,6 +62,8 @@ final class ShortcodeProcessorTest extends DotEnvAwareWebTestCase implements The
     public function testBuildShortcodeTreeOutputIsCorrect(): void
     {
         $tree = $this->shortcodeProcessor->buildShortcodeTree(self::SAMPLE_SHORTCODE, true, false, true);
+        $temp = $this->serializer->serialize($tree, 'json');
+        $tree = json_decode($temp, true, 512, JSON_THROW_ON_ERROR);
 
         unset_recursive($tree, 'id');
         unset_recursive($tree, 'content');
@@ -73,11 +75,11 @@ final class ShortcodeProcessorTest extends DotEnvAwareWebTestCase implements The
                     'type' => 'NumberNine\\Shortcode\\ContainerShortcode',
                     'name' => 'container',
                     'parameters' => [
+                        'orientation' => 'horizontal',
                         'justify' => 'center',
                         'align' => 'center',
                         'margin' => '10px auto 10px auto',
                         'padding' => '',
-                        'orientation' => 'horizontal',
                     ],
                     'responsive' => [],
                     'computed' => [],

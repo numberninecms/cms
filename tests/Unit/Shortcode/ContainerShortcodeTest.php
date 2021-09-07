@@ -30,10 +30,10 @@ final class ContainerShortcodeTest extends ShortcodeTestCase
         $parameters = $this->processParameters([]);
 
         static::assertSame([
-            'content' => '',
             'align' => 'start',
             'justify' => 'start',
             'styles' => ' style="margin:0 auto"',
+            'content' => '',
         ], $parameters);
     }
 

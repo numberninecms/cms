@@ -15,7 +15,7 @@ services:
             - .env.test.local
         volumes:
             - ./:/srv/app
-            - ./docker/symfony.ini:/etc/php7/conf.d/symfony.ini
+            - ./docker/symfony.ini:/etc/php81/conf.d/symfony.ini
 
     mysql:
         image: mysql:8
