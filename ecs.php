@@ -31,6 +31,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
 
     $parameters->set(Option::SKIP, [
+        __DIR__ . '/src/Bundle/Resources/public',
         SwitchCaseSemicolonToColonFixer::class,
     ]);
 

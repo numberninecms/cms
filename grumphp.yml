@@ -1,12 +1,11 @@
 grumphp:
     tasks:
 #        phpstan: ~
+        ecs:
+            files_on_pre_commit: true
+            no-progress-bar: true
         twigcs:
             path: './src/'
-#        phpcs:
-#            standard: PSR12
-#            ignore_patterns:
-#                - './src/Bundle/Resources/public/*'
         composer:
             no_check_lock: true
             no_local_repository: true
