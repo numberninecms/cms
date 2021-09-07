@@ -29,20 +29,20 @@ final class GapShortcodeTest extends ShortcodeTestCase
         $parameters = $this->processParameters([]);
 
         static::assertSame([
-            'height' => 30,
+            'height' => 30.0,
         ], $parameters);
     }
 
     public function testValidHeight(): void
     {
         $parameters = $this->processParameters(['height' => 123]);
-        static::assertSame(123, $parameters['height']);
+        static::assertSame(123.0, $parameters['height']);
     }
 
     public function testHeightAsString(): void
     {
         $parameters = $this->processParameters(['height' => '123']);
-        static::assertSame(123, $parameters['height']);
+        static::assertSame(123.0, $parameters['height']);
     }
 
     public function testInvalidHeight(): void

@@ -17,6 +17,7 @@ use PhpCsFixer\Fixer\Import\NoUnusedImportsFixer;
 use PhpCsFixer\Fixer\Import\OrderedImportsFixer;
 use PhpCsFixer\Fixer\Operator\ConcatSpaceFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocTypesOrderFixer;
+use PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
@@ -33,12 +34,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::SKIP, [
         __DIR__ . '/src/Bundle/Resources/public',
         SwitchCaseSemicolonToColonFixer::class,
+        PhpUnitStrictFixer::class,
     ]);
 
     $containerConfigurator->import(SetList::PSR_12);
     $containerConfigurator->import(SetList::PHP_CS_FIXER);
     $containerConfigurator->import(SetList::PHP_CS_FIXER_RISKY);
     $containerConfigurator->import(SetList::DOCTRINE_ANNOTATIONS);
+    $containerConfigurator->import(SetList::CLEAN_CODE);
 
     $services = $containerConfigurator->services();
 
@@ -66,8 +69,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]]);
 
     $services->set(LineLengthFixer::class)
-        ->property('lineLimit', 120)
-        ->property('absoluteLineLimit', 120);
+        ->call('configure', [[
+            LineLengthFixer::LINE_LENGTH => 120,
+        ]]);
 
     $services->set(NoUnusedImportsFixer::class);
 };

@@ -17,6 +17,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use NumberNine\Annotation\ExtendedAnnotationReader;
 use NumberNine\Attribute\Theme;
 use NumberNine\Exception\AnnotationOrAttributeMissingException;
+use NumberNine\Tests\Dummy\Annotation\AnotherSampleAnnotation;
 use NumberNine\Tests\Dummy\Annotation\SampleAnnotation;
 use NumberNine\Tests\Dummy\Annotation\UnusedAnnotation;
 use NumberNine\Tests\Dummy\Attribute\AnotherSampleAttribute;
@@ -35,6 +36,8 @@ final class ExtendedAnnotationReaderTest extends TestCase
     private SampleAnnotation $classAnnotation;
     private SampleAnnotation $propertyAnnotation;
     private SampleAnnotation $methodAnnotation;
+    private AnotherSampleAnnotation $anotherClassAnnotation;
+    private AnotherSampleAnnotation $anotherPropertyAnnotation;
     private SampleAttribute $classAttribute;
     private SampleAttribute $propertyAttribute;
     private SampleAttribute $methodAttribute;
@@ -63,6 +66,14 @@ final class ExtendedAnnotationReaderTest extends TestCase
         $this->propertyAttribute = new SampleAttribute('Sample property attribute', 13.0);
         $this->methodAttribute = new SampleAttribute('Sample method attribute', 7.6);
 
+        $this->anotherClassAnnotation = new AnotherSampleAnnotation();
+        $this->anotherClassAnnotation->category = 'Class';
+        $this->anotherClassAnnotation->nullable = false;
+
+        $this->anotherPropertyAnnotation = new AnotherSampleAnnotation();
+        $this->anotherPropertyAnnotation->category = 'Property';
+        $this->anotherPropertyAnnotation->nullable = true;
+
         $this->anotherClassAttribute = new AnotherSampleAttribute('Class', false);
         $this->anotherPropertyAttribute = new AnotherSampleAttribute('Property', true);
     }
@@ -72,10 +83,20 @@ final class ExtendedAnnotationReaderTest extends TestCase
      */
     public function testGetAllAnnotations(): void
     {
-        static::assertSame(
+        static::assertEquals(
             [
-                SampleAnnotatedClass::class => [$this->classAnnotation, $this->classAttribute],
-                'sampleProperty' => [$this->propertyAnnotation, $this->propertyAttribute],
+                SampleAnnotatedClass::class => [
+                    $this->classAnnotation,
+                    $this->anotherClassAnnotation,
+                    $this->classAttribute,
+                    $this->anotherClassAttribute,
+                ],
+                'sampleProperty' => [
+                    $this->propertyAnnotation,
+                    $this->anotherPropertyAnnotation,
+                    $this->propertyAttribute,
+                    $this->anotherPropertyAttribute,
+                ],
                 'sampleMethod' => [$this->methodAnnotation, $this->methodAttribute],
             ],
             $this->reader->getAllAnnotationsAndAttributes(SampleAnnotatedClass::class),
@@ -87,7 +108,7 @@ final class ExtendedAnnotationReaderTest extends TestCase
      */
     public function testGetAnnotationsOrAttributesOfType(): void
     {
-        static::assertSame(
+        static::assertEquals(
             [
                 SampleAnnotatedClass::class => $this->classAnnotation,
                 'sampleProperty' => $this->propertyAnnotation,
@@ -96,7 +117,7 @@ final class ExtendedAnnotationReaderTest extends TestCase
             $this->reader->getAnnotationsOrAttributesOfType(SampleAnnotatedClass::class, SampleAnnotation::class)
         );
 
-        static::assertSame(
+        static::assertEquals(
             [
                 SampleAnnotatedClass::class => $this->anotherClassAttribute,
                 'sampleProperty' => $this->anotherPropertyAttribute,
@@ -110,12 +131,12 @@ final class ExtendedAnnotationReaderTest extends TestCase
      */
     public function testGetFirstAnnotationOrAttributeOfType(): void
     {
-        static::assertSame(
+        static::assertEquals(
             $this->classAnnotation,
             $this->reader->getFirstAnnotationOrAttributeOfType(SampleAnnotatedClass::class, SampleAnnotation::class)
         );
 
-        static::assertSame(
+        static::assertEquals(
             $this->anotherClassAttribute,
             $this->reader->getFirstAnnotationOrAttributeOfType(
                 SampleAnnotatedClass::class,

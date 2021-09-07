@@ -41,7 +41,7 @@ final class AdminMenuFormTypeTest extends FormTestCase
         $form->submit($formData);
 
         static::assertTrue($form->isSynchronized());
-        static::assertSame($expected, $model);
+        static::assertEquals($expected, $model);
     }
 
     public function testSubmitValidDataForEdition(): void
@@ -67,7 +67,7 @@ final class AdminMenuFormTypeTest extends FormTestCase
         $form->submit($formData);
 
         static::assertTrue($form->isSynchronized());
-        static::assertSame($expected, $model);
+        static::assertEquals($expected, $model);
     }
 
     public function testProvideWrongModeFails(): void
