@@ -21,7 +21,7 @@ abstract class DotEnvAwareWebTestCase extends WebTestCase
 
     protected function setUp(): void
     {
-        (new Dotenv())->bootEnv(dirname(__DIR__) . '/.env');
+        (new Dotenv())->bootEnv(\dirname(__DIR__) . '/.env');
         $this->client = static::createClient();
     }
 }

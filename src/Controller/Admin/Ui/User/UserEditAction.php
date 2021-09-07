@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace NumberNine\Controller\Admin\Ui\User;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use NumberNine\Entity\User;
 use NumberNine\Form\Admin\User\AdminUserFormType;
 use NumberNine\Model\Admin\AdminController;
@@ -24,7 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/users/{id}/', name: 'numbernine_admin_user_edit', methods: ['GET', 'POST'])]
+#[Route(path: '/users/{id}/', name: 'numbernine_admin_user_edit', methods: ['GET', 'POST'])]
 final class UserEditAction extends AbstractController implements AdminController
 {
     public function __invoke(
@@ -49,19 +50,18 @@ final class UserEditAction extends AbstractController implements AdminController
                     ));
 
                     return $this->redirectToRoute('numbernine_admin_user_index', [], Response::HTTP_SEE_OTHER);
-                } else {
-                    $entityManager->persist($user);
-                    $entityManager->flush();
-
-                    $this->addFlash('success', 'Term successfully saved.');
-
-                    return $this->redirectToRoute(
-                        'numbernine_admin_user_edit',
-                        ['id' => $user->getId()],
-                        Response::HTTP_SEE_OTHER,
-                    );
                 }
-            } catch (\Exception $e) {
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Term successfully saved.');
+
+                return $this->redirectToRoute(
+                    'numbernine_admin_user_edit',
+                    ['id' => $user->getId()],
+                    Response::HTTP_SEE_OTHER,
+                );
+            } catch (Exception $e) {
                 $logger->error($e->getMessage());
                 $this->addFlash('error', 'An unknown error occured.');
             }

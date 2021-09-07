@@ -11,8 +11,8 @@
 
 namespace NumberNine\EventSubscriber;
 
-use NumberNine\Event\ComponentProcessParametersEvent;
 use NumberNine\Content\DataTransformerProcessor;
+use NumberNine\Event\ComponentProcessParametersEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class ComponentProcessParametersEventSubscriber implements EventSubscriberInterface
@@ -24,7 +24,7 @@ final class ComponentProcessParametersEventSubscriber implements EventSubscriber
     public static function getSubscribedEvents(): array
     {
         return [
-            ComponentProcessParametersEvent::class => 'transformValues'
+            ComponentProcessParametersEvent::class => 'transformValues',
         ];
     }
 

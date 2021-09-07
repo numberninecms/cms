@@ -19,7 +19,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'content_entities/{type}/{id<\d+|__id__>}/', name: 'numbernine_admin_contententity_get_item', options: ['expose' => true], methods: ['GET'], priority: 100,)]
+#[Route(path: 'content_entities/{type}/{id<\d+|__id__>}/', name: 'numbernine_admin_contententity_get_item', options: ['expose' => true], methods: [
+    'GET',
+], priority: 100, )]
 final class ContentEntityGetAction
 {
     /**

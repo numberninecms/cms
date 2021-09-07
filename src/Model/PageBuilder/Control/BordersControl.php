@@ -13,7 +13,6 @@ namespace NumberNine\Model\PageBuilder\Control;
 
 use NumberNine\Model\PageBuilder\AbstractPageBuilderFormControl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use function NumberNine\Common\Util\ArrayUtil\in_array_all;
 
 class BordersControl extends AbstractPageBuilderFormControl

@@ -23,8 +23,6 @@ final class ArrayExtension extends AbstractExtension
      */
     public function getFilters(): array
     {
-        return [
-            new TwigFilter('depth', '\NumberNine\Common\Util\ArrayUtil\array_depth'),
-        ];
+        return [new TwigFilter('depth', '\NumberNine\Common\Util\ArrayUtil\array_depth')];
     }
 }

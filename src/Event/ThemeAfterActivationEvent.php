@@ -12,8 +12,7 @@
 namespace NumberNine\Event;
 
 /**
- * Class ThemeEvent
- * @package NumberNine\Event
+ * Class ThemeEvent.
  */
 final class ThemeAfterActivationEvent extends ThemeEvent
 {

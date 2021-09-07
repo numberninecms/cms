@@ -17,7 +17,11 @@ use NumberNine\Model\Content\ContentTypeLabels;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
-class ContentTypeTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class ContentTypeTest extends TestCase
 {
     public function testEmptyArguments(): void
     {
@@ -39,7 +43,7 @@ class ContentTypeTest extends TestCase
 
     public function testMinimumRequiredArguments(): void
     {
-        self::assertInstanceOf(
+        static::assertInstanceOf(
             ContentType::class,
             new ContentType(
                 [
@@ -59,7 +63,7 @@ class ContentTypeTest extends TestCase
             ]
         );
 
-        self::assertEquals('media_file', $contentType->getName());
+        static::assertSame('media_file', $contentType->getName());
     }
 
     public function testNonNullLabels(): void
@@ -71,6 +75,6 @@ class ContentTypeTest extends TestCase
             ]
         );
 
-        self::assertInstanceOf(ContentTypeLabels::class, $contentType->getLabels());
+        static::assertInstanceOf(ContentTypeLabels::class, $contentType->getLabels());
     }
 }

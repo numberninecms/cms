@@ -11,8 +11,8 @@
 
 namespace NumberNine\Model\PageBuilder;
 
+use LogicException;
 use NumberNine\Model\PageBuilder\Control\TextBoxControl;
-
 use function Symfony\Component\String\u;
 
 final class PageBuilderFormBuilder implements PageBuilderFormBuilderInterface
@@ -26,14 +26,14 @@ final class PageBuilderFormBuilder implements PageBuilderFormBuilderInterface
         }
 
         if (!is_subclass_of($type, PageBuilderFormControlInterface::class)) {
-            throw new \LogicException(sprintf(
+            throw new LogicException(sprintf(
                 '%s must implement %s',
                 $type,
                 PageBuilderFormControlInterface::class,
             ));
         }
 
-        if (!array_key_exists('label', $options)) {
+        if (!\array_key_exists('label', $options)) {
             $options['label'] = u($child)->snake()->replace('_', ' ')->title();
         }
 

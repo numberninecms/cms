@@ -17,11 +17,15 @@ use NumberNine\Twig\Extension\ThemeExtension;
 use PHPUnit\Framework\TestCase;
 use Twig\TwigFunction;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class ThemeExtensionTest extends TestCase
 {
     public function testGetFunctions(): void
     {
         $functions = (new ThemeExtension())->getFunctions();
-        $this->assertContainsOnlyInstancesOf(TwigFunction::class, $functions);
+        static::assertContainsOnlyInstancesOf(TwigFunction::class, $functions);
     }
 }

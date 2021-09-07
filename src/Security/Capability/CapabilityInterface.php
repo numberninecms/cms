@@ -11,7 +11,6 @@
 
 namespace NumberNine\Security\Capability;
 
-use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\User;
 
 interface CapabilityInterface
@@ -21,6 +20,7 @@ interface CapabilityInterface
     /**
      * @param mixed $subject
      * @param ?User $user
+     *
      * @return int either ACCESS_GRANTED, ACCESS_ABSTAIN, or ACCESS_DENIED
      */
     public function handle($subject, ?User $user): int;

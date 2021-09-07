@@ -22,8 +22,8 @@ final class ColorRuntime implements RuntimeExtensionInterface
             throw new InvalidHexColorValueException($hex);
         }
 
-        [$red, $green, $blue] = sscanf($hex, "#%02x%02x%02x");
+        [$red, $green, $blue] = sscanf($hex, '#%02x%02x%02x');
 
-        return "$red, $green, $blue";
+        return "{$red}, {$green}, {$blue}";
     }
 }

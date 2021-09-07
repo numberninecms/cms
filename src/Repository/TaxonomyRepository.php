@@ -11,9 +11,9 @@
 
 namespace NumberNine\Repository;
 
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use NumberNine\Entity\Taxonomy;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use NumberNine\Model\Content\ContentType;
 
 /**
@@ -39,6 +39,7 @@ final class TaxonomyRepository extends ServiceEntityRepository
             ->andWhere('t.contentTypes IS NOT NULL')
             ->setParameter('contentType', $contentType->getName())
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 }

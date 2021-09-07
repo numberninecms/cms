@@ -43,19 +43,10 @@ abstract class UserAwareTestCase extends DotEnvAwareWebTestCase
         $this->entityManager->flush(); // @phpstan-ignore-line
     }
 
-    protected function setCapabilitiesThenLogin(array $capabilities): void
-    {
-        $this->testRole->setCapabilities($capabilities);
-        $this->entityManager->persist($this->testRole);
-        $this->entityManager->flush();
-
-        $this->loginThenNavigateToAdminUrl('TestRole');
-    }
-
     public function loginThenNavigateToAdminUrl(string $role, ?string $url = null): void
     {
         if ($url && !str_starts_with($url, '/admin/')) {
-            self::fail('$url parameter must be an admin URL.');
+            static::fail('$url parameter must be an admin URL.');
         }
 
         $this->loginAs($role);
@@ -65,6 +56,15 @@ abstract class UserAwareTestCase extends DotEnvAwareWebTestCase
         $adminMenuBuilderStore = static::getContainer()->get(AdminMenuBuilderStore::class);
 
         $this->adminMenuBuilder = $adminMenuBuilderStore->getAdminMenuBuilder();
+    }
+
+    protected function setCapabilitiesThenLogin(array $capabilities): void
+    {
+        $this->testRole->setCapabilities($capabilities);
+        $this->entityManager->persist($this->testRole);
+        $this->entityManager->flush();
+
+        $this->loginThenNavigateToAdminUrl('TestRole');
     }
 
     protected function loginAs(string $role): User

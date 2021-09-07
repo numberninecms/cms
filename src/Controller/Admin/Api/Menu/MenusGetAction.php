@@ -11,13 +11,15 @@
 
 namespace NumberNine\Controller\Admin\Api\Menu;
 
+use NumberNine\Http\ResponseFactory;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Repository\MenuRepository;
-use NumberNine\Http\ResponseFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/menus/', name: 'numbernine_admin_menus_get_collection', options: ['expose' => true], methods: ['GET'])]
+#[Route(path: '/menus/', name: 'numbernine_admin_menus_get_collection', options: ['expose' => true], methods: [
+    'GET',
+])]
 final class MenusGetAction implements AdminController
 {
     public function __invoke(ResponseFactory $responseFactory, MenuRepository $menuRepository): JsonResponse

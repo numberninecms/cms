@@ -10,7 +10,7 @@ jobs:
 
         strategy:
             matrix:
-                php: [ '7.4', '8.0' ]
+                php: [ '8.1' ]
 
         steps:
             -   uses: FranzDiebold/github-env-vars-action@v2
@@ -48,7 +48,7 @@ jobs:
             -   name: Prepare folders and env files
                 run: |
                     echo 'APP_ENV=test' > .env.test.local
-                    echo 'DATABASE_URL=mysql://test:test@mysql:3306/numbernine_test?serverVersion=5.7' >> .env.test.local
+                    echo 'DATABASE_URL=mysql://test:test@mysql:3306/numbernine_test?serverVersion=8.0' >> .env.test.local
                     touch .phpunit.result.cache
                     chmod 0644 .phpunit.result.cache
                     mkdir -p var/cache
@@ -58,12 +58,6 @@ jobs:
 
             -   name: Run code quality tests
                 run: composer run-script test
-
-            -   name: Setup Docker PHP version
-                if: matrix.php == '8.0'
-                run: |
-                    sed -i 's/7.4-fpm/8.0-fpm/' docker-compose.yml
-                    sed -i 's/php7/php8/' docker-compose.yml
 
             -   name: Run Docker containers
                 run: docker-compose up -d
@@ -78,7 +72,7 @@ jobs:
 
         strategy:
             matrix:
-                php: [ 8.0 ]
+                php: [ 8.1 ]
 
         steps:
             -   uses: FranzDiebold/github-env-vars-action@v2
@@ -113,8 +107,9 @@ jobs:
                     COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             -   name: Create a new project
+                continue-on-error: true
                 run: |
-                    composer create-project symfony/website-skeleton newproject
+                    composer create-project symfony/website-skeleton:"5.4.x@dev" newproject
                     cd newproject
                     cp -Rp . ../
                     cd ..
@@ -125,8 +120,11 @@ jobs:
                     composer config extra.symfony.allow-contrib true
                     composer config minimum-stability dev
                     composer config prefer-stable true
-                    composer config repositories.0 path ./temp/cms
-                    composer require numberninecms/cms:*@dev numberninecms/chapterone --ignore-platform-reqs
+                    composer config repositories.0 vcs https://github.com/derrabus/laminas-code
+                    cp composer.json temp.json
+                    jq --indent 4 -r '.require += {"laminas/laminas-code": "dev-bugfix/return-type-will-change as 4.5.x-dev"}' temp.json > composer.json
+                    composer config repositories.1 path ./temp/cms
+                    composer require numberninecms/cms:*@dev numberninecms/chapterone:dev-php8 --ignore-platform-reqs
 
             -   name: Create .env.local file
                 run: |

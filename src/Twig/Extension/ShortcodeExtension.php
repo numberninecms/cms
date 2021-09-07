@@ -22,7 +22,7 @@ final class ShortcodeExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('N9_shortcode', [ShortcodeRuntime::class, 'renderShortcode'], ['is_safe' => ['html']])
+            new TwigFunction('N9_shortcode', [ShortcodeRuntime::class, 'renderShortcode'], ['is_safe' => ['html']]),
         ];
     }
 }

@@ -15,7 +15,6 @@ namespace NumberNine\Twig\Extension;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-
 use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
 
 final class TemplatingExtension extends AbstractExtension

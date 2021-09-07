@@ -19,17 +19,17 @@ final class DateTimeExtension extends AbstractExtension
 {
     public function getFunctions(): array
     {
-        return array(
+        return [
             new TwigFunction('time_left', [DateTimeRuntime::class, 'getTimeLeftInWords']),
             new TwigFunction('time_ago', [DateTimeRuntime::class, 'getTimeAgoInWords']),
-        );
+        ];
     }
 
     public function getFilters(): array
     {
-        return array(
+        return [
             new TwigFilter('time_left', [DateTimeRuntime::class, 'getTimeLeftInWords']),
             new TwigFilter('time_ago', [DateTimeRuntime::class, 'getTimeAgoInWords']),
-        );
+        ];
     }
 }

@@ -13,5 +13,4 @@ namespace NumberNine\Event\Theme;
 
 final class HeadEvent extends GenericEvent
 {
-
 }

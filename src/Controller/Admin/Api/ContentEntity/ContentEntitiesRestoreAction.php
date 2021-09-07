@@ -12,16 +12,16 @@
 namespace NumberNine\Controller\Admin\Api\ContentEntity;
 
 use Exception;
-use NumberNine\Entity\MediaFile;
 use NumberNine\Content\ContentService;
 use NumberNine\Http\ResponseFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'content_entities/{type}/restore-collection', name: 'numbernine_admin_contententity_restore_collection', options: ['expose' => true], methods: ['POST'])]
+#[Route(path: 'content_entities/{type}/restore-collection', name: 'numbernine_admin_contententity_restore_collection', options: ['expose' => true], methods: [
+    'POST',
+])]
 final class ContentEntitiesRestoreAction
 {
     public function __invoke(

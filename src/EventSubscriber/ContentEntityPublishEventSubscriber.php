@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace NumberNine\EventSubscriber;
 
+use DateTime;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
@@ -23,10 +24,7 @@ final class ContentEntityPublishEventSubscriber implements EventSubscriber
 {
     public function getSubscribedEvents(): array
     {
-        return [
-            Events::prePersist,
-            Events::preUpdate,
-        ];
+        return [Events::prePersist, Events::preUpdate];
     }
 
     public function prePersist(LifecycleEventArgs $args): void
@@ -49,7 +47,7 @@ final class ContentEntityPublishEventSubscriber implements EventSubscriber
             && $entity->getStatus() === PublishingStatusInterface::STATUS_PUBLISH
             && $entity->getPublishedAt() === null
         ) {
-            $entity->setPublishedAt(new \DateTime());
+            $entity->setPublishedAt(new DateTime());
         }
     }
 }

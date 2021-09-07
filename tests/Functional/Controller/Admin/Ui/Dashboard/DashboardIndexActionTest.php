@@ -14,6 +14,10 @@ namespace NumberNine\Tests\Functional\Controller\Admin\Ui\Dashboard;
 use NumberNine\Security\Capabilities;
 use NumberNine\Tests\UserAwareTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class DashboardIndexActionTest extends UserAwareTestCase
 {
     public function testAdminPageRedirectsToLogin(): void

@@ -23,9 +23,9 @@ interface ThemeInterface
 
     public function setSlug(string $slug): self;
 
-    public function getParent(): ?ThemeInterface;
+    public function getParent(): ?self;
 
-    public function setParent(ThemeInterface $parent): self;
+    public function setParent(self $parent): self;
 
     public function getThemeOptions(): ?ThemeOptions;
 

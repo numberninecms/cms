@@ -32,9 +32,7 @@ final class FrontendHelperExtension extends AbstractExtension
      */
     public function getFunctions(): array
     {
-        return [
-            new TwigFunction('is_frontend', [$this, 'isFrontend']),
-        ];
+        return [new TwigFunction('is_frontend', [$this, 'isFrontend'])];
     }
 
     public function isFrontend(): bool

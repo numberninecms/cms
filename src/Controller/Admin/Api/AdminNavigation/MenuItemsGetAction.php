@@ -11,15 +11,17 @@
 
 namespace NumberNine\Controller\Admin\Api\AdminNavigation;
 
+use NumberNine\Admin\AdminMenuBuilderStore;
+use NumberNine\Http\ResponseFactory;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Security\Capabilities;
-use NumberNine\Http\ResponseFactory;
-use NumberNine\Admin\AdminMenuBuilderStore;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'menu_items', name: 'numbernine_admin_menuitems_get_collection', options: ['expose' => true], methods: ['GET'])]
+#[Route(path: 'menu_items', name: 'numbernine_admin_menuitems_get_collection', options: ['expose' => true], methods: [
+    'GET',
+])]
 final class MenuItemsGetAction extends AbstractController implements AdminController
 {
     public function __invoke(

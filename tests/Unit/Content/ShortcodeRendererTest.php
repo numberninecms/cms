@@ -16,13 +16,17 @@ use NumberNine\Shortcode\TextShortcode;
 use NumberNine\Tests\DotEnvAwareWebTestCase;
 use NumberNine\Tests\Dummy\Shortcode\SampleShortcode;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class ShortcodeRendererTest extends DotEnvAwareWebTestCase
 {
     private ShortcodeRenderer $shortcodeRenderer;
     private TextShortcode $textShortcode;
     private SampleShortcode $sampleShortcode;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->client->request('GET', '/');
@@ -35,6 +39,6 @@ final class ShortcodeRendererTest extends DotEnvAwareWebTestCase
     {
         $output = $this->shortcodeRenderer->renderPageBuilderTemplate($this->textShortcode);
 
-        self::assertEquals('<div v-html="parameters.content"></div>', $output);
+        static::assertSame('<div v-html="parameters.content"></div>', $output);
     }
 }

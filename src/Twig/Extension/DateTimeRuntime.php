@@ -12,6 +12,7 @@
 namespace NumberNine\Twig\Extension;
 
 use DateTime;
+use Exception;
 use NumberNine\Exception\InvalidTimestampException;
 use RelativeTime\RelativeTime;
 use Twig\Extension\RuntimeExtensionInterface;
@@ -25,7 +26,7 @@ final class DateTimeRuntime implements RuntimeExtensionInterface
     /**
      * @param int|DateTime $date Unix timestamp or DateTime object
      */
-    public function getTimeLeftInWords(int|\DateTime $date): string
+    public function getTimeLeftInWords(int|DateTime $date): string
     {
         $date = $this->getTimestamp($date);
 
@@ -35,7 +36,7 @@ final class DateTimeRuntime implements RuntimeExtensionInterface
     /**
      * @param int|DateTime $date Unix timestamp or DateTime object
      */
-    public function getTimeAgoInWords(int|\DateTime $date): string
+    public function getTimeAgoInWords(int|DateTime $date): string
     {
         $date = $this->getTimestamp($date);
 
@@ -45,7 +46,7 @@ final class DateTimeRuntime implements RuntimeExtensionInterface
     /**
      * @param int|DateTime $date Unix timestamp or DateTime object
      */
-    private function getTimestamp(int|\DateTime $date): int
+    private function getTimestamp(int|DateTime $date): int
     {
         if ($date instanceof DateTime) {
             $date = $date->getTimestamp();
@@ -53,10 +54,10 @@ final class DateTimeRuntime implements RuntimeExtensionInterface
 
         try {
             new DateTime('@' . $date);
-        } catch (\Exception) {
-            throw new InvalidTimestampException((string)$date);
+        } catch (Exception) {
+            throw new InvalidTimestampException((string) $date);
         }
 
-        return (int)$date;
+        return (int) $date;
     }
 }

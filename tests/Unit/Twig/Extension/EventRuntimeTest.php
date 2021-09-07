@@ -18,6 +18,10 @@ use NumberNine\Exception\ThemeEventNotFoundException;
 use NumberNine\Tests\DotEnvAwareWebTestCase;
 use NumberNine\Twig\Extension\EventRuntime;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class EventRuntimeTest extends DotEnvAwareWebTestCase
 {
     private EventRuntime $runtime;
@@ -31,12 +35,12 @@ final class EventRuntimeTest extends DotEnvAwareWebTestCase
 
     public function testHead(): void
     {
-        self::assertStringContainsString('<title>', $this->runtime->head());
+        static::assertStringContainsString('<title>', $this->runtime->head());
     }
 
     public function testFooter(): void
     {
-        self::assertIsString($this->runtime->footer());
+        static::assertIsString($this->runtime->footer());
     }
 
     public function testDispatch(): void

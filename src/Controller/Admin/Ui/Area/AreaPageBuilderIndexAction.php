@@ -18,7 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/area/', name: 'numbernine_admin_area_page_builder_index', methods: ['GET'])]
+#[Route(path: '/area/', name: 'numbernine_admin_area_page_builder_index', methods: ['GET'])]
 final class AreaPageBuilderIndexAction extends AbstractController implements AdminController
 {
     public function __invoke(AreaStore $areaStore): Response

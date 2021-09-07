@@ -11,7 +11,6 @@
 
 namespace NumberNine\Content;
 
-use NumberNine\Model\DataTransformer\DataTransformerInterface;
 use ReflectionClass;
 use ReflectionException;
 
@@ -23,12 +22,14 @@ final class DataTransformerProcessor
 
     /**
      * @param mixed $object
-     * @return mixed
+     *
      * @throws ReflectionException
+     *
+     * @return mixed
      */
     public function transform($object)
     {
-        if (is_object($object)) {
+        if (\is_object($object)) {
             $reflection = new ReflectionClass($object);
             $data = $reflection->isCloneable() ? clone $object : $object;
         } else {

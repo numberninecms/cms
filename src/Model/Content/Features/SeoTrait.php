@@ -29,6 +29,7 @@ trait SeoTrait
     public function setSeo(?array $seo): self
     {
         $this->seo = $seo;
+
         return $this;
     }
 
@@ -37,16 +38,17 @@ trait SeoTrait
      */
     public function getSeoTitle(): ?string
     {
-        return is_array($this->seo) && array_key_exists('title', $this->seo) ? $this->seo['title'] : null;
+        return \is_array($this->seo) && \array_key_exists('title', $this->seo) ? $this->seo['title'] : null;
     }
 
     public function setSeoTitle(?string $title): self
     {
-        if (!is_array($this->seo)) {
+        if (!\is_array($this->seo)) {
             $this->seo = [];
         }
 
         $this->seo['title'] = $title;
+
         return $this;
     }
 
@@ -55,16 +57,17 @@ trait SeoTrait
      */
     public function getSeoDescription(): ?string
     {
-        return is_array($this->seo) && array_key_exists('title', $this->seo) ? $this->seo['description'] : null;
+        return \is_array($this->seo) && \array_key_exists('title', $this->seo) ? $this->seo['description'] : null;
     }
 
     public function setSeoDescription(?string $description): self
     {
-        if (!is_array($this->seo)) {
+        if (!\is_array($this->seo)) {
             $this->seo = [];
         }
 
         $this->seo['description'] = $description;
+
         return $this;
     }
 }

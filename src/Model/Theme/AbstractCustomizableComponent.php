@@ -15,5 +15,4 @@ use NumberNine\Model\Component\AbstractComponent;
 
 abstract class AbstractCustomizableComponent extends AbstractComponent
 {
-
 }

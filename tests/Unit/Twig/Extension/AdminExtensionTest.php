@@ -17,11 +17,15 @@ use NumberNine\Twig\Extension\AdminExtension;
 use PHPUnit\Framework\TestCase;
 use Twig\TwigFunction;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class AdminExtensionTest extends TestCase
 {
     public function testGetFunctions(): void
     {
         $functions = (new AdminExtension())->getFunctions();
-        $this->assertContainsOnlyInstancesOf(TwigFunction::class, $functions);
+        static::assertContainsOnlyInstancesOf(TwigFunction::class, $functions);
     }
 }

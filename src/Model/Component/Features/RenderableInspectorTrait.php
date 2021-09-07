@@ -20,6 +20,7 @@ trait RenderableInspectorTrait
     final public function setRenderableInspector(RenderableInspectorInterface $renderableInspector): self
     {
         $this->renderableInspector = $renderableInspector;
+
         return $this;
     }
 }

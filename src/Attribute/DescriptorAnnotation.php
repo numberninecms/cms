@@ -13,5 +13,4 @@ namespace NumberNine\Attribute;
 
 interface DescriptorAnnotation
 {
-
 }

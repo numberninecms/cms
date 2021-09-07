@@ -72,14 +72,15 @@ final class ContentEntityRelationshipType extends AbstractType
             'name' => $options['name'],
         ]);
 
-        if (count($relationships) > 1) {
+        if (\count($relationships) > 1) {
             throw new InvalidManyToOneRelationshipTypeException($options['name']);
         }
 
-        if (count($relationships) === 0) {
+        if (\count($relationships) === 0) {
             $data = (new ContentEntityRelationship())
                 ->setParent($parent)
-                ->setName($options['name']);
+                ->setName($options['name'])
+            ;
         } else {
             $data = $relationships[0];
         }

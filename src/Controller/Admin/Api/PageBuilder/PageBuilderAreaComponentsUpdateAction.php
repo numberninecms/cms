@@ -20,7 +20,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'page_builder/{area<(?!\d+)[\w_\-]+>}/components', name: 'numbernine_admin_pagebuilder_post_area_components', options: ['expose' => true], methods: ['POST'])]
+#[Route(path: 'page_builder/{area<(?!\d+)[\w_\-]+>}/components', name: 'numbernine_admin_pagebuilder_post_area_components', options: ['expose' => true], methods: [
+    'POST',
+])]
 final class PageBuilderAreaComponentsUpdateAction
 {
     public function __invoke(

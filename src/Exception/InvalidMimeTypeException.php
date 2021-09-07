@@ -13,7 +13,6 @@ namespace NumberNine\Exception;
 
 use Exception;
 use NumberNine\Entity\MediaFile;
-use NumberNine\Model\Customizer\Control\ControlInterface;
 
 final class InvalidMimeTypeException extends Exception
 {

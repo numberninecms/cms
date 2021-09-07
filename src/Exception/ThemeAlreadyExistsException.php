@@ -15,8 +15,7 @@ use Exception;
 use NumberNine\Model\Theme\ThemeInterface;
 
 /**
- * Class ThemeAlreadyExistsException
- * @package NumberNine\Exception
+ * Class ThemeAlreadyExistsException.
  */
 final class ThemeAlreadyExistsException extends Exception
 {

@@ -17,11 +17,15 @@ use NumberNine\Twig\Extension\RelationshipExtension;
 use PHPUnit\Framework\TestCase;
 use Twig\TwigFunction;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class RelationshipExtensionTest extends TestCase
 {
     public function testGetFunctions(): void
     {
         $functions = (new RelationshipExtension())->getFunctions();
-        $this->assertContainsOnlyInstancesOf(TwigFunction::class, $functions);
+        static::assertContainsOnlyInstancesOf(TwigFunction::class, $functions);
     }
 }

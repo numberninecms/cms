@@ -21,7 +21,6 @@ use Symfony\Component\WebLink\GenericLinkProvider;
 use Symfony\Component\WebLink\Link;
 use Twig\Error\RuntimeError;
 use Twig\Extension\RuntimeExtensionInterface;
-
 use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
 use function NumberNine\Common\Util\ConfigUtil\get_file_upload_max_size;
 
@@ -77,7 +76,7 @@ final class MediaRuntime implements RuntimeExtensionInterface
             throw new InvalidMimeTypeException($mediaFile, 'image');
         }
 
-        return $size ? $mediaFile->getSizePath($size) : (string)$mediaFile->getPath();
+        return $size ? $mediaFile->getSizePath($size) : (string) $mediaFile->getPath();
     }
 
     /**
@@ -93,7 +92,7 @@ final class MediaRuntime implements RuntimeExtensionInterface
 
         $sizeInfo = $mediaFile->getSize($size);
 
-        $assetPath = $sizeInfo ? $mediaFile->getSizePath($size) : (string)$mediaFile->getPath();
+        $assetPath = $sizeInfo ? $mediaFile->getSizePath($size) : (string) $mediaFile->getPath();
 
         if ($this->request) {
             $linkProvider = $this->request->attributes->get('_links', new GenericLinkProvider());

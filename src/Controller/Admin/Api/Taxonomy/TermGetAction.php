@@ -12,13 +12,15 @@
 namespace NumberNine\Controller\Admin\Api\Taxonomy;
 
 use NumberNine\Entity\Term;
-use NumberNine\Model\Admin\AdminController;
 use NumberNine\Http\ResponseFactory;
+use NumberNine\Model\Admin\AdminController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'terms/{taxonomy}/{id}/', name: 'numbernine_admin_terms_get_item', options: ['expose' => true], methods: ['GET'])]
+#[Route(path: 'terms/{taxonomy}/{id}/', name: 'numbernine_admin_terms_get_item', options: ['expose' => true], methods: [
+    'GET',
+])]
 final class TermGetAction extends AbstractController implements AdminController
 {
     public function __invoke(ResponseFactory $responseFactory, Term $term): JsonResponse

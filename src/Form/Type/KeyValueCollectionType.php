@@ -28,7 +28,7 @@ final class KeyValueCollectionType extends AbstractType
             'entry_options' => [
                 'label' => false,
                 'delete_button' => true,
-                'row_attr' => ['class' => 'collection-item']
+                'row_attr' => ['class' => 'collection-item'],
             ],
             'allow_add' => true,
             'allow_delete' => true,

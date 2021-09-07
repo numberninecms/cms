@@ -33,22 +33,6 @@ final class ExifPurifiedMetadataReader extends ExifMetadataReader
     }
 
     /**
-     * Extracts metadata from raw data, merges with existing metadata.
-     *
-     * @param string $data
-     */
-    private function doReadData($data): array
-    {
-        if (str_starts_with($data, 'II')) {
-            $mime = 'image/tiff';
-        } else {
-            $mime = 'image/jpeg';
-        }
-
-        return $this->extract('data://' . $mime . ';base64,' . base64_encode($data));
-    }
-
-    /**
      * Performs the exif data extraction given a path or data-URI representation.
      *
      * @param string $path the path to the file or the data-URI representation
@@ -67,13 +51,13 @@ final class ExifPurifiedMetadataReader extends ExifMetadataReader
         } catch (Throwable) {
             $exifData = false;
         }
-        if (!is_array($exifData)) {
-            return array();
+        if (!\is_array($exifData)) {
+            return [];
         }
 
-        $metadata = array();
+        $metadata = [];
         foreach ($exifData as $prefix => $values) {
-            if (is_array($values)) {
+            if (\is_array($values)) {
                 $prefix = strtolower($prefix);
                 foreach ($values as $prop => $value) {
                     $metadata[$prefix . '.' . $prop] = preg_replace('/[\x00-\x1F\x7F]/u', '', $value);
@@ -82,5 +66,21 @@ final class ExifPurifiedMetadataReader extends ExifMetadataReader
         }
 
         return $metadata;
+    }
+
+    /**
+     * Extracts metadata from raw data, merges with existing metadata.
+     *
+     * @param string $data
+     */
+    private function doReadData($data): array
+    {
+        if (str_starts_with($data, 'II')) {
+            $mime = 'image/tiff';
+        } else {
+            $mime = 'image/jpeg';
+        }
+
+        return $this->extract('data://' . $mime . ';base64,' . base64_encode($data));
     }
 }

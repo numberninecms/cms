@@ -13,14 +13,16 @@ namespace NumberNine\Controller\Admin\Api\Taxonomy;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use NumberNine\Http\ResponseFactory;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Repository\TermRepository;
-use NumberNine\Http\ResponseFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'terms/{taxonomy}/delete-collection', name: 'numbernine_admin_terms_delete_collection', options: ['expose' => true], methods: ['POST'])]
+#[Route(path: 'terms/{taxonomy}/delete-collection', name: 'numbernine_admin_terms_delete_collection', options: ['expose' => true], methods: [
+    'POST',
+])]
 final class TermDeleteAction implements AdminController
 {
     public function __invoke(

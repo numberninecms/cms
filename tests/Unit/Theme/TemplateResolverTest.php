@@ -22,13 +22,17 @@ use NumberNine\Tests\Dummy\Shortcode\SampleShortcode;
 use NumberNine\Theme\TemplateResolver;
 use Twig\Error\LoaderError;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class TemplateResolverTest extends DotEnvAwareWebTestCase
 {
     private TemplateResolver $templateResolver;
     private TextShortcode $textShortcode;
     private SampleShortcode $sampleShortcode;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->client->request('GET', '/');
@@ -45,7 +49,7 @@ final class TemplateResolverTest extends DotEnvAwareWebTestCase
         ;
         $template = $this->templateResolver->resolveSingle($post);
 
-        self::assertEquals('@ChapterOne/post/single.html.twig', $template->getTemplateName());
+        static::assertSame('@ChapterOne/post/single.html.twig', $template->getTemplateName());
     }
 
     public function testResolveSinglePostCustomTemplate(): void
@@ -58,7 +62,7 @@ final class TemplateResolverTest extends DotEnvAwareWebTestCase
             '@NumberNineTests/template_resolver/custom_template.html.twig',
         ]);
 
-        self::assertMatchesRegularExpression(
+        static::assertMatchesRegularExpression(
             '/^custom_template\.html\.twig \(string template [a-f0-9]+\)$/',
             $template->getTemplateName(),
         );
@@ -72,7 +76,7 @@ final class TemplateResolverTest extends DotEnvAwareWebTestCase
         ;
         $template = $this->templateResolver->resolveSingle($page);
 
-        self::assertEquals('@ChapterOne/page/single.html.twig', $template->getTemplateName());
+        static::assertSame('@ChapterOne/page/single.html.twig', $template->getTemplateName());
     }
 
     public function testResolveSinglePageCustomTemplate(): void
@@ -83,7 +87,7 @@ final class TemplateResolverTest extends DotEnvAwareWebTestCase
         ;
         $template = $this->templateResolver->resolveSingle($page);
 
-        self::assertMatchesRegularExpression(
+        static::assertMatchesRegularExpression(
             '/^single\.left_sidebar\.html\.twig \(string template [a-f0-9]+\)$/',
             $template->getTemplateName(),
         );
@@ -99,7 +103,7 @@ final class TemplateResolverTest extends DotEnvAwareWebTestCase
             '@NumberNineTests/template_resolver/custom_template.html.twig',
         ]);
 
-        self::assertMatchesRegularExpression(
+        static::assertMatchesRegularExpression(
             '/^custom_template\.html\.twig \(string template [a-f0-9]+\)$/',
             $template->getTemplateName(),
         );
@@ -113,14 +117,14 @@ final class TemplateResolverTest extends DotEnvAwareWebTestCase
         ;
         $template = $this->templateResolver->resolveSingle($page);
 
-        self::assertEquals('@ChapterOne/page/single.html.twig', $template->getTemplateName());
+        static::assertSame('@ChapterOne/page/single.html.twig', $template->getTemplateName());
     }
 
     public function testResolvePostIndexTemplate(): void
     {
         $template = $this->templateResolver->resolveIndex('post');
 
-        self::assertEquals('@ChapterOne/post/index.html.twig', $template);
+        static::assertSame('@ChapterOne/post/index.html.twig', $template);
     }
 
     public function testResolvePostIndexCustomTemplate(): void
@@ -129,7 +133,7 @@ final class TemplateResolverTest extends DotEnvAwareWebTestCase
             '@NumberNineTests/template_resolver/custom_template.html.twig',
         ]);
 
-        self::assertEquals('@NumberNineTests/template_resolver/custom_template.html.twig', $template);
+        static::assertSame('@NumberNineTests/template_resolver/custom_template.html.twig', $template);
     }
 
     public function testResolvePageIndexTemplate(): void
@@ -151,7 +155,7 @@ final class TemplateResolverTest extends DotEnvAwareWebTestCase
 
         $template = $this->templateResolver->resolveTermIndex($term);
 
-        self::assertEquals('@ChapterOne/post/index.html.twig', $template);
+        static::assertSame('@ChapterOne/post/index.html.twig', $template);
     }
 
     public function testResolveTermIndexCustomTemplate(): void
@@ -169,41 +173,41 @@ final class TemplateResolverTest extends DotEnvAwareWebTestCase
             '@NumberNineTests/template_resolver/custom_template.html.twig',
         ]);
 
-        self::assertEquals('@NumberNineTests/template_resolver/custom_template.html.twig', $template);
+        static::assertSame('@NumberNineTests/template_resolver/custom_template.html.twig', $template);
     }
 
     public function testResolveShortcodeTemplate(): void
     {
         $template = $this->templateResolver->resolveShortcode($this->textShortcode);
 
-        self::assertEquals('@ChapterOneShortcodes/./TextShortcode/template.html.twig', $template);
+        static::assertSame('@ChapterOneShortcodes/./TextShortcode/template.html.twig', $template);
     }
 
     public function testResolveShortcodeWithoutThemeTemplate(): void
     {
         $template = $this->templateResolver->resolveShortcode($this->sampleShortcode);
 
-        self::assertStringStartsWith('missing_template (string template', $template);
+        static::assertStringStartsWith('missing_template (string template', $template);
     }
 
     public function testResolveShortcodePageBuilderTemplate(): void
     {
         $template = $this->templateResolver->resolveShortcodePageBuilder($this->textShortcode);
 
-        self::assertEquals('@ChapterOneShortcodes/./TextShortcode/template.vue.twig', $template->getTemplateName());
+        static::assertSame('@ChapterOneShortcodes/./TextShortcode/template.vue.twig', $template->getTemplateName());
     }
 
     public function testResolveBaseLayoutTemplate(): void
     {
         $template = $this->templateResolver->resolveBaseLayout();
 
-        self::assertEquals('@ChapterOne/base.html.twig', $template);
+        static::assertSame('@ChapterOne/base.html.twig', $template);
     }
 
     public function testResolvePathTemplate(): void
     {
         $template = $this->templateResolver->resolvePath('base.html.twig');
 
-        self::assertEquals('@ChapterOne/base.html.twig', $template->getTemplateName());
+        static::assertSame('@ChapterOne/base.html.twig', $template->getTemplateName());
     }
 }

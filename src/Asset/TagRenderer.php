@@ -51,9 +51,9 @@ final class TagRenderer
             $this->entrypointLookupCollection = new EntrypointLookupCollection(
                 new ServiceLocator(
                     [
-                        '_default' => function () use ($entrypointLookupCollection): \Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface {
+                        '_default' => function () use ($entrypointLookupCollection): EntrypointLookupInterface {
                             return $entrypointLookupCollection;
-                        }
+                        },
                     ]
                 )
             );
@@ -67,10 +67,6 @@ final class TagRenderer
         $this->request = $requestStack->getMasterRequest();
     }
 
-    /**
-     * @param string|null $entryName
-     * @param string|null $configName
-     */
     public function renderWebpackScriptTags(
         string $entryName = null,
         string $configName = null,
@@ -80,7 +76,7 @@ final class TagRenderer
         $configName = $configName ?? $this->themeStore->getCurrentTheme()->getWebpackConfigName();
 
         $scriptTags = [];
-        foreach ($this->getEntrypointLookup($configName)->getJavaScriptFiles((string)$entryName) as $filename) {
+        foreach ($this->getEntrypointLookup($configName)->getJavaScriptFiles((string) $entryName) as $filename) {
             if ($ignoreRuntime && preg_match('@(:?/runtime.*\.js)$@iU', $filename)) {
                 continue;
             }
@@ -101,8 +97,6 @@ final class TagRenderer
     }
 
     /**
-     * @param string|null $entryName
-     * @param string|null $configName
      * @throws Exception
      */
     public function renderWebpackLinkTags(string $entryName = null, string $configName = null): string
@@ -118,20 +112,16 @@ final class TagRenderer
                 ));
             }
 
-            $scriptTags[] = sprintf(
-                '<link rel="stylesheet" href="%s">',
-                $assetPath
-            );
+            $scriptTags[] = sprintf('<link rel="stylesheet" href="%s">', $assetPath);
         }
 
         return implode('', $scriptTags);
     }
 
     /**
-     * @param string|null $entryName
-     * @param string|null $configName
-     * @return string[]
      * @throws Exception
+     *
+     * @return string[]
      */
     public function getWebpackLinkStylesheetsPaths(string $entryName = null, string $configName = null): array
     {
@@ -140,7 +130,7 @@ final class TagRenderer
 
         $assetPaths = [];
 
-        foreach ($this->getEntrypointLookup($configName)->getCssFiles((string)$entryName) as $filename) {
+        foreach ($this->getEntrypointLookup($configName)->getCssFiles((string) $entryName) as $filename) {
             $assetPath = htmlentities($this->getAssetPath($filename, $configName));
             $assetPaths[] = $assetPath;
         }
@@ -155,10 +145,7 @@ final class TagRenderer
 
     private function getAssetPath(string $assetPath, string $packageName = null): string
     {
-        return $this->packages->getUrl(
-            $assetPath,
-            $packageName
-        );
+        return $this->packages->getUrl($assetPath, $packageName);
     }
 
     private function getEntrypointLookup(string $buildName): EntrypointLookupInterface

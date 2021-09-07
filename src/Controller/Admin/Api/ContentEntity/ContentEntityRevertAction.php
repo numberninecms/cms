@@ -15,18 +15,20 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Gedmo\Loggable\Entity\LogEntry;
 use Gedmo\Loggable\Entity\Repository\LogEntryRepository;
+use NumberNine\Content\ContentService;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\User;
+use NumberNine\Http\ResponseFactory;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Model\Content\ContentType;
 use NumberNine\Security\Capabilities;
-use NumberNine\Content\ContentService;
-use NumberNine\Http\ResponseFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'content_entities/{type}/{id<\d+>}/revert/{version}/', name: 'numbernine_admin_contententity_revert_item', options: ['expose' => true], methods: ['POST'])]
+#[Route(path: 'content_entities/{type}/{id<\d+>}/revert/{version}/', name: 'numbernine_admin_contententity_revert_item', options: ['expose' => true], methods: [
+    'POST',
+])]
 final class ContentEntityRevertAction extends AbstractController implements AdminController
 {
     public function __invoke(
@@ -42,7 +44,7 @@ final class ContentEntityRevertAction extends AbstractController implements Admi
         /** @var LogEntryRepository $logEntryRepository */
         $logEntryRepository = $entityManager->getRepository(LogEntry::class);
 
-        $logEntryRepository->revert($entity, intval($version));
+        $logEntryRepository->revert($entity, (int) $version);
         $entityManager->persist($entity);
 
         try {
@@ -51,7 +53,7 @@ final class ContentEntityRevertAction extends AbstractController implements Admi
             return $responseFactory->createErrorJsonResponse($e->getMessage());
         }
 
-        $this->deleteNewerVersions($entityManager, $logEntryRepository, $entity, intval($version));
+        $this->deleteNewerVersions($entityManager, $logEntryRepository, $entity, (int) $version);
 
         $context = [
             'groups' => [
@@ -63,11 +65,12 @@ final class ContentEntityRevertAction extends AbstractController implements Admi
                 'custom_fields_get',
                 'featured_image_get',
                 'media_file_get',
-            ]
+            ],
         ];
 
         return $responseFactory->createSerializedJsonResponse($entity, $context);
     }
+
     private function validateAccess(ContentEntity $entity, ContentType $contentType): void
     {
         $user = $this->getUser();
@@ -81,6 +84,7 @@ final class ContentEntityRevertAction extends AbstractController implements Admi
             $this->denyAccessUnlessGranted($contentType->getMappedCapability(Capabilities::EDIT_OTHERS_POSTS));
         }
     }
+
     private function deleteNewerVersions(
         EntityManagerInterface $entityManager,
         LogEntryRepository $logEntryRepository,
@@ -96,7 +100,7 @@ final class ContentEntityRevertAction extends AbstractController implements Admi
                 [
                     'id' => $entity->getId(),
                     'className' => $entityManager->getClassMetadata($entity::class)->name,
-                    'version' => $version
+                    'version' => $version,
                 ]
             )
             ->getQuery()

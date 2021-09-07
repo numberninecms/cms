@@ -14,9 +14,9 @@ namespace NumberNine\Content\DataTransformer;
 use Exception;
 use NumberNine\Content\ShortcodeRenderer;
 use NumberNine\Entity\Post;
+use NumberNine\Http\RequestAnalyzer;
 use NumberNine\Model\Content\PublishingStatusInterface;
 use NumberNine\Model\DataTransformer\DataTransformerInterface;
-use NumberNine\Http\RequestAnalyzer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -39,8 +39,10 @@ final class PostDataTransformer implements DataTransformerInterface
 
     /**
      * @param Post $object
-     * @return mixed
+     *
      * @throws Exception
+     *
+     * @return mixed
      */
     public function transform($object)
     {
@@ -66,7 +68,7 @@ final class PostDataTransformer implements DataTransformerInterface
 
         $content = $isPreviewMode
             ? '<page-builder></page-builder>'
-            : $this->shortcodeRenderer->applyShortcodes((string)$post->getContent());
+            : $this->shortcodeRenderer->applyShortcodes((string) $post->getContent());
 
         $post->setContent($content);
     }

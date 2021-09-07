@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace NumberNine\Exception;
 
+use LogicException;
 use NumberNine\Model\Menu\MenuItem;
 
-final class ChildMenuItemNotFoundException extends \LogicException
+final class ChildMenuItemNotFoundException extends LogicException
 {
     public function __construct(MenuItem $menuItem, string $key)
     {

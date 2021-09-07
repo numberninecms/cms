@@ -54,7 +54,7 @@ final class VideoShortcode extends AbstractShortcode implements EditableShortcod
         $mimeTypes = new MimeTypes();
 
         return $parameters['src'] && file_exists($parameters['src'])
-            ? (string)$mimeTypes->guessMimeType($parameters['src'])
+            ? (string) $mimeTypes->guessMimeType($parameters['src'])
             : '';
     }
 }

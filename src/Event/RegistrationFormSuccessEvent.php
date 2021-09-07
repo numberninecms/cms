@@ -19,7 +19,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 final class RegistrationFormSuccessEvent extends Event
 {
-    public function __construct(private User $user, private ?\Symfony\Component\HttpFoundation\Response $response)
+    public function __construct(private User $user, private ?Response $response)
     {
     }
 
@@ -36,6 +36,7 @@ final class RegistrationFormSuccessEvent extends Event
     public function setResponse(?Response $response): self
     {
         $this->response = $response;
+
         return $this;
     }
 }

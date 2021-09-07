@@ -31,7 +31,7 @@ final class TextShortcode extends AbstractShortcode implements EditableShortcode
     public function configureParameters(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'content' => ''
+            'content' => '',
         ]);
     }
 

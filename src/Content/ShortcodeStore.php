@@ -11,10 +11,10 @@
 
 namespace NumberNine\Content;
 
+use NumberNine\Annotation\ExtendedReader;
 use NumberNine\Attribute\Shortcode;
 use NumberNine\Exception\InvalidShortcodeException;
 use NumberNine\Model\Shortcode\ShortcodeInterface;
-use NumberNine\Annotation\ExtendedReader;
 use NumberNine\Theme\ThemeStore;
 
 final class ShortcodeStore
@@ -84,7 +84,7 @@ final class ShortcodeStore
 
     public function hasShortcode(string $shortcodeName): bool
     {
-        if (!array_key_exists($shortcodeName, $this->shortcodes)) {
+        if (!\array_key_exists($shortcodeName, $this->shortcodes)) {
             return false;
         }
 
@@ -105,6 +105,6 @@ final class ShortcodeStore
 
     public function hasShortcodeMetadata(string $shortcodeName): bool
     {
-        return array_key_exists($shortcodeName, $this->shortcodesMetadata);
+        return \array_key_exists($shortcodeName, $this->shortcodesMetadata);
     }
 }

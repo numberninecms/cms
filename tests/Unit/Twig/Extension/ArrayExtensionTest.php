@@ -17,11 +17,15 @@ use NumberNine\Twig\Extension\ArrayExtension;
 use PHPUnit\Framework\TestCase;
 use Twig\TwigFilter;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class ArrayExtensionTest extends TestCase
 {
     public function testGetFilters(): void
     {
         $functions = (new ArrayExtension())->getFilters();
-        $this->assertContainsOnlyInstancesOf(TwigFilter::class, $functions);
+        static::assertContainsOnlyInstancesOf(TwigFilter::class, $functions);
     }
 }

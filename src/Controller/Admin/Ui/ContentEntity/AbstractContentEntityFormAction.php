@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace NumberNine\Controller\Admin\Ui\ContentEntity;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Gedmo\Loggable\Entity\LogEntry;
 use Gedmo\Loggable\Entity\Repository\LogEntryRepository;
 use NumberNine\Entity\ContentEntity;
@@ -37,7 +38,7 @@ abstract class AbstractContentEntityFormAction extends AbstractController implem
     protected function handle(Request $request, ContentType $contentType, ContentEntity $entity): Response
     {
         $editorExtensions = $this->getEditorExtensions($contentType);
-        $type = $this->slugger->slug((string)$contentType->getLabels()->getPluralName());
+        $type = $this->slugger->slug((string) $contentType->getLabels()->getPluralName());
         $form = $this->createForm(AdminContentEntityEditFormType::class, $entity, [
             'editor_extensions' => $editorExtensions,
         ]);
@@ -52,7 +53,7 @@ abstract class AbstractContentEntityFormAction extends AbstractController implem
 
                 $this->addFlash('success', sprintf(
                     "%s '%s' successfully saved.",
-                    ucfirst((string)$contentType->getLabels()->getSingularName()),
+                    ucfirst((string) $contentType->getLabels()->getSingularName()),
                     $entity->getTitle(),
                 ));
 
@@ -60,7 +61,7 @@ abstract class AbstractContentEntityFormAction extends AbstractController implem
                     'type' => $type,
                     'id' => $entity->getId(),
                 ], Response::HTTP_SEE_OTHER);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->logger->error($e->getMessage());
                 $this->addFlash('error', sprintf(
                     "Unable to save %s '%s'.",
@@ -81,7 +82,7 @@ abstract class AbstractContentEntityFormAction extends AbstractController implem
             'entity' => $entity,
             'form' => $form->createView(),
             'editor_extensions' => $editorExtensions,
-            'has_revisions' => count($logEntryRepository->getLogEntries($entity)) > 1,
+            'has_revisions' => \count($logEntryRepository->getLogEntries($entity)) > 1,
         ], $response);
     }
 

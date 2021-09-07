@@ -14,6 +14,7 @@ namespace NumberNine\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -22,7 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Table(name="userrole")
  * @UniqueEntity("name")
  */
-class UserRole implements \Stringable
+class UserRole implements Stringable
 {
     /**
      * @ORM\Id()
@@ -41,12 +42,14 @@ class UserRole implements \Stringable
     /**
      * @ORM\Column(type="json")
      * @Groups("role_get")
+     *
      * @var string[]
      */
     private array $capabilities = [];
 
     /**
      * @ORM\ManyToMany(targetEntity="NumberNine\Entity\User", mappedBy="userRoles")
+     *
      * @var Collection|User[]
      */
     private Collection $users;
@@ -54,6 +57,11 @@ class UserRole implements \Stringable
     public function __construct()
     {
         $this->users = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->name;
     }
 
     public function getId(): ?int
@@ -69,6 +77,7 @@ class UserRole implements \Stringable
     public function setName(?string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -80,6 +89,7 @@ class UserRole implements \Stringable
     public function setCapabilities(array $capabilities): self
     {
         $this->capabilities = $capabilities;
+
         return $this;
     }
 
@@ -109,10 +119,5 @@ class UserRole implements \Stringable
         }
 
         return $this;
-    }
-
-    public function __toString(): string
-    {
-        return (string)$this->name;
     }
 }

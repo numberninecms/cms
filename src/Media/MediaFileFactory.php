@@ -14,17 +14,17 @@ namespace NumberNine\Media;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use NumberNine\Common\Util\StringUtil\ExtendedSluggerInterface;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use wapmorgan\MediaFile\MediaFile as MediaFileMetadataReader;
 use NumberNine\Entity\MediaFile;
 use NumberNine\Model\Content\PublishingStatusInterface;
 use NumberNine\Model\Media\FileDescriptor;
 use RuntimeException;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
+use wapmorgan\MediaFile\MediaFile as MediaFileMetadataReader;
 
 final class MediaFileFactory
 {
@@ -75,7 +75,7 @@ final class MediaFileFactory
             throw new RuntimeException('Uploaded file is invalid.');
         }
 
-        $file = $this->getFileDescriptor((string)$uploadedFile->getClientOriginalName());
+        $file = $this->getFileDescriptor((string) $uploadedFile->getClientOriginalName());
 
         $uploadedFile->move($file->getUploadDirectory(), pathinfo($file->getNewFilename(), PATHINFO_BASENAME));
 
@@ -97,7 +97,8 @@ final class MediaFileFactory
         return (new FileDescriptor())
             ->setNewFilename($this->datedAbsoluteUploadPath . '/' . $slugifiedFilename)
             ->setSlugifiedFilename($slugifiedFilename)
-            ->setOriginalFilename($filename);
+            ->setOriginalFilename($filename)
+        ;
     }
 
     /**
@@ -130,7 +131,7 @@ final class MediaFileFactory
     private function createMediaFile(FileDescriptor $file, ?UserInterface $user, bool $flush = true): MediaFile
     {
         $mimeTypes = new MimeTypes();
-        $mimeType = (string)$mimeTypes->guessMimeType($file->getNewFilename());
+        $mimeType = (string) $mimeTypes->guessMimeType($file->getNewFilename());
 
         $mediaFile = (new MediaFile())
             ->setCustomType('media_file')
@@ -142,9 +143,10 @@ final class MediaFileFactory
             ->setPath($this->uploadPath . str_replace(
                 [realpath($this->absoluteUploadPath), '\\'],
                 ['', '/'],
-                (string)realpath($file->getNewFilename())
+                (string) realpath($file->getNewFilename())
             ))
-            ->setMimeType($mimeType);
+            ->setMimeType($mimeType)
+        ;
 
         if (str_starts_with($mimeType, 'image')) {
             $processedImage = $this->imageProcessor->processImage(
@@ -157,7 +159,8 @@ final class MediaFileFactory
                 ->setWidth($size->getWidth())
                 ->setHeight($size->getHeight())
                 ->setExif($processedImage->getExif())
-                ->setSizes($processedImage->getSizes());
+                ->setSizes($processedImage->getSizes())
+            ;
         } elseif (str_starts_with($mimeType, 'video')) {
             try {
                 $video = MediaFileMetadataReader::open($file->getNewFilename())->getVideo();

@@ -20,6 +20,10 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class MakeDefaultPagesCommandTest extends KernelTestCase
 {
     public function testExecuteWithoutAdminUser(): void
@@ -32,7 +36,7 @@ final class MakeDefaultPagesCommandTest extends KernelTestCase
         $commandTester->execute([]);
 
         $output = $commandTester->getDisplay();
-        $this->assertStringContainsString('[ERROR] You must create an admin user', $output);
+        static::assertStringContainsString('[ERROR] You must create an admin user', $output);
     }
 
     public function testExecuteWithNonExistentAdminUser(): void
@@ -45,7 +49,7 @@ final class MakeDefaultPagesCommandTest extends KernelTestCase
         $commandTester->execute(['--username' => 'nonexistentuser']);
 
         $output = $commandTester->getDisplay();
-        $this->assertStringContainsString('[ERROR] Unknown administrator user "nonexistentuser"', $output);
+        static::assertStringContainsString('[ERROR] Unknown administrator user "nonexistentuser"', $output);
     }
 
     public function testExecuteResolvingDefaultAdminUser(): void
@@ -65,13 +69,13 @@ final class MakeDefaultPagesCommandTest extends KernelTestCase
         $commandTester->execute([]);
 
         $output = $commandTester->getDisplay();
-        $this->assertStringContainsString('[OK] Default pages successfully created.', $output);
+        static::assertStringContainsString('[OK] Default pages successfully created.', $output);
 
         $myAccount = $postRepository->findOneBy(['title' => 'My account']);
-        $this->assertEquals($admin->getId(), $myAccount->getAuthor()->getId());
+        static::assertSame($admin->getId(), $myAccount->getAuthor()->getId());
 
         $privacy = $postRepository->findOneBy(['title' => 'Privacy policy']);
-        $this->assertEquals($admin->getId(), $privacy->getAuthor()->getId());
+        static::assertSame($admin->getId(), $privacy->getAuthor()->getId());
     }
 
     public function testExecuteWithAdminUserAsOption(): void
@@ -92,12 +96,12 @@ final class MakeDefaultPagesCommandTest extends KernelTestCase
         $commandTester->execute(['--username' => 'anotheradmin']);
 
         $output = $commandTester->getDisplay();
-        $this->assertStringContainsString('[OK] Default pages successfully created.', $output);
+        static::assertStringContainsString('[OK] Default pages successfully created.', $output);
 
         $myAccount = $postRepository->findOneBy(['title' => 'My account']);
-        $this->assertEquals($admin->getId(), $myAccount->getAuthor()->getId());
+        static::assertSame($admin->getId(), $myAccount->getAuthor()->getId());
 
         $privacy = $postRepository->findOneBy(['title' => 'Privacy policy']);
-        $this->assertEquals($admin->getId(), $privacy->getAuthor()->getId());
+        static::assertSame($admin->getId(), $privacy->getAuthor()->getId());
     }
 }

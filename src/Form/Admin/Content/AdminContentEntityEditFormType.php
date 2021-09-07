@@ -12,6 +12,7 @@
 namespace NumberNine\Form\Admin\Content;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\QueryBuilder;
 use NumberNine\Content\ContentService;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\ContentEntityTerm;
@@ -44,7 +45,6 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
-
 use function NumberNine\Common\Util\ArrayUtil\array_merge_recursive_fixed;
 
 final class AdminContentEntityEditFormType extends AbstractType
@@ -91,7 +91,8 @@ final class AdminContentEntityEditFormType extends AbstractType
 
         $builder
             ->get('customFields')
-            ->addModelTransformer($this->associativeArrayToKeyValueCollectionTransformer);
+            ->addModelTransformer($this->associativeArrayToKeyValueCollectionTransformer)
+        ;
 
         /** @var HiddenCustomFieldsEvent $hiddenCustomFieldsEvent */
         $hiddenCustomFieldsEvent = $this->eventDispatcher->dispatch(new HiddenCustomFieldsEvent([
@@ -204,7 +205,7 @@ final class AdminContentEntityEditFormType extends AbstractType
         $form = $event->getForm();
         /** @var ContentEntity $entity */
         $entity = $event->getData();
-        $contentType = $this->contentService->getContentType((string)$entity->getCustomType());
+        $contentType = $this->contentService->getContentType((string) $entity->getCustomType());
 
         $candidates = array_merge(
             $this->templateResolver->getContentEntitySingleTemplateCandidates($contentType),
@@ -237,7 +238,7 @@ final class AdminContentEntityEditFormType extends AbstractType
             $form
                 ->add($taxonomy->getName() . '_terms', EntityType::class, [
                     'class' => Term::class,
-                    'query_builder' => function () use ($taxonomy): \Doctrine\ORM\QueryBuilder {
+                    'query_builder' => function () use ($taxonomy): QueryBuilder {
                         return $this->termRepository->findByTaxonomyNameQueryBuilder($taxonomy->getName());
                     },
                     'label' => false,
@@ -245,7 +246,8 @@ final class AdminContentEntityEditFormType extends AbstractType
                     'multiple' => true,
                     'expanded' => true,
                     'mapped' => false,
-                ]);
+                ])
+            ;
         }
     }
 
@@ -280,6 +282,7 @@ final class AdminContentEntityEditFormType extends AbstractType
             $contentEntityTerms = $this->contentEntityTermRepository->findByTaxonomyName($entity, $taxonomy->getName());
             $existingTermsIds = array_map(static function (ContentEntityTerm $cet): ?int {
                 $term = $cet->getTerm();
+
                 return $term ? $term->getId() : null;
             }, $contentEntityTerms);
 
@@ -294,7 +297,8 @@ final class AdminContentEntityEditFormType extends AbstractType
             $toBeRemoved = $entity->getContentEntityTerms()->filter(
                 function (ContentEntityTerm $contentEntityTerm) use ($toBeRemovedIds): bool {
                     $term = $contentEntityTerm->getTerm();
-                    return $term && in_array($term->getId(), $toBeRemovedIds);
+
+                    return $term && \in_array($term->getId(), $toBeRemovedIds, true);
                 }
             );
 
@@ -325,7 +329,7 @@ final class AdminContentEntityEditFormType extends AbstractType
         /** @var SupportedContentEntityRelationshipsEvent $event */
         $event = $this->eventDispatcher->dispatch(new SupportedContentEntityRelationshipsEvent($entity::class));
 
-        if (\in_array('featured_image', $event->getRelationships())) {
+        if (\in_array('featured_image', $event->getRelationships(), true)) {
             $form->add('featuredImage', ContentEntityRelationshipType::class, [
                 'name' => 'featured_image',
                 'form_type' => MediaFileType::class,
@@ -334,16 +338,6 @@ final class AdminContentEntityEditFormType extends AbstractType
                 'mapped' => false,
             ]);
         }
-    }
-
-    private function getTaxonomies(ContentEntity $entity): array
-    {
-        if (!$this->taxonomies) {
-            $contentType = $this->contentService->getContentType((string)$entity->getCustomType());
-            $this->taxonomies = $this->taxonomyRepository->findByContentType($contentType);
-        }
-
-        return $this->taxonomies;
     }
 
     public function addEditorExtensionsFields(FormEvent $event): void
@@ -380,7 +374,7 @@ final class AdminContentEntityEditFormType extends AbstractType
                     $data = [];
 
                     foreach ($this->originalEntity->getCustomFieldsStartingWith('extension.') as $field => $value) {
-                        $key = (string)str_replace(sprintf('extension.%s.', $child['name']), '', $field);
+                        $key = (string) str_replace(sprintf('extension.%s.', $child['name']), '', $field);
                         $data[$key] = $value;
                     }
 
@@ -405,10 +399,7 @@ final class AdminContentEntityEditFormType extends AbstractType
             foreach ($children as $child) {
                 if ($child['form_type'] !== null) {
                     foreach ($form['extension_' . $child['name']]->getData() as $field => $value) {
-                        $entity->addCustomField(
-                            sprintf('extension.%s.%s', $child['name'], $field),
-                            $value,
-                        );
+                        $entity->addCustomField(sprintf('extension.%s.%s', $child['name'], $field), $value,);
                     }
                 }
             }
@@ -421,5 +412,15 @@ final class AdminContentEntityEditFormType extends AbstractType
         $entity = $event->getForm()->getData();
 
         $this->cache->invalidateTags([sprintf('content_entity_%d', $entity->getId())]);
+    }
+
+    private function getTaxonomies(ContentEntity $entity): array
+    {
+        if (!$this->taxonomies) {
+            $contentType = $this->contentService->getContentType((string) $entity->getCustomType());
+            $this->taxonomies = $this->taxonomyRepository->findByContentType($contentType);
+        }
+
+        return $this->taxonomies;
     }
 }

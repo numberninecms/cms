@@ -12,14 +12,16 @@
 namespace NumberNine\Controller\Admin\Api\User;
 
 use NumberNine\Entity\User;
+use NumberNine\Http\ResponseFactory;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Security\Capabilities;
-use NumberNine\Http\ResponseFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/users/{id<\d+>}/', name: 'numbernine_admin_users_get_item', options: ['expose' => true], methods: ['GET'])]
+#[Route(path: '/users/{id<\d+>}/', name: 'numbernine_admin_users_get_item', options: ['expose' => true], methods: [
+    'GET',
+])]
 final class UserGetAction extends AbstractController implements AdminController
 {
     public function __invoke(ResponseFactory $responseFactory, User $user): JsonResponse

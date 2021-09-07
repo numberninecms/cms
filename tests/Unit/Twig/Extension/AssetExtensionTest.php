@@ -17,11 +17,15 @@ use NumberNine\Twig\Extension\AssetExtension;
 use PHPUnit\Framework\TestCase;
 use Twig\TwigFunction;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class AssetExtensionTest extends TestCase
 {
     public function testGetFunctions(): void
     {
         $functions = (new AssetExtension())->getFunctions();
-        $this->assertContainsOnlyInstancesOf(TwigFunction::class, $functions);
+        static::assertContainsOnlyInstancesOf(TwigFunction::class, $functions);
     }
 }

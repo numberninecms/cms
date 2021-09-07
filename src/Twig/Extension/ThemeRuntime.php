@@ -11,32 +11,26 @@
 
 namespace NumberNine\Twig\Extension;
 
-use Exception;
+use NumberNine\Configuration\ConfigurationReadWriter;
+use NumberNine\Content\ComponentRenderer;
 use NumberNine\Content\ContentService;
+use NumberNine\Content\PermalinkGenerator;
 use NumberNine\Content\ShortcodeRenderer;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\Term;
 use NumberNine\Exception\ThemeNotFoundException;
+use NumberNine\Http\RequestAnalyzer;
 use NumberNine\Model\General\Settings;
 use NumberNine\Model\Theme\ThemeInterface;
 use NumberNine\Repository\ContentEntityRepository;
-use NumberNine\Content\ComponentRenderer;
-use NumberNine\Content\PermalinkGenerator;
-use NumberNine\Configuration\ConfigurationReadWriter;
-use NumberNine\Http\RequestAnalyzer;
 use NumberNine\Theme\TemplateResolver;
 use NumberNine\Theme\ThemeOptionsReadWriter;
 use NumberNine\Theme\ThemeStore;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\String\Inflector\EnglishInflector;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 use Twig\Extension\RuntimeExtensionInterface;
-
 use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
 
 final class ThemeRuntime implements RuntimeExtensionInterface
@@ -87,8 +81,9 @@ final class ThemeRuntime implements RuntimeExtensionInterface
     }
 
     /**
-     * @return mixed|null
      * @throws ThemeNotFoundException
+     *
+     * @return mixed|null
      */
     public function getThemeOption(string $optionName)
     {
@@ -103,6 +98,7 @@ final class ThemeRuntime implements RuntimeExtensionInterface
 
     /**
      * @param mixed $default
+     *
      * @return mixed|null
      */
     public function getSetting(string $settingName, $default = null)
@@ -140,7 +136,7 @@ final class ThemeRuntime implements RuntimeExtensionInterface
     {
         return $this->urlGenerator->generate('numbernine_admin_content_entity_edit', [
             'type' => $this->slugger->slug(
-                (string)$this->contentService->getContentType($contentEntity->getType())->getLabels()->getPluralName(),
+                (string) $this->contentService->getContentType($contentEntity->getType())->getLabels()->getPluralName(),
             ),
             'id' => $contentEntity->getId(),
         ]);
@@ -153,17 +149,6 @@ final class ThemeRuntime implements RuntimeExtensionInterface
         array $attributes = []
     ): string {
         return implode($separator, $this->getTermsLinkArray($contentEntity, $taxonomyName, $attributes));
-    }
-
-    private function getTermsLinkArray(
-        ContentEntity $contentEntity,
-        string $taxonomyName,
-        array $attributes = []
-    ): array {
-        return array_map(
-            fn(Term $term): string => $this->getTermLink($term, $attributes),
-            $contentEntity->getTerms($taxonomyName)
-        );
     }
 
     public function getTermLink(Term $term, array $attributes = []): string
@@ -183,7 +168,7 @@ final class ThemeRuntime implements RuntimeExtensionInterface
 
     public function getPath(string $settingName, int $page = 1, bool $absolute = false): string
     {
-        if (!($id = (int)$this->configurationReadWriter->read($settingName))) {
+        if (!($id = (int) $this->configurationReadWriter->read($settingName))) {
             return '';
         }
 
@@ -216,5 +201,16 @@ final class ThemeRuntime implements RuntimeExtensionInterface
     public function isHomepage(): bool
     {
         return $this->requestAnalyzer->isHomePage();
+    }
+
+    private function getTermsLinkArray(
+        ContentEntity $contentEntity,
+        string $taxonomyName,
+        array $attributes = []
+    ): array {
+        return array_map(
+            fn (Term $term): string => $this->getTermLink($term, $attributes),
+            $contentEntity->getTerms($taxonomyName)
+        );
     }
 }

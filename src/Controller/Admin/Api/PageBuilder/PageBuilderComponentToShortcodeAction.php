@@ -11,15 +11,17 @@
 
 namespace NumberNine\Controller\Admin\Api\PageBuilder;
 
-use NumberNine\Content\ShortcodeMarkupBeautifier;
-use NumberNine\Model\Admin\AdminController;
 use NumberNine\Content\ArrayToShortcodeConverter;
+use NumberNine\Content\ShortcodeMarkupBeautifier;
 use NumberNine\Http\ResponseFactory;
+use NumberNine\Model\Admin\AdminController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'page_builder/shortcodes/', name: 'numbernine_admin_page_builder_generate_shortcode', options: ['expose' => true], methods: ['POST'])]
+#[Route(path: 'page_builder/shortcodes/', name: 'numbernine_admin_page_builder_generate_shortcode', options: ['expose' => true], methods: [
+    'POST',
+])]
 final class PageBuilderComponentToShortcodeAction implements AdminController
 {
     public function __invoke(
@@ -30,7 +32,7 @@ final class PageBuilderComponentToShortcodeAction implements AdminController
     ): JsonResponse {
         $text = $arrayToShortcodeConverter->convertMany(
             [$request->request->get('component')],
-            (bool)$request->request->get('beautify', false),
+            (bool) $request->request->get('beautify', false),
         );
 
         return $responseFactory->createSerializedJsonResponse($text);

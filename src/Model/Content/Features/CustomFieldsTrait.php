@@ -19,7 +19,6 @@ trait CustomFieldsTrait
     /**
      * @ORM\Column(type="json", nullable=true)
      * @Groups({"custom_fields_get", "content_entity_get_full"})
-     * @var array|null
      */
     private ?array $customFields = null;
 

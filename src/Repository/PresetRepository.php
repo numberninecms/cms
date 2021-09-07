@@ -11,9 +11,9 @@
 
 namespace NumberNine\Repository;
 
-use NumberNine\Entity\Preset;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use NumberNine\Entity\Preset;
 
 /**
  * @method Preset|null find($id, $lockMode = null, $lockVersion = null)

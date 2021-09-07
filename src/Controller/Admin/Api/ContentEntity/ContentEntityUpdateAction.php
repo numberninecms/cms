@@ -13,19 +13,19 @@ namespace NumberNine\Controller\Admin\Api\ContentEntity;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use NumberNine\Content\ContentService;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\ContentEntityTerm;
 use NumberNine\Entity\Term;
 use NumberNine\Entity\User;
 use NumberNine\Event\UpdateContentEntityEvent;
+use NumberNine\Http\ResponseFactory;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Model\Content\ContentType;
 use NumberNine\Model\Content\PublishingStatusInterface;
 use NumberNine\Repository\MediaFileRepository;
 use NumberNine\Repository\TermRepository;
 use NumberNine\Security\Capabilities;
-use NumberNine\Content\ContentService;
-use NumberNine\Http\ResponseFactory;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -36,14 +36,18 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'content_entities/{type}/{id<\d+>}/', name: 'numbernine_admin_contententity_update_item', options: ['expose' => true], methods: ['PUT'])]
+#[Route(path: 'content_entities/{type}/{id<\d+>}/', name: 'numbernine_admin_contententity_update_item', options: ['expose' => true], methods: [
+    'PUT',
+])]
 final class ContentEntityUpdateAction extends AbstractController implements AdminController
 {
     public function __construct(private EventDispatcherInterface $eventDispatcher)
     {
     }
+
     /**
      * @param Serializer $serializer
+     *
      * @throws ExceptionInterface
      */
     public function __invoke(
@@ -77,19 +81,20 @@ final class ContentEntityUpdateAction extends AbstractController implements Admi
                     'contentEntityTerms',
                     'children',
                     'parents',
-                ]
+                ],
             ]
         );
 
         $entity
             ->setSeoDescription($data['seoDescription'] ?? null)
-            ->setCustomFields($data['customFields'] ?? null);
+            ->setCustomFields($data['customFields'] ?? null)
+        ;
 
         if (
             !empty($data['featuredImage'])
             && method_exists($entity, 'getFeaturedImage')
             && method_exists($entity, 'setFeaturedImage')
-            && $entity->getFeaturedImage()->getId() !== (int)$data['featuredImage']['id']
+            && $entity->getFeaturedImage()->getId() !== (int) $data['featuredImage']['id']
         ) {
             $featuredImage = $mediaFileRepository->find($data['featuredImage']['id']);
             $entity->setFeaturedImage($featuredImage);
@@ -105,9 +110,9 @@ final class ContentEntityUpdateAction extends AbstractController implements Admi
             $entity->setStatus($data['status']);
         }
 
-        $submittedTermIds = array_map(static fn($term) => $term['id'], $data['terms'] ?? []);
+        $submittedTermIds = array_map(static fn ($term) => $term['id'], $data['terms'] ?? []);
         $existingTermIds = $entity->getContentEntityTerms()->map(
-            fn(ContentEntityTerm $cet): ?int => $cet->getTerm() instanceof Term ? $cet->getTerm()->getId() : null
+            fn (ContentEntityTerm $cet): ?int => $cet->getTerm() instanceof Term ? $cet->getTerm()->getId() : null
         )->toArray();
 
         $termIdsToDelete = array_diff($existingTermIds, $submittedTermIds);
@@ -115,7 +120,7 @@ final class ContentEntityUpdateAction extends AbstractController implements Admi
 
         foreach ($termIdsToDelete as $id) {
             $cet = $entity->getContentEntityTerms()->filter(
-                fn(ContentEntityTerm $cet): bool => $cet->getTerm() instanceof Term && $cet->getTerm()->getId() === $id
+                fn (ContentEntityTerm $cet): bool => $cet->getTerm() instanceof Term && $cet->getTerm()->getId() === $id
             )->first();
             $entity->removeContentEntityTerm($cet);
         }
@@ -124,12 +129,13 @@ final class ContentEntityUpdateAction extends AbstractController implements Admi
             $term = $termRepository->find($id);
 
             if (!$term) {
-                return $responseFactory->createErrorJsonResponse("Term with ID $id doesn't exist");
+                return $responseFactory->createErrorJsonResponse("Term with ID {$id} doesn't exist");
             }
 
             $cet = (new ContentEntityTerm())
                 ->setContentEntity($entity)
-                ->setTerm($term);
+                ->setTerm($term)
+            ;
 
             $entity->addContentEntityTerm($cet);
 
@@ -145,14 +151,12 @@ final class ContentEntityUpdateAction extends AbstractController implements Admi
         }
 
         $context = [
-            'groups' => [
-                'content_entity_get_full',
-                'media_file_get',
-            ]
+            'groups' => ['content_entity_get_full', 'media_file_get'],
         ];
 
         return $responseFactory->createSerializedJsonResponse($entity, $context);
     }
+
     private function validateAccess(ContentEntity $entity, ContentType $contentType): void
     {
         $user = $this->getUser();

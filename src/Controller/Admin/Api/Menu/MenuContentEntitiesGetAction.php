@@ -12,14 +12,16 @@
 namespace NumberNine\Controller\Admin\Api\Menu;
 
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use NumberNine\Model\Admin\AdminController;
-use NumberNine\Repository\ContentEntityRepository;
 use NumberNine\Content\ContentService;
 use NumberNine\Http\ResponseFactory;
+use NumberNine\Model\Admin\AdminController;
+use NumberNine\Repository\ContentEntityRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/menus/entities/{type}/{page<\d+>}/', name: 'numbernine_admin_menus_get_entities', options: ['expose' => true], methods: ['GET'])]
+#[Route(path: '/menus/entities/{type}/{page<\d+>}/', name: 'numbernine_admin_menus_get_entities', options: ['expose' => true], methods: [
+    'GET',
+])]
 final class MenuContentEntitiesGetAction implements AdminController
 {
     public function __invoke(

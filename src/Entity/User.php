@@ -17,6 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use NumberNine\Model\Content\Features\CustomFieldsTrait;
 use Serializable;
+use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -26,7 +27,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @UniqueEntity(fields={"username"}, message="This username is already taken.")
  * @UniqueEntity(fields={"email"}, message="A user is already registered with this email.")
  */
-class User implements UserInterface, Serializable, \Stringable
+class User implements UserInterface, Serializable, Stringable
 {
     use CustomFieldsTrait;
     use TimestampableEntity;
@@ -49,18 +50,21 @@ class User implements UserInterface, Serializable, \Stringable
      * @ORM\ManyToMany(targetEntity="NumberNine\Entity\UserRole", inversedBy="users", fetch="EAGER")
      * @ORM\JoinTable(name="userrole_user")
      * @Groups({"user_get"})
+     *
      * @var Collection|UserRole[]
      */
     private Collection $userRoles;
 
     /**
      * @ORM\OneToMany(targetEntity="NumberNine\Entity\ContentEntity", mappedBy="author")
+     *
      * @var Collection|ContentEntity[]
      */
     private Collection $contentEntities;
 
     /**
      * @ORM\OneToMany(targetEntity="NumberNine\Entity\Comment", mappedBy="author")
+     *
      * @var Collection|Comment[]
      */
     private Collection $comments;
@@ -108,6 +112,25 @@ class User implements UserInterface, Serializable, \Stringable
         $this->contentEntities = new ArrayCollection();
     }
 
+    public function __serialize(): array
+    {
+        return [$this->id, $this->username, $this->password];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        [
+            $this->id,
+            $this->username,
+            $this->password,
+        ] = $data;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getDisplayName();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -120,7 +143,7 @@ class User implements UserInterface, Serializable, \Stringable
      */
     public function getUsername(): string
     {
-        return (string)$this->username;
+        return (string) $this->username;
     }
 
     public function setUsername(string $username): self
@@ -132,7 +155,7 @@ class User implements UserInterface, Serializable, \Stringable
 
     public function getEmail(): string
     {
-        return (string)$this->email;
+        return (string) $this->email;
     }
 
     public function setEmail(string $email): self
@@ -150,7 +173,7 @@ class User implements UserInterface, Serializable, \Stringable
             $userRoles = $userRoles->toArray();
         }
 
-        return array_map(fn(UserRole $userRole): string => (string)$userRole->getName(), $userRoles);
+        return array_map(fn (UserRole $userRole): string => (string) $userRole->getName(), $userRoles);
     }
 
     /**
@@ -158,7 +181,7 @@ class User implements UserInterface, Serializable, \Stringable
      */
     public function getPassword(): string
     {
-        return (string)$this->password;
+        return (string) $this->password;
     }
 
     public function setPassword(string $password): self
@@ -186,6 +209,7 @@ class User implements UserInterface, Serializable, \Stringable
     public function setFirstName(?string $firstName): self
     {
         $this->firstName = $firstName;
+
         return $this;
     }
 
@@ -197,6 +221,7 @@ class User implements UserInterface, Serializable, \Stringable
     public function setLastName(?string $lastName): self
     {
         $this->lastName = $lastName;
+
         return $this;
     }
 
@@ -208,6 +233,7 @@ class User implements UserInterface, Serializable, \Stringable
     public function setDisplayNameFormat(?string $displayName): self
     {
         $this->displayNameFormat = $displayName;
+
         return $this;
     }
 
@@ -217,8 +243,8 @@ class User implements UserInterface, Serializable, \Stringable
     public function getDisplayName(): string
     {
         return match ($this->displayNameFormat) {
-            self::DISPLAY_NAME_FIRST_ONLY => (string)$this->getFirstName(),
-            self::DISPLAY_NAME_LAST_ONLY => (string)$this->getLastName(),
+            self::DISPLAY_NAME_FIRST_ONLY => (string) $this->getFirstName(),
+            self::DISPLAY_NAME_LAST_ONLY => (string) $this->getLastName(),
             self::DISPLAY_NAME_FIRST_LAST => trim(sprintf('%s %s', $this->getFirstName(), $this->getLastName())),
             self::DISPLAY_NAME_LAST_FIRST => trim(sprintf('%s %s', $this->getLastName(), $this->getFirstName())),
             default => $this->getUsername(),
@@ -237,13 +263,7 @@ class User implements UserInterface, Serializable, \Stringable
     /** @see \Serializable::serialize() */
     public function serialize(): string
     {
-        return serialize(
-            [
-                $this->id,
-                $this->username,
-                $this->password,
-            ]
-        );
+        return serialize([$this->id, $this->username, $this->password]);
     }
 
     /** @param string $serialized
@@ -256,24 +276,6 @@ class User implements UserInterface, Serializable, \Stringable
             $this->username,
             $this->password,
         ] = unserialize($serialized, ['allowed_classes' => []]);
-    }
-
-    public function __serialize(): array
-    {
-        return [
-            $this->id,
-            $this->username,
-            $this->password,
-        ];
-    }
-
-    public function __unserialize(array $data): void
-    {
-        [
-            $this->id,
-            $this->username,
-            $this->password,
-        ] = $data;
     }
 
     /**
@@ -356,10 +358,5 @@ class User implements UserInterface, Serializable, \Stringable
         }
 
         return $this;
-    }
-
-    public function __toString(): string
-    {
-        return $this->getDisplayName();
     }
 }

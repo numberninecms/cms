@@ -28,6 +28,14 @@ class Term
     use CustomFieldsTrait;
 
     /**
+     * @var string
+     * @Gedmo\Slug(fields={"name"}, updatable=false)
+     * @ORM\Column(type="string", unique=false)
+     * @Groups("term_get")
+     */
+    protected ?string $slug = null;
+
+    /**
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(type="integer")
@@ -40,14 +48,6 @@ class Term
      * @Groups({"term_get", "content_entity_get", "content_entity_get_full"})
      */
     private ?string $name = null;
-
-    /**
-     * @var string
-     * @Gedmo\Slug(fields={"name"}, updatable=false)
-     * @ORM\Column(type="string", unique=false)
-     * @Groups("term_get")
-     */
-    protected ?string $slug = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="NumberNine\Entity\Taxonomy", inversedBy="terms")
@@ -70,12 +70,14 @@ class Term
 
     /**
      * @ORM\OneToMany(targetEntity="NumberNine\Entity\Term", mappedBy="parent")
+     *
      * @var Collection|Term[]
      */
     private Collection $children;
 
     /**
      * @ORM\OneToMany(targetEntity="NumberNine\Entity\ContentEntityTerm", mappedBy="term", orphanRemoval=true)
+     *
      * @var Collection|ContentEntityTerm[]
      */
     private Collection $contentEntityTerms;
@@ -189,7 +191,7 @@ class Term
     {
         // @phpstan-ignore-next-line
         return $this->contentEntityTerms->map(
-            static function (ContentEntityTerm $item): ?\NumberNine\Entity\ContentEntity {
+            static function (ContentEntityTerm $item): ?ContentEntity {
                 return $item->getContentEntity();
             }
         );

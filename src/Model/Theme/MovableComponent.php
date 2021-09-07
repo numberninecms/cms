@@ -13,5 +13,4 @@ namespace NumberNine\Model\Theme;
 
 interface MovableComponent
 {
-
 }

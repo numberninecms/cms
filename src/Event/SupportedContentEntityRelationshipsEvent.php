@@ -43,7 +43,7 @@ final class SupportedContentEntityRelationshipsEvent extends Event
 
     public function addRelationship(string $string): self
     {
-        if (!in_array($string, $this->relationships)) {
+        if (!\in_array($string, $this->relationships, true)) {
             $this->relationships[] = $string;
         }
 
@@ -52,8 +52,8 @@ final class SupportedContentEntityRelationshipsEvent extends Event
 
     public function removeRelationship(string $string): self
     {
-        if (in_array($string, $this->relationships)) {
-            unset($this->relationships[array_search($string, $this->relationships)]);
+        if (\in_array($string, $this->relationships, true)) {
+            unset($this->relationships[array_search($string, $this->relationships, true)]);
         }
 
         return $this;

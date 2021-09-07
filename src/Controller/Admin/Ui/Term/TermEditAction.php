@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace NumberNine\Controller\Admin\Ui\Term;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use NumberNine\Entity\Taxonomy;
 use NumberNine\Entity\Term;
 use NumberNine\Exception\InvalidTermTaxonomyException;
@@ -31,7 +32,7 @@ use Symfony\Component\String\Inflector\EnglishInflector;
 /**
  * @ParamConverter("taxonomy", options={"mapping": {"taxonomy": "name"}})
  */
-#[\Symfony\Component\Routing\Annotation\Route(path: '/taxonomy/{taxonomy}/term/{id}/', name: 'numbernine_admin_term_edit', methods: ['GET', 'POST'])]
+#[Route(path: '/taxonomy/{taxonomy}/term/{id}/', name: 'numbernine_admin_term_edit', methods: ['GET', 'POST'])]
 final class TermEditAction extends AbstractController implements AdminController
 {
     public function __invoke(
@@ -65,22 +66,21 @@ final class TermEditAction extends AbstractController implements AdminController
                     return $this->redirectToRoute('numbernine_admin_term_index', [
                         'taxonomy' => $taxonomy->getName(),
                     ], Response::HTTP_SEE_OTHER);
-                } else {
-                    $entityManager->persist($term);
-                    $entityManager->flush();
-
-                    $this->addFlash('success', 'Term successfully saved.');
-
-                    return $this->redirectToRoute(
-                        'numbernine_admin_term_edit',
-                        [
-                            'taxonomy' => $taxonomy->getName(),
-                            'id' => $term->getId(),
-                        ],
-                        Response::HTTP_SEE_OTHER
-                    );
                 }
-            } catch (\Exception $e) {
+                $entityManager->persist($term);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Term successfully saved.');
+
+                return $this->redirectToRoute(
+                    'numbernine_admin_term_edit',
+                    [
+                        'taxonomy' => $taxonomy->getName(),
+                        'id' => $term->getId(),
+                    ],
+                    Response::HTTP_SEE_OTHER
+                );
+            } catch (Exception $e) {
                 $logger->error($e->getMessage());
                 $this->addFlash('error', 'An unknown error occured.');
             }
@@ -91,7 +91,7 @@ final class TermEditAction extends AbstractController implements AdminController
         return $this->render('@NumberNine/admin/term/edit.html.twig', [
             'taxonomy' => $taxonomy,
             'term' => $term,
-            'taxonomy_plural_name' => (string)current($inflector->pluralize((string)$taxonomy->getName())),
+            'taxonomy_plural_name' => (string) current($inflector->pluralize((string) $taxonomy->getName())),
             'form' => $form->createView(),
         ], $response);
     }

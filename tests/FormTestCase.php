@@ -20,7 +20,7 @@ abstract class FormTestCase extends KernelTestCase
 {
     protected FormFactoryInterface $factory;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         /** @var FormFactoryInterface $factory */
         $factory = static::getContainer()->get('form.factory');

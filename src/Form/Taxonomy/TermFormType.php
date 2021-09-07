@@ -25,7 +25,8 @@ final class TermFormType extends AbstractType
         $builder
             ->add('name')
             ->add('slug')
-            ->add('description');
+            ->add('description')
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -23,8 +23,6 @@ final class RelationshipExtension extends AbstractExtension
      */
     public function getFunctions(): array
     {
-        return [
-            new TwigFunction('N9_has_relationship', [RelationshipRuntime::class, 'hasRelationship']),
-        ];
+        return [new TwigFunction('N9_has_relationship', [RelationshipRuntime::class, 'hasRelationship'])];
     }
 }

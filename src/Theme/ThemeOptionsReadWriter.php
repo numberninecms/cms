@@ -27,7 +27,7 @@ final class ThemeOptionsReadWriter
         $themeOptions = $this->themeOptionsRepository->findOneBy(['theme' => $theme->getName()]);
 
         if (!$themeOptions instanceof ThemeOptions) {
-            $themeOptions = (new ThemeOptions())->setTheme((string)$theme->getName());
+            $themeOptions = (new ThemeOptions())->setTheme((string) $theme->getName());
         }
 
         $theme->setThemeOptions($themeOptions);
@@ -48,7 +48,7 @@ final class ThemeOptionsReadWriter
         $themeOptions = $this->themeOptionsRepository->findOneBy(['theme' => $theme->getName()]);
 
         if (!$themeOptions instanceof ThemeOptions) {
-            $themeOptions = (new ThemeOptions())->setTheme((string)$theme->getName());
+            $themeOptions = (new ThemeOptions())->setTheme((string) $theme->getName());
         }
 
         if (!$draft) {
@@ -67,6 +67,7 @@ final class ThemeOptionsReadWriter
 
     /**
      * @param mixed $default
+     *
      * @return mixed
      */
     public function read(
@@ -92,7 +93,7 @@ final class ThemeOptionsReadWriter
     ): void {
         $options = $this->readAll($theme, $draft);
 
-        if ($overwrite || !array_key_exists($option, $options)) {
+        if ($overwrite || !\array_key_exists($option, $options)) {
             $options[$option] = $value;
             $this->writeAll($theme, $options, $draft, $flush);
         }

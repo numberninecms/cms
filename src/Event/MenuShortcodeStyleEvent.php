@@ -33,6 +33,7 @@ final class MenuShortcodeStyleEvent extends Event
     public function setStyles(array $styles): self
     {
         $this->styles = $styles;
+
         return $this;
     }
 
@@ -47,7 +48,7 @@ final class MenuShortcodeStyleEvent extends Event
 
     public function removeStyle(string $style): self
     {
-        if (($key = \array_search($style, $this->styles, true)) !== false) {
+        if (($key = array_search($style, $this->styles, true)) !== false) {
             unset($this->styles[$key]);
         }
 

@@ -14,8 +14,7 @@ namespace NumberNine\Exception;
 use LogicException;
 
 /**
- * Class InvalidShortcodeException
- * @package NumberNine\Exception
+ * Class InvalidShortcodeException.
  */
 final class InvalidShortcodeException extends LogicException
 {

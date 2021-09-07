@@ -57,6 +57,20 @@ class ShortcodeRenderer
         return $renderedText;
     }
 
+    public function renderPageBuilderTemplate(ShortcodeInterface $shortcode): string
+    {
+        $template = $this->templateResolver->resolveShortcodePageBuilder($shortcode);
+
+        $template = $this->twig->createTemplate(sprintf(
+            '{%% apply spaceless %%}%s{%% endapply %%}',
+            !str_contains($template->getTemplateName(), 'string template')
+                ? file_get_contents($template->getSourceContext()->getPath())
+                : $template->getSourceContext()->getCode(),
+        ));
+
+        return $this->twig->render($template);
+    }
+
     /**
      * @throws Exception
      * @throws InvalidArgumentException
@@ -74,10 +88,10 @@ class ShortcodeRenderer
 
         $parameters = $parsedShortcode->getParameters();
 
-        if (!$shortcode instanceof TextShortcode && trim((string)$parsedShortcode->getContent())) {
-            $parameters['content'] = $this->applyShortcodes((string)$parsedShortcode->getContent());
+        if (!$shortcode instanceof TextShortcode && trim((string) $parsedShortcode->getContent())) {
+            $parameters['content'] = $this->applyShortcodes((string) $parsedShortcode->getContent());
         } else {
-            $parameters['content'] = trim((string)$parsedShortcode->getContent());
+            $parameters['content'] = trim((string) $parsedShortcode->getContent());
         }
 
         $resolver = new OptionsResolver();
@@ -92,23 +106,6 @@ class ShortcodeRenderer
         );
         $processedParameters = $event->getParameters();
 
-        return $this->twig->render(
-            $this->templateResolver->resolveShortcode($shortcode),
-            $processedParameters,
-        );
-    }
-
-    public function renderPageBuilderTemplate(ShortcodeInterface $shortcode): string
-    {
-        $template = $this->templateResolver->resolveShortcodePageBuilder($shortcode);
-
-        $template = $this->twig->createTemplate(sprintf(
-            '{%% apply spaceless %%}%s{%% endapply %%}',
-            !str_contains($template->getTemplateName(), 'string template')
-                ? file_get_contents($template->getSourceContext()->getPath())
-                : $template->getSourceContext()->getCode(),
-        ));
-
-        return $this->twig->render($template);
+        return $this->twig->render($this->templateResolver->resolveShortcode($shortcode), $processedParameters,);
     }
 }

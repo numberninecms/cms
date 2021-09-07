@@ -17,6 +17,10 @@ use NumberNine\Exception\InvalidTimestampException;
 use NumberNine\Tests\DotEnvAwareWebTestCase;
 use NumberNine\Twig\Extension\DateTimeRuntime;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class DateTimeRuntimeTest extends DotEnvAwareWebTestCase
 {
     private DateTimeRuntime $runtime;
@@ -39,7 +43,7 @@ final class DateTimeRuntimeTest extends DotEnvAwareWebTestCase
         $date = new \DateTime();
         $date->modify('+4 day');
 
-        self::assertEquals('4 days left', $this->runtime->getTimeLeftInWords($date->getTimestamp()));
+        static::assertSame('4 days left', $this->runtime->getTimeLeftInWords($date->getTimestamp()));
     }
 
     public function testGetTimeLeftInWordsWithDateTimeWorks(): void
@@ -47,7 +51,7 @@ final class DateTimeRuntimeTest extends DotEnvAwareWebTestCase
         $date = new \DateTime();
         $date->modify('+30 minutes');
 
-        self::assertEquals('30 minutes left', $this->runtime->getTimeLeftInWords($date));
+        static::assertSame('30 minutes left', $this->runtime->getTimeLeftInWords($date));
     }
 
     public function testGetTimeAgoInWordsWithInvalidTimestampThrowsException(): void
@@ -61,7 +65,7 @@ final class DateTimeRuntimeTest extends DotEnvAwareWebTestCase
         $date = new \DateTime();
         $date->modify('-4 day');
 
-        self::assertEquals('4 days ago', $this->runtime->getTimeAgoInWords($date->getTimestamp()));
+        static::assertSame('4 days ago', $this->runtime->getTimeAgoInWords($date->getTimestamp()));
     }
 
     public function testGetTimeAgoInWordsWithDateTimeWorks(): void
@@ -69,6 +73,6 @@ final class DateTimeRuntimeTest extends DotEnvAwareWebTestCase
         $date = new \DateTime();
         $date->modify('-30 minutes');
 
-        self::assertEquals('30 minutes ago', $this->runtime->getTimeAgoInWords($date));
+        static::assertSame('30 minutes ago', $this->runtime->getTimeAgoInWords($date));
     }
 }

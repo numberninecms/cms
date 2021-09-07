@@ -11,16 +11,18 @@
 
 namespace NumberNine\Controller\Admin\Api\ContentEntity;
 
-use NumberNine\Model\Admin\AdminController;
 use NumberNine\Content\ContentService;
 use NumberNine\Http\ResponseFactory;
+use NumberNine\Model\Admin\AdminController;
 use NumberNine\Theme\TemplateResolverInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'content_entities/{type}/templates/', name: 'numbernine_admin_contententity_templates_get_collection', options: ['expose' => true], methods: ['GET'], priority: 200,)]
+#[Route(path: 'content_entities/{type}/templates/', name: 'numbernine_admin_contententity_templates_get_collection', options: ['expose' => true], methods: [
+    'GET',
+], priority: 200, )]
 final class ContentEntityTemplatesGetAction extends AbstractController implements AdminController
 {
     public function __invoke(

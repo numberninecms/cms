@@ -37,7 +37,6 @@ trait WebAccessTrait
     private ?string $password = null;
 
     /**
-     * @var string|null
      * @Groups({"web_access_get", "content_entity_get_full"})
      */
     private ?string $publicUrl = null;

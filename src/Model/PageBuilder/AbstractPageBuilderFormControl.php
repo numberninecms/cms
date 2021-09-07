@@ -26,12 +26,12 @@ abstract class AbstractPageBuilderFormControl implements PageBuilderFormControlI
         $this->options = $resolver->resolve($options);
     }
 
-    protected function configureOptions(OptionsResolver $resolver): void
-    {
-    }
-
     public function getOptions(): array
     {
         return $this->options;
+    }
+
+    protected function configureOptions(OptionsResolver $resolver): void
+    {
     }
 }

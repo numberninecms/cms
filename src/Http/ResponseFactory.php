@@ -13,15 +13,14 @@ namespace NumberNine\Http;
 
 use ArrayIterator;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use NumberNine\Annotation\ExtendedReader;
 use NumberNine\Attribute\NormalizationContext;
+use NumberNine\Content\ContentService;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Pagination\Paginator as NumberNinePaginator;
-use NumberNine\Annotation\ExtendedReader;
-use NumberNine\Content\ContentService;
 use ReflectionException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final class ResponseFactory
@@ -32,6 +31,7 @@ final class ResponseFactory
 
     /**
      * @param mixed|null $data
+     *
      * @throws ExceptionInterface
      */
     public function createSerializedJsonResponse(
@@ -41,14 +41,14 @@ final class ResponseFactory
         array $headers = []
     ): JsonResponse {
         if ($data instanceof ContentEntity) {
-            $type = $this->contentService->getContentType((string)$data->getCustomType());
+            $type = $this->contentService->getContentType((string) $data->getCustomType());
 
             if (empty($context)) {
                 $normalizationContext = $this->annotationReader->getFirstAnnotationOrAttributeOfType(
                     $type->getEntityClassName(),
                     NormalizationContext::class
                 ) ?? [];
-                $context = array_merge_recursive($context, (array)$normalizationContext);
+                $context = array_merge_recursive($context, (array) $normalizationContext);
             }
 
             $data = $this->normalize($data, null, $context);
@@ -58,7 +58,7 @@ final class ResponseFactory
     }
 
     /**
-     * Creates a json response with paginated data
+     * Creates a json response with paginated data.
      *
      * @throws ReflectionException
      */
@@ -76,7 +76,7 @@ final class ResponseFactory
                 $iterator->current()::class,
                 NormalizationContext::class
             ) ?? [];
-            $context = array_merge_recursive($context, (array)$normalizationContext);
+            $context = array_merge_recursive($context, (array) $normalizationContext);
         }
 
         $paginator = new NumberNinePaginator($data);
@@ -102,9 +102,10 @@ final class ResponseFactory
 
     /**
      * @param mixed $data
-     * @param string|null $format
-     * @return mixed
+     *
      * @throws ExceptionInterface
+     *
+     * @return mixed
      */
     private function normalize($data, string $format = null, array $context = [])
     {

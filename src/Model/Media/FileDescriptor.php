@@ -24,9 +24,10 @@ final class FileDescriptor
         return $this->originalFilename;
     }
 
-    public function setOriginalFilename(string $originalFilename): FileDescriptor
+    public function setOriginalFilename(string $originalFilename): self
     {
         $this->originalFilename = $originalFilename;
+
         return $this;
     }
 
@@ -35,9 +36,10 @@ final class FileDescriptor
         return $this->newFilename;
     }
 
-    public function setNewFilename(string $newFilename): FileDescriptor
+    public function setNewFilename(string $newFilename): self
     {
         $this->newFilename = $newFilename;
+
         return $this;
     }
 
@@ -46,14 +48,15 @@ final class FileDescriptor
         return $this->slugifiedFilename;
     }
 
-    public function setSlugifiedFilename(string $slugifiedFilename): FileDescriptor
+    public function setSlugifiedFilename(string $slugifiedFilename): self
     {
         $this->slugifiedFilename = $slugifiedFilename;
+
         return $this;
     }
 
     public function getUploadDirectory(): string
     {
-        return dirname($this->getNewFilename());
+        return \dirname($this->getNewFilename());
     }
 }

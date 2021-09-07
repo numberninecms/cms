@@ -11,8 +11,8 @@
 
 namespace NumberNine\Entity;
 
-use NumberNine\Repository\PresetRepository;
 use Doctrine\ORM\Mapping as ORM;
+use NumberNine\Repository\PresetRepository;
 
 /**
  * @ORM\Entity(repositoryClass=PresetRepository::class)

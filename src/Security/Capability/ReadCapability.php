@@ -14,7 +14,6 @@ namespace NumberNine\Security\Capability;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\User;
 use NumberNine\Security\Capabilities;
-use Symfony\Cmf\Bundle\RoutingBundle\Tests\Fixtures\App\Document\Content;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\String\Inflector\EnglishInflector;

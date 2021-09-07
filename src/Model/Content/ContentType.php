@@ -16,7 +16,6 @@ use NumberNine\Security\Capabilities;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use function Symfony\Component\String\u;
 
 final class ContentType
@@ -88,7 +87,7 @@ final class ContentType
 
     public function hasCapability(string $capability): bool
     {
-        return in_array($capability, $this->capabilities, true);
+        return \in_array($capability, $this->capabilities, true);
     }
 
     public function getMappedCapability(string $capability): string
@@ -137,7 +136,8 @@ final class ContentType
             ->setAllowedTypes('public', 'bool')
             ->setAllowedTypes('shown_in_menu', 'bool')
             ->setAllowedTypes('capabilities', 'string[]')
-            ->setAllowedTypes('editor_extension', ['null', 'string']);
+            ->setAllowedTypes('editor_extension', ['null', 'string'])
+        ;
 
         $this->configureOptionsNormalizers($resolver);
     }
@@ -225,7 +225,7 @@ final class ContentType
         ];
 
         $mappedCapabilities = array_map(
-            static fn($capability): string => str_replace(
+            static fn ($capability): string => str_replace(
                 'posts',
                 u($options['labels']->getPluralName())->snake()->toString(),
                 $capability

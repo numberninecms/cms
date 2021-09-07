@@ -40,7 +40,8 @@ final class PostRepository extends AbstractContentEntityRepository
             ->orderBy('p.publishedAt', 'DESC')
             ->setMaxResults($count)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     public function findSiblings(Post $post): array
@@ -57,9 +58,9 @@ final class PostRepository extends AbstractContentEntityRepository
             'id'
         );
 
-        $currentPosition = (int)array_search($post->getId(), $ids, true);
+        $currentPosition = (int) array_search($post->getId(), $ids, true);
         $previousId = $currentPosition >= 1 ? $ids[$currentPosition - 1] : false;
-        $nextId = ($currentPosition < count($ids) - 1) ? $ids[$currentPosition + 1] : false;
+        $nextId = ($currentPosition < \count($ids) - 1) ? $ids[$currentPosition + 1] : false;
 
         if ($previousId === false && $nextId === false) {
             return ['previous' => null, 'next' => null];
@@ -71,11 +72,12 @@ final class PostRepository extends AbstractContentEntityRepository
             ->orderBy('p.publishedAt', 'ASC')
             ->setParameter('ids', array_filter([$previousId, $nextId]))
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
 
         return [
             'previous' => $previousId ? $siblings[0] : null,
-            'next' => $nextId ? $siblings[count($siblings) - 1] : null
+            'next' => $nextId ? $siblings[\count($siblings) - 1] : null,
         ];
     }
 }

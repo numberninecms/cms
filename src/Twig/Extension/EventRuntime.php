@@ -28,24 +28,26 @@ final class EventRuntime implements RuntimeExtensionInterface
     }
 
     /**
-     * Renders the <head> section
+     * Renders the <head> section.
      */
     public function head(): string
     {
-        return (string)$this->eventDispatcher->dispatch(new HeadEvent());
+        return (string) $this->eventDispatcher->dispatch(new HeadEvent());
     }
 
     /**
-     * Renders the footer section
+     * Renders the footer section.
      */
     public function footer(): string
     {
-        return (string)$this->eventDispatcher->dispatch(new FooterEvent());
+        return (string) $this->eventDispatcher->dispatch(new FooterEvent());
     }
 
     /**
-     * Dispatches a theme event
+     * Dispatches a theme event.
+     *
      * @param string $eventName Theme event
+     *
      * @throws ThemeNotFoundException
      */
     public function dispatch(string $eventName): string
@@ -57,11 +59,14 @@ final class EventRuntime implements RuntimeExtensionInterface
     }
 
     /**
-     * Filters an object
+     * Filters an object.
+     *
      * @param string $eventName Theme event
-     * @param mixed $object Object to filter
-     * @return mixed Filtered object
+     * @param mixed  $object    Object to filter
+     *
      * @throws ThemeNotFoundException
+     *
+     * @return mixed Filtered object
      */
     public function filter($object, string $eventName)
     {

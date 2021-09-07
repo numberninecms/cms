@@ -15,8 +15,7 @@ use LogicException;
 use NumberNine\Model\Content\ContentType;
 
 /**
- * Class ExistingContentTypeException
- * @package NumberNine\Exception
+ * Class ExistingContentTypeException.
  */
 final class ExistingContentTypeException extends LogicException
 {

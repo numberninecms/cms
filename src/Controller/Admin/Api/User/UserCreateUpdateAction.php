@@ -14,10 +14,10 @@ namespace NumberNine\Controller\Admin\Api\User;
 use Doctrine\ORM\EntityManagerInterface;
 use NumberNine\Entity\User;
 use NumberNine\Entity\UserRole;
+use NumberNine\Http\ResponseFactory;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Repository\UserRoleRepository;
 use NumberNine\Security\Capabilities;
-use NumberNine\Http\ResponseFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,19 +30,24 @@ final class UserCreateUpdateAction extends AbstractController implements AdminCo
     {
     }
 
-    #[\Symfony\Component\Routing\Annotation\Route(path: '/users/{id<\d+>}/', name: 'numbernine_admin_users_update_item', options: ['expose' => true], methods: ['PUT'])]
-    public function update(Request $request, User $user) : JsonResponse
+    #[Route(path: '/users/{id<\d+>}/', name: 'numbernine_admin_users_update_item', options: ['expose' => true], methods: [
+        'PUT',
+    ])]
+    public function update(Request $request, User $user): JsonResponse
     {
         $this->denyAccessUnlessGranted(Capabilities::EDIT_USERS);
         /** @var array $data */
         $data = $request->request->get('user');
         $this->setFields($user, $data);
         $this->entityManager->flush();
+
         return $this->responseFactory->createSerializedJsonResponse($user, ['groups' => ['user_get']]);
     }
 
-    #[\Symfony\Component\Routing\Annotation\Route(path: '/users/create/', name: 'numbernine_admin_users_create_item', options: ['expose' => true], methods: ['POST'])]
-    public function create(Request $request, UserPasswordEncoderInterface $passwordEncoder) : JsonResponse
+    #[Route(path: '/users/create/', name: 'numbernine_admin_users_create_item', options: ['expose' => true], methods: [
+        'POST',
+    ])]
+    public function create(Request $request, UserPasswordEncoderInterface $passwordEncoder): JsonResponse
     {
         $this->denyAccessUnlessGranted(Capabilities::CREATE_USERS);
         /** @var array $data */
@@ -52,6 +57,7 @@ final class UserCreateUpdateAction extends AbstractController implements AdminCo
         $this->setFields($user, $data);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
+
         return $this->responseFactory->createSerializedJsonResponse($user, ['groups' => ['user_get']]);
     }
 
@@ -61,10 +67,13 @@ final class UserCreateUpdateAction extends AbstractController implements AdminCo
             ->setFirstName($data['firstName'])
             ->setLastName($data['lastName'])
             ->setDisplayNameFormat($data['displayNameFormat'])
-            ->setEmail($data['email']);
+            ->setEmail($data['email'])
+        ;
 
-        $userRolesIds = array_values(array_map(fn(UserRole $role): ?int => $role->getId(), $user->getUserRoles()->toArray()));
-        $submittedRolesIds = array_values(array_map(fn($role) => $role['id'], $data['userRoles']));
+        $userRolesIds = array_values(
+            array_map(fn (UserRole $role): ?int => $role->getId(), $user->getUserRoles()->toArray())
+        );
+        $submittedRolesIds = array_values(array_map(fn ($role) => $role['id'], $data['userRoles']));
         $userRoles = $this->userRoleRepository->findBy(['id' => $submittedRolesIds]);
 
         sort($userRolesIds);

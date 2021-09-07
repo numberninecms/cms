@@ -11,6 +11,7 @@
 
 namespace NumberNine\Controller\Admin\Ui\Media;
 
+use Exception;
 use NumberNine\Content\ContentService;
 use NumberNine\Form\Admin\Content\AdminContentEntityIndexFormType;
 use NumberNine\Model\Admin\AdminController;
@@ -24,7 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/media/', name: 'numbernine_admin_media_library_index', methods: ['GET', 'POST'])]
+#[Route(path: '/media/', name: 'numbernine_admin_media_library_index', methods: ['GET', 'POST'])]
 final class MediaIndexAction extends AbstractController implements AdminController
 {
     public function __invoke(
@@ -58,7 +59,7 @@ final class MediaIndexAction extends AbstractController implements AdminControll
 
         if ($form->isSubmitted() && $form->isValid()) {
             $checkedIds = array_map(
-                fn ($name): int => (int)str_replace('entity_', '', $name),
+                fn ($name): int => (int) str_replace('entity_', '', $name),
                 array_keys(array_filter($form->getData()))
             );
 
@@ -72,7 +73,7 @@ final class MediaIndexAction extends AbstractController implements AdminControll
                 }
 
                 return $this->redirectToRoute('numbernine_admin_media_library_index', [], Response::HTTP_SEE_OTHER);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $logger->error($e->getMessage());
                 $this->addFlash('error', 'An unknown error occured.');
             }

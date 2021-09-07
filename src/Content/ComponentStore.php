@@ -41,7 +41,7 @@ final class ComponentStore
 
         foreach ($this->components as $componentFqcn => $component) {
             if (
-                trim(dirname(str_replace(
+                trim(\dirname(str_replace(
                     [$theme->getComponentNamespace(), $this->appComponentsNamespace, '\\'],
                     ['', '', '/'],
                     $componentFqcn

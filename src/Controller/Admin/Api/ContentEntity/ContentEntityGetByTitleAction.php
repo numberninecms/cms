@@ -18,7 +18,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'content_entities/{type}/title/{title}/', name: 'numbernine_admin_contententity_get_item_by_title', options: ['expose' => true], methods: ['GET'], priority: 0,)]
+#[Route(path: 'content_entities/{type}/title/{title}/', name: 'numbernine_admin_contententity_get_item_by_title', options: ['expose' => true], methods: [
+    'GET',
+], priority: 0, )]
 final class ContentEntityGetByTitleAction
 {
     /**

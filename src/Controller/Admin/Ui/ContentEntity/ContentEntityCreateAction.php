@@ -16,14 +16,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/{type}/new/', name: 'numbernine_admin_content_entity_create', methods: ['GET', 'POST'], priority: '-1000')]
+#[Route(path: '/{type}/new/', name: 'numbernine_admin_content_entity_create', methods: [
+    'GET',
+    'POST',
+], priority: '-1000')]
 final class ContentEntityCreateAction extends AbstractContentEntityFormAction
 {
-    public function __invoke(
-        ContentService $contentService,
-        Request $request,
-        string $type
-    ): Response {
+    public function __invoke(ContentService $contentService, Request $request, string $type): Response
+    {
         $contentType = $contentService->getContentType($type);
 
         $class = $contentType->getEntityClassName();

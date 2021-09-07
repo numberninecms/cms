@@ -21,7 +21,6 @@ use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use NumberNine\Repository\MediaFileRepository;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use function NumberNine\Common\Util\ArrayUtil\array_implode_associative;
 use function NumberNine\Common\Util\ArrayUtil\array_set_if_value_exists;
 

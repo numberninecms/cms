@@ -37,22 +37,17 @@ final class NumberNineExtension extends ConfigurableExtension implements Prepend
             'framework',
             [
                 'translator' => [
-                    'paths' => [
-                        __DIR__ . '/../Resources/translations',
-                    ]
-                ]
+                    'paths' => [__DIR__ . '/../Resources/translations'],
+                ],
             ]
         );
 
         $reflection = new ReflectionClass(Settings::class);
         $constants = $reflection->getConstants();
 
-        $container->loadFromExtension(
-            'twig',
-            [
-                'globals' => $constants,
-            ]
-        );
+        $container->loadFromExtension('twig', [
+            'globals' => $constants,
+        ]);
 
         $securityModified = false;
         $securityConfigs = [];
@@ -85,8 +80,9 @@ final class NumberNineExtension extends ConfigurableExtension implements Prepend
         $loader->load('services.yaml');
 
         $env = $container->getParameter('kernel.environment');
+
         try {
-            $loader->load("services_$env.yaml"); // @phpstan-ignore-line
+            $loader->load("services_{$env}.yaml"); // @phpstan-ignore-line
         } catch (FileLocatorFileNotFoundException) {
             // ignore
         }

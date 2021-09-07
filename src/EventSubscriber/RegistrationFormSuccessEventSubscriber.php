@@ -34,7 +34,7 @@ final class RegistrationFormSuccessEventSubscriber implements EventSubscriberInt
     public static function getSubscribedEvents(): array
     {
         return [
-            RegistrationFormSuccessEvent::class => 'notifyUser'
+            RegistrationFormSuccessEvent::class => 'notifyUser',
         ];
     }
 
@@ -42,10 +42,7 @@ final class RegistrationFormSuccessEventSubscriber implements EventSubscriberInt
     {
         $user = $event->getUser();
 
-        $appName = $this->configurationReadWriter->read(
-            Settings::SITE_TITLE,
-            SettingsDefaultValues::SITE_TITLE,
-        );
+        $appName = $this->configurationReadWriter->read(Settings::SITE_TITLE, SettingsDefaultValues::SITE_TITLE,);
 
         $email = (new TemplatedEmail())
             ->from($this->addressFactory->createApplicationAddress())

@@ -11,12 +11,6 @@
 
 namespace NumberNine\Twig\Extension;
 
-use NumberNine\Event\Theme\AbstractThemeEvent;
-use NumberNine\Event\Theme\FooterEvent;
-use NumberNine\Event\Theme\HeadEvent;
-use NumberNine\Exception\ThemeNotFoundException;
-use NumberNine\Theme\ThemeEventDispatcher;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -43,8 +37,6 @@ final class EventExtension extends AbstractExtension
      */
     public function getFilters(): array
     {
-        return [
-            new TwigFilter('N9_filter', [EventRuntime::class, 'filter']),
-        ];
+        return [new TwigFilter('N9_filter', [EventRuntime::class, 'filter'])];
     }
 }

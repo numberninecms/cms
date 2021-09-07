@@ -35,28 +35,33 @@ final class CommentFormType extends AbstractType
         $builder
             ->add('content', null, ['label' => 'Comment'])
             ->add('contentEntity', HiddenType::class)
-            ->add('parent', HiddenType::class, ['required' => false]);
+            ->add('parent', HiddenType::class, ['required' => false])
+        ;
 
         if ($user instanceof User) {
             $builder->add('author', HiddenType::class);
 
             $builder
                 ->get('author')
-                ->addModelTransformer($this->userToNumberTransformer);
+                ->addModelTransformer($this->userToNumberTransformer)
+            ;
         } else {
             $builder
                 ->add('guestAuthorName', null)
                 ->add('guestAuthorEmail', null)
-                ->add('guestAuthorUrl', null, ['required' => false]);
+                ->add('guestAuthorUrl', null, ['required' => false])
+            ;
         }
 
         $builder
             ->get('contentEntity')
-            ->addModelTransformer($this->contentEntityToNumberTransformer);
+            ->addModelTransformer($this->contentEntityToNumberTransformer)
+        ;
 
         $builder
             ->get('parent')
-            ->addModelTransformer($this->commentToNumberTransformer);
+            ->addModelTransformer($this->commentToNumberTransformer)
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

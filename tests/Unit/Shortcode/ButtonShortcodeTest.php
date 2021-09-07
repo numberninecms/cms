@@ -16,6 +16,10 @@ namespace NumberNine\Tests\Unit\Shortcode;
 use NumberNine\Shortcode\ButtonShortcode;
 use NumberNine\Tests\ShortcodeTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class ButtonShortcodeTest extends ShortcodeTestCase
 {
     protected const SHORTCODE = ButtonShortcode::class;
@@ -24,7 +28,7 @@ final class ButtonShortcodeTest extends ShortcodeTestCase
     {
         $parameters = $this->processParameters([]);
 
-        self::assertEquals([
+        static::assertSame([
             'text' => 'View more...',
             'case' => 'normal',
             'color' => 'primary',
@@ -39,24 +43,24 @@ final class ButtonShortcodeTest extends ShortcodeTestCase
     public function testContentOverridesDefaultText(): void
     {
         $parameters = $this->processParameters(['content' => 'Sample content']);
-        self::assertEquals('Sample content', $parameters['text']);
+        static::assertSame('Sample content', $parameters['text']);
     }
 
     public function testCustomTextOverridesContent(): void
     {
         $parameters = $this->processParameters([
             'content' => 'Sample content',
-            'text' => 'This should override content'
+            'text' => 'This should override content',
         ]);
 
-        self::assertEquals('This should override content', $parameters['text']);
+        static::assertSame('This should override content', $parameters['text']);
     }
 
     public function testShortcodeWithRandomArguments(): void
     {
         $parameters = $this->processParameters(['random' => 'nonexistent']);
 
-        self::assertEquals([
+        static::assertSame([
             'text' => 'View more...',
             'case' => 'normal',
             'color' => 'primary',

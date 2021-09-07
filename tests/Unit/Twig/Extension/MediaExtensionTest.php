@@ -17,11 +17,15 @@ use NumberNine\Twig\Extension\MediaExtension;
 use PHPUnit\Framework\TestCase;
 use Twig\TwigFunction;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class MediaExtensionTest extends TestCase
 {
     public function testGetFunctions(): void
     {
         $functions = (new MediaExtension())->getFunctions();
-        $this->assertContainsOnlyInstancesOf(TwigFunction::class, $functions);
+        static::assertContainsOnlyInstancesOf(TwigFunction::class, $functions);
     }
 }

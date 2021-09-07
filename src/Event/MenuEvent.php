@@ -19,7 +19,7 @@ final class MenuEvent extends Event
     /**
      * @param Menu $menu
      */
-    public function __construct(private ?\NumberNine\Entity\Menu $menu, private string $location)
+    public function __construct(private ?Menu $menu, private string $location)
     {
     }
 
