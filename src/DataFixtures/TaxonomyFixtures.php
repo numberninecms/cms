@@ -22,12 +22,14 @@ final class TaxonomyFixtures extends Fixture implements FixtureGroupInterface
     {
         $taxonomyCategory = (new Taxonomy())
             ->setName('category')
-            ->setContentTypes(['post']);
+            ->setContentTypes(['post'])
+        ;
         $this->setReference('taxonomy_category', $taxonomyCategory);
 
         $taxonomyTag = (new Taxonomy())
             ->setName('tag')
-            ->setContentTypes(['post']);
+            ->setContentTypes(['post'])
+        ;
         $this->setReference('taxonomy_tag', $taxonomyTag);
 
         $manager->persist($taxonomyCategory);

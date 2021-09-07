@@ -14,8 +14,7 @@ namespace NumberNine\Exception;
 use RuntimeException;
 
 /**
- * Class ThemeNotFoundException
- * @package NumberNine\Exception
+ * Class ThemeNotFoundException.
  */
 final class ThemeNotFoundException extends RuntimeException
 {
@@ -24,6 +23,6 @@ final class ThemeNotFoundException extends RuntimeException
      */
     public function __construct(string $themeName)
     {
-        parent::__construct("Theme with name \"$themeName\" not found.");
+        parent::__construct("Theme with name \"{$themeName}\" not found.");
     }
 }

@@ -25,6 +25,10 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 final class ThemeActivator implements EventSubscriberInterface
 {
+    public function __construct(private ThemeStore $themeStore, private ConfigurationReadWriter $configurationReadWriter, private ThemeOptionsRepository $themeOptionsRepository, private EventDispatcherInterface $eventDispatcher)
+    {
+    }
+
     public static function getSubscribedEvents(): array
     {
         return [
@@ -33,11 +37,7 @@ final class ThemeActivator implements EventSubscriberInterface
         ];
     }
 
-    public function __construct(private ThemeStore $themeStore, private ConfigurationReadWriter $configurationReadWriter, private ThemeOptionsRepository $themeOptionsRepository, private EventDispatcherInterface $eventDispatcher)
-    {
-    }
-
-    public function activateCurrentTheme(\Symfony\Component\Console\Event\ConsoleCommandEvent|\Symfony\Component\HttpKernel\Event\RequestEvent $event): void
+    public function activateCurrentTheme(ConsoleCommandEvent|RequestEvent $event): void
     {
         if ($event instanceof ConsoleCommandEvent && !$event->getCommand() instanceof ThemeAwareCommandInterface) {
             return;
@@ -62,7 +62,7 @@ final class ThemeActivator implements EventSubscriberInterface
             $this->configurationReadWriter->write(Settings::ACTIVE_THEME, $themeWrapper->getDescriptor()->getName());
         }
 
-        $themeOptions = $this->themeOptionsRepository->getOrCreateByThemeName((string)$currentThemeName);
+        $themeOptions = $this->themeOptionsRepository->getOrCreateByThemeName((string) $currentThemeName);
         $themeWrapper->getTheme()->setThemeOptions($themeOptions);
 
         $themeWrapper->getTheme()->setConfiguration([

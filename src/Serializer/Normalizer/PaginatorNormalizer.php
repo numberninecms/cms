@@ -24,7 +24,8 @@ final class PaginatorNormalizer implements NormalizerInterface
 
     /**
      * @param Paginator $object
-     * @param string $format
+     * @param string    $format
+     *
      * @throws Exception
      */
     public function normalize($object, ?string $format = null, array $context = []): array
@@ -51,8 +52,8 @@ final class PaginatorNormalizer implements NormalizerInterface
                 'first' => 1,
                 'last' => $object->getLastPage(),
                 'previous' => max(1, $object->getCurrentPage() - 1),
-                'next' => min($object->getLastPage(), $object->getCurrentPage() + 1)
-            ]
+                'next' => min($object->getLastPage(), $object->getCurrentPage() + 1),
+            ],
         ];
     }
 

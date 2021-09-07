@@ -12,17 +12,19 @@
 namespace NumberNine\Controller\Admin\Api\Taxonomy;
 
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use NumberNine\Http\ResponseFactory;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Model\Pagination\PaginationParameters;
 use NumberNine\Repository\TermRepository;
-use NumberNine\Http\ResponseFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'terms/{taxonomy}/', name: 'numbernine_admin_terms_get_collection', options: ['expose' => true], methods: ['GET'])]
+#[Route(path: 'terms/{taxonomy}/', name: 'numbernine_admin_terms_get_collection', options: ['expose' => true], methods: [
+    'GET',
+])]
 final class TermsGetAction implements AdminController
 {
     public function __invoke(

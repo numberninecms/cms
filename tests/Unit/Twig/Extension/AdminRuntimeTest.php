@@ -18,6 +18,10 @@ use NumberNine\Model\Menu\MenuItem;
 use NumberNine\Tests\UserAwareTestCase;
 use NumberNine\Twig\Extension\AdminRuntime;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class AdminRuntimeTest extends UserAwareTestCase
 {
     private AdminRuntime $runtime;
@@ -32,8 +36,8 @@ final class AdminRuntimeTest extends UserAwareTestCase
     {
         $this->loginThenNavigateToAdminUrl('Administrator');
         $menuItems = $this->runtime->getAdminMenuItems();
-        self::assertContainsOnlyInstancesOf(MenuItem::class, $menuItems);
-        self::assertGreaterThanOrEqual(8, count($menuItems));
+        static::assertContainsOnlyInstancesOf(MenuItem::class, $menuItems);
+        static::assertGreaterThanOrEqual(8, \count($menuItems));
     }
 
     public function testGetHighlightedPermalinkUrlForPost(): void
@@ -47,7 +51,7 @@ final class AdminRuntimeTest extends UserAwareTestCase
 
         $permalink = $this->runtime->getHighlightedPermalinkUrl($post);
 
-        self::assertEquals('http://localhost/2021/06/12/<span class="slug">new-post</span>', $permalink);
+        static::assertSame('http://localhost/2021/06/12/<span class="slug">new-post</span>', $permalink);
     }
 
     public function testGetHighlightedPermalinkUrlForPage(): void
@@ -61,6 +65,6 @@ final class AdminRuntimeTest extends UserAwareTestCase
 
         $permalink = $this->runtime->getHighlightedPermalinkUrl($page);
 
-        self::assertEquals('http://localhost/<span class="slug">new-page</span>', $permalink);
+        static::assertSame('http://localhost/<span class="slug">new-page</span>', $permalink);
     }
 }

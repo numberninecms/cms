@@ -13,5 +13,4 @@ namespace NumberNine\Event\Theme;
 
 final class FooterEvent extends GenericEvent
 {
-
 }

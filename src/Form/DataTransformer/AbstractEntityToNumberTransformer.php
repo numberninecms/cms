@@ -28,7 +28,7 @@ abstract class AbstractEntityToNumberTransformer implements DataTransformerInter
      */
     public function transform($value): int|string
     {
-        if ($value === null || !is_object($value)) {
+        if ($value === null || !\is_object($value)) {
             return '';
         }
 
@@ -41,6 +41,7 @@ abstract class AbstractEntityToNumberTransformer implements DataTransformerInter
 
     /**
      * @param mixed $value
+     *
      * @return mixed|null
      */
     public function reverseTransform($value)

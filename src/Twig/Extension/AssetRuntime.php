@@ -22,7 +22,6 @@ final class AssetRuntime implements RuntimeExtensionInterface
     }
 
     /**
-     * @param string|null $entryName
      * @throws Exception
      */
     public function renderStylesheetTag(string $entryName = null): string
@@ -31,9 +30,9 @@ final class AssetRuntime implements RuntimeExtensionInterface
     }
 
     /**
-     * @param string|null $entryName
-     * @return string[]
      * @throws Exception
+     *
+     * @return string[]
      */
     public function getStylesheetUrls(string $entryName = null): array
     {
@@ -41,7 +40,6 @@ final class AssetRuntime implements RuntimeExtensionInterface
     }
 
     /**
-     * @param string|null $entryName
      * @throws Exception
      */
     public function renderScriptTag(string $entryName = null): string
@@ -50,7 +48,6 @@ final class AssetRuntime implements RuntimeExtensionInterface
     }
 
     /**
-     * @param string|null $entryName
      * @throws Exception
      */
     public function renderEntryTags(string $entryName = null): string

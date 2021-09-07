@@ -14,10 +14,10 @@ namespace NumberNine\Controller\Admin\Api\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use NumberNine\Entity\UserRole;
+use NumberNine\Http\ResponseFactory;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Repository\UserRoleRepository;
 use NumberNine\Security\Capabilities;
-use NumberNine\Http\ResponseFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +25,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/users/roles/', name: 'numbernine_admin_user_roles_update_collection', options: ['expose' => true], methods: ['PUT'])]
+#[Route(path: '/users/roles/', name: 'numbernine_admin_user_roles_update_collection', options: ['expose' => true], methods: [
+    'PUT',
+])]
 final class UserRolesUpdateAction extends AbstractController implements AdminController
 {
     public function __invoke(
@@ -49,7 +51,8 @@ final class UserRolesUpdateAction extends AbstractController implements AdminCon
 
                 $userRole
                     ->setName($role['name'])
-                    ->setCapabilities($role['capabilities']);
+                    ->setCapabilities($role['capabilities'])
+                ;
             } else {
                 /** @var UserRole $userRole */
                 $userRole = $serializer->denormalize(

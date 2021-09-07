@@ -67,7 +67,7 @@ final class ImageProcessor
     {
         $image = $this->imagine->open($filename);
         $thumbnail = $image->thumbnail(
-            new Box((int)$size->getWidth(), (int)$size->getHeight()),
+            new Box((int) $size->getWidth(), (int) $size->getHeight()),
             $size->isCrop() ? ImageInterface::THUMBNAIL_OUTBOUND : ImageInterface::THUMBNAIL_INSET
         );
 
@@ -84,30 +84,33 @@ final class ImageProcessor
         return [
             'filename' => pathinfo($thumbnailFilename, PATHINFO_BASENAME),
             'width' => $thumbnailSize->getWidth(),
-            'height' => $thumbnailSize->getHeight()
+            'height' => $thumbnailSize->getHeight(),
         ];
     }
 
     /**
-     * Fix orientation according to Exif data
+     * Fix orientation according to Exif data.
      */
     private function fixOrientation(ImageInterface $image): bool
     {
         $orientation = $image->metadata()->toArray()['ifd0.Orientation'] ?? null;
 
-        if ($orientation === null || (int)$orientation === 0) {
+        if ($orientation === null || (int) $orientation === 0) {
             return false;
         }
 
         switch ($orientation) {
             case 3:
                 $image->rotate(180);
+
                 break;
             case 6:
                 $image->rotate(90);
+
                 break;
             case 9:
                 $image->rotate(-90);
+
                 break;
         }
 

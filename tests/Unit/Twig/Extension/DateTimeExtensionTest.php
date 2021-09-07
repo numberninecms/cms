@@ -18,17 +18,21 @@ use PHPUnit\Framework\TestCase;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class DateTimeExtensionTest extends TestCase
 {
     public function testGetFunctions(): void
     {
         $functions = (new DateTimeExtension())->getFunctions();
-        $this->assertContainsOnlyInstancesOf(TwigFunction::class, $functions);
+        static::assertContainsOnlyInstancesOf(TwigFunction::class, $functions);
     }
 
     public function testGetFilters(): void
     {
         $functions = (new DateTimeExtension())->getFilters();
-        $this->assertContainsOnlyInstancesOf(TwigFilter::class, $functions);
+        static::assertContainsOnlyInstancesOf(TwigFilter::class, $functions);
     }
 }

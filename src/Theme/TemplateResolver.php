@@ -12,13 +12,13 @@
 namespace NumberNine\Theme;
 
 use InvalidArgumentException;
+use NumberNine\Content\ContentService;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\Term;
 use NumberNine\Exception\ContentTypeNotFoundException;
 use NumberNine\Model\Component\ComponentInterface;
 use NumberNine\Model\Content\ContentType;
 use NumberNine\Model\Shortcode\ShortcodeInterface;
-use NumberNine\Content\ContentService;
 use ReflectionClass;
 use RuntimeException;
 use Symfony\Component\Finder\Finder;
@@ -30,7 +30,6 @@ use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\SyntaxError;
 use Twig\TemplateWrapper;
-
 use function Symfony\Component\String\u;
 
 final class TemplateResolver implements TemplateResolverInterface
@@ -43,7 +42,7 @@ final class TemplateResolver implements TemplateResolverInterface
     {
         return $this->cache->get(
             sprintf('single_%s_id_%d', $entity->getCustomType(), $entity->getId()),
-            function (ItemInterface $item) use ($entity, $extraTemplates): \Twig\TemplateWrapper {
+            function (ItemInterface $item) use ($entity, $extraTemplates): TemplateWrapper {
                 $item->tag(sprintf('content_entity_%d', $entity->getId()));
 
                 $themeName = $this->themeStore->getCurrentThemeName();
@@ -65,7 +64,7 @@ final class TemplateResolver implements TemplateResolverInterface
                 if ($pageTemplate = $entity->getCustomField('page_template')) {
                     $candidates = array_merge(
                         $this->getContentEntitySingleTemplateCandidates(
-                            $this->contentService->getContentType((string)$entity->getCustomType())
+                            $this->contentService->getContentType((string) $entity->getCustomType())
                         ),
                         $this->getContentEntityIndexTemplateCandidates(),
                     );
@@ -178,6 +177,7 @@ final class TemplateResolver implements TemplateResolverInterface
     {
         return $this->cache->get($this->slugger->slug($component::class), function () use ($component): string {
             $templates = $this->getComponentTemplatesCandidates($component);
+
             return $this->twig->resolveTemplate($templates)->getTemplateName();
         });
     }
@@ -198,23 +198,6 @@ final class TemplateResolver implements TemplateResolverInterface
     public function resolveShortcodePageBuilder(ShortcodeInterface $shortcode): TemplateWrapper
     {
         return $this->resolveShortcodeTemplate($shortcode, 'vue');
-    }
-
-    /**
-     * @throws SyntaxError
-     */
-    private function resolveShortcodeTemplate(ShortcodeInterface $shortcode, string $type): TemplateWrapper
-    {
-        $templates = $this->getShortcodeTemplatesCandidates($shortcode, $type);
-
-        try {
-            return $this->twig->resolveTemplate($templates);
-        } catch (LoaderError) {
-            return $this->twig->createTemplate(
-                '<div>Missing template</div>',
-                'missing_template',
-            );
-        }
     }
 
     /**
@@ -245,7 +228,7 @@ final class TemplateResolver implements TemplateResolverInterface
 
     public function getShortcodeTemplatesCandidates(ShortcodeInterface $shortcode, string $type): array
     {
-        if (!\in_array($type, ['html', 'vue'])) {
+        if (!\in_array($type, ['html', 'vue'], true)) {
             throw new InvalidArgumentException("Type must be 'html' or 'vue'.");
         }
 
@@ -341,7 +324,7 @@ final class TemplateResolver implements TemplateResolverInterface
             $content = file_get_contents($templateFile);
             $templateInfo = [];
 
-            if ($this->hasFrontMatterBlock((string)$content, $matches)) {
+            if ($this->hasFrontMatterBlock((string) $content, $matches)) {
                 $templateInfo = Yaml::parse($matches[1]);
             }
 
@@ -396,8 +379,21 @@ final class TemplateResolver implements TemplateResolverInterface
         return $templatesNames;
     }
 
+    /**
+     * @throws SyntaxError
+     */
+    private function resolveShortcodeTemplate(ShortcodeInterface $shortcode, string $type): TemplateWrapper
+    {
+        $templates = $this->getShortcodeTemplatesCandidates($shortcode, $type);
 
-    private function hasFrontMatterBlock(string $template, array &$matches = null): bool
+        try {
+            return $this->twig->resolveTemplate($templates);
+        } catch (LoaderError) {
+            return $this->twig->createTemplate('<div>Missing template</div>', 'missing_template',);
+        }
+    }
+
+    private function hasFrontMatterBlock(string $template, array & $matches = null): bool
     {
         return preg_match('@^---[\r\n]+(.*)\s---[\r\n]+@simU', $template, $matches) > 0;
     }
@@ -405,7 +401,7 @@ final class TemplateResolver implements TemplateResolverInterface
     private function createTwigTemplateFromFrontMatterAnnotatedFile(string $filename): TemplateWrapper
     {
         return $this->twig->createTemplate(
-            (string)preg_replace('@^(---[\r\n]+.*\s---[\r\n]+)@simU', '', (string)file_get_contents($filename)),
+            (string) preg_replace('@^(---[\r\n]+.*\s---[\r\n]+)@simU', '', (string) file_get_contents($filename)),
             basename($filename)
         );
     }

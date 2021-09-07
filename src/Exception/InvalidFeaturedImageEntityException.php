@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace NumberNine\Exception;
 
+use LogicException;
 use NumberNine\Entity\ContentEntity;
 
-final class InvalidFeaturedImageEntityException extends \LogicException
+final class InvalidFeaturedImageEntityException extends LogicException
 {
     public function __construct(ContentEntity $contentEntity)
     {

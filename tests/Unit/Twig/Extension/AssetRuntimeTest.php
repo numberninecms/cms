@@ -17,6 +17,10 @@ use NumberNine\Tests\DotEnvAwareWebTestCase;
 use NumberNine\Twig\Extension\AssetRuntime;
 use Symfony\WebpackEncoreBundle\Exception\EntrypointNotFoundException;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class AssetRuntimeTest extends DotEnvAwareWebTestCase
 {
     private AssetRuntime $runtime;

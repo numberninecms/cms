@@ -16,6 +16,10 @@ namespace NumberNine\Tests\Unit\Shortcode;
 use NumberNine\Shortcode\GridShortcode;
 use NumberNine\Tests\ShortcodeTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class GridShortcodeTest extends ShortcodeTestCase
 {
     protected const SHORTCODE = GridShortcode::class;
@@ -24,7 +28,7 @@ final class GridShortcodeTest extends ShortcodeTestCase
     {
         $parameters = $this->processParameters([]);
 
-        self::assertEquals([
+        static::assertSame([
             'content' => '',
             'columns_count' => 3,
         ], $parameters);
@@ -33,33 +37,33 @@ final class GridShortcodeTest extends ShortcodeTestCase
     public function testValidColumnsCount(): void
     {
         $parameters = $this->processParameters(['columnsCount' => 12]);
-        self::assertEquals(12, $parameters['columns_count']);
+        static::assertSame(12, $parameters['columns_count']);
     }
 
     public function testColumnsCountAsString(): void
     {
         $parameters = $this->processParameters(['columnsCount' => '12']);
-        self::assertEquals(12, $parameters['columns_count']);
+        static::assertSame(12, $parameters['columns_count']);
     }
 
     public function testColumnsCountOutOfRangeUpper(): void
     {
         $parameters = $this->processParameters(['columnsCount' => 13]);
-        self::assertEquals(12, $parameters['columns_count']);
+        static::assertSame(12, $parameters['columns_count']);
     }
 
     public function testColumnsCountOutOfRangeLower(): void
     {
         $parameters = $this->processParameters(['columnsCount' => 0]);
-        self::assertEquals(1, $parameters['columns_count']);
+        static::assertSame(1, $parameters['columns_count']);
     }
 
     public function testInvalidColumnsCount(): void
     {
         $parameters = $this->processParameters(['columnsCount' => 'invalid']);
-        self::assertEquals(3, $parameters['columns_count']);
+        static::assertSame(3, $parameters['columns_count']);
 
         $parameters = $this->processParameters(['columnsCount' => 6.75]);
-        self::assertEquals(6, $parameters['columns_count']);
+        static::assertSame(6, $parameters['columns_count']);
     }
 }

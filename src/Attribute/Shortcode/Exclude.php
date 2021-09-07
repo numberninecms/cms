@@ -11,9 +11,10 @@
 
 namespace NumberNine\Attribute\Shortcode;
 
+use Attribute;
 use Doctrine\Common\Annotations\Annotation\Enum;
 
-#[\Attribute(\Attribute::TARGET_METHOD | \Attribute::TARGET_PROPERTY)]
+#[Attribute(Attribute::TARGET_METHOD | Attribute::TARGET_PROPERTY)]
 final class Exclude
 {
     public const ALL = 'all';

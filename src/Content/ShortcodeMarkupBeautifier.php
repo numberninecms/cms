@@ -22,6 +22,7 @@ final class ShortcodeMarkupBeautifier
     public function beautify(string $text): string
     {
         $tree = $this->shortcodeProcessor->buildShortcodeTree($text);
+
         return $this->arrayToShortcodeConverter->convertMany($tree, true);
     }
 }

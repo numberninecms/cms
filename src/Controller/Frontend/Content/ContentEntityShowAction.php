@@ -13,6 +13,7 @@ namespace NumberNine\Controller\Frontend\Content;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
+use NumberNine\Content\PermalinkGenerator;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Event\ContentEntityShowForwardEvent;
 use NumberNine\Event\CurrentContentEntityEvent;
@@ -21,7 +22,6 @@ use NumberNine\Exception\ClassNotFoundException;
 use NumberNine\Model\Content\ContentType;
 use NumberNine\Repository\AbstractContentEntityRepository;
 use NumberNine\Security\Capabilities;
-use NumberNine\Content\PermalinkGenerator;
 use NumberNine\Theme\TemplateResolver;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -31,9 +31,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
-* The route of this action is dynamically generated
-* @see RouteRegistrationEventSubscriber
-*/
+ * The route of this action is dynamically generated.
+ *
+ * @see RouteRegistrationEventSubscriber
+ */
 final class ContentEntityShowAction extends AbstractController
 {
     public function __invoke(
@@ -104,7 +105,7 @@ final class ContentEntityShowAction extends AbstractController
         if (
             $request->getPathInfo() === $this->generateUrl('numbernine_homepage')
             || $request->getPathInfo() === $this->generateUrl('numbernine_homepage_page', [
-                'page' => $request->get('page', 1)
+                'page' => $request->get('page', 1),
             ])
         ) {
             return;

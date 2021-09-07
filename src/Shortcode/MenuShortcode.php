@@ -12,6 +12,7 @@
 namespace NumberNine\Shortcode;
 
 use NumberNine\Attribute\Shortcode;
+use NumberNine\Content\PermalinkGenerator;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\Menu;
 use NumberNine\Event\MenuShortcodeStyleEvent;
@@ -22,11 +23,8 @@ use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use NumberNine\Repository\ContentEntityRepository;
 use NumberNine\Repository\MenuRepository;
-use NumberNine\Content\PermalinkGenerator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use function NumberNine\Common\Util\ArrayUtil\array_depth;
 
 #[Shortcode(name: 'menu', label: 'Menu', icon: 'mdi-file-tree')]
 final class MenuShortcode extends AbstractShortcode implements EditableShortcodeInterface
@@ -111,7 +109,7 @@ final class MenuShortcode extends AbstractShortcode implements EditableShortcode
                     $menuItem['url'] = $this->permalinkGenerator->generateContentEntityPermalink(
                         current(array_filter(
                             $entities,
-                            static fn (ContentEntity $entity): bool => $entity->getId() === (int)$menuItem['entityId'],
+                            static fn (ContentEntity $entity): bool => $entity->getId() === (int) $menuItem['entityId'],
                         ))
                     );
                 }

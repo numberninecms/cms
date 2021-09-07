@@ -37,7 +37,6 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
-
 use function Symfony\Component\String\u;
 
 final class ContentService
@@ -58,7 +57,7 @@ final class ContentService
             if (
                 $type->getName() === $contentType
                 || u($type->getLabels()->getPluralName())->snake()->toString() === $contentType
-                || $this->slugger->slug((string)$type->getLabels()->getPluralName())->toString() === $contentType
+                || $this->slugger->slug((string) $type->getLabels()->getPluralName())->toString() === $contentType
             ) {
                 return $type;
             }
@@ -82,15 +81,15 @@ final class ContentService
 
     /**
      * @param ContentType|string $contentType Either the ContentType object, or the content type name as registered
-     * @param Criteria|null $criteria
+     *
      * @throws QueryException
      */
     public function getEntitiesOfType(
-        \NumberNine\Model\Content\ContentType|string $contentType,
+        ContentType|string $contentType,
         PaginationParameters $paginationParameters,
         Criteria $criteria = null
     ): Paginator {
-        if (is_string($contentType)) {
+        if (\is_string($contentType)) {
             $contentType = $this->getContentType($contentType);
         }
 
@@ -123,7 +122,6 @@ final class ContentService
      * At the moment it queries only the first content type of the array.
      *
      * @param ContentType[] $contentTypes
-     * @param Criteria|null $criteria
      */
     public function getEntitiesOfMultipleTypes(
         array $contentTypes,
@@ -140,11 +138,12 @@ final class ContentService
 
     /**
      * @param ContentType|string $contentType Either the ContentType object or the content type name as registered
+     *
      * @return ContentEntity|object|null
      */
-    public function getEntityOfType(\NumberNine\Model\Content\ContentType|string $contentType, int $id): ?object
+    public function getEntityOfType(ContentType|string $contentType, int $id): ?object
     {
-        if (is_string($contentType)) {
+        if (\is_string($contentType)) {
             $contentType = $this->getContentType($contentType);
         }
 
@@ -157,12 +156,13 @@ final class ContentService
 
     /**
      * @param ContentType|string $contentType Either the ContentType object or the content type name as registered
-     * @param array $criteria Associative array representing the fields to search
+     * @param array              $criteria    Associative array representing the fields to search
+     *
      * @return ContentEntity|object|null
      */
-    public function getEntityOfTypeBy(\NumberNine\Model\Content\ContentType|string $contentType, array $criteria): ?object
+    public function getEntityOfTypeBy(ContentType|string $contentType, array $criteria): ?object
     {
-        if (is_string($contentType)) {
+        if (\is_string($contentType)) {
             $contentType = $this->getContentType($contentType);
         }
 
@@ -175,11 +175,12 @@ final class ContentService
 
     /**
      * @throws ORMException
+     *
      * @return never
      */
-    public function deleteEntitiesOfType(string|\NumberNine\Model\Content\ContentType $contentType, array $ids): void
+    public function deleteEntitiesOfType(string|ContentType $contentType, array $ids): void
     {
-        if (is_string($contentType)) {
+        if (\is_string($contentType)) {
             $contentType = $this->getContentType($contentType);
         }
 
@@ -195,11 +196,12 @@ final class ContentService
 
     /**
      * @throws ORMException
+     *
      * @return never
      */
-    public function deletePermanentlyAllEntitiesOfType(string|\NumberNine\Model\Content\ContentType $contentType): void
+    public function deletePermanentlyAllEntitiesOfType(string|ContentType $contentType): void
     {
-        if (is_string($contentType)) {
+        if (\is_string($contentType)) {
             $contentType = $this->getContentType($contentType);
         }
 
@@ -216,9 +218,9 @@ final class ContentService
     /**
      * @return never
      */
-    public function restoreEntitiesOfType(string|\NumberNine\Model\Content\ContentType $contentType, array $ids): void
+    public function restoreEntitiesOfType(string|ContentType $contentType, array $ids): void
     {
-        if (is_string($contentType)) {
+        if (\is_string($contentType)) {
             $contentType = $this->getContentType($contentType);
         }
 

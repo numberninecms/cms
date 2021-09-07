@@ -20,7 +20,6 @@ use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
-
 use function Symfony\Component\String\u;
 
 final class ComponentRenderer
@@ -42,7 +41,7 @@ final class ComponentRenderer
             foreach ($args as $property => $value) {
                 $setter = 'set' . u($property)->camel()->title();
                 if (method_exists($component, $setter)) {
-                    $component->$setter($value);
+                    $component->{$setter}($value);
                 }
             }
 

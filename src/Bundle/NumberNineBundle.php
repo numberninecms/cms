@@ -16,9 +16,9 @@ use NumberNine\Bundle\DependencyInjection\Compiler\ComponentCompilerPass;
 use NumberNine\Bundle\DependencyInjection\Compiler\ShortcodeCompilerPass;
 use NumberNine\Common\Bundle\BundleTrait;
 use NumberNine\Model\Component\ComponentInterface;
+use NumberNine\Model\DataTransformer\DataTransformerInterface;
 use NumberNine\Model\Shortcode\ShortcodeInterface;
 use NumberNine\Model\Theme\ThemeInterface;
-use NumberNine\Model\DataTransformer\DataTransformerInterface;
 use NumberNine\Security\Capability\CapabilityInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -27,17 +27,14 @@ final class NumberNineBundle extends Bundle
 {
     use BundleTrait;
 
-    protected function getAlias(): string
-    {
-        return 'numbernine';
-    }
-
     public function build(ContainerBuilder $container): void
     {
         $container->registerForAutoconfiguration(CapabilityInterface::class)
-            ->addTag('numbernine.security.capability');
+            ->addTag('numbernine.security.capability')
+        ;
         $container->registerForAutoconfiguration(DataTransformerInterface::class)
-            ->addTag('numbernine.data_transformer');
+            ->addTag('numbernine.data_transformer')
+        ;
         $container->registerForAutoconfiguration(ThemeInterface::class)->addTag('numbernine.theme');
         $container->registerForAutoconfiguration(ComponentInterface::class)->addTag('numbernine.component');
         $container->registerForAutoconfiguration(ShortcodeInterface::class)->addTag('numbernine.shortcode');
@@ -46,15 +43,14 @@ final class NumberNineBundle extends Bundle
         $container->addCompilerPass(new ShortcodeCompilerPass());
         $container->addCompilerPass(
             DoctrineOrmMappingsPass::createAnnotationMappingDriver(
-                [
-                    'NumberNine\\Entity',
-                    'NumberNine\\Model'
-                ],
-                [
-                    __DIR__ . '/../Entity',
-                    __DIR__ . '/../Model'
-                ]
+                ['NumberNine\\Entity', 'NumberNine\\Model'],
+                [__DIR__ . '/../Entity', __DIR__ . '/../Model']
             )
         );
+    }
+
+    protected function getAlias(): string
+    {
+        return 'numbernine';
     }
 }

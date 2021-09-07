@@ -11,21 +11,19 @@
 
 namespace NumberNine\EventSubscriber;
 
-use NumberNine\Controller\Frontend\Content\HomepageAction;
+use NumberNine\Configuration\ConfigurationReadWriter;
+use NumberNine\Content\ContentService;
 use NumberNine\Controller\Frontend\Content\ContentEntityShowAction;
+use NumberNine\Controller\Frontend\Content\HomepageAction;
 use NumberNine\Controller\Frontend\Term\IndexAction as TermIndexAction;
 use NumberNine\Event\RouteRegistrationEvent;
 use NumberNine\Model\General\Settings;
 use NumberNine\Repository\TaxonomyRepository;
-use NumberNine\Content\ContentService;
-use NumberNine\Configuration\ConfigurationReadWriter;
 use Psr\Cache\CacheException;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
-
-use function Symfony\Component\String\u;
 
 final class RouteRegistrationEventSubscriber implements EventSubscriberInterface
 {
@@ -36,9 +34,7 @@ final class RouteRegistrationEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            RouteRegistrationEvent::class => [
-                ['registerFrontendRoutes', 50],
-            ]
+            RouteRegistrationEvent::class => [['registerFrontendRoutes', 50]],
         ];
     }
 
@@ -79,7 +75,8 @@ final class RouteRegistrationEventSubscriber implements EventSubscriberInterface
                         'page' => 1,
                     ]
                 )
-                ->setMethods(['GET', 'POST']);
+                ->setMethods(['GET', 'POST'])
+            ;
 
             $routeName = sprintf('numbernine_%s_show', $contentType->getName());
             $event->addRoute($routeName, $route);
@@ -91,16 +88,15 @@ final class RouteRegistrationEventSubscriber implements EventSubscriberInterface
 
         // Taxonomies routes
         foreach ($this->taxonomyRepository->findAll() as $taxonomy) {
-            $slugDashed = $this->slugger->slug((string)$taxonomy->getName());
-            $slugUnderscore = $this->slugger->slug((string)$taxonomy->getName(), '_');
+            $slugDashed = $this->slugger->slug((string) $taxonomy->getName());
+            $slugUnderscore = $this->slugger->slug((string) $taxonomy->getName(), '_');
 
             $route = (new Route($slugDashed . '/{slug}/'))
-                ->setDefaults(
-                    [
-                        '_controller' => TermIndexAction::class
-                    ]
-                )
-                ->setMethods(['GET']);
+                ->setDefaults([
+                    '_controller' => TermIndexAction::class,
+                ])
+                ->setMethods(['GET'])
+            ;
 
             $routeName = sprintf('numbernine_taxonomy_%s_term_index', $slugUnderscore);
             $event->addRoute($routeName, $route);

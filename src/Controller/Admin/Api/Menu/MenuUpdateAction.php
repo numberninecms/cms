@@ -13,13 +13,15 @@ namespace NumberNine\Controller\Admin\Api\Menu;
 
 use Doctrine\ORM\EntityManagerInterface;
 use NumberNine\Entity\Menu;
-use NumberNine\Model\Admin\AdminController;
 use NumberNine\Http\ResponseFactory;
+use NumberNine\Model\Admin\AdminController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/menus/{id}/', name: 'numbernine_admin_menus_set_menu_items', options: ['expose' => true], methods: ['POST'])]
+#[Route(path: '/menus/{id}/', name: 'numbernine_admin_menus_set_menu_items', options: ['expose' => true], methods: [
+    'POST',
+])]
 final class MenuUpdateAction implements AdminController
 {
     public function __invoke(

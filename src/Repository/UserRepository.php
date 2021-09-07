@@ -44,6 +44,7 @@ final class UserRepository extends ServiceEntityRepository
 
     /**
      * @param mixed $fieldValue
+     *
      * @throws NonUniqueResultException
      * @throws NoResultException
      */
@@ -51,14 +52,13 @@ final class UserRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('u')
             ->where('JSON_EXTRACT(u.customFields, :fieldName) = :fieldValue')
-            ->setParameters(
-                [
-                    'fieldName' => '$.' . $fieldName,
-                    'fieldValue' => $fieldValue
-                ]
-            )
+            ->setParameters([
+                'fieldName' => '$.' . $fieldName,
+                'fieldValue' => $fieldValue,
+            ])
             ->getQuery()
-            ->getSingleResult();
+            ->getSingleResult()
+        ;
     }
 
     /**
@@ -71,11 +71,11 @@ final class UserRepository extends ServiceEntityRepository
             ->where('r.name = :role')
             ->setParameter('role', $role)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     /**
-     * @param Criteria|null $criteria
      * @throws QueryException
      */
     public function getPaginatedCollectionQueryBuilder(
@@ -86,7 +86,8 @@ final class UserRepository extends ServiceEntityRepository
             ->select('u', 'r')
             ->join('u.userRoles', 'r')
             ->setFirstResult($paginationParameters->getStartRow() ?: 0)
-            ->setMaxResults($paginationParameters->getFetchCount() ?: PHP_INT_MAX);
+            ->setMaxResults($paginationParameters->getFetchCount() ?: PHP_INT_MAX)
+        ;
 
         if ($paginationParameters->getFilter()) {
             $or = $queryBuilder->expr()->orx();
@@ -96,7 +97,8 @@ final class UserRepository extends ServiceEntityRepository
 
             $queryBuilder
                 ->andWhere($or)
-                ->setParameter('filter', '%' . trim((string)$paginationParameters->getFilter()) . '%');
+                ->setParameter('filter', '%' . trim((string) $paginationParameters->getFilter()) . '%')
+            ;
         }
 
         if ($paginationParameters->getOrderBy()) {
@@ -116,7 +118,7 @@ final class UserRepository extends ServiceEntityRepository
      */
     public function removeCollection(array $ids, string $associatedContent): void
     {
-        if (!in_array($associatedContent, [self::DELETE_MODE_REASSIGN, self::DELETE_MODE_DELETE], true)) {
+        if (!\in_array($associatedContent, [self::DELETE_MODE_REASSIGN, self::DELETE_MODE_DELETE], true)) {
             throw new InvalidArgumentException(sprintf(
                 'Parameter $associatedContent value must be one of "%s" or "%s".',
                 self::DELETE_MODE_REASSIGN,
@@ -135,7 +137,8 @@ final class UserRepository extends ServiceEntityRepository
             ->where('u.id IN (:ids)')
             ->setParameter('ids', $ids)
             ->getQuery()
-            ->toIterable();
+            ->toIterable()
+        ;
 
         $counter = 0;
 
@@ -149,7 +152,7 @@ final class UserRepository extends ServiceEntityRepository
 
             if ($associatedContent === self::DELETE_MODE_REASSIGN) {
                 foreach ($user->getContentEntities() as $contentEntity) {
-                    /** @var ContentEntity $contentEntity */
+                    // @var ContentEntity $contentEntity
                     $contentEntity->setAuthor($currentUser);
                     $this->_em->persist($contentEntity);
                 }

@@ -14,7 +14,6 @@ namespace NumberNine\Media;
 use Doctrine\ORM\EntityManagerInterface;
 use NumberNine\Entity\MediaFile;
 use NumberNine\Repository\MediaFileRepository;
-use NumberNine\Media\ImageSizeStore;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
 
@@ -32,7 +31,7 @@ final class ThumbnailGenerator
     }
 
     /**
-     * Regenerates all images variations in media library
+     * Regenerates all images variations in media library.
      */
     public function regenerateImageVariations(): void
     {
@@ -48,14 +47,15 @@ final class ThumbnailGenerator
             $finder = new Finder();
             $finder
                 ->files()
-                ->name('@' . pathinfo((string)$mediaFile->getPath(), PATHINFO_BASENAME) . '.+@')
-                ->in($this->publicPath . dirname((string)$mediaFile->getPath()));
+                ->name('@' . pathinfo((string) $mediaFile->getPath(), PATHINFO_BASENAME) . '.+@')
+                ->in($this->publicPath . \dirname((string) $mediaFile->getPath()))
+            ;
 
             if (iterator_count($finder) > 0) {
                 $mediaFile->setSizes([]);
 
                 foreach ($finder as $file) {
-                    unlink((string)$file->getRealPath());
+                    unlink((string) $file->getRealPath());
                 }
             }
 

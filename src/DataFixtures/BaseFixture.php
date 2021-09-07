@@ -25,17 +25,17 @@ abstract class BaseFixture extends Fixture
     {
     }
 
-    abstract protected function loadData(ObjectManager $manager): void;
-
     public function load(ObjectManager $manager): void
     {
         $this->manager = $manager;
         $this->loadData($manager);
     }
 
+    abstract protected function loadData(ObjectManager $manager): void;
+
     protected function createMany(string $className, int $count, callable $factory, int $offset = 0): void
     {
-        for ($i = $offset; $i < $offset + $count; $i++) {
+        for ($i = $offset; $i < $offset + $count; ++$i) {
             $entity = new $className();
             $factory($entity, $i);
             $this->manager->persist($entity);
@@ -49,7 +49,7 @@ abstract class BaseFixture extends Fixture
         $contentType = $this->contentService->getContentType($type);
         $className = $contentType->getEntityClassName();
 
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             $entity = new $className();
             $entity->setCustomType($contentType->getName());
 
@@ -83,6 +83,7 @@ abstract class BaseFixture extends Fixture
         $references = array_diff($this->referencesIndex[$className], $excludedReferences);
 
         $randomReferenceKey = $references[array_rand($references)];
+
         return $this->getReference($randomReferenceKey);
     }
 }

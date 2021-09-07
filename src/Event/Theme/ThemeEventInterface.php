@@ -13,9 +13,10 @@ namespace NumberNine\Event\Theme;
 
 interface ThemeEventInterface
 {
+    public function __toString();
+
     /**
      * @return mixed
      */
     public function getObject();
-    public function __toString();
 }

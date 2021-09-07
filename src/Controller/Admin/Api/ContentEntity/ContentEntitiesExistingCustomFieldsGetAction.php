@@ -11,16 +11,18 @@
 
 namespace NumberNine\Controller\Admin\Api\ContentEntity;
 
+use NumberNine\Content\ContentService;
+use NumberNine\Http\ResponseFactory;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Repository\ContentEntityRepository;
 use NumberNine\Security\Capabilities;
-use NumberNine\Content\ContentService;
-use NumberNine\Http\ResponseFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'content_entities/existing-custom-fields/', name: 'numbernine_admin_contententity_customfields_get_collection', options: ['expose' => true], methods: ['GET'])]
+#[Route(path: 'content_entities/existing-custom-fields/', name: 'numbernine_admin_contententity_customfields_get_collection', options: ['expose' => true], methods: [
+    'GET',
+])]
 final class ContentEntitiesExistingCustomFieldsGetAction extends AbstractController implements AdminController
 {
     public function __invoke(

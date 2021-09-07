@@ -25,6 +25,7 @@ final class Range
     public function setMin(float $min): self
     {
         $this->min = $min;
+
         return $this;
     }
 
@@ -36,6 +37,7 @@ final class Range
     public function setMax(float $max): self
     {
         $this->max = $max;
+
         return $this;
     }
 }

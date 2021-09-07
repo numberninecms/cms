@@ -17,6 +17,10 @@ use NumberNine\Exception\InvalidHexColorValueException;
 use NumberNine\Tests\DotEnvAwareWebTestCase;
 use NumberNine\Twig\Extension\ColorRuntime;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class ColorRuntimeTest extends DotEnvAwareWebTestCase
 {
     private ColorRuntime $runtime;
@@ -30,7 +34,7 @@ final class ColorRuntimeTest extends DotEnvAwareWebTestCase
 
     public function testHexToRgbWorks(): void
     {
-        self::assertEquals('70, 166, 233', $this->runtime->hexToRgb('#46a6e9'));
+        static::assertSame('70, 166, 233', $this->runtime->hexToRgb('#46a6e9'));
     }
 
     public function testInvalidHexThrowsException(): void

@@ -21,13 +21,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/settings/emails/', name: 'numbernine_admin_settings_emails', methods: ['GET', 'POST'])]
+#[Route(path: '/settings/emails/', name: 'numbernine_admin_settings_emails', methods: ['GET', 'POST'])]
 final class SettingsEmailsAction extends AbstractController implements AdminController
 {
-    public function __invoke(
-        ConfigurationReadWriter $configurationReadWriter,
-        Request $request
-    ): Response {
+    public function __invoke(ConfigurationReadWriter $configurationReadWriter, Request $request): Response
+    {
         $settings = $configurationReadWriter->readMany([
             Settings::MAILER_SENDER_NAME => SettingsDefaultValues::MAILER_SENDER_NAME,
             Settings::MAILER_SENDER_ADDRESS => SettingsDefaultValues::MAILER_SENDER_ADDRESS,
@@ -40,6 +38,7 @@ final class SettingsEmailsAction extends AbstractController implements AdminCont
             $configurationReadWriter->writeMany($form->getData());
 
             $this->addFlash('success', 'Email settings successfully saved.');
+
             return $this->redirectToRoute('numbernine_admin_settings_emails', [], Response::HTTP_SEE_OTHER);
         }
 

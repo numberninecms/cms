@@ -16,6 +16,10 @@ namespace NumberNine\Tests\Unit\Twig\Extension;
 use NumberNine\Tests\DotEnvAwareWebTestCase;
 use NumberNine\Twig\Extension\ShortcodeRuntime;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class ShortcodeRuntimeTest extends DotEnvAwareWebTestCase
 {
     private ShortcodeRuntime $runtime;
@@ -29,11 +33,11 @@ final class ShortcodeRuntimeTest extends DotEnvAwareWebTestCase
 
     public function testRenderTextShortcode(): void
     {
-        self::assertEquals("Test\n", $this->runtime->renderShortcode('[text]Test[/text]'));
+        static::assertSame("Test\n", $this->runtime->renderShortcode('[text]Test[/text]'));
     }
 
     public function testRenderUnknownShortcode(): void
     {
-        self::assertEquals("[nonexistent]", $this->runtime->renderShortcode('[nonexistent]'));
+        static::assertSame('[nonexistent]', $this->runtime->renderShortcode('[nonexistent]'));
     }
 }

@@ -11,7 +11,9 @@
 
 namespace NumberNine\Attribute\Form;
 
-#[\Attribute]
+use Attribute;
+
+#[Attribute]
 final class Responsive
 {
 }

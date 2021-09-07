@@ -34,6 +34,7 @@ final class ImageSizesEvent extends Event
     public function addSize(string $name, ImageSize $size): self
     {
         $this->sizes[$name] = $size;
+
         return $this;
     }
 }

@@ -19,5 +19,6 @@ interface EditorExtensionBuilderInterface
     public const COMPONENT_TYPE_SIDEBAR = 'sidebar';
 
     public function add(string $child, ?string $formType, array $options = [], ?string $type = null): self;
+
     public function all(): array;
 }

@@ -42,13 +42,14 @@ abstract class AbstractContentEntityRepository extends ServiceEntityRepository
             ->where('c.customType = :customType')
             ->setParameter('customType', $contentType)
             ->setFirstResult($paginationParameters->getStartRow() ?: 0)
-            ->setMaxResults($paginationParameters->getFetchCount() ?: PHP_INT_MAX);
+            ->setMaxResults($paginationParameters->getFetchCount() ?: PHP_INT_MAX)
+        ;
 
         if ($paginationParameters->getStatus()) {
-            $status = explode(',', (string)$paginationParameters->getStatus());
+            $status = explode(',', (string) $paginationParameters->getStatus());
             $deleted = false;
 
-            if (in_array('deleted', $status, true)) {
+            if (\in_array('deleted', $status, true)) {
                 $deleted = true;
                 unset($status[array_search('deleted', $status, true)]);
             }
@@ -56,7 +57,8 @@ abstract class AbstractContentEntityRepository extends ServiceEntityRepository
             if (!empty($status)) {
                 $queryBuilder
                     ->andWhere('c.status IN (:status)')
-                    ->setParameter('status', $status);
+                    ->setParameter('status', $status)
+                ;
             }
 
             if ($deleted) {
@@ -76,10 +78,12 @@ abstract class AbstractContentEntityRepository extends ServiceEntityRepository
                         $paginationParameters->getTerms(),
                         static function ($array, Term $term) {
                             $array[] = $term->getId();
+
                             return $array;
                         }
                     )
-                );
+                )
+            ;
         }
 
         if ($paginationParameters->getFilter()) {
@@ -91,7 +95,8 @@ abstract class AbstractContentEntityRepository extends ServiceEntityRepository
 
             $queryBuilder
                 ->andWhere($or)
-                ->setParameter('filter', '%' . trim((string)$paginationParameters->getFilter()) . '%');
+                ->setParameter('filter', '%' . trim((string) $paginationParameters->getFilter()) . '%')
+            ;
         }
 
         if ($paginationParameters->getOrderBy()) {
@@ -117,7 +122,8 @@ abstract class AbstractContentEntityRepository extends ServiceEntityRepository
             ->orderBy('c.title', 'asc')
             ->setParameter('customType', $contentType)
             ->setFirstResult($startRow)
-            ->setMaxResults($fetchCount);
+            ->setMaxResults($fetchCount)
+        ;
     }
 
     public function removeCollection(array $ids): void
@@ -131,32 +137,6 @@ abstract class AbstractContentEntityRepository extends ServiceEntityRepository
         foreach ($entities as $entity) {
             $this->removeEntity($entity);
         }
-    }
-
-    private function removeEntity(ContentEntity $entity): void
-    {
-        if ($entity->getDeletedAt() !== null) {
-            foreach ($entity->getContentEntityTerms() as $contentEntityTerm) {
-                $this->_em->remove($contentEntityTerm);
-            }
-
-            foreach ($entity->getComments() as $comment) {
-                $this->_em->remove($comment);
-            }
-
-            $relationships = $this->_em->getRepository(ContentEntityRelationship::class)->createQueryBuilder('r')
-                ->where('r.parent = :id')
-                ->orWhere('r.child = :id')
-                ->setParameter('id', $entity->getId())
-                ->getQuery()
-                ->getResult();
-
-            foreach ($relationships as $relationship) {
-                $this->_em->remove($relationship);
-            }
-        }
-
-        $this->_em->remove($entity);
     }
 
     public function restoreCollection(array $ids): void
@@ -183,7 +163,8 @@ abstract class AbstractContentEntityRepository extends ServiceEntityRepository
             ->andWhere('c.customType = :type')
             ->setParameter('type', $type)
             ->getQuery()
-            ->toIterable();
+            ->toIterable()
+        ;
 
         $counter = 0;
 
@@ -208,5 +189,32 @@ abstract class AbstractContentEntityRepository extends ServiceEntityRepository
         ]);
 
         return $relationship ? $relationship->getChild() : null;
+    }
+
+    private function removeEntity(ContentEntity $entity): void
+    {
+        if ($entity->getDeletedAt() !== null) {
+            foreach ($entity->getContentEntityTerms() as $contentEntityTerm) {
+                $this->_em->remove($contentEntityTerm);
+            }
+
+            foreach ($entity->getComments() as $comment) {
+                $this->_em->remove($comment);
+            }
+
+            $relationships = $this->_em->getRepository(ContentEntityRelationship::class)->createQueryBuilder('r')
+                ->where('r.parent = :id')
+                ->orWhere('r.child = :id')
+                ->setParameter('id', $entity->getId())
+                ->getQuery()
+                ->getResult()
+            ;
+
+            foreach ($relationships as $relationship) {
+                $this->_em->remove($relationship);
+            }
+        }
+
+        $this->_em->remove($entity);
     }
 }

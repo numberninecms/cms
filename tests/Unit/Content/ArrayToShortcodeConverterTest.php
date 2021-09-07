@@ -16,11 +16,15 @@ namespace NumberNine\Tests\Unit\Content;
 use NumberNine\Content\ArrayToShortcodeConverter;
 use NumberNine\Tests\DotEnvAwareWebTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class ArrayToShortcodeConverterTest extends DotEnvAwareWebTestCase
 {
     private ArrayToShortcodeConverter $arrayToShortcodeConverter;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->client->request('GET', '/');
@@ -47,7 +51,7 @@ final class ArrayToShortcodeConverterTest extends DotEnvAwareWebTestCase
             ],
         ]);
 
-        $this->assertEquals(
+        static::assertSame(
             '[my_shortcode margin="0px" padding="0" color="light" integer_zero="0" ' .
             'camelCase="ok" snake_case="ok"]Some content[/my_shortcode]',
             $shortcode

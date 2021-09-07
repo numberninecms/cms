@@ -20,6 +20,7 @@ interface DataTransformerInterface
 
     /**
      * @param mixed $object
+     *
      * @return mixed
      */
     public function transform($object);

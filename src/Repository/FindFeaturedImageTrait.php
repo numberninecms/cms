@@ -27,7 +27,7 @@ trait FindFeaturedImageTrait
             throw new InvalidFeaturedImageEntityException($entity);
         }
 
-        /** @var ?MediaFile $entity */
+        // @var ?MediaFile $entity
         return $entity;
     }
 }

@@ -43,6 +43,7 @@ class Taxonomy
 
     /**
      * @ORM\OneToMany(targetEntity="NumberNine\Entity\Term", mappedBy="taxonomy", orphanRemoval=true)
+     *
      * @var Collection|Term[]
      */
     private Collection $terms;

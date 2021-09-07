@@ -13,5 +13,4 @@ namespace NumberNine\Command;
 
 interface RouteAwareCommandInterface
 {
-
 }

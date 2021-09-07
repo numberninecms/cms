@@ -11,6 +11,7 @@
 
 namespace NumberNine\Controller\Admin\Ui\ContentEntity;
 
+use Exception;
 use NumberNine\Content\ContentService;
 use NumberNine\Form\Admin\Content\AdminContentEntityIndexFormType;
 use NumberNine\Model\Admin\AdminController;
@@ -24,7 +25,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/{type}/', name: 'numbernine_admin_content_entity_index', methods: ['GET', 'POST'], priority: '-1000')]
+#[Route(path: '/{type}/', name: 'numbernine_admin_content_entity_index', methods: [
+    'GET',
+    'POST',
+], priority: '-1000')]
 final class ContentEntityIndexAction extends AbstractController implements AdminController
 {
     public function __invoke(
@@ -57,7 +61,7 @@ final class ContentEntityIndexAction extends AbstractController implements Admin
 
         if ($form->isSubmitted() && $form->isValid()) {
             $checkedIds = array_map(
-                fn ($name): int => (int)str_replace('entity_', '', $name),
+                fn ($name): int => (int) str_replace('entity_', '', $name),
                 array_keys(array_filter($form->getData()))
             );
 
@@ -66,7 +70,7 @@ final class ContentEntityIndexAction extends AbstractController implements Admin
                     $contentService->restoreEntitiesOfType($contentType->getName(), $checkedIds);
                     $this->addFlash('success', sprintf(
                         '%s have been successfully restored.',
-                        ucfirst((string)$contentType->getLabels()->getPluralName()),
+                        ucfirst((string) $contentType->getLabels()->getPluralName()),
                     ));
                 } else {
                     $contentService->deleteEntitiesOfType($contentType->getName(), $checkedIds);
@@ -74,12 +78,12 @@ final class ContentEntityIndexAction extends AbstractController implements Admin
                     if ($isTrash) {
                         $this->addFlash('success', sprintf(
                             '%s have been permanently deleted.',
-                            ucfirst((string)$contentType->getLabels()->getPluralName()),
+                            ucfirst((string) $contentType->getLabels()->getPluralName()),
                         ));
                     } else {
                         $this->addFlash('success', sprintf(
                             '%s have been deleted and placed in trash.',
-                            ucfirst((string)$contentType->getLabels()->getPluralName()),
+                            ucfirst((string) $contentType->getLabels()->getPluralName()),
                         ));
                     }
                 }
@@ -88,7 +92,7 @@ final class ContentEntityIndexAction extends AbstractController implements Admin
                     ['type' => $type],
                     $request->query->all(),
                 ), Response::HTTP_SEE_OTHER);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $logger->error($e->getMessage());
                 $this->addFlash('error', 'An unknown error occured.');
             }

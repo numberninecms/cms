@@ -16,8 +16,7 @@ use NumberNine\Entity\ContentEntity;
 use NumberNine\Model\Content\ContentType;
 
 /**
- * Class InvalidContentTypeException
- * @package NumberNine\Exception
+ * Class InvalidContentTypeException.
  */
 final class InvalidContentTypeException extends LogicException
 {

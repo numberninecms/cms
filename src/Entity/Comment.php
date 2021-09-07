@@ -18,7 +18,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use NumberNine\Model\Content\Features\AuthorTrait;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -29,6 +28,12 @@ class Comment
     use AuthorTrait;
     use SoftDeleteableEntity;
     use TimestampableEntity;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="NumberNine\Entity\User", inversedBy="comments")
+     * @Groups("author_get")
+     */
+    protected ?User $author = null;
 
     /**
      * @ORM\Id()
@@ -73,12 +78,6 @@ class Comment
     private ?ContentEntity $contentEntity;
 
     /**
-     * @ORM\ManyToOne(targetEntity="NumberNine\Entity\User", inversedBy="comments")
-     * @Groups("author_get")
-     */
-    protected ?User $author = null;
-
-    /**
      * Comment constructor.
      */
     public function __construct()
@@ -111,6 +110,7 @@ class Comment
     public function setGuestAuthorName(?string $guestAuthorName): self
     {
         $this->guestAuthorName = $guestAuthorName;
+
         return $this;
     }
 
@@ -122,6 +122,7 @@ class Comment
     public function setGuestAuthorEmail(?string $guestAuthorEmail): self
     {
         $this->guestAuthorEmail = $guestAuthorEmail;
+
         return $this;
     }
 
@@ -133,15 +134,16 @@ class Comment
     public function setGuestAuthorUrl(?string $guestAuthorUrl): self
     {
         $this->guestAuthorUrl = $guestAuthorUrl;
+
         return $this;
     }
 
-    public function getParent(): ?Comment
+    public function getParent(): ?self
     {
         return $this->parent;
     }
 
-    public function setParent(?Comment $parent): self
+    public function setParent(?self $parent): self
     {
         $this->parent = $parent;
 
@@ -171,19 +173,20 @@ class Comment
     public function setContentEntity(?ContentEntity $contentEntity): self
     {
         $this->contentEntity = $contentEntity;
+
         return $this;
     }
 
     public function getAuthorName(): string
     {
-        return (string)($this->getAuthor() instanceof User
+        return (string) ($this->getAuthor() instanceof User
             ? $this->getAuthor()->getDisplayName()
             : $this->getGuestAuthorName());
     }
 
     public function getAuthorEmail(): string
     {
-        return (string)($this->getAuthor() instanceof User
+        return (string) ($this->getAuthor() instanceof User
             ? $this->getAuthor()->getEmail()
             : $this->getGuestAuthorEmail());
     }

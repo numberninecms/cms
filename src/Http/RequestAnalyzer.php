@@ -39,6 +39,7 @@ final class RequestAnalyzer
         }
 
         $route = $this->request->attributes->get('_route');
-        return in_array($route, ['numbernine_homepage', 'numbernine_homepage_page']);
+
+        return \in_array($route, ['numbernine_homepage', 'numbernine_homepage_page'], true);
     }
 }

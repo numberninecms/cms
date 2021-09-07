@@ -12,6 +12,7 @@
 namespace NumberNine\Entity;
 
 use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -50,6 +51,27 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
     use TimestampableEntity;
 
     /**
+     * @Gedmo\Slug(fields={"title"}, updatable=false)
+     * @ORM\Column(type="string", unique=true)
+     * @Groups({"content_entity_get", "content_entity_get_full"})
+     * @Gedmo\Versioned
+     */
+    protected ?string $slug = null;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     * @Groups({"content_entity_get", "content_entity_get_full"})
+     */
+    protected $createdAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="NumberNine\Entity\User", inversedBy="contentEntities")
+     * @Groups({"author_get", "content_entity_get_full"})
+     */
+    protected ?User $author = null;
+
+    /**
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(type="integer")
@@ -66,22 +88,6 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
      * @ORM\Column(type="integer", nullable=true)
      */
     private ?int $menuOrder = null;
-
-    /**
-     * @Gedmo\Slug(fields={"title"}, updatable=false)
-     * @ORM\Column(type="string", unique=true)
-     * @Groups({"content_entity_get", "content_entity_get_full"})
-     * @Gedmo\Versioned
-     */
-    protected ?string $slug = null;
-
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     * @Groups({"content_entity_get", "content_entity_get_full"})
-     * @var DateTime|null
-     */
-    protected $createdAt;
 
     /**
      * @Gedmo\Timestampable(on="change", field="status", value="publish")
@@ -113,12 +119,6 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
      */
     private Collection $parents;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="NumberNine\Entity\User", inversedBy="contentEntities")
-     * @Groups({"author_get", "content_entity_get_full"})
-     */
-    protected ?User $author = null;
-
     public function __construct()
     {
         $this->contentEntityTerms = new ArrayCollection();
@@ -127,7 +127,6 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
         $this->parents = new ArrayCollection();
         $this->setCommentStatus(self::COMMENT_STATUS_OPEN);
     }
-
 
     public function getId(): ?int
     {
@@ -163,18 +162,20 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
         return $this->slug;
     }
 
-    public function setSlug(string $slug): ContentEntity
+    public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
         return $this;
     }
 
     /**
-     * Get terms sorted by their position
+     * Get terms sorted by their position.
+     *
      * @return Term[]
      * @Groups({"content_entity_get", "content_entity_get_full"})
      */
-    public function getTerms(\NumberNine\Entity\Taxonomy|string|null $taxonomy = null): array
+    public function getTerms(Taxonomy|string|null $taxonomy = null): array
     {
         $sorted = $this->contentEntityTerms->toArray();
         usort(
@@ -185,12 +186,9 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
         );
 
         /** @var Term[] $terms */
-        $terms = array_map(
-            static function (ContentEntityTerm $item): ?\NumberNine\Entity\Term {
-                return $item->getTerm();
-            },
-            $sorted
-        );
+        $terms = array_map(static function (ContentEntityTerm $item): ?Term {
+            return $item->getTerm();
+        }, $sorted);
 
         if (!$taxonomy) {
             return $terms;
@@ -314,6 +312,7 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
     public function setPublishedAt(?DateTime $publishedAt): self
     {
         $this->publishedAt = $publishedAt;
+
         return $this;
     }
 }

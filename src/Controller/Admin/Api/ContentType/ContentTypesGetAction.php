@@ -11,14 +11,16 @@
 
 namespace NumberNine\Controller\Admin\Api\ContentType;
 
-use NumberNine\Model\Admin\AdminController;
 use NumberNine\Content\ContentService;
 use NumberNine\Http\ResponseFactory;
+use NumberNine\Model\Admin\AdminController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'content-types/', name: 'numbernine_admin_contenttypes_get_collection', options: ['expose' => true], methods: ['GET'])]
+#[Route(path: 'content-types/', name: 'numbernine_admin_contenttypes_get_collection', options: ['expose' => true], methods: [
+    'GET',
+])]
 final class ContentTypesGetAction extends AbstractController implements AdminController
 {
     public function __invoke(ResponseFactory $responseFactory, ContentService $contentService): JsonResponse

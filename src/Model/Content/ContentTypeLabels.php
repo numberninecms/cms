@@ -12,7 +12,6 @@
 namespace NumberNine\Model\Content;
 
 use Symfony\Component\String\Inflector\EnglishInflector;
-
 use function Symfony\Component\String\u;
 
 final class ContentTypeLabels
@@ -40,7 +39,7 @@ final class ContentTypeLabels
     {
         $inflector = new EnglishInflector();
         $singularName = u($singularName)->replace('_', ' ')->lower()->toString();
-        $pluralName = (string)current($inflector->pluralize($singularName));
+        $pluralName = (string) current($inflector->pluralize($singularName));
 
         $this
             ->setSingularName($singularName)
@@ -53,10 +52,11 @@ final class ContentTypeLabels
             ->setViewItem('View ' . $singularName)
             ->setViewItems('View ' . $pluralName)
             ->setSearchItems('Search ' . $pluralName)
-            ->setNotFound("No $pluralName found")
-            ->setNotFoundInTrash("No $pluralName found in trash")
+            ->setNotFound("No {$pluralName} found")
+            ->setNotFoundInTrash("No {$pluralName} found in trash")
             ->setAllItems('All ' . $pluralName)
-            ->setArchives($pluralName . ' archives');
+            ->setArchives($pluralName . ' archives')
+        ;
     }
 
     public function getSingularName(): ?string
@@ -64,9 +64,10 @@ final class ContentTypeLabels
         return $this->singularName;
     }
 
-    public function setSingularName(?string $singularName): ContentTypeLabels
+    public function setSingularName(?string $singularName): self
     {
         $this->singularName = $singularName;
+
         return $this;
     }
 
@@ -75,9 +76,10 @@ final class ContentTypeLabels
         return $this->pluralName;
     }
 
-    public function setPluralName(?string $pluralName): ContentTypeLabels
+    public function setPluralName(?string $pluralName): self
     {
         $this->pluralName = $pluralName;
+
         return $this;
     }
 
@@ -86,9 +88,10 @@ final class ContentTypeLabels
         return $this->menuName;
     }
 
-    public function setMenuName(?string $menuName): ContentTypeLabels
+    public function setMenuName(?string $menuName): self
     {
         $this->menuName = $menuName;
+
         return $this;
     }
 
@@ -97,9 +100,10 @@ final class ContentTypeLabels
         return $this->addNew;
     }
 
-    public function setAddNew(?string $addNew): ContentTypeLabels
+    public function setAddNew(?string $addNew): self
     {
         $this->addNew = $addNew;
+
         return $this;
     }
 
@@ -108,9 +112,10 @@ final class ContentTypeLabels
         return $this->addNewItem;
     }
 
-    public function setAddNewItem(?string $addNewItem): ContentTypeLabels
+    public function setAddNewItem(?string $addNewItem): self
     {
         $this->addNewItem = $addNewItem;
+
         return $this;
     }
 
@@ -119,9 +124,10 @@ final class ContentTypeLabels
         return $this->editItem;
     }
 
-    public function setEditItem(?string $editItem): ContentTypeLabels
+    public function setEditItem(?string $editItem): self
     {
         $this->editItem = $editItem;
+
         return $this;
     }
 
@@ -130,9 +136,10 @@ final class ContentTypeLabels
         return $this->newItem;
     }
 
-    public function setNewItem(?string $newItem): ContentTypeLabels
+    public function setNewItem(?string $newItem): self
     {
         $this->newItem = $newItem;
+
         return $this;
     }
 
@@ -141,9 +148,10 @@ final class ContentTypeLabels
         return $this->viewItem;
     }
 
-    public function setViewItem(?string $viewItem): ContentTypeLabels
+    public function setViewItem(?string $viewItem): self
     {
         $this->viewItem = $viewItem;
+
         return $this;
     }
 
@@ -152,9 +160,10 @@ final class ContentTypeLabels
         return $this->viewItems;
     }
 
-    public function setViewItems(?string $viewItems): ContentTypeLabels
+    public function setViewItems(?string $viewItems): self
     {
         $this->viewItems = $viewItems;
+
         return $this;
     }
 
@@ -163,9 +172,10 @@ final class ContentTypeLabels
         return $this->searchItems;
     }
 
-    public function setSearchItems(?string $searchItems): ContentTypeLabels
+    public function setSearchItems(?string $searchItems): self
     {
         $this->searchItems = $searchItems;
+
         return $this;
     }
 
@@ -174,9 +184,10 @@ final class ContentTypeLabels
         return $this->notFound;
     }
 
-    public function setNotFound(?string $notFound): ContentTypeLabels
+    public function setNotFound(?string $notFound): self
     {
         $this->notFound = $notFound;
+
         return $this;
     }
 
@@ -185,9 +196,10 @@ final class ContentTypeLabels
         return $this->notFoundInTrash;
     }
 
-    public function setNotFoundInTrash(?string $notFoundInTrash): ContentTypeLabels
+    public function setNotFoundInTrash(?string $notFoundInTrash): self
     {
         $this->notFoundInTrash = $notFoundInTrash;
+
         return $this;
     }
 
@@ -196,9 +208,10 @@ final class ContentTypeLabels
         return $this->parentItem;
     }
 
-    public function setParentItem(?string $parentItem): ContentTypeLabels
+    public function setParentItem(?string $parentItem): self
     {
         $this->parentItem = $parentItem;
+
         return $this;
     }
 
@@ -207,9 +220,10 @@ final class ContentTypeLabels
         return $this->allItems;
     }
 
-    public function setAllItems(?string $allItems): ContentTypeLabels
+    public function setAllItems(?string $allItems): self
     {
         $this->allItems = $allItems;
+
         return $this;
     }
 
@@ -218,9 +232,10 @@ final class ContentTypeLabels
         return $this->archives;
     }
 
-    public function setArchives(?string $archives): ContentTypeLabels
+    public function setArchives(?string $archives): self
     {
         $this->archives = $archives;
+
         return $this;
     }
 }

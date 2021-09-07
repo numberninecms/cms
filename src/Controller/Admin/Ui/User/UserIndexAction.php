@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace NumberNine\Controller\Admin\Ui\User;
 
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Exception;
 use NumberNine\Entity\User;
 use NumberNine\Form\Admin\User\AdminUserIndexFormType;
 use NumberNine\Model\Admin\AdminController;
@@ -29,7 +30,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/users/', name: 'numbernine_admin_user_index', methods: ['GET', 'POST'])]
+#[Route(path: '/users/', name: 'numbernine_admin_user_index', methods: ['GET', 'POST'])]
 final class UserIndexAction extends AbstractController implements AdminController
 {
     public function __invoke(
@@ -64,15 +65,16 @@ final class UserIndexAction extends AbstractController implements AdminControlle
             $this->denyAccessUnlessGranted(Capabilities::DELETE_USERS);
 
             $checkedIds = array_map(
-                fn ($name): int => (int)str_replace('user_', '', $name),
+                fn ($name): int => (int) str_replace('user_', '', $name),
                 array_keys(array_filter($form->getData()))
             );
 
             /** @var User $user */
             $user = $this->getUser();
 
-            if (in_array($user->getId(), $checkedIds)) {
+            if (\in_array($user->getId(), $checkedIds, true)) {
                 $this->addFlash('error', "You can't delete yourself.");
+
                 return $this->redirectToRoute('numbernine_admin_user_index', [], Response::HTTP_SEE_OTHER);
             }
 
@@ -81,7 +83,7 @@ final class UserIndexAction extends AbstractController implements AdminControlle
                 $this->addFlash('success', 'Users have been deleted successfully.');
 
                 return $this->redirectToRoute('numbernine_admin_user_index', [], Response::HTTP_SEE_OTHER);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $logger->error($e->getMessage());
                 $this->addFlash('error', 'An unknown error occured.');
             }
@@ -90,7 +92,7 @@ final class UserIndexAction extends AbstractController implements AdminControlle
         $postCounts = [];
 
         foreach ($users as $user) {
-            /** @var User $user */
+            // @var User $user
             $postCounts[$user->getId()] = $postRepository->count(['author' => $user->getId()]);
         }
 

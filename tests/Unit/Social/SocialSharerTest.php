@@ -15,18 +15,22 @@ use InvalidArgumentException;
 use NumberNine\Social\SocialSharer;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class SocialSharerTest extends TestCase
 {
     private SocialSharer $socialSharer;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->socialSharer = new SocialSharer();
     }
 
     public function testFacebookShareLink(): void
     {
-        self::assertEquals(
+        static::assertSame(
             'https://www.facebook.com/sharer.php?u=https://www.google.com',
             $this->socialSharer->getFacebookShareLink('https://www.google.com')
         );
@@ -37,7 +41,7 @@ final class SocialSharerTest extends TestCase
 
     public function testTwitterShareLink(): void
     {
-        self::assertEquals(
+        static::assertSame(
             'https://twitter.com/intent/tweet?url=https://www.google.com',
             $this->socialSharer->getTwitterShareLink('https://www.google.com')
         );
@@ -48,7 +52,7 @@ final class SocialSharerTest extends TestCase
 
     public function testPinterestShareLink(): void
     {
-        self::assertEquals(
+        static::assertSame(
             'http://pinterest.com/pin/create/button/?url=https://www.google.com',
             $this->socialSharer->getPinterestShareLink('https://www.google.com')
         );
@@ -59,7 +63,7 @@ final class SocialSharerTest extends TestCase
 
     public function testLinkedInShareLink(): void
     {
-        self::assertEquals(
+        static::assertSame(
             'https://www.linkedin.com/shareArticle?mini=true&url=https://www.google.com',
             $this->socialSharer->getLinkedInShareLink('https://www.google.com')
         );
@@ -70,7 +74,7 @@ final class SocialSharerTest extends TestCase
 
     public function testEmailShareLink(): void
     {
-        self::assertEquals(
+        static::assertSame(
             'mailto:enteryour@addresshere.com?subject=Some%20subject%20line&body=Check%20this%20out:%20' .
             'https://www.google.com',
             $this->socialSharer->getEmailShareLink('Some subject line', 'https://www.google.com')

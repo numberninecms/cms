@@ -17,6 +17,10 @@ use NumberNine\Shortcode\TitleShortcode;
 use NumberNine\Tests\ShortcodeTestCase;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class TitleShortcodeTest extends ShortcodeTestCase
 {
     protected const SHORTCODE = TitleShortcode::class;
@@ -25,7 +29,7 @@ final class TitleShortcodeTest extends ShortcodeTestCase
     {
         $parameters = $this->processParameters([]);
 
-        self::assertEquals([
+        static::assertSame([
             'tag' => 'h2',
             'color' => null,
             'style' => 'center',
@@ -38,17 +42,17 @@ final class TitleShortcodeTest extends ShortcodeTestCase
     public function testContentOverridesDefaultText(): void
     {
         $parameters = $this->processParameters(['content' => 'Sample content']);
-        self::assertEquals('Sample content', $parameters['text']);
+        static::assertSame('Sample content', $parameters['text']);
     }
 
     public function testCustomTextOverridesContent(): void
     {
         $parameters = $this->processParameters([
             'content' => 'Sample content',
-            'text' => 'This should override content'
+            'text' => 'This should override content',
         ]);
 
-        self::assertEquals('This should override content', $parameters['text']);
+        static::assertSame('This should override content', $parameters['text']);
     }
 
     public function testTag(): void
@@ -90,36 +94,36 @@ final class TitleShortcodeTest extends ShortcodeTestCase
     public function testMarginWithSingleValue(): void
     {
         $parameters = $this->processParameters(['margin' => '10px']);
-        self::assertEquals('10px', $parameters['margin']);
+        static::assertSame('10px', $parameters['margin']);
     }
 
     public function testMarginWithTwoValues(): void
     {
         $parameters = $this->processParameters(['margin' => '10px auto']);
-        self::assertEquals('10px auto', $parameters['margin']);
+        static::assertSame('10px auto', $parameters['margin']);
     }
 
     public function testMarginWithThreeValues(): void
     {
         $parameters = $this->processParameters(['margin' => '10px auto 13rem']);
-        self::assertEquals('10px auto 13rem', $parameters['margin']);
+        static::assertSame('10px auto 13rem', $parameters['margin']);
     }
 
     public function testMarginWithFourValues(): void
     {
         $parameters = $this->processParameters(['margin' => '10px auto 13rem 0']);
-        self::assertEquals('10px auto 13rem 0', $parameters['margin']);
+        static::assertSame('10px auto 13rem 0', $parameters['margin']);
     }
 
     public function testMarginWithFiveValues(): void
     {
         $parameters = $this->processParameters(['margin' => '10px auto 13rem 0 25px']);
-        self::assertEquals('30px 0', $parameters['margin']);
+        static::assertSame('30px 0', $parameters['margin']);
     }
 
     public function testMarginWithInvalidValue(): void
     {
         $parameters = $this->processParameters(['margin' => 'invalid']);
-        self::assertEquals('30px 0', $parameters['margin']);
+        static::assertSame('30px 0', $parameters['margin']);
     }
 }

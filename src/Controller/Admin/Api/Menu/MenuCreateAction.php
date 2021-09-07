@@ -13,14 +13,16 @@ namespace NumberNine\Controller\Admin\Api\Menu;
 
 use Doctrine\ORM\EntityManagerInterface;
 use NumberNine\Entity\Menu;
-use NumberNine\Model\Admin\AdminController;
 use NumberNine\Http\ResponseFactory;
+use NumberNine\Model\Admin\AdminController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/menus/', name: 'numbernine_admin_menus_post_item', options: ['expose' => true], methods: ['POST'])]
+#[Route(path: '/menus/', name: 'numbernine_admin_menus_post_item', options: ['expose' => true], methods: [
+    'POST',
+])]
 final class MenuCreateAction implements AdminController
 {
     public function __invoke(
@@ -34,7 +36,7 @@ final class MenuCreateAction implements AdminController
             throw new BadRequestHttpException('Menu name not specified.');
         }
 
-        $menu = (new Menu())->setName((string)$name);
+        $menu = (new Menu())->setName((string) $name);
         $entityManager->persist($menu);
         $entityManager->flush();
 

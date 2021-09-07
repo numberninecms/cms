@@ -26,7 +26,7 @@ class AccessDeniedEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            ExceptionEvent::class => 'handleAccessDenied'
+            ExceptionEvent::class => 'handleAccessDenied',
         ];
     }
 

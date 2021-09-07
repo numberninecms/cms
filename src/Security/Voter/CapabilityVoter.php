@@ -25,8 +25,8 @@ final class CapabilityVoter implements VoterInterface
 
     public function __construct(iterable $capabilities)
     {
-        $capabilityNames = array_map(fn(CapabilityInterface $c): string => $c->getName(), [...$capabilities]);
-        $this->capabilities = (array)array_combine($capabilityNames, [...$capabilities]);
+        $capabilityNames = array_map(fn (CapabilityInterface $c): string => $c->getName(), [...$capabilities]);
+        $this->capabilities = (array) array_combine($capabilityNames, [...$capabilities]);
     }
 
     public function vote(TokenInterface $token, $subject, array $attributes): int
@@ -40,19 +40,19 @@ final class CapabilityVoter implements VoterInterface
         }
 
         $userCapabilities = array_merge(...array_map(
-            fn(UserRole $role): array => $role->getCapabilities(),
+            fn (UserRole $role): array => $role->getCapabilities(),
             $user->getUserRoles()->toArray()
         ));
 
         foreach ($attributes as $attribute) {
             $result = self::ACCESS_DENIED;
 
-            if (in_array($attribute, $userCapabilities, true)) {
+            if (\in_array($attribute, $userCapabilities, true)) {
                 if ($attribute === Capabilities::READ) { // handled by another ReaderVoter
                     continue;
                 }
 
-                if (array_key_exists($attribute, $this->capabilities)) {
+                if (\array_key_exists($attribute, $this->capabilities)) {
                     return $this->capabilities[$attribute]->handle($subject, $user);
                 }
 

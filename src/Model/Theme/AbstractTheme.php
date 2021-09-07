@@ -31,6 +31,7 @@ abstract class AbstractTheme implements ThemeInterface
     public function setName(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -42,6 +43,7 @@ abstract class AbstractTheme implements ThemeInterface
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
         return $this;
     }
 
@@ -53,6 +55,7 @@ abstract class AbstractTheme implements ThemeInterface
     public function setParent(ThemeInterface $parent): self
     {
         $this->parent = $parent;
+
         return $this;
     }
 
@@ -64,6 +67,7 @@ abstract class AbstractTheme implements ThemeInterface
     public function setThemeOptions(ThemeOptions $options): self
     {
         $this->options = $options;
+
         return $this;
     }
 
@@ -75,6 +79,7 @@ abstract class AbstractTheme implements ThemeInterface
     public function setConfiguration(array $configuration): self
     {
         $this->config = $configuration;
+
         return $this;
     }
 
@@ -96,12 +101,13 @@ abstract class AbstractTheme implements ThemeInterface
     final public function getRootPath(): string
     {
         $reflection = new ReflectionClass($this);
-        return dirname((string)$reflection->getFileName()) . DIRECTORY_SEPARATOR;
+
+        return \dirname((string) $reflection->getFileName()) . \DIRECTORY_SEPARATOR;
     }
 
     public function getTranslationPath(): string
     {
-        return $this->getRootPath() . 'Resources' . DIRECTORY_SEPARATOR . 'translations' . DIRECTORY_SEPARATOR;
+        return $this->getRootPath() . 'Resources' . \DIRECTORY_SEPARATOR . 'translations' . \DIRECTORY_SEPARATOR;
     }
 
     public function getTranslationDomain(): string
@@ -111,7 +117,7 @@ abstract class AbstractTheme implements ThemeInterface
 
     public function getTemplatePath(): string
     {
-        return $this->getRootPath() . 'Resources' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR;
+        return $this->getRootPath() . 'Resources' . \DIRECTORY_SEPARATOR . 'views' . \DIRECTORY_SEPARATOR;
     }
 
     final public function getFilePath(string $relativeFilename): string
@@ -121,7 +127,7 @@ abstract class AbstractTheme implements ThemeInterface
 
     public function getComponentPath(): string
     {
-        return $this->getRootPath() . 'Component' . DIRECTORY_SEPARATOR;
+        return $this->getRootPath() . 'Component' . \DIRECTORY_SEPARATOR;
     }
 
     public function getComponentNamespace(): string
@@ -135,7 +141,7 @@ abstract class AbstractTheme implements ThemeInterface
 
     public function getShortcodePath(): string
     {
-        return $this->getRootPath() . 'Shortcode' . DIRECTORY_SEPARATOR;
+        return $this->getRootPath() . 'Shortcode' . \DIRECTORY_SEPARATOR;
     }
 
     public function getShortcodeNamespace(): string

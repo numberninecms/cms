@@ -2,8 +2,9 @@
 
 namespace NumberNine\Entity;
 
-use NumberNine\Repository\ResetPasswordRequestRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use NumberNine\Repository\ResetPasswordRequestRepository;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestTrait;
 
@@ -21,12 +22,15 @@ class ResetPasswordRequest implements ResetPasswordRequestInterface
      */
     private int $id;
 
-    public function __construct(/**
+    public function __construct(/*
      * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private User $user, \DateTimeInterface $expiresAt, string $selector, string $hashedToken)
-    {
+    private User $user,
+        DateTimeInterface $expiresAt,
+        string $selector,
+        string $hashedToken
+    ) {
         $this->initialize($expiresAt, $selector, $hashedToken);
     }
 

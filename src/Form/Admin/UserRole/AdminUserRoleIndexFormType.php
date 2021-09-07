@@ -28,7 +28,7 @@ final class AdminUserRoleIndexFormType extends AbstractType
     {
         /** @var UserRole $role */
         foreach ($options['roles'] as $role) {
-            if (!in_array($role->getName(), $options['built_in_roles'])) {
+            if (!\in_array($role->getName(), $options['built_in_roles'], true)) {
                 $key = sprintf('delete_%d', $role->getId());
                 $builder->add($key, SubmitType::class, ['attr' => ['value' => $key]]);
             }
@@ -64,7 +64,7 @@ final class AdminUserRoleIndexFormType extends AbstractType
         foreach ($roles as $role) {
             foreach ($capabilities as $capability) {
                 $key = sprintf('cap_%d_%s', $role->getId(), $capability);
-                $data[$key] = in_array($capability, $role->getCapabilities());
+                $data[$key] = \in_array($capability, $role->getCapabilities(), true);
             }
         }
 

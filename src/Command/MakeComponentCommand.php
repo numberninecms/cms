@@ -35,7 +35,8 @@ final class MakeComponentCommand extends Command
             ->setHelp(
                 'This command allows you to create a component in the current theme, or in the theme your choose.'
             )
-            ->addArgument('component-name', InputArgument::OPTIONAL, 'Component name');
+            ->addArgument('component-name', InputArgument::OPTIONAL, 'Component name')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -54,7 +55,7 @@ final class MakeComponentCommand extends Command
         try {
             $path = $this->componentsPath;
             $componentPath = $path . $componentName . '/';
-            $relativeComponentPath = substr($componentPath, (int)strpos($componentPath, 'src/'));
+            $relativeComponentPath = substr($componentPath, (int) strpos($componentPath, 'src/'));
             $namespace = trim('App\\' . str_replace(
                 [$this->projectPath . '/src/', '//', '/'],
                 ['', '/', '\\'],
@@ -62,7 +63,7 @@ final class MakeComponentCommand extends Command
             ), '\\');
 
             if (!mkdir($componentPath, 0755, true) && !is_dir($componentPath)) {
-                throw new RuntimeException("Unable to create directory $componentPath.");
+                throw new RuntimeException("Unable to create directory {$componentPath}.");
             }
 
             $componentBasename = basename($componentName);
@@ -75,16 +76,16 @@ final class MakeComponentCommand extends Command
 
 declare(strict_types=1);
 
-namespace $namespace;
+namespace {$namespace};
 
-use NumberNine\Model\Component\ComponentInterface;
+use NumberNine\\Model\\Component\\ComponentInterface;
 
-final class $componentBasename implements ComponentInterface
+final class {$componentBasename} implements ComponentInterface
 {
     public function getTemplateParameters(): array
     {
         return [
-            'name' => '$componentBasename',
+            'name' => '{$componentBasename}',
         ];
     }
 }
@@ -93,7 +94,7 @@ COMPONENT
 
             file_put_contents(
                 $componentPath . 'template.html.twig',
-                <<<TEMPLATE
+                <<<'TEMPLATE'
 <p>I'm a component. My name is {{ name }}.</p>
 TEMPLATE
             );
@@ -104,13 +105,13 @@ TEMPLATE
             return Command::FAILURE;
         }
 
-        $io->success("Component $componentName has been created.");
-        $io->writeln("<info>$relativeComponentPath$componentClassFilename</info>");
+        $io->success("Component {$componentName} has been created.");
+        $io->writeln("<info>{$relativeComponentPath}{$componentClassFilename}</info>");
         $io->writeln("<info>{$relativeComponentPath}template.html.twig</info>");
         $io->newLine();
         $componentName = str_replace('\\', '/', $componentName);
         $io->writeln('Use it in your template with the following twig command: ' .
-            "<comment>{{ N9_component('$componentName') }}</comment>");
+            "<comment>{{ N9_component('{$componentName}') }}</comment>");
         $io->newLine();
 
         return Command::SUCCESS;

@@ -16,6 +16,10 @@ namespace NumberNine\Tests\Unit\Shortcode;
 use NumberNine\Shortcode\BannerShortcode;
 use NumberNine\Tests\ShortcodeTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class BannerShortcodeTest extends ShortcodeTestCase
 {
     protected const SHORTCODE = BannerShortcode::class;
@@ -24,7 +28,7 @@ final class BannerShortcodeTest extends ShortcodeTestCase
     {
         $parameters = $this->processParameters([]);
 
-        self::assertEquals([
+        static::assertSame([
             'content' => '',
         ], $parameters);
     }
@@ -33,7 +37,7 @@ final class BannerShortcodeTest extends ShortcodeTestCase
     {
         $parameters = $this->processParameters(['content' => 'Sample content']);
 
-        self::assertEquals([
+        static::assertSame([
             'content' => 'Sample content',
         ], $parameters);
     }
@@ -42,7 +46,7 @@ final class BannerShortcodeTest extends ShortcodeTestCase
     {
         $parameters = $this->processParameters(['random' => 'nonexistent']);
 
-        self::assertEquals([
+        static::assertSame([
             'content' => '',
         ], $parameters);
     }

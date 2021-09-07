@@ -34,13 +34,13 @@ final class DividerShortcode extends AbstractShortcode implements EditableShortc
                 'label' => 'Width',
                 'min' => 30,
                 'max' => 200,
-                'suffix' => 'px'
+                'suffix' => 'px',
             ])
             ->add('height', SliderInputControl::class, [
                 'label' => 'Height',
                 'min' => 1,
                 'max' => 10,
-                'suffix' => 'px'
+                'suffix' => 'px',
             ])
             ->add('margin', BordersControl::class, ['borders' => ['top', 'bottom']])
             ->add('color', ColorControl::class, ['label' => 'Color'])

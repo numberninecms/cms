@@ -11,10 +11,8 @@
 
 namespace NumberNine\Model\Content\Features;
 
-use ArrayAccess;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 use NumberNine\Entity\Comment;
 use Traversable;
 
@@ -27,6 +25,7 @@ trait CommentsTrait
 
     /**
      * @ORM\OneToMany(targetEntity="NumberNine\Entity\Comment", mappedBy="contentEntity")
+     *
      * @var Collection|Comment[]
      */
     private Collection $comments;

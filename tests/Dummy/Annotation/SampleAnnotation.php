@@ -14,15 +14,15 @@ declare(strict_types=1);
 namespace NumberNine\Tests\Dummy\Annotation;
 
 use Doctrine\Common\Annotations\Annotation;
-use Doctrine\Common\Annotations\Annotation\Attributes;
 use Doctrine\Common\Annotations\Annotation\Attribute;
+use Doctrine\Common\Annotations\Annotation\Attributes;
 
 /**
  * @Annotation
  * @Target({"CLASS", "PROPERTY", "METHOD"})
  * @Attributes({
- *      @Attribute("name", type="string"),
- *      @Attribute("value", type="float")
+ *     @Attribute("name", type="string"),
+ *     @Attribute("value", type="float")
  * })
  */
 final class SampleAnnotation

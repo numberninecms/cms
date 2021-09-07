@@ -16,6 +16,10 @@ namespace NumberNine\Tests\Unit\Shortcode;
 use NumberNine\Shortcode\MenuShortcode;
 use NumberNine\Tests\ShortcodeTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class MenuShortcodeTest extends ShortcodeTestCase
 {
     protected const SHORTCODE = MenuShortcode::class;
@@ -24,7 +28,7 @@ final class MenuShortcodeTest extends ShortcodeTestCase
     {
         $parameters = $this->processParameters([]);
 
-        self::assertEquals([
+        static::assertSame([
             'menuItems' => [],
             'style' => null,
         ], $parameters);
@@ -34,7 +38,7 @@ final class MenuShortcodeTest extends ShortcodeTestCase
     {
         $parameters = $this->processParameters(['random' => 'nonexistent']);
 
-        self::assertEquals([
+        static::assertSame([
             'menuItems' => [],
             'style' => null,
         ], $parameters);
@@ -44,7 +48,7 @@ final class MenuShortcodeTest extends ShortcodeTestCase
     {
         $parameters = $this->processParameters(['id' => 123]);
 
-        self::assertEquals([
+        static::assertSame([
             'menuItems' => [],
             'style' => null,
         ], $parameters);

@@ -38,7 +38,7 @@ final class SampleShortcode extends AbstractShortcode implements EditableShortco
         $resolver->setAllowedTypes('height', ['int', 'float', 'string']);
 
         $resolver->setNormalizer('height', static function (Options $options, $value): int|float {
-            return is_numeric($value) ? (float)$value : 30;
+            return is_numeric($value) ? (float) $value : 30;
         });
     }
 

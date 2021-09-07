@@ -38,7 +38,7 @@ final class HiddenCustomFieldsEvent extends Event
 
     public function addFieldToHide(string $fieldName): self
     {
-        if (!in_array($fieldName, $this->fieldsToHide)) {
+        if (!\in_array($fieldName, $this->fieldsToHide, true)) {
             $this->fieldsToHide[] = $fieldName;
         }
 

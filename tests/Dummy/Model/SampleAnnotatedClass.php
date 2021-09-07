@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Dummy\Model;
 
-use NumberNine\Tests\Dummy\Annotation\SampleAnnotation;
 use NumberNine\Tests\Dummy\Annotation\AnotherSampleAnnotation;
+use NumberNine\Tests\Dummy\Annotation\SampleAnnotation;
 use NumberNine\Tests\Dummy\Attribute\AnotherSampleAttribute;
 use NumberNine\Tests\Dummy\Attribute\SampleAttribute;
 
@@ -38,6 +38,7 @@ final class SampleAnnotatedClass
      * @SampleAnnotation(name="Sample method annotation", value=15.3)
      */
     #[SampleAttribute(name: 'Sample method attribute', value: 7.6)]
-    public function sampleMethod(): void {
+    public function sampleMethod(): void
+    {
     }
 }

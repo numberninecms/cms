@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace NumberNine\Exception;
 
-final class ThemeEventNotFoundException extends \LogicException
+use LogicException;
+
+final class ThemeEventNotFoundException extends LogicException
 {
     public function __construct(string $eventName)
     {

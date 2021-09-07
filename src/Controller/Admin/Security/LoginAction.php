@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/login', name: 'numbernine_login')]
+#[Route(path: '/login', name: 'numbernine_login')]
 final class LoginAction extends AbstractController
 {
     public function __invoke(AuthenticationUtils $authenticationUtils): Response

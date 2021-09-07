@@ -11,13 +11,13 @@
 
 namespace NumberNine\Repository;
 
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use NumberNine\Entity\Term;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use NumberNine\Model\Pagination\PaginationParameters;
 
 /**
@@ -35,20 +35,20 @@ final class TermRepository extends ServiceEntityRepository
 
     /**
      * @param mixed $fieldValue
+     *
      * @throws NonUniqueResultException
      */
     public function findOneByCustomField(string $fieldName, $fieldValue): ?Term
     {
         return $this->createQueryBuilder('t')
             ->where('JSON_EXTRACT(t.customFields, :fieldName) = :fieldValue')
-            ->setParameters(
-                [
-                    'fieldName' => '$.' . $fieldName,
-                    'fieldValue' => $fieldValue
-                ]
-            )
+            ->setParameters([
+                'fieldName' => '$.' . $fieldName,
+                'fieldValue' => $fieldValue,
+            ])
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getOneOrNullResult()
+        ;
     }
 
     /**
@@ -64,14 +64,16 @@ final class TermRepository extends ServiceEntityRepository
         $queryBuilder = $this->createQueryBuilder('t')
             ->join('t.taxonomy', 'tax', Join::WITH, 'tax.name = :taxonomy')
             ->orderBy('t.name', 'asc')
-            ->setParameter('taxonomy', $taxonomyName);
+            ->setParameter('taxonomy', $taxonomyName)
+        ;
 
         if ($includeCount) {
             $queryBuilder
                 ->select('t as term', 'COUNT(c.id) as count')
                 ->leftJoin('t.contentEntityTerms', 'cet')
                 ->leftJoin('cet.contentEntity', 'c', Join::WITH, "c.status = 'publish'")
-                ->groupBy('t.id');
+                ->groupBy('t.id')
+            ;
         }
 
         return $queryBuilder;
@@ -85,7 +87,8 @@ final class TermRepository extends ServiceEntityRepository
             ->join('t.taxonomy', 'tax', Join::WITH, 'tax.name = :taxonomy')
             ->setParameter('taxonomy', $taxonomy)
             ->setFirstResult($paginationParameters->getStartRow() ?: 0)
-            ->setMaxResults($paginationParameters->getFetchCount() ?: PHP_INT_MAX);
+            ->setMaxResults($paginationParameters->getFetchCount() ?: PHP_INT_MAX)
+        ;
 
         if ($paginationParameters->getFilter()) {
             $or = $queryBuilder->expr()->orx();
@@ -95,7 +98,8 @@ final class TermRepository extends ServiceEntityRepository
 
             $queryBuilder
                 ->andWhere($or)
-                ->setParameter('filter', '%' . trim((string)$paginationParameters->getFilter()) . '%');
+                ->setParameter('filter', '%' . trim((string) $paginationParameters->getFilter()) . '%')
+            ;
         }
 
         if ($paginationParameters->getOrderBy()) {

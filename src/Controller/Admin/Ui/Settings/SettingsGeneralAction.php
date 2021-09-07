@@ -21,13 +21,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/settings/general/', name: 'numbernine_admin_settings_general', methods: ['GET', 'POST'])]
+#[Route(path: '/settings/general/', name: 'numbernine_admin_settings_general', methods: ['GET', 'POST'])]
 final class SettingsGeneralAction extends AbstractController implements AdminController
 {
-    public function __invoke(
-        ConfigurationReadWriter $configurationReadWriter,
-        Request $request
-    ): Response {
+    public function __invoke(ConfigurationReadWriter $configurationReadWriter, Request $request): Response
+    {
         $settings = $configurationReadWriter->readMany(
             [
                 Settings::SITE_TITLE => SettingsDefaultValues::SITE_TITLE,
@@ -41,7 +39,7 @@ final class SettingsGeneralAction extends AbstractController implements AdminCon
 
         $form = $this->createForm(AdminSettingsGeneralFormType::class, array_merge(
             $settings,
-            ['blog_as_homepage' => !(bool)$settings[Settings::PAGE_FOR_FRONT]],
+            ['blog_as_homepage' => !(bool) $settings[Settings::PAGE_FOR_FRONT]],
         ));
         $form->handleRequest($request);
 
@@ -49,6 +47,7 @@ final class SettingsGeneralAction extends AbstractController implements AdminCon
             $configurationReadWriter->writeMany($form->getData());
 
             $this->addFlash('success', 'General settings successfully saved.');
+
             return $this->redirectToRoute('numbernine_admin_settings_general', [], Response::HTTP_SEE_OTHER);
         }
 

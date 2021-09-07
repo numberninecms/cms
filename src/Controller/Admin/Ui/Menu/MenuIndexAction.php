@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace NumberNine\Controller\Admin\Ui\Menu;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use NumberNine\Form\Admin\Menu\AdminMenuIndexFormType;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Repository\MenuRepository;
@@ -24,7 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/menus/', name: 'numbernine_admin_menu_index')]
+#[Route(path: '/menus/', name: 'numbernine_admin_menu_index')]
 final class MenuIndexAction extends AbstractController implements AdminController
 {
     public function __invoke(
@@ -40,7 +41,7 @@ final class MenuIndexAction extends AbstractController implements AdminControlle
 
         if ($form->isSubmitted() && $form->isValid()) {
             $checkedIds = array_map(
-                fn ($name): int => (int)str_replace('menu_', '', $name),
+                fn ($name): int => (int) str_replace('menu_', '', $name),
                 array_keys(array_filter($form->getData()))
             );
 
@@ -51,7 +52,7 @@ final class MenuIndexAction extends AbstractController implements AdminControlle
                 $this->addFlash('success', 'Menus have been deleted successfully.');
 
                 return $this->redirectToRoute('numbernine_admin_menu_index', [], Response::HTTP_SEE_OTHER);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $logger->error($e->getMessage());
                 $this->addFlash('error', 'An unknown error occured.');
             }

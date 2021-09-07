@@ -21,7 +21,7 @@ final class FooterEventSubscriber implements EventSubscriberInterface
 {
     private ?Request $request;
 
-    public function __construct(RequestStack $requestStack, private ?\Symfony\Component\HttpKernel\Profiler\Profiler $profiler)
+    public function __construct(RequestStack $requestStack, private ?Profiler $profiler)
     {
         $this->request = $requestStack->getCurrentRequest();
     }
@@ -29,14 +29,12 @@ final class FooterEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            FooterEvent::class => [
-                ['hideProfiler', 512]
-            ],
+            FooterEvent::class => [['hideProfiler', 512]],
         ];
     }
 
     /**
-     * Hides profiler for customizer
+     * Hides profiler for customizer.
      */
     public function hideProfiler(): void
     {

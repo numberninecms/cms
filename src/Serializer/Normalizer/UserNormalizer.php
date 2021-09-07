@@ -25,7 +25,7 @@ final class UserNormalizer implements NormalizerInterface
 
     /**
      * @param mixed $object
-     * @param string|null $format
+     *
      * @throws ExceptionInterface
      */
     public function normalize($object, string $format = null, array $context = []): array
@@ -33,7 +33,7 @@ final class UserNormalizer implements NormalizerInterface
         /** @var array $data */
         $data = $this->normalizer->normalize($object, $format, $context);
 
-        if (is_array($data)) {
+        if (\is_array($data)) {
             $data['postsCount'] = $this->postRepository->count(['author' => $object->getId()]);
         }
 

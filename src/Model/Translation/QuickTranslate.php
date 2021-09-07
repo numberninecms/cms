@@ -15,6 +15,6 @@ trait QuickTranslate
 {
     public function __(?string $text, array $parameters = [], string $locale = null): string
     {
-        return $this->translator->trans((string)$text, $parameters, 'numbernine', $locale);
+        return $this->translator->trans((string) $text, $parameters, 'numbernine', $locale);
     }
 }

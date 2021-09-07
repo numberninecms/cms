@@ -14,7 +14,6 @@ namespace NumberNine\Model\Menu;
 use NumberNine\Exception\ChildMenuItemNotFoundException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use function Symfony\Component\String\u;
 
 final class MenuItem
@@ -42,43 +41,6 @@ final class MenuItem
                 $this->{$property} = $value;
             }
         }
-    }
-
-    private function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'position' => 0,
-        ]);
-
-        $resolver->setDefined(['text', 'route', 'link', 'icon', 'position', 'children', 'if_granted']);
-        $resolver->setRequired(['text']);
-
-        $resolver
-            ->setAllowedTypes('text', 'string')
-            ->setAllowedTypes('route', ['string', 'null'])
-            ->setAllowedTypes('link', ['string', 'null'])
-            ->setAllowedTypes('icon', ['string', 'null'])
-            ->setAllowedTypes('if_granted', ['string', 'null'])
-            ->setAllowedTypes('position', 'int')
-            ->setAllowedTypes('children', ['array', MenuItem::class . '[]'])
-        ;
-
-        $resolver->setNormalizer('children', static function (Options $options, array $children): array {
-            $newChildren = $children;
-
-            foreach ($children as $key => $child) {
-                if (is_array($child)) {
-                    $newChildren[$key] = new MenuItem($child);
-                }
-            }
-
-            $i = 0;
-            array_walk($newChildren, function (MenuItem $menuItem) use (&$i): void {
-                $menuItem->setPosition((($i++) + 1) * 100);
-            });
-
-            return $newChildren;
-        });
     }
 
     public function getText(): string
@@ -129,6 +91,7 @@ final class MenuItem
     public function setIfGranted(?string $ifGranted): self
     {
         $this->ifGranted = $ifGranted;
+
         return $this;
     }
 
@@ -142,26 +105,28 @@ final class MenuItem
         $this->position = $position;
     }
 
-    public function addChild(string $key, MenuItem $child): self
+    public function addChild(string $key, self $child): self
     {
         $this->children[$key] = $child;
-        $child->setPosition(count($this->children) * 100);
+        $child->setPosition(\count($this->children) * 100);
+
         return $this;
     }
 
     public function removeChild(string $key): self
     {
-        if (!array_key_exists($key, $this->children)) {
+        if (!\array_key_exists($key, $this->children)) {
             throw new ChildMenuItemNotFoundException($this, $key);
         }
 
         unset($this->children[$key]);
+
         return $this;
     }
 
     public function hasChildren(): bool
     {
-        return count($this->children) > 0;
+        return \count($this->children) > 0;
     }
 
     /**
@@ -178,6 +143,44 @@ final class MenuItem
     public function setChildren(array $children): self
     {
         $this->children = $children;
+
         return $this;
+    }
+
+    private function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'position' => 0,
+        ]);
+
+        $resolver->setDefined(['text', 'route', 'link', 'icon', 'position', 'children', 'if_granted']);
+        $resolver->setRequired(['text']);
+
+        $resolver
+            ->setAllowedTypes('text', 'string')
+            ->setAllowedTypes('route', ['string', 'null'])
+            ->setAllowedTypes('link', ['string', 'null'])
+            ->setAllowedTypes('icon', ['string', 'null'])
+            ->setAllowedTypes('if_granted', ['string', 'null'])
+            ->setAllowedTypes('position', 'int')
+            ->setAllowedTypes('children', ['array', self::class . '[]'])
+        ;
+
+        $resolver->setNormalizer('children', static function (Options $options, array $children): array {
+            $newChildren = $children;
+
+            foreach ($children as $key => $child) {
+                if (\is_array($child)) {
+                    $newChildren[$key] = new self($child);
+                }
+            }
+
+            $i = 0;
+            array_walk($newChildren, function (self $menuItem) use (&$i): void {
+                $menuItem->setPosition((($i++) + 1) * 100);
+            });
+
+            return $newChildren;
+        });
     }
 }

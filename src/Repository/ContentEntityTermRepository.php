@@ -11,11 +11,11 @@
 
 namespace NumberNine\Repository;
 
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\ContentEntityTerm;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method ContentEntityTerm|null find($id, $lockMode = null, $lockVersion = null)

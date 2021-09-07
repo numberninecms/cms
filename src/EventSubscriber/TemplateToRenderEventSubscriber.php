@@ -11,9 +11,9 @@
 
 namespace NumberNine\EventSubscriber;
 
+use NumberNine\Configuration\ConfigurationReadWriter;
 use NumberNine\Event\TemplateToRenderEvent;
 use NumberNine\Model\General\Settings;
-use NumberNine\Configuration\ConfigurationReadWriter;
 use NumberNine\Theme\TemplateResolver;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -26,9 +26,7 @@ final class TemplateToRenderEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            TemplateToRenderEvent::class => [
-                ['myAccountPage', 512],
-            ],
+            TemplateToRenderEvent::class => [['myAccountPage', 512]],
         ];
     }
 
@@ -36,7 +34,7 @@ final class TemplateToRenderEventSubscriber implements EventSubscriberInterface
     {
         $pageForMyAccount = $this->configurationReadWriter->read(Settings::PAGE_FOR_MY_ACCOUNT);
 
-        if ((int)$pageForMyAccount === $event->getEntity()->getId()) {
+        if ((int) $pageForMyAccount === $event->getEntity()->getId()) {
             $template = $this->templateResolver->resolvePath('page/my_account.html.twig');
             $event->setTemplate($template);
         }

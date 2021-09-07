@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/logout', name: 'numbernine_logout')]
+#[Route(path: '/logout', name: 'numbernine_logout')]
 final class LogoutAction extends AbstractController
 {
     /**

@@ -20,7 +20,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'content_entities/{type}/{id<\d+>}/revisions/', name: 'numbernine_admin_contententity_revisions_get_collection', options: ['expose' => true], methods: ['GET'], priority: 100,)]
+#[Route(path: 'content_entities/{type}/{id<\d+>}/revisions/', name: 'numbernine_admin_contententity_revisions_get_collection', options: ['expose' => true], methods: [
+    'GET',
+], priority: 100, )]
 final class ContentEntityRevisionsGetAction
 {
     public function __invoke(
@@ -34,7 +36,7 @@ final class ContentEntityRevisionsGetAction
 
         $entries = $logEntryRepository->getLogEntries($entity);
         $revisions = array_map(
-            fn(LogEntry $entry) => array_merge(
+            fn (LogEntry $entry) => array_merge(
                 $entry->getData(),
                 ['version' => $entry->getVersion(), 'date' => $entry->getLoggedAt()]
             ),

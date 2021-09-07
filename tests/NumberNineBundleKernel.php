@@ -55,6 +55,11 @@ final class NumberNineBundleKernel extends Kernel
         ];
     }
 
+    public function getCacheDir(): string
+    {
+        return __DIR__ . '/../var/cache/test/';
+    }
+
     protected function configureContainer(ContainerConfigurator $container): void
     {
         $container->import('../src/Bundle/Resources/config/app.yaml');
@@ -66,10 +71,5 @@ final class NumberNineBundleKernel extends Kernel
     protected function configureRoutes(RoutingConfigurator $routes): void
     {
         $routes->import('../src/Bundle/Resources/config/routing.yaml');
-    }
-
-    public function getCacheDir(): string
-    {
-        return __DIR__ . '/../var/cache/test/';
     }
 }

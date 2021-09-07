@@ -15,6 +15,7 @@ namespace NumberNine\Controller\Admin\Ui\Menu;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
+use Exception;
 use NumberNine\Content\ContentService;
 use NumberNine\Entity\Menu;
 use NumberNine\Form\Admin\Menu\AdminMenuFormType;
@@ -28,11 +29,12 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/menus/{id}/', name: 'numbernine_admin_menu_edit', methods: ['GET', 'POST'])]
+#[Route(path: '/menus/{id}/', name: 'numbernine_admin_menu_edit', methods: ['GET', 'POST'])]
 final class MenuEditAction extends AbstractController implements AdminController
 {
-    private ?Request $request;
     private const ITEMS_PER_PAGE = 5;
+    private ?Request $request;
+
     public function __construct(
         private ContentService $contentService,
         private ContentEntityRepository $contentEntityRepository,
@@ -40,6 +42,7 @@ final class MenuEditAction extends AbstractController implements AdminController
     ) {
         $this->request = $requestStack->getCurrentRequest();
     }
+
     public function __invoke(
         EntityManagerInterface $entityManager,
         LoggerInterface $logger,
@@ -50,15 +53,12 @@ final class MenuEditAction extends AbstractController implements AdminController
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                if ($form->getClickedButton()->getName() === 'delete') { // @phpstan-ignore-line
+                if ($form->getClickedButton()->getName() === 'delete') { /** @phpstan-ignore-line */
                     $name = $menu->getName();
                     $entityManager->remove($menu);
                     $entityManager->flush();
 
-                    $this->addFlash('success', sprintf(
-                        'Menu "%s" have been successfully deleted.',
-                        $name,
-                    ));
+                    $this->addFlash('success', sprintf('Menu "%s" have been successfully deleted.', $name,));
 
                     return $this->redirectToRoute('numbernine_admin_menu_index', [], Response::HTTP_SEE_OTHER);
                 }
@@ -75,7 +75,7 @@ final class MenuEditAction extends AbstractController implements AdminController
                     ],
                     Response::HTTP_SEE_OTHER
                 );
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $logger->error($e->getMessage());
                 $this->addFlash('error', 'An unknown error occured.');
             }
@@ -90,6 +90,7 @@ final class MenuEditAction extends AbstractController implements AdminController
             'pages' => $this->getPages(),
         ], $response);
     }
+
     private function getEntities(): array
     {
         $entities = [];
@@ -100,7 +101,7 @@ final class MenuEditAction extends AbstractController implements AdminController
                 $this->contentEntityRepository->getSimplePaginatedCollectionQueryBuilder(
                     $type,
                     $this->request
-                        ? ((int)$this->request->query->get($type . '_page', '1') - 1) * self::ITEMS_PER_PAGE
+                        ? ((int) $this->request->query->get($type . '_page', '1') - 1) * self::ITEMS_PER_PAGE
                         : 0,
                     self::ITEMS_PER_PAGE,
                 )
@@ -109,6 +110,7 @@ final class MenuEditAction extends AbstractController implements AdminController
 
         return $entities;
     }
+
     private function getPages(): array
     {
         $pages = [];
@@ -116,7 +118,7 @@ final class MenuEditAction extends AbstractController implements AdminController
         foreach ($this->contentService->getContentTypes() as $contentType) {
             $type = $contentType->getName();
             $pages[$type] = $this->request
-                ? (int)$this->request->query->get($type . '_page', '1')
+                ? (int) $this->request->query->get($type . '_page', '1')
                 : 1;
         }
 

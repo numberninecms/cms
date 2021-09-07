@@ -21,7 +21,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/{type}/{id<\d+>}/builder/', name: 'numbernine_admin_content_entity_page_builder_edit', methods: ['GET'], priority: '-1000')]
+#[Route(path: '/{type}/{id<\d+>}/builder/', name: 'numbernine_admin_content_entity_page_builder_edit', methods: [
+    'GET',
+], priority: '-1000')]
 final class ContentEntityPageBuilderEditAction extends AbstractController implements AdminController
 {
     public function __invoke(

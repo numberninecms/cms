@@ -12,16 +12,16 @@
 namespace NumberNine\EventSubscriber;
 
 use Exception;
-use NumberNine\Event\Theme\HeaderScriptsEvent;
 use NumberNine\Asset\TagRenderer;
+use NumberNine\Configuration\ConfigurationReadWriter;
+use NumberNine\Event\Theme\HeaderScriptsEvent;
 use NumberNine\Event\Theme\HeadEvent;
 use NumberNine\Event\Theme\HeadStylesheetsEvent;
 use NumberNine\Event\Theme\HeadThemeCustomStylesEvent;
 use NumberNine\Event\Theme\HeadTitleEvent;
 use NumberNine\Exception\ThemeNotFoundException;
-use NumberNine\Model\General\Settings;
-use NumberNine\Configuration\ConfigurationReadWriter;
 use NumberNine\Http\RequestAnalyzer;
+use NumberNine\Model\General\Settings;
 use NumberNine\Model\General\SettingsDefaultValues;
 use NumberNine\Theme\ThemeOptionsReadWriter;
 use NumberNine\Theme\ThemeStore;
@@ -47,7 +47,7 @@ final class HeadEventSubscriber implements EventSubscriberInterface
                 ['stylesheets', 1024],
                 ['themeCustomStyles', 512],
                 ['scripts', 256],
-            ]
+            ],
         ];
     }
 
@@ -80,6 +80,7 @@ final class HeadEventSubscriber implements EventSubscriberInterface
     public function themeCustomStyles(HeadEvent $event): void
     {
         $theme = $this->themeStore->getCurrentTheme();
+
         try {
             $styles = $this->twig->render(
                 sprintf('@%s/customizable_styles.css.twig', $theme->getName()),
@@ -89,11 +90,12 @@ final class HeadEventSubscriber implements EventSubscriberInterface
             $styles = '';
         }
         $stylesEvent = $this->eventDispatcher->dispatch(new HeadThemeCustomStylesEvent($styles));
-        $event->setObject($event . sprintf('<style type="text/css">%s</style>', (string)$stylesEvent));
+        $event->setObject($event . sprintf('<style type="text/css">%s</style>', (string) $stylesEvent));
     }
 
     /**
-     * Renders page scripts
+     * Renders page scripts.
+     *
      * @throws Exception
      */
     public function scripts(HeadEvent $event): void

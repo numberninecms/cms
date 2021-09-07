@@ -31,7 +31,7 @@ final class AdminUserIndexFormType extends AbstractType
                 ],
                 'help' => "Comments won't be deleted, but anonymized instead.",
                 'expanded' => true,
-                'label' => 'Deletion mode'
+                'label' => 'Deletion mode',
             ])
             ->add('delete', SubmitType::class, ['label' => 'Delete', 'attr' => ['value' => 'delete']])
         ;

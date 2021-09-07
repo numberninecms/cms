@@ -17,16 +17,16 @@ final class TailwindCss implements CssFrameworkInterface
 {
     public function getResponsiveVisibilityClasses(array $visibleViewSizes): array
     {
-        $isMobileFirstVisible = in_array('sm', $visibleViewSizes, true);
+        $isMobileFirstVisible = \in_array('sm', $visibleViewSizes, true);
         $hiddenViewSizes = array_diff(['lg', 'md', 'sm'], $visibleViewSizes);
         $classes = [];
 
         if ($isMobileFirstVisible) {
             if (in_array_all(['md', 'lg'], $hiddenViewSizes)) {
                 $classes[] = 'md:hidden';
-            } elseif (in_array('md', $hiddenViewSizes, true)) {
+            } elseif (\in_array('md', $hiddenViewSizes, true)) {
                 $classes[] = 'md:hidden lg:block';
-            } elseif (in_array('lg', $hiddenViewSizes, true)) { /* @phpstan-ignore-line */
+            } elseif (\in_array('lg', $hiddenViewSizes, true)) { // @phpstan-ignore-line
                 $classes[] = 'lg:hidden';
             }
 
@@ -37,9 +37,9 @@ final class TailwindCss implements CssFrameworkInterface
 
         if (in_array_all(['md', 'lg'], $visibleViewSizes)) {
             $classes[] = 'md:block';
-        } elseif (in_array('md', $visibleViewSizes, true)) {
+        } elseif (\in_array('md', $visibleViewSizes, true)) {
             $classes[] = 'md:block lg:hidden';
-        } elseif (in_array('lg', $visibleViewSizes, true)) {
+        } elseif (\in_array('lg', $visibleViewSizes, true)) {
             $classes[] = 'lg:block';
         }
 

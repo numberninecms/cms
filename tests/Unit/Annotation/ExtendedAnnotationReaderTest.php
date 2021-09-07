@@ -26,6 +26,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \NumberNine\Annotation\ExtendedAnnotationReader
+ *
+ * @internal
  */
 final class ExtendedAnnotationReaderTest extends TestCase
 {
@@ -70,7 +72,7 @@ final class ExtendedAnnotationReaderTest extends TestCase
      */
     public function testGetAllAnnotations(): void
     {
-        static::assertEquals(
+        static::assertSame(
             [
                 SampleAnnotatedClass::class => [$this->classAnnotation, $this->classAttribute],
                 'sampleProperty' => [$this->propertyAnnotation, $this->propertyAttribute],
@@ -85,7 +87,7 @@ final class ExtendedAnnotationReaderTest extends TestCase
      */
     public function testGetAnnotationsOrAttributesOfType(): void
     {
-        static::assertEquals(
+        static::assertSame(
             [
                 SampleAnnotatedClass::class => $this->classAnnotation,
                 'sampleProperty' => $this->propertyAnnotation,
@@ -94,7 +96,7 @@ final class ExtendedAnnotationReaderTest extends TestCase
             $this->reader->getAnnotationsOrAttributesOfType(SampleAnnotatedClass::class, SampleAnnotation::class)
         );
 
-        static::assertEquals(
+        static::assertSame(
             [
                 SampleAnnotatedClass::class => $this->anotherClassAttribute,
                 'sampleProperty' => $this->anotherPropertyAttribute,
@@ -108,12 +110,12 @@ final class ExtendedAnnotationReaderTest extends TestCase
      */
     public function testGetFirstAnnotationOrAttributeOfType(): void
     {
-        static::assertEquals(
+        static::assertSame(
             $this->classAnnotation,
             $this->reader->getFirstAnnotationOrAttributeOfType(SampleAnnotatedClass::class, SampleAnnotation::class)
         );
 
-        static::assertEquals(
+        static::assertSame(
             $this->anotherClassAttribute,
             $this->reader->getFirstAnnotationOrAttributeOfType(
                 SampleAnnotatedClass::class,
@@ -128,7 +130,7 @@ final class ExtendedAnnotationReaderTest extends TestCase
     public function testGetFirstAnnotationOfTypeThrowException(): void
     {
         $this->expectException(AnnotationOrAttributeMissingException::class);
-        static::assertEquals(
+        static::assertSame(
             $this->classAnnotation,
             $this->reader->getFirstAnnotationOrAttributeOfType(
                 SampleAnnotatedClass::class,
@@ -137,19 +139,16 @@ final class ExtendedAnnotationReaderTest extends TestCase
             )
         );
     }
+
     /**
      * @covers ::getFirstAnnotationOrAttributeOfType
      */
     public function testGetFirstAttributeOfTypeThrowException(): void
     {
         $this->expectException(AnnotationOrAttributeMissingException::class);
-        static::assertEquals(
+        static::assertSame(
             $this->classAnnotation,
-            $this->reader->getFirstAnnotationOrAttributeOfType(
-                SampleAnnotatedClass::class,
-                Theme::class,
-                true,
-            )
+            $this->reader->getFirstAnnotationOrAttributeOfType(SampleAnnotatedClass::class, Theme::class, true,)
         );
     }
 
@@ -158,7 +157,7 @@ final class ExtendedAnnotationReaderTest extends TestCase
      */
     public function testGetValueOfFirstAnnotationOrAttributeOfType(): void
     {
-        static::assertEquals(
+        static::assertSame(
             'Sample class annotation',
             $this->reader->getValueOfFirstAnnotationOrAttributeOfType(
                 SampleAnnotatedClass::class,
@@ -168,8 +167,7 @@ final class ExtendedAnnotationReaderTest extends TestCase
             )
         );
 
-        static::assertEquals(
-            false,
+        static::assertFalse(
             $this->reader->getValueOfFirstAnnotationOrAttributeOfType(
                 SampleAnnotatedClass::class,
                 AnotherSampleAttribute::class,

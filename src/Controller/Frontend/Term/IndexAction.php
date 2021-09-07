@@ -12,14 +12,14 @@
 namespace NumberNine\Controller\Frontend\Term;
 
 use Doctrine\Common\Collections\Criteria;
+use NumberNine\Configuration\ConfigurationReadWriter;
+use NumberNine\Content\ContentService;
 use NumberNine\Entity\Term;
 use NumberNine\Event\CurrentRequestTermEvent;
 use NumberNine\EventSubscriber\RouteRegistrationEventSubscriber;
 use NumberNine\Model\Content\ContentType;
 use NumberNine\Model\General\Settings;
 use NumberNine\Model\Pagination\PaginationParameters;
-use NumberNine\Content\ContentService;
-use NumberNine\Configuration\ConfigurationReadWriter;
 use NumberNine\Theme\TemplateResolver;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -31,13 +31,15 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
- * The route of this action is dynamically generated
+ * The route of this action is dynamically generated.
+ *
  * @see RouteRegistrationEventSubscriber
  */
 final class IndexAction extends AbstractController
 {
     /**
      * @param Serializer $serializer
+     *
      * @return Response
      */
     public function __invoke(
@@ -65,10 +67,12 @@ final class IndexAction extends AbstractController
                     ->setFetchCount($configurationReadWriter->read(Settings::POSTS_PER_PAGE, 12))
                     ->setOrderBy('createdAt')
                     ->setOrder('DESC')
-                    ->setTerms([$term]);
+                    ->setTerms([$term])
+                ;
 
                 $criteria = (new Criteria())
-                    ->andWhere((Criteria::expr())->eq('c.status', 'publish'));
+                    ->andWhere((Criteria::expr())->eq('c.status', 'publish'))
+                ;
 
                 $taxonomy = $term->getTaxonomy();
 
@@ -77,7 +81,7 @@ final class IndexAction extends AbstractController
                         array_filter(
                             $contentService->getContentTypes(),
                             static function (ContentType $contentType) use ($taxonomy): bool {
-                                return in_array($contentType->getName(), $taxonomy->getContentTypes() ?? [], true);
+                                return \in_array($contentType->getName(), $taxonomy->getContentTypes() ?? [], true);
                             }
                         )
                     );

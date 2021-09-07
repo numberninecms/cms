@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace NumberNine\Exception;
 
-final class InvalidManyToOneRelationshipTypeException extends \LogicException
+use LogicException;
+
+final class InvalidManyToOneRelationshipTypeException extends LogicException
 {
     public function __construct(string $name)
     {

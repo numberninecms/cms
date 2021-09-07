@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace NumberNine\Repository;
 
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use NumberNine\Entity\ContentEntityRelationship;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method ContentEntityRelationship|null find($id, $lockMode = null, $lockVersion = null)

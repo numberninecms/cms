@@ -18,6 +18,10 @@ use NumberNine\Form\Admin\Menu\AdminMenuFormType;
 use NumberNine\Tests\FormTestCase;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class AdminMenuFormTypeTest extends FormTestCase
 {
     public function testSubmitValidDataForCreation(): void
@@ -31,12 +35,13 @@ final class AdminMenuFormTypeTest extends FormTestCase
         $form = $this->factory->create(AdminMenuFormType::class, $model);
 
         $expected = (new Menu())
-            ->setName('Main menu');
+            ->setName('Main menu')
+        ;
 
         $form->submit($formData);
 
-        self::assertTrue($form->isSynchronized());
-        self::assertEquals($expected, $model);
+        static::assertTrue($form->isSynchronized());
+        static::assertSame($expected, $model);
     }
 
     public function testSubmitValidDataForEdition(): void
@@ -56,12 +61,13 @@ final class AdminMenuFormTypeTest extends FormTestCase
                 'title' => 'Home',
                 'entityId' => 1,
                 'children' => [],
-            ]);
+            ])
+        ;
 
         $form->submit($formData);
 
-        self::assertTrue($form->isSynchronized());
-        self::assertEquals($expected, $model);
+        static::assertTrue($form->isSynchronized());
+        static::assertSame($expected, $model);
     }
 
     public function testProvideWrongModeFails(): void

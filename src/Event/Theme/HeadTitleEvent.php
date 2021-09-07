@@ -13,16 +13,16 @@ namespace NumberNine\Event\Theme;
 
 final class HeadTitleEvent extends GenericEvent
 {
-    public function setTitle(string $title): void
-    {
-        $this->setObject($title);
-    }
-
     /**
      * @return mixed
      */
     public function __toString()
     {
         return '<title>' . $this->getObject() . '</title>';
+    }
+
+    public function setTitle(string $title): void
+    {
+        $this->setObject($title);
     }
 }

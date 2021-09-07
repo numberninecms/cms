@@ -12,12 +12,14 @@
 namespace NumberNine\Controller\Admin\Api\Taxonomy;
 
 use NumberNine\Entity\Term;
-use NumberNine\Repository\TaxonomyRepository;
 use NumberNine\Http\ResponseFactory;
+use NumberNine\Repository\TaxonomyRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'terms/{taxonomy}/{id}/', name: 'numbernine_admin_terms_edit_item', options: ['expose' => true], methods: ['PUT'])]
+#[Route(path: 'terms/{taxonomy}/{id}/', name: 'numbernine_admin_terms_edit_item', options: ['expose' => true], methods: [
+    'PUT',
+])]
 final class TermEditAction extends AbstractTermController
 {
     public function __invoke(

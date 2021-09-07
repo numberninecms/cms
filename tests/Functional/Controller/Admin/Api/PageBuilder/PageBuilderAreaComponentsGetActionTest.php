@@ -14,6 +14,10 @@ namespace NumberNine\Tests\Functional\Controller\Admin\Api\PageBuilder;
 use NumberNine\Security\Capabilities;
 use NumberNine\Tests\UserAwareTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class PageBuilderAreaComponentsGetActionTest extends UserAwareTestCase
 {
     public function testNotLoggedInUserCantAccessUrl(): void

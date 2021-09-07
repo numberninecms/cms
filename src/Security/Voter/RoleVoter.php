@@ -28,7 +28,7 @@ final class RoleVoter implements VoterInterface
             return $result;
         }
 
-        $roles = array_map(fn(UserRole $role): ?string => $role->getName(), $user->getUserRoles()->toArray());
+        $roles = array_map(fn (UserRole $role): ?string => $role->getName(), $user->getUserRoles()->toArray());
 
         foreach ($attributes as $attribute) {
             $result = VoterInterface::ACCESS_DENIED;

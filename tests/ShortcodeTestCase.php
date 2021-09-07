@@ -22,7 +22,7 @@ abstract class ShortcodeTestCase extends KernelTestCase
     protected const SHORTCODE = '';
     protected ShortcodeInterface $shortcode;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->shortcode = static::getContainer()->get(static::SHORTCODE);
@@ -34,6 +34,7 @@ abstract class ShortcodeTestCase extends KernelTestCase
         $resolver->setDefined(array_keys($parameters));
         $this->shortcode->configureParameters($resolver);
         $parameters = $resolver->resolve($parameters);
+
         return $this->shortcode->processParameters($parameters);
     }
 }

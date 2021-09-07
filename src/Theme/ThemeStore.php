@@ -24,16 +24,16 @@ final class ThemeStore implements EventSubscriberInterface
     /** @var ThemeWrapper[] */
     private array $themeWrappers = [];
 
+    public function __construct(private ThemeMetadataFactory $themeMetadataFactory, private iterable $themes)
+    {
+    }
+
     public static function getSubscribedEvents(): array
     {
         return [
             ConsoleCommandEvent::class => ['loadThemeWrappers', 5000],
             RequestEvent::class => ['loadThemeWrappers', 5000],
         ];
-    }
-
-    public function __construct(private ThemeMetadataFactory $themeMetadataFactory, private iterable $themes)
-    {
     }
 
     public function loadThemeWrappers(): void
@@ -62,7 +62,7 @@ final class ThemeStore implements EventSubscriberInterface
 
         return current(array_filter(
             $this->themeWrappers,
-            fn(ThemeWrapper $wrapper): bool => $wrapper->getDescriptor()->getName() === $themeNameOrClassName
+            fn (ThemeWrapper $wrapper): bool => $wrapper->getDescriptor()->getName() === $themeNameOrClassName
         )) ?: null;
     }
 

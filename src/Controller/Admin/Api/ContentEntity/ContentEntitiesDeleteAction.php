@@ -12,17 +12,19 @@
 namespace NumberNine\Controller\Admin\Api\ContentEntity;
 
 use Exception;
-use NumberNine\Model\Admin\AdminController;
-use NumberNine\Security\Capabilities;
 use NumberNine\Content\ContentService;
 use NumberNine\Http\ResponseFactory;
+use NumberNine\Model\Admin\AdminController;
+use NumberNine\Security\Capabilities;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'content_entities/{type}/delete-collection', name: 'numbernine_admin_contententity_delete_collection', options: ['expose' => true], methods: ['POST'])]
+#[Route(path: 'content_entities/{type}/delete-collection', name: 'numbernine_admin_contententity_delete_collection', options: ['expose' => true], methods: [
+    'POST',
+])]
 final class ContentEntitiesDeleteAction extends AbstractController implements AdminController
 {
     public function __invoke(

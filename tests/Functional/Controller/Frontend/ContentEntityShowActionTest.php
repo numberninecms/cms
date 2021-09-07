@@ -20,31 +20,12 @@ use NumberNine\Security\Capabilities;
 use NumberNine\Tests\UserAwareTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class ContentEntityShowActionTest extends UserAwareTestCase
 {
-    private function createPrivatePost(string $date, ?User $user = null): void
-    {
-        if (!$user) {
-            $user = $this->userFactory->createUser(
-                'contributor',
-                'contributor@numbernine-fakedomain.com',
-                'password',
-                [$this->userRoleRepository->findOneBy(['name' => 'Contributor'])],
-            );
-        }
-
-        $post = (new Post())
-            ->setCustomType('post')
-            ->setAuthor($user)
-            ->setTitle('This page is private')
-            ->setStatus(PublishingStatusInterface::STATUS_PRIVATE)
-            ->setCreatedAt(new \DateTime($date))
-        ;
-
-        $this->entityManager->persist($post);
-        $this->entityManager->flush();
-    }
-
     public function testAccessingPrivatePostThrows404NotFound(): void
     {
         $this->createPrivatePost('2021/04/15');
@@ -71,5 +52,28 @@ final class ContentEntityShowActionTest extends UserAwareTestCase
 
         self::assertResponseStatusCodeSame(Response::HTTP_OK);
         self::assertSelectorTextSame('h1', 'Private: This page is private');
+    }
+
+    private function createPrivatePost(string $date, ?User $user = null): void
+    {
+        if (!$user) {
+            $user = $this->userFactory->createUser(
+                'contributor',
+                'contributor@numbernine-fakedomain.com',
+                'password',
+                [$this->userRoleRepository->findOneBy(['name' => 'Contributor'])],
+            );
+        }
+
+        $post = (new Post())
+            ->setCustomType('post')
+            ->setAuthor($user)
+            ->setTitle('This page is private')
+            ->setStatus(PublishingStatusInterface::STATUS_PRIVATE)
+            ->setCreatedAt(new \DateTime($date))
+        ;
+
+        $this->entityManager->persist($post);
+        $this->entityManager->flush();
     }
 }

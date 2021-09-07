@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: '/users/new/', name: 'numbernine_admin_user_create', methods: ['GET', 'POST'])]
+#[Route(path: '/users/new/', name: 'numbernine_admin_user_create', methods: ['GET', 'POST'])]
 final class UserCreateAction extends AbstractController implements AdminController
 {
     public function __invoke(

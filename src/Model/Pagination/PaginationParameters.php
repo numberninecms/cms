@@ -40,7 +40,8 @@ final class PaginationParameters
      */
     public function setStartRow($startRow): self
     {
-        $this->startRow = (int)$startRow;
+        $this->startRow = (int) $startRow;
+
         return $this;
     }
 
@@ -54,7 +55,8 @@ final class PaginationParameters
      */
     public function setFetchCount($fetchCount): self
     {
-        $this->fetchCount = (int)$fetchCount;
+        $this->fetchCount = (int) $fetchCount;
+
         return $this;
     }
 
@@ -66,6 +68,7 @@ final class PaginationParameters
     public function setFilter(?string $filter): self
     {
         $this->filter = $filter;
+
         return $this;
     }
 
@@ -74,9 +77,10 @@ final class PaginationParameters
         return $this->status;
     }
 
-    public function setStatus(?string $status): PaginationParameters
+    public function setStatus(?string $status): self
     {
         $this->status = $status;
+
         return $this;
     }
 
@@ -88,6 +92,7 @@ final class PaginationParameters
     public function setOrderBy(?string $orderBy): self
     {
         $this->orderBy = $orderBy;
+
         return $this;
     }
 
@@ -99,6 +104,7 @@ final class PaginationParameters
     public function setOrder(?string $order): self
     {
         $this->order = $order;
+
         return $this;
     }
 
@@ -116,6 +122,7 @@ final class PaginationParameters
     public function setTerms(array $terms): self
     {
         $this->terms = $terms;
+
         return $this;
     }
 }

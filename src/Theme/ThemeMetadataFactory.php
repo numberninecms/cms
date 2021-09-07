@@ -14,10 +14,9 @@ namespace NumberNine\Theme;
 use NumberNine\Annotation\ExtendedReader;
 use NumberNine\Attribute\Theme;
 use NumberNine\Model\General\AbstractMetadataFactory;
-use NumberNine\Model\Theme\ThemeInterface;
 use NumberNine\Model\Theme\ThemeDescriptor;
+use NumberNine\Model\Theme\ThemeInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
-
 use function Symfony\Component\String\u;
 
 final class ThemeMetadataFactory extends AbstractMetadataFactory

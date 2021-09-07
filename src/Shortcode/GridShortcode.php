@@ -39,7 +39,7 @@ final class GridShortcode extends AbstractShortcode implements EditableShortcode
         $resolver->setAllowedTypes('columnsCount', ['int', 'float', 'string']);
 
         $resolver->setNormalizer('columnsCount', static function (Options $options, $value): int {
-            return is_numeric($value) ? max(1, min(12, (int)$value)) : 3;
+            return is_numeric($value) ? max(1, min(12, (int) $value)) : 3;
         });
     }
 

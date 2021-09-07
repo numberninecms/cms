@@ -11,16 +11,18 @@
 
 namespace NumberNine\Controller\Admin\Api\ContentType;
 
-use NumberNine\Model\Admin\AdminController;
 use NumberNine\Content\ContentService;
 use NumberNine\Http\ResponseFactory;
+use NumberNine\Model\Admin\AdminController;
 use NumberNine\Model\Content\EditorExtensionBuilder;
 use NumberNine\Model\Content\EditorExtensionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'content-types/{type}/editor-extension/', name: 'numbernine_admin_contenttype_editor_extension_get_item', options: ['expose' => true], methods: ['GET'])]
+#[Route(path: 'content-types/{type}/editor-extension/', name: 'numbernine_admin_contenttype_editor_extension_get_item', options: ['expose' => true], methods: [
+    'GET',
+])]
 final class ContentTypeEditorExtensionGetAction extends AbstractController implements AdminController
 {
     public function __invoke(

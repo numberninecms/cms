@@ -23,21 +23,19 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 #[Shortcode(name: 'categories', label: 'Categories', description: 'Displays the posts categories.', icon: 'mdi-view-list')]
-final class CategoriesShortcode extends AbstractShortcode implements
-    EditableShortcodeInterface,
-    EventSubscriberInterface
+final class CategoriesShortcode extends AbstractShortcode implements EditableShortcodeInterface, EventSubscriberInterface
 {
     private ?Term $term = null;
+
+    public function __construct(private TermRepository $termRepository)
+    {
+    }
 
     public static function getSubscribedEvents(): array
     {
         return [
             CurrentRequestTermEvent::class => 'setTerm',
         ];
-    }
-
-    public function __construct(private TermRepository $termRepository)
-    {
     }
 
     public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void

@@ -20,7 +20,7 @@ final class ImageSizesEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            ImageSizesEvent::class => 'registerImageSizes'
+            ImageSizesEvent::class => 'registerImageSizes',
         ];
     }
 
@@ -30,6 +30,7 @@ final class ImageSizesEventSubscriber implements EventSubscriberInterface
             ->addSize('thumbnail', new ImageSize(150, 150, true))
             ->addSize('preview', new ImageSize(300, 300))
             ->addSize('medium', new ImageSize(512, 512))
-            ->addSize('large', new ImageSize(1024, 1024));
+            ->addSize('large', new ImageSize(1024, 1024))
+        ;
     }
 }

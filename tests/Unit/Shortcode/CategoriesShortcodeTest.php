@@ -22,6 +22,10 @@ use NumberNine\Shortcode\CategoriesShortcode;
 use NumberNine\Tests\ShortcodeTestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class CategoriesShortcodeTest extends ShortcodeTestCase
 {
     protected const SHORTCODE = CategoriesShortcode::class;
@@ -30,7 +34,7 @@ final class CategoriesShortcodeTest extends ShortcodeTestCase
     private TermRepository $termRepository;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->entityManager = static::getContainer()->get(EntityManagerInterface::class);
@@ -39,35 +43,11 @@ final class CategoriesShortcodeTest extends ShortcodeTestCase
         $this->eventDispatcher = static::getContainer()->get(EventDispatcherInterface::class);
     }
 
-    private function addFixtures(): void
-    {
-        $taxonomyCategory = $this->taxonomyRepository->findOneBy(['name' => 'category']);
-        $taxonomyTag = $this->taxonomyRepository->findOneBy(['name' => 'tag']);
-
-        $category1 = (new Term())
-            ->setTaxonomy($taxonomyCategory)
-            ->setName('Category1')
-            ->setSlug('category1');
-        $category2 = (new Term())
-            ->setTaxonomy($taxonomyCategory)
-            ->setName('Category2')
-            ->setSlug('category2');
-        $tag1 = (new Term())
-            ->setTaxonomy($taxonomyTag)
-            ->setName('Tag1')
-            ->setSlug('tag1');
-
-        $this->entityManager->persist($category1);
-        $this->entityManager->persist($category2);
-        $this->entityManager->persist($tag1);
-        $this->entityManager->flush();
-    }
-
     public function testShortcodeWithoutArguments(): void
     {
         $parameters = $this->processParameters([]);
 
-        self::assertEquals([
+        static::assertSame([
             'title' => 'Categories',
             'categories' => [],
             'showIfEmpty' => false,
@@ -80,7 +60,7 @@ final class CategoriesShortcodeTest extends ShortcodeTestCase
     {
         $parameters = $this->processParameters(['title' => 'My categories']);
 
-        self::assertEquals([
+        static::assertSame([
             'title' => 'My categories',
             'categories' => [],
             'showIfEmpty' => false,
@@ -93,7 +73,7 @@ final class CategoriesShortcodeTest extends ShortcodeTestCase
     {
         $parameters = $this->processParameters(['showIfEmpty' => true]);
 
-        self::assertEquals([
+        static::assertSame([
             'title' => 'Categories',
             'categories' => [],
             'showIfEmpty' => true,
@@ -106,7 +86,7 @@ final class CategoriesShortcodeTest extends ShortcodeTestCase
     {
         $parameters = $this->processParameters(['showPostCounts' => true]);
 
-        self::assertEquals([
+        static::assertSame([
             'title' => 'Categories',
             'categories' => [],
             'showIfEmpty' => false,
@@ -122,7 +102,7 @@ final class CategoriesShortcodeTest extends ShortcodeTestCase
 
         $parameters = $this->processParameters([]);
 
-        self::assertEquals([
+        static::assertSame([
             'title' => 'Categories',
             'categories' => $categories,
             'showIfEmpty' => false,
@@ -143,12 +123,39 @@ final class CategoriesShortcodeTest extends ShortcodeTestCase
 
         $parameters = $this->processParameters([]);
 
-        self::assertEquals([
+        static::assertSame([
             'title' => 'Categories',
             'categories' => $categories,
             'showIfEmpty' => false,
             'showPostCounts' => false,
             'term' => $term,
         ], $parameters);
+    }
+
+    private function addFixtures(): void
+    {
+        $taxonomyCategory = $this->taxonomyRepository->findOneBy(['name' => 'category']);
+        $taxonomyTag = $this->taxonomyRepository->findOneBy(['name' => 'tag']);
+
+        $category1 = (new Term())
+            ->setTaxonomy($taxonomyCategory)
+            ->setName('Category1')
+            ->setSlug('category1')
+        ;
+        $category2 = (new Term())
+            ->setTaxonomy($taxonomyCategory)
+            ->setName('Category2')
+            ->setSlug('category2')
+        ;
+        $tag1 = (new Term())
+            ->setTaxonomy($taxonomyTag)
+            ->setName('Tag1')
+            ->setSlug('tag1')
+        ;
+
+        $this->entityManager->persist($category1);
+        $this->entityManager->persist($category2);
+        $this->entityManager->persist($tag1);
+        $this->entityManager->flush();
     }
 }

@@ -13,6 +13,7 @@ namespace NumberNine\Annotation;
 
 use Doctrine\Common\Annotations\Reader;
 use NumberNine\Exception\AnnotationOrAttributeMissingException;
+use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -25,7 +26,6 @@ final class ExtendedAnnotationReader implements ExtendedReader
     }
 
     /**
-     * @param object|string $object
      * @throws ReflectionException
      */
     public function getAllAnnotationsAndAttributes(object|string $object): array
@@ -49,7 +49,7 @@ final class ExtendedAnnotationReader implements ExtendedReader
         if (!empty($classAttributes)) {
             $annotations[$reflection->getName()] = array_merge(
                 $annotations[$reflection->getName()] ?? [],
-                array_map(static function (\ReflectionAttribute $attribute) {
+                array_map(static function (ReflectionAttribute $attribute): object {
                     return $attribute->newInstance();
                 }, $classAttributes),
             );
@@ -67,7 +67,7 @@ final class ExtendedAnnotationReader implements ExtendedReader
             if (!empty($propertyAttributes)) {
                 $annotations[$property->getName()] = array_merge(
                     $annotations[$property->getName()] ?? [],
-                    array_map(static function (\ReflectionAttribute $attribute) {
+                    array_map(static function (ReflectionAttribute $attribute): object {
                         return $attribute->newInstance();
                     }, $propertyAttributes),
                 );
@@ -86,7 +86,7 @@ final class ExtendedAnnotationReader implements ExtendedReader
             if (!empty($methodAttributes)) {
                 $annotations[$method->getName()] = array_merge(
                     $annotations[$method->getName()] ?? [],
-                    array_map(static function (\ReflectionAttribute $attribute) {
+                    array_map(static function (ReflectionAttribute $attribute): object {
                         return $attribute->newInstance();
                     }, $methodAttributes),
                 );
@@ -97,7 +97,6 @@ final class ExtendedAnnotationReader implements ExtendedReader
     }
 
     /**
-     * @param object|array|string $object
      * @throws ReflectionException
      */
     public function getAnnotationsOrAttributesOfType(object|array|string $object, string $type): array
@@ -156,7 +155,7 @@ final class ExtendedAnnotationReader implements ExtendedReader
         $annotation = $this->getFirstAnnotationOrAttributeOfType($object, $type);
 
         if ($annotation && property_exists($type, $property)) {
-            return $annotation->$property;
+            return $annotation->{$property};
         }
 
         return $default;

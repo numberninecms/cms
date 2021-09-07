@@ -17,6 +17,10 @@ use NumberNine\Model\Menu\MenuItem;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class MenuItemTest extends TestCase
 {
     public function testEmptyArguments(): void
@@ -33,7 +37,7 @@ final class MenuItemTest extends TestCase
 
     public function testMinimumRequiredArguments(): void
     {
-        self::assertInstanceOf(MenuItem::class, new MenuItem(['text' => 'Sample menu item']));
+        static::assertInstanceOf(MenuItem::class, new MenuItem(['text' => 'Sample menu item']));
     }
 
     public function testStandardMenuItem(): void
@@ -44,12 +48,12 @@ final class MenuItemTest extends TestCase
             'icon' => 'tachometer-alt',
         ]);
 
-        self::assertEquals('Dashboard', $menuItem->getText());
-        self::assertEquals('/admin/', $menuItem->getLink());
-        self::assertEquals('tachometer-alt', $menuItem->getIcon());
-        self::assertEquals(0, $menuItem->getPosition());
-        self::assertIsArray($menuItem->getChildren());
-        self::assertEmpty($menuItem->getChildren());
+        static::assertSame('Dashboard', $menuItem->getText());
+        static::assertSame('/admin/', $menuItem->getLink());
+        static::assertSame('tachometer-alt', $menuItem->getIcon());
+        static::assertSame(0, $menuItem->getPosition());
+        static::assertIsArray($menuItem->getChildren());
+        static::assertEmpty($menuItem->getChildren());
     }
 
     public function testMenuItemWithChildrenAsRawArray(): void
@@ -70,10 +74,10 @@ final class MenuItemTest extends TestCase
             ],
         ]);
 
-        self::assertTrue($menuItem->hasChildren());
-        self::assertCount(2, $menuItem->getChildren());
-        self::assertInstanceOf(MenuItem::class, $menuItem->getChildren()['general']);
-        self::assertEquals(200, $menuItem->getChildren()['permalinks']->getPosition());
+        static::assertTrue($menuItem->hasChildren());
+        static::assertCount(2, $menuItem->getChildren());
+        static::assertInstanceOf(MenuItem::class, $menuItem->getChildren()['general']);
+        static::assertSame(200, $menuItem->getChildren()['permalinks']->getPosition());
     }
 
     public function testMenuItemWithChildrenAsMenuItemArray(): void
@@ -94,10 +98,10 @@ final class MenuItemTest extends TestCase
             ],
         ]);
 
-        self::assertTrue($menuItem->hasChildren());
-        self::assertCount(2, $menuItem->getChildren());
-        self::assertInstanceOf(MenuItem::class, $menuItem->getChildren()['general']);
-        self::assertEquals(200, $menuItem->getChildren()['permalinks']->getPosition());
+        static::assertTrue($menuItem->hasChildren());
+        static::assertCount(2, $menuItem->getChildren());
+        static::assertInstanceOf(MenuItem::class, $menuItem->getChildren()['general']);
+        static::assertSame(200, $menuItem->getChildren()['permalinks']->getPosition());
     }
 
     public function testMenuItemAddChild(): void
@@ -118,9 +122,9 @@ final class MenuItemTest extends TestCase
             'link' => '/admin/settings/permalinks/',
         ]));
 
-        self::assertTrue($menuItem->hasChildren());
-        self::assertCount(2, $menuItem->getChildren());
-        self::assertInstanceOf(MenuItem::class, $menuItem->getChildren()['general']);
-        self::assertEquals(200, $menuItem->getChildren()['permalinks']->getPosition());
+        static::assertTrue($menuItem->hasChildren());
+        static::assertCount(2, $menuItem->getChildren());
+        static::assertInstanceOf(MenuItem::class, $menuItem->getChildren()['general']);
+        static::assertSame(200, $menuItem->getChildren()['permalinks']->getPosition());
     }
 }

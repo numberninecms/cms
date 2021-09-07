@@ -11,18 +11,20 @@
 
 namespace NumberNine\Controller\Admin\Api\Settings;
 
+use NumberNine\Configuration\ConfigurationReadWriter;
 use NumberNine\Content\ContentService;
+use NumberNine\Http\ResponseFactory;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Model\General\Settings;
-use NumberNine\Configuration\ConfigurationReadWriter;
-use NumberNine\Http\ResponseFactory;
 use NumberNine\Model\General\SettingsDefaultValues;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'settings/', name: 'numbernine_admin_settings_get_collection', options: ['expose' => true], methods: ['GET'])]
+#[Route(path: 'settings/', name: 'numbernine_admin_settings_get_collection', options: ['expose' => true], methods: [
+    'GET',
+])]
 final class SettingsGetAction extends AbstractController implements AdminController
 {
     public function __invoke(

@@ -273,12 +273,12 @@ class MediaFile extends ContentEntity
 
     public function isImage(): bool
     {
-        return str_starts_with((string)$this->getMimeType(), 'image/');
+        return str_starts_with((string) $this->getMimeType(), 'image/');
     }
 
     public function isVideo(): bool
     {
-        return str_starts_with((string)$this->getMimeType(), 'video/');
+        return str_starts_with((string) $this->getMimeType(), 'video/');
     }
 
     /**
@@ -295,7 +295,7 @@ class MediaFile extends ContentEntity
             return '';
         }
 
-        return dirname((string)$this->getPath()) . '/' . $sizeInfo['filename'];
+        return \dirname((string) $this->getPath()) . '/' . $sizeInfo['filename'];
     }
 
     /**

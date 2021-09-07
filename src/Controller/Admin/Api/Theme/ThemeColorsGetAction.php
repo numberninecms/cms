@@ -11,15 +11,17 @@
 
 namespace NumberNine\Controller\Admin\Api\Theme;
 
-use NumberNine\Model\Admin\AdminController;
 use NumberNine\Http\ResponseFactory;
+use NumberNine\Model\Admin\AdminController;
 use NumberNine\Theme\ThemeOptionsReadWriter;
 use NumberNine\Theme\ThemeStore;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[\Symfony\Component\Routing\Annotation\Route(path: 'theme/colors/', name: 'numbernine_admin_theme_colors_get_collection', options: ['expose' => true], methods: ['GET'])]
+#[Route(path: 'theme/colors/', name: 'numbernine_admin_theme_colors_get_collection', options: ['expose' => true], methods: [
+    'GET',
+])]
 final class ThemeColorsGetAction implements AdminController
 {
     public function __invoke(

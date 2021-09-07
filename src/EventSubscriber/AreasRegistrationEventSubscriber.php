@@ -19,16 +19,16 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 final class AreasRegistrationEventSubscriber implements EventSubscriberInterface
 {
+    public function __construct(private ThemeStore $themeStore, private EventDispatcherInterface $eventDispatcher)
+    {
+    }
+
     public static function getSubscribedEvents(): array
     {
         return [
             RequestEvent::class => ['registerCurrentThemeAreas', 4500],
             AreasRegistrationEvent::class => 'registerDefaultAreas',
         ];
-    }
-
-    public function __construct(private ThemeStore $themeStore, private EventDispatcherInterface $eventDispatcher)
-    {
     }
 
     public function registerCurrentThemeAreas(): void
