@@ -86,14 +86,14 @@ jobs:
                 run: |
                     cd temp/cms
                     composer config --unset extra.branch-alias.dev-master
-                    composer config extra.branch-alias.dev-$CI_REF_NAME_SLUG 0.2.x-dev
+                    composer config extra.branch-alias.dev-$CI_REF_NAME_SLUG 0.3.x-dev
 
             -   name: Create temporary branch alias for pull requests
                 if: startsWith(github.ref, 'refs/pull/')
                 run: |
                     cd temp/cms
                     composer config --unset extra.branch-alias.dev-master
-                    composer config extra.branch-alias.dev-$CI_SHA 0.2.x-dev
+                    composer config extra.branch-alias.dev-$CI_SHA 0.3.x-dev
 
             -   name: Setup PHP
                 id: setup-php
@@ -101,7 +101,7 @@ jobs:
                 with:
                     php-version: ${{ matrix.php }}
                     extensions: dom, curl, libxml, mbstring, zip, redis, sysvsem
-                    tools: composer:v2
+                    tools: composer:v2, symfony
                     coverage: none
                 env:
                     COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -109,22 +109,21 @@ jobs:
             -   name: Create a new project
                 continue-on-error: true
                 run: |
-                    composer create-project symfony/website-skeleton:"5.4.x@dev" newproject
+                    symfony new newproject --full --no-git --version="5.4.x@dev"
                     cd newproject
                     cp -Rp . ../
                     cd ..
                     rm -rf newproject
+                    rm composer.lock
 
             -   name: Add NumberNine to the project
                 run: |
                     composer config extra.symfony.allow-contrib true
                     composer config minimum-stability dev
                     composer config prefer-stable true
-                    composer config repositories.0 vcs https://github.com/derrabus/laminas-code
-                    cp composer.json temp.json
-                    jq --indent 4 -r '.require += {"laminas/laminas-code": "dev-bugfix/return-type-will-change as 4.5.x-dev"}' temp.json > composer.json
-                    composer config repositories.1 path ./temp/cms
-                    composer require numberninecms/cms:*@dev numberninecms/chapterone:dev-php8 --ignore-platform-reqs
+                    composer config repositories.0 path ./temp/cms
+                    composer config repositories.1 vcs https://github.com/williarin/data-fixtures
+                    composer require "doctrine/data-fixtures:dev-fix-dbal3-compatibility as 1.5.x-dev" numberninecms/cms:^0.3 numberninecms/chapterone:^0.3 --ignore-platform-reqs
 
             -   name: Create .env.local file
                 run: |
@@ -180,14 +179,14 @@ jobs:
                 run: |
                     cd temp/cms
                     composer config --unset extra.branch-alias.dev-master
-                    composer config extra.branch-alias.dev-$CI_REF_NAME_SLUG 0.2.x-dev
+                    composer config extra.branch-alias.dev-$CI_REF_NAME_SLUG 0.3.x-dev
 
             -   name: Create temporary branch alias for pull requests
                 if: startsWith(github.ref, 'refs/pull/')
                 run: |
                     cd temp/cms
                     composer config --unset extra.branch-alias.dev-master
-                    composer config extra.branch-alias.dev-$CI_SHA 0.2.x-dev
+                    composer config extra.branch-alias.dev-$CI_SHA 0.3.x-dev
 
             -   name: Setup PHP
                 id: setup-php
@@ -203,22 +202,21 @@ jobs:
             -   name: Create a new project
                 continue-on-error: true
                 run: |
-                    symfony new newproject --full --no-git
+                    symfony new newproject --full --no-git --version="5.4.x@dev"
                     cd newproject
                     cp -Rp . ../
                     cd ..
                     rm -rf newproject
+                    rm composer.lock
 
             -   name: Add NumberNine to the project
                 run: |
                     composer config extra.symfony.allow-contrib true
                     composer config minimum-stability dev
                     composer config prefer-stable true
-                    composer config repositories.0 vcs https://github.com/derrabus/laminas-code
-                    cp composer.json temp.json
-                    jq --indent 4 -r '.require += {"laminas/laminas-code": "dev-bugfix/return-type-will-change as 4.5.x-dev"}' temp.json > composer.json
-                    composer config repositories.1 path ./temp/cms
-                    composer require numberninecms/cms:*@dev numberninecms/chapterone:dev-php8
+                    composer config repositories.0 path ./temp/cms
+                    composer config repositories.1 vcs https://github.com/williarin/data-fixtures
+                    composer require "doctrine/data-fixtures:dev-fix-dbal3-compatibility as 1.5.x-dev" numberninecms/cms:^0.3 numberninecms/chapterone:^0.3
 
             -   name: Create .env.local file
                 run: |
