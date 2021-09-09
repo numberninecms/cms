@@ -26,9 +26,9 @@
         "beberlei/doctrineextensions": "^1.3",
         "doctrine/collections": "^1.6",
         "doctrine/common": "^3.1",
-        "doctrine/dbal": "^3.0",
-        "doctrine/doctrine-bundle": "^2.0",
-        "doctrine/doctrine-fixtures-bundle": "^3.3",
+        "doctrine/data-fixtures": "dev-fix-dbal3-compatibility as 1.5.x-dev",
+        "doctrine/doctrine-bundle": "^2.5",
+        "doctrine/doctrine-fixtures-bundle": "^3.5",
         "doctrine/orm": "^2.10",
         "friendsofsymfony/jsrouting-bundle": "^2.6",
         "gedmo/doctrine-extensions": "^3.0",
@@ -80,11 +80,11 @@
         "wapmorgan/media-file": "^0.1.4"
     },
     "require-dev": {
-        "dama/doctrine-test-bundle": "^6.6",
+        "dama/doctrine-test-bundle": "6.6.0",
         "ergebnis/composer-normalize": "^2.11",
         "friendsoftwig/twigcs": "^5.0",
         "nikic/php-parser": "^4.10",
-        "numberninecms/chapterone": "*@dev",
+        "numberninecms/chapterone": "0.3.x-dev",
         "php-parallel-lint/php-parallel-lint": "^1.2",
         "phpro/grumphp": "^1.0",
         "phpstan/phpstan-doctrine": "^0.12.13",
@@ -122,15 +122,15 @@
             "NumberNine\\Tests\\": "tests/"
         }
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/williarin/data-fixtures"
+        }
+    ],
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
         "test": "vendor/bin/grumphp run --no-interaction"
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/williarin/chapterone"
-        }
-    ]
+    }
 }
