@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eb7f1607a36a3e648b6fc6a7fffcac0a",
+    "content-hash": "d8a1d82ce8f91a4792a1861eba1bfb90",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -545,16 +545,16 @@
         },
         {
             "name": "doctrine/data-fixtures",
-            "version": "dev-fix-dbal3-compatibility",
+            "version": "1.5.x-dev",
             "source": {
                 "type": "git",
-                "url": "https://github.com/williarin/data-fixtures.git",
-                "reference": "18822ba9af4c74b6b5979a49ecbd255e9cce0c08"
+                "url": "https://github.com/doctrine/data-fixtures.git",
+                "reference": "f18adf13f6c81c67a88360dca359ad474523f8e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/williarin/data-fixtures/zipball/18822ba9af4c74b6b5979a49ecbd255e9cce0c08",
-                "reference": "18822ba9af4c74b6b5979a49ecbd255e9cce0c08",
+                "url": "https://api.github.com/repos/doctrine/data-fixtures/zipball/f18adf13f6c81c67a88360dca359ad474523f8e3",
+                "reference": "f18adf13f6c81c67a88360dca359ad474523f8e3",
                 "shasum": ""
             },
             "require": {
@@ -566,8 +566,8 @@
                 "doctrine/phpcr-odm": "<1.3.0"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^8.2",
-                "doctrine/dbal": "^2.5.4",
+                "doctrine/coding-standard": "^9.0",
+                "doctrine/dbal": "^2.5.4 || ^3.0",
                 "doctrine/mongodb-odm": "^1.3.0 || ^2.0.0",
                 "doctrine/orm": "^2.7.0",
                 "ext-sqlite3": "*",
@@ -579,17 +579,14 @@
                 "doctrine/orm": "For loading ORM fixtures",
                 "doctrine/phpcr-odm": "For loading PHPCR ODM fixtures"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "Doctrine\\Common\\DataFixtures\\": "lib/Doctrine/Common/DataFixtures"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Doctrine\\Tests\\": "tests/Doctrine/Tests"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -605,23 +602,24 @@
                 "database"
             ],
             "support": {
-                "source": "https://github.com/williarin/data-fixtures/tree/fix-dbal3-compatibility"
+                "issues": "https://github.com/doctrine/data-fixtures/issues",
+                "source": "https://github.com/doctrine/data-fixtures/tree/1.5.x"
             },
             "funding": [
                 {
-                    "type": "patreon",
-                    "url": "https://www.patreon.com/phpdoctrine"
+                    "url": "https://www.doctrine-project.org/sponsorship.html",
+                    "type": "custom"
                 },
                 {
-                    "type": "tidelift",
-                    "url": "https://tidelift.com/funding/github/packagist/doctrine%2Fdata-fixtures"
+                    "url": "https://www.patreon.com/phpdoctrine",
+                    "type": "patreon"
                 },
                 {
-                    "type": "custom",
-                    "url": "https://www.doctrine-project.org/sponsorship.html"
+                    "url": "https://tidelift.com/funding/github/packagist/doctrine%2Fdata-fixtures",
+                    "type": "tidelift"
                 }
             ],
-            "time": "2021-09-18T03:19:19+00:00"
+            "time": "2021-09-20T21:51:43+00:00"
         },
         {
             "name": "doctrine/dbal",
@@ -2501,20 +2499,20 @@
         },
         {
             "name": "symfony-cmf/routing-bundle",
-            "version": "2.5.0",
+            "version": "2.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony-cmf/routing-bundle.git",
-                "reference": "fb2284caa0bab2ffebe673e68e9c995da6ee4bdf"
+                "reference": "e9c3dfb9815b68b7f95d18308ca036cccadd4739"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony-cmf/routing-bundle/zipball/fb2284caa0bab2ffebe673e68e9c995da6ee4bdf",
-                "reference": "fb2284caa0bab2ffebe673e68e9c995da6ee4bdf",
+                "url": "https://api.github.com/repos/symfony-cmf/routing-bundle/zipball/e9c3dfb9815b68b7f95d18308ca036cccadd4739",
+                "reference": "e9c3dfb9815b68b7f95d18308ca036cccadd4739",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2 || ^8.0",
+                "php": "^7.4 || ^8.0",
                 "symfony-cmf/routing": "^2.3.0",
                 "symfony/framework-bundle": "^4.4 || ^5.0"
             },
@@ -2528,12 +2526,12 @@
                 "doctrine/data-fixtures": "^1.0.0",
                 "doctrine/doctrine-bundle": "^2.0",
                 "doctrine/orm": "^2.5",
-                "doctrine/phpcr-bundle": "^2.1",
+                "doctrine/phpcr-bundle": "^2.3",
                 "doctrine/phpcr-odm": "^1.4|^2.0",
                 "jackalope/jackalope-doctrine-dbal": "^1.3",
                 "matthiasnoback/symfony-config-test": "^4.1.0",
                 "matthiasnoback/symfony-dependency-injection-test": "^4.1.0",
-                "symfony-cmf/testing": "^3.2",
+                "symfony-cmf/testing": "^4.0",
                 "symfony/form": "^4.4 || ^5.0",
                 "symfony/monolog-bundle": "^3.5",
                 "symfony/phpunit-bridge": "^5.0",
@@ -2578,9 +2576,9 @@
             ],
             "support": {
                 "issues": "https://github.com/symfony-cmf/routing-bundle/issues",
-                "source": "https://github.com/symfony-cmf/routing-bundle/tree/2.5.0"
+                "source": "https://github.com/symfony-cmf/routing-bundle/tree/2.5.1"
             },
-            "time": "2021-03-09T10:42:09+00:00"
+            "time": "2021-09-15T09:54:36+00:00"
         },
         {
             "name": "symfony/asset",
@@ -3976,12 +3974,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "90671ea639570dce58a2aecac8476f763313bf42"
+                "reference": "65808acd52ee65add91353cde5cb432021a9ca43"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/90671ea639570dce58a2aecac8476f763313bf42",
-                "reference": "90671ea639570dce58a2aecac8476f763313bf42",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/65808acd52ee65add91353cde5cb432021a9ca43",
+                "reference": "65808acd52ee65add91353cde5cb432021a9ca43",
                 "shasum": ""
             },
             "require": {
@@ -4041,7 +4039,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-09-10T10:26:24+00:00"
+            "time": "2021-09-14T13:02:56+00:00"
         },
         {
             "name": "symfony/http-kernel",
@@ -7131,12 +7129,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/validator.git",
-                "reference": "4fd05d9d2688217973656f944d0aac0efd205611"
+                "reference": "70410517cf6bc14732184fa5a94124c53b83cece"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/validator/zipball/4fd05d9d2688217973656f944d0aac0efd205611",
-                "reference": "4fd05d9d2688217973656f944d0aac0efd205611",
+                "url": "https://api.github.com/repos/symfony/validator/zipball/70410517cf6bc14732184fa5a94124c53b83cece",
+                "reference": "70410517cf6bc14732184fa5a94124c53b83cece",
                 "shasum": ""
             },
             "require": {
@@ -7235,7 +7233,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-09-14T13:57:32+00:00"
+            "time": "2021-09-20T05:07:32+00:00"
         },
         {
             "name": "symfony/var-dumper",
@@ -9424,16 +9422,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.12.0",
+            "version": "v4.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "6608f01670c3cc5079e18c1dab1104e002579143"
+                "reference": "50953a2691a922aa1769461637869a0a2faa3f53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/6608f01670c3cc5079e18c1dab1104e002579143",
-                "reference": "6608f01670c3cc5079e18c1dab1104e002579143",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/50953a2691a922aa1769461637869a0a2faa3f53",
+                "reference": "50953a2691a922aa1769461637869a0a2faa3f53",
                 "shasum": ""
             },
             "require": {
@@ -9474,9 +9472,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v4.12.0"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v4.13.0"
             },
-            "time": "2021-07-21T10:44:31+00:00"
+            "time": "2021-09-20T12:20:58+00:00"
         },
         {
             "name": "numberninecms/chapterone",
@@ -10928,12 +10926,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "94b1ad0f093b41a6cfccbe1272026cbc1ebaad5c"
+                "reference": "4911abe63afbbba425931f44a3c62fc002973935"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/94b1ad0f093b41a6cfccbe1272026cbc1ebaad5c",
-                "reference": "94b1ad0f093b41a6cfccbe1272026cbc1ebaad5c",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/4911abe63afbbba425931f44a3c62fc002973935",
+                "reference": "4911abe63afbbba425931f44a3c62fc002973935",
                 "shasum": ""
             },
             "conflict": {
@@ -11125,7 +11123,7 @@
                 "phpunit/phpunit": ">=4.8.19,<4.8.28|>=5.0.10,<5.6.3",
                 "phpwhois/phpwhois": "<=4.2.5",
                 "phpxmlrpc/extras": "<0.6.1",
-                "pimcore/pimcore": "<10.1.1",
+                "pimcore/pimcore": "<10.1.3",
                 "pocketmine/pocketmine-mp": "<3.15.4",
                 "pressbooks/pressbooks": "<5.18",
                 "prestashop/autoupgrade": ">=4,<4.10.1",
@@ -11260,7 +11258,7 @@
                 "yiisoft/yii2-jui": "<2.0.4",
                 "yiisoft/yii2-redis": "<2.0.8",
                 "yoast-seo-for-typo3/yoast_seo": "<7.2.3",
-                "yourls/yourls": "<=1.8.1",
+                "yourls/yourls": "<=1.8.2",
                 "zendesk/zendesk_api_client_php": "<2.2.11",
                 "zendframework/zend-cache": ">=2.4,<2.4.8|>=2.5,<2.5.3",
                 "zendframework/zend-captcha": ">=2,<2.4.9|>=2.5,<2.5.2",
@@ -11322,7 +11320,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-09-14T21:02:42+00:00"
+            "time": "2021-09-20T21:03:12+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -12767,16 +12765,16 @@
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "9.4.60",
+            "version": "9.4.63",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard.git",
-                "reference": "323e57e0a667d2795c9fac591caf955469f2ed75"
+                "reference": "5b22e3dfc78da47d75fd29a597f6bdb4596310f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/323e57e0a667d2795c9fac591caf955469f2ed75",
-                "reference": "323e57e0a667d2795c9fac591caf955469f2ed75",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/5b22e3dfc78da47d75fd29a597f6bdb4596310f1",
+                "reference": "5b22e3dfc78da47d75fd29a597f6bdb4596310f1",
                 "shasum": ""
             },
             "require": {
@@ -12801,7 +12799,7 @@
             ],
             "description": "Prefixed scoped version of ECS package",
             "support": {
-                "source": "https://github.com/symplify/easy-coding-standard/tree/9.4.60"
+                "source": "https://github.com/symplify/easy-coding-standard/tree/9.4.63"
             },
             "funding": [
                 {
@@ -12813,7 +12811,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-09-13T14:42:11+00:00"
+            "time": "2021-09-20T14:27:55+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -12924,14 +12922,7 @@
             "time": "2021-03-09T10:59:23+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "doctrine/data-fixtures",
-            "version": "dev-fix-dbal3-compatibility",
-            "alias": "1.5.x-dev",
-            "alias_normalized": "1.5.9999999.9999999-dev"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
         "doctrine/data-fixtures": 20,

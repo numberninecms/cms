@@ -122,8 +122,7 @@ jobs:
                     composer config minimum-stability dev
                     composer config prefer-stable true
                     composer config repositories.0 path ./temp/cms
-                    composer config repositories.1 vcs https://github.com/williarin/data-fixtures
-                    composer require "doctrine/data-fixtures:dev-fix-dbal3-compatibility as 1.5.x-dev" numberninecms/cms:^0.3 numberninecms/chapterone:^0.3 --ignore-platform-reqs
+                    composer require numberninecms/cms:^0.3 numberninecms/chapterone:^0.3 --ignore-platform-reqs
 
             -   name: Create .env.local file
                 run: |
@@ -215,8 +214,7 @@ jobs:
                     composer config minimum-stability dev
                     composer config prefer-stable true
                     composer config repositories.0 path ./temp/cms
-                    composer config repositories.1 vcs https://github.com/williarin/data-fixtures
-                    composer require "doctrine/data-fixtures:dev-fix-dbal3-compatibility as 1.5.x-dev" numberninecms/cms:^0.3 numberninecms/chapterone:^0.3
+                    composer require numberninecms/cms:^0.3 numberninecms/chapterone:^0.3
 
             -   name: Create .env.local file
                 run: |
