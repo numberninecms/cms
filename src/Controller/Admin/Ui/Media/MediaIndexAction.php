@@ -16,6 +16,7 @@ use NumberNine\Content\ContentService;
 use NumberNine\Form\Admin\Content\AdminContentEntityIndexFormType;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Model\Pagination\PaginationParameters;
+use NumberNine\Repository\TaxonomyRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
@@ -31,6 +32,7 @@ final class MediaIndexAction extends AbstractController implements AdminControll
     public function __invoke(
         Request $request,
         ContentService $contentService,
+        TaxonomyRepository $taxonomyRepository,
         SerializerInterface $serializer,
         LoggerInterface $logger
     ): Response {
@@ -80,11 +82,13 @@ final class MediaIndexAction extends AbstractController implements AdminControll
         }
 
         $response = new Response(null, $form->isSubmitted() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK);
+        $contentType = $contentService->getContentType('media_file');
 
         return $this->render('@NumberNine/admin/media/index.html.twig', [
             'deleted_media_files' => $deletedMediaFiles,
             'form' => $form->createView(),
-            'content_type' => $contentService->getContentType('media_file'),
+            'content_type' => $contentType,
+            'taxonomies' => $taxonomyRepository->findByContentType($contentType),
         ], $response);
     }
 }
