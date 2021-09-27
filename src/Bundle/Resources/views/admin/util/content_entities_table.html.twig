@@ -10,8 +10,9 @@
             {% endif %}
             <th class="w-1/3">{{ 'Title'|trans }}</th>
             <th>{{ 'Author'|trans }}</th>
-            <th>{{ 'Categories'|trans }}</th>
-            <th>{{ 'Tags'|trans }}</th>
+            {% for taxonomy in taxonomies %}
+                <th>{{ taxonomy.name|capitalize|trans }}</th>
+            {% endfor %}
             <th>{{ 'Comments'|trans }}</th>
             <th>{{ 'Date'|trans }}</th>
         </tr>
@@ -27,56 +28,60 @@
             {% endif %}
             <td>
                 <div class="flex items-center justify-between mr-3">
-                    <a href="{{ N9_entity_admin_url(entity) }}" data-turbo-frame="_top">{{ entity.title }}</a>
                     {% if content_type is defined and content_type.name != 'media_file' %}
-                        <div class="btn-group">
-                            {% if not is_trash %}
-                                <a
-                                    href="{{ path('numbernine_admin_content_entity_page_builder_edit', {
-                                        type: type_slug,
-                                        id: entity.id,
-                                    }) }}"
-                                    class="btn btn-color-primary btn-style-flat"
-                                    title="{{ 'Page builder'|trans }}"
-                                    data-turbo-frame="_top"
-                                >
-                                    <i class="mdi mdi-toy-brick-outline mdi-18px"></i>
-                                </a>
-                            {% else %}
-                                <button
-                                    type="button"
-                                    class="btn btn-color-primary btn-style-flat"
-                                    title="{{ 'Restore'|trans }}"
-                                    data-action="content-entity--index#restoreEntity"
-                                >
-                                    <i class="mdi mdi-backup-restore mdi-18px"></i>
-                                </button>
-                            {% endif %}
+                        <a href="{{ N9_entity_admin_url(entity) }}" data-turbo-frame="_top">{{ entity.title }}</a>
+                    {% else %}
+                        {{ entity.title }}
+                    {% endif %}
+
+                    <div class="btn-group">
+                        {% if not is_trash %}
+                            <a
+                                href="{{ path('numbernine_admin_content_entity_page_builder_edit', {
+                                    type: type_slug,
+                                    id: entity.id,
+                                }) }}"
+                                class="btn btn-color-primary btn-style-flat"
+                                title="{{ 'Page builder'|trans }}"
+                                data-turbo-frame="_top"
+                            >
+                                <i class="mdi mdi-toy-brick-outline mdi-18px"></i>
+                            </a>
+                        {% else %}
                             <button
                                 type="button"
-                                class="btn btn-color-red btn-style-flat"
-                                title="{{ ('Delete' ~ (is_trash ? ' permanently' : ''))|trans }}"
-                                data-action="content-entity--index#deleteEntity"
+                                class="btn btn-color-primary btn-style-flat"
+                                title="{{ 'Restore'|trans }}"
+                                data-action="content-entity--index#restoreEntity"
                             >
-                                <i class="mdi mdi-delete-outline mdi-18px"></i>
+                                <i class="mdi mdi-backup-restore mdi-18px"></i>
                             </button>
-                            {% if not is_trash %}
-                                <a
-                                    href="{{ N9_entity_url(entity) }}"
-                                    class="btn btn-color-secondary btn-style-flat"
-                                    title="{{ 'View'|trans }}"
-                                    target="_blank"
-                                >
-                                    <i class="mdi mdi-eye-outline mdi-18px"></i>
-                                </a>
-                            {% endif %}
-                        </div>
-                    {% endif %}
+                        {% endif %}
+                        <button
+                            type="button"
+                            class="btn btn-color-red btn-style-flat"
+                            title="{{ ('Delete' ~ (is_trash ? ' permanently' : ''))|trans }}"
+                            data-action="content-entity--index#deleteEntity"
+                        >
+                            <i class="mdi mdi-delete-outline mdi-18px"></i>
+                        </button>
+                        {% if not is_trash %}
+                            <a
+                                href="{{ N9_entity_url(entity) }}"
+                                class="btn btn-color-secondary btn-style-flat"
+                                title="{{ 'View'|trans }}"
+                                target="_blank"
+                            >
+                                <i class="mdi mdi-eye-outline mdi-18px"></i>
+                            </a>
+                        {% endif %}
+                    </div>
                 </div>
             </td>
             <td>{{ entity.author }}</td>
-            <td>{{ N9_terms_links(entity, 'category') }}</td>
-            <td>{{ N9_terms_links(entity, 'tag') }}</td>
+            {% for taxonomy in taxonomies %}
+                <td>{{ N9_terms_links(entity, taxonomy.name, ', ', {target: '_blank'}) }}</td>
+            {% endfor %}
             <td>{{ entity.comments|length }}</td>
             <td>{{ (entity.publishedAt ?? entity.updatedAt)|date('d/m/Y H:i:s') }}</td>
         </tr>

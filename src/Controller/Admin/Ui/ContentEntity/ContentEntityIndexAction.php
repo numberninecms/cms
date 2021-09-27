@@ -16,6 +16,7 @@ use NumberNine\Content\ContentService;
 use NumberNine\Form\Admin\Content\AdminContentEntityIndexFormType;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Model\Pagination\PaginationParameters;
+use NumberNine\Repository\TaxonomyRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
@@ -28,12 +29,13 @@ use Symfony\Component\Serializer\SerializerInterface;
 #[Route(path: '/{type}/', name: 'numbernine_admin_content_entity_index', methods: [
     'GET',
     'POST',
-], priority: '-1000')]
+], priority: -1000)]
 final class ContentEntityIndexAction extends AbstractController implements AdminController
 {
     public function __invoke(
         SerializerInterface $serializer,
         ContentService $contentService,
+        TaxonomyRepository $taxonomyRepository,
         Request $request,
         LoggerInterface $logger,
         string $type
@@ -102,6 +104,7 @@ final class ContentEntityIndexAction extends AbstractController implements Admin
 
         return $this->render('@NumberNine/admin/content_entity/index.html.twig', [
             'content_type' => $contentType,
+            'taxonomies' => $taxonomyRepository->findByContentType($contentType),
             'type_slug' => $type,
             'entities' => $entities,
             'form' => $form->createView(),
