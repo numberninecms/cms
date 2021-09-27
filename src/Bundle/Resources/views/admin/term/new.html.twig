@@ -14,7 +14,7 @@
 
             {% include '@NumberNine/admin/util/flashes.html.twig' %}
 
-            {{ form_start(form, {attr: {class: 'lg:max-w-md', 'data-controller': 'slugger', 'data-turbo-frame': '_top'}}) }}
+            {{ form_start(form, {attr: {class: 'lg:max-w-md px-3', 'data-controller': 'slugger', 'data-turbo-frame': '_top'}}) }}
                 {{ form_row(form.name, {attr: {'data-slugger-target': 'main'}}) }}
                 {{ form_row(form.slug, {attr: {'data-slugger-target': 'slug'}}) }}
                 {{ form_row(form.description) }}
