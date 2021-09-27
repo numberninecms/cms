@@ -2,7 +2,7 @@
 <table class="w-full" data-controller="select-all content-entity--index">
     <thead>
         <tr>
-            <th class="w-8"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></th>
+            <th class="w-8 select-row"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></th>
             {% if content_type.name != 'media_file' %}
                 <th class="w-10"></th>
             {% else %}
@@ -20,7 +20,7 @@
     <tbody>
     {% for entity in entities %}
         <tr data-entity-id="{{ entity.id }}">
-            <td>{{ form_widget(form['entity_' ~ entity.id], {attr: {'data-select-all-target': 'child'}}) }}</td>
+            <td class="select-row">{{ form_widget(form['entity_' ~ entity.id], {attr: {'data-select-all-target': 'child'}}) }}</td>
             {% if content_type is defined and content_type.name != 'media_file' %}
                 <td>{{ N9_featured_image(entity, 'thumbnail', {class: 'p-1'}) }}</td>
             {% else %}
@@ -89,7 +89,7 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="8"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></td>
+            <td class="select-row" colspan="8"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></td>
         </tr>
     </tfoot>
 </table>
