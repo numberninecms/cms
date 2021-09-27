@@ -26,7 +26,7 @@
                     <table class="w-full" data-controller="select-all">
                         <thead>
                             <tr>
-                                <th class="w-8"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></th>
+                                <th class="w-8 select-row"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></th>
                                 <th>{{ 'Name'|trans }}</th>
                                 <th>{{ 'Slug'|trans }}</th>
                                 <th>{{ 'Description'|trans }}</th>
@@ -35,7 +35,7 @@
                         <tbody>
                             {% for term in terms %}
                                 <tr>
-                                    <td>{{ form_widget(form['term_' ~ term.id], {attr: {'data-select-all-target': 'child'}}) }}</td>
+                                    <td class="select-row">{{ form_widget(form['term_' ~ term.id], {attr: {'data-select-all-target': 'child'}}) }}</td>
                                     <td>
                                         <a href="{{ path('numbernine_admin_term_edit', {taxonomy: taxonomy.name, id: term.id}) }}"
                                            data-turbo-frame="_top"
@@ -50,12 +50,12 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="4"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></td>
+                            <td colspan="4" class="select-row"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></td>
                         </tr>
                         </tfoot>
                     </table>
 
-                    <div class="flex">
+                    <div class="flex hidden" data-controller="visible-on-selected-rows">
                         {{ form_row(form.delete, {row_attr: {class: 'mt-4'}, attr: {class: 'btn btn-color-red'}}) }}
                     </div>
                 {{ form_end(form) }}

@@ -46,11 +46,11 @@
             <div class="flex-grow p-3">
                 {{ form_start(form) }}
                     {% include '@NumberNine/admin/util/content_entities_table.html.twig' %}
-                    <div class="flex">
+                    <div class="flex gap-3 hidden" data-controller="visible-on-selected-rows">
                         {% if is_trash %}
                             {{ form_row(form.restore, {row_attr: {class: 'mt-4'}}) }}
                         {% endif %}
-                        {{ form_row(form.delete, {row_attr: {class: is_trash ? 'mt-4 pl-3' : 'mt-4'}, attr: {class: 'btn btn-color-red'}}) }}
+                        {{ form_row(form.delete, {row_attr: {class: 'mt-4'}, attr: {class: 'btn btn-color-red'}}) }}
                     </div>
                 {{ form_end(form) }}
             </div>
