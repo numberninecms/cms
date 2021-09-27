@@ -24,7 +24,7 @@
                 <table class="w-full" data-controller="select-all">
                     <thead>
                     <tr>
-                        <th class="w-8"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></th>
+                        <th class="w-8 select-row"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></th>
                         <th>{{ 'Username'|trans }}</th>
                         <th>{{ 'Name'|trans }}</th>
                         <th>{{ 'Email'|trans }}</th>
@@ -35,7 +35,7 @@
                     <tbody>
                     {% for user in users %}
                         <tr>
-                            <td>{{ form_widget(form['user_' ~ user.id], {attr: {'data-select-all-target': 'child'}}) }}</td>
+                            <td class="select-row">{{ form_widget(form['user_' ~ user.id], {attr: {'data-select-all-target': 'child'}}) }}</td>
                             <td>
                                 <a href="{{ path('numbernine_admin_user_edit', {id: user.id}) }}"
                                    data-turbo-frame="_top"
@@ -52,12 +52,12 @@
                     </tbody>
                     <tfoot>
                     <tr>
-                        <td colspan="4"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></td>
+                        <td colspan="4" class="select-row"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></td>
                     </tr>
                     </tfoot>
                 </table>
 
-                <div class="flex flex-col">
+                <div class="flex flex-col hidden" data-controller="visible-on-selected-rows">
                     {{ form_row(form.mode) }}
                     {{ form_row(form.delete, {row_attr: {class: 'mt-4'}, attr: {class: 'btn btn-color-red'}}) }}
                 </div>
