@@ -17,6 +17,7 @@ security:
             provider: numbernine_user_provider
             custom_authenticators:
                 - NumberNine\Security\LoginFormAuthenticator
+            entry_point: NumberNine\Security\LoginFormAuthenticator
             logout:
                 path: numbernine_logout
             remember_me:

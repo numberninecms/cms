@@ -173,7 +173,7 @@ jobs:
                 with:
                     path: temp/cms
 
-            -   name: Create temporary branch alias for master and feature branches
+            -   name: Create temporary branch alias feature branches
                 if: github.ref != 'refs/heads/master' && !startsWith(github.ref, 'refs/pull/')
                 run: |
                     cd temp/cms
@@ -238,4 +238,4 @@ jobs:
                     sleep 5
 
             -   name: Check that website is up and running
-                run: wget --spider --no-check-certificate http://localhost:8080/
+                run: wget -qSO- http://localhost:8080/
