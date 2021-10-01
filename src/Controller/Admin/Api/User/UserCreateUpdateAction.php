@@ -21,8 +21,8 @@ use NumberNine\Security\Capabilities;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 final class UserCreateUpdateAction extends AbstractController implements AdminController
 {
@@ -47,13 +47,13 @@ final class UserCreateUpdateAction extends AbstractController implements AdminCo
     #[Route(path: '/users/create/', name: 'numbernine_admin_users_create_item', options: ['expose' => true], methods: [
         'POST',
     ])]
-    public function create(Request $request, UserPasswordEncoderInterface $passwordEncoder): JsonResponse
+    public function create(Request $request, UserPasswordHasherInterface $userPasswordHasher): JsonResponse
     {
         $this->denyAccessUnlessGranted(Capabilities::CREATE_USERS);
         /** @var array $data */
         $data = $request->request->get('user');
         $user = (new User())->setUsername($data['username']);
-        $user->setPassword($passwordEncoder->encodePassword($user, $data['password']));
+        $user->setPassword($userPasswordHasher->hashPassword($user, $data['password']));
         $this->setFields($user, $data);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
