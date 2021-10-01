@@ -40,7 +40,7 @@ final class ResponseEventSubscriber implements EventSubscriberInterface
         private TagRenderer $tagRenderer,
         private ContentService $contentService
     ) {
-        $this->request = $requestStack->getMasterRequest();
+        $this->request = $requestStack->getMainRequest();
     }
 
     public static function getSubscribedEvents(): array

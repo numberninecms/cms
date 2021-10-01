@@ -20,7 +20,7 @@ final class RequestAnalyzer
 
     public function __construct(RequestStack $requestStack)
     {
-        $this->request = $requestStack->getMasterRequest();
+        $this->request = $requestStack->getMainRequest();
     }
 
     public function isPreviewMode(): bool

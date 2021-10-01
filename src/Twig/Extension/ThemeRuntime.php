@@ -52,7 +52,7 @@ final class ThemeRuntime implements RuntimeExtensionInterface
         private ContentService $contentService,
         private SluggerInterface $slugger
     ) {
-        $this->request = $requestStack->getMasterRequest();
+        $this->request = $requestStack->getMainRequest();
     }
 
     public function getCurrentTheme(): ThemeInterface
