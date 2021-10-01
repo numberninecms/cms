@@ -19,26 +19,20 @@ use Symfony\Component\Serializer\Annotation\Groups;
 trait WebAccessTrait
 {
     /**
-     * @ORM\Column(type="text")
-     * @Groups({"web_access_get", "menu_get", "content_entity_get_full"})
      * @Gedmo\Versioned
      */
+    #[ORM\Column(type: 'text')]
+    #[Groups(['web_access_get', 'menu_get', 'content_entity_get_full'])]
     private ?string $title = null;
 
-    /**
-     * @ORM\Column(type="string", length=20)
-     * @Groups({"web_access_get", "content_entity_get_full"})
-     */
+    #[ORM\Column(type: 'string', length: 20)]
+    #[Groups(['web_access_get', 'content_entity_get_full'])]
     private ?string $status = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $password = null;
 
-    /**
-     * @Groups({"web_access_get", "content_entity_get_full"})
-     */
+    #[Groups(['web_access_get', 'content_entity_get_full'])]
     private ?string $publicUrl = null;
 
     public function getTitle(): ?string

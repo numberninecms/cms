@@ -17,69 +17,53 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use NumberNine\Attribute\NormalizationContext;
 use NumberNine\Model\Content\Features\CustomFieldsTrait;
+use NumberNine\Repository\TermRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Entity(repositoryClass="NumberNine\Repository\TermRepository")
- */
+#[ORM\Entity(repositoryClass: TermRepository::class)]
 #[NormalizationContext(groups: ['term_get'])]
 class Term
 {
     use CustomFieldsTrait;
 
     /**
-     * @var string
      * @Gedmo\Slug(fields={"name"}, updatable=false)
-     * @ORM\Column(type="string", unique=false)
-     * @Groups("term_get")
      */
+    #[ORM\Column(type: 'string', unique: false)]
+    #[Groups(['term_get'])]
     protected ?string $slug = null;
 
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(type="integer")
-     * @Groups({"term_get", "content_entity_get", "content_entity_get_full"})
-     */
+    #[ORM\Id, ORM\GeneratedValue(strategy: 'IDENTITY'), ORM\Column(type: 'integer')]
+    #[Groups(['term_get', 'content_entity_get', 'content_entity_get_full'])]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"term_get", "content_entity_get", "content_entity_get_full"})
-     */
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['term_get', 'content_entity_get', 'content_entity_get_full'])]
     private ?string $name = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="NumberNine\Entity\Taxonomy", inversedBy="terms")
-     * @ORM\JoinColumn(nullable=false)
-     * @Groups({"content_entity_get", "term_get"})
-     */
+    #[ORM\ManyToOne(targetEntity: Taxonomy::class, inversedBy: 'terms')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['term_get', 'content_entity_get'])]
     private ?Taxonomy $taxonomy = null;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     * @Groups("term_get")
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
+    #[Groups(['term_get'])]
     private ?string $description = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="NumberNine\Entity\Term", inversedBy="children")
-     * @Groups("term_get")
-     */
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
+    #[Groups(['term_get'])]
     private ?Term $parent = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="NumberNine\Entity\Term", mappedBy="parent")
-     *
      * @var Collection|Term[]
      */
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     private Collection $children;
 
     /**
-     * @ORM\OneToMany(targetEntity="NumberNine\Entity\ContentEntityTerm", mappedBy="term", orphanRemoval=true)
-     *
      * @var Collection|ContentEntityTerm[]
      */
+    #[ORM\OneToMany(targetEntity: ContentEntityTerm::class, mappedBy: 'term', orphanRemoval: true)]
     private Collection $contentEntityTerms;
 
     public function __construct()

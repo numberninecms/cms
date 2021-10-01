@@ -18,17 +18,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
 trait EditorTrait
 {
     /**
-     * @ORM\Column(type="text", nullable=true)
-     * @Groups({"editor_get", "content_entity_get_full"})
      * @Gedmo\Versioned
      */
+    #[ORM\Column(type: 'text', nullable: true)]
+    #[Groups(['editor_get', 'content_entity_get_full'])]
     private ?string $content = null;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
-     * @Groups({"editor_get", "content_entity_get_full"})
      * @Gedmo\Versioned
      */
+    #[ORM\Column(type: 'text', nullable: true)]
+    #[Groups(['editor_get', 'content_entity_get_full'])]
     private ?string $excerpt = null;
 
     public function getContent(): ?string

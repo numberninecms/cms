@@ -14,44 +14,35 @@ namespace NumberNine\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use NumberNine\Repository\UserRoleRepository;
 use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Entity(repositoryClass="NumberNine\Repository\UserRoleRepository")
- * @ORM\Table(name="userrole")
- * @UniqueEntity("name")
- */
+#[ORM\Entity(repositoryClass: UserRoleRepository::class)]
+#[ORM\Table(name: 'userrole')]
+#[UniqueEntity(fields: ['name'])]
 class UserRole implements Stringable
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(type="integer")
-     * @Groups({"user_get", "role_get"})
-     */
+    #[ORM\Id, ORM\GeneratedValue(strategy: 'IDENTITY'), ORM\Column(type: 'integer')]
+    #[Groups(['user_get', 'role_get'])]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     * @Groups({"user_get", "role_get"})
-     */
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
+    #[Groups(['user_get', 'role_get'])]
     private ?string $name = null;
 
     /**
-     * @ORM\Column(type="json")
-     * @Groups("role_get")
-     *
      * @var string[]
      */
+    #[ORM\Column(type: 'json')]
+    #[Groups(['role_get'])]
     private array $capabilities = [];
 
     /**
-     * @ORM\ManyToMany(targetEntity="NumberNine\Entity\User", mappedBy="userRoles")
-     *
      * @var Collection|User[]
      */
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'userRoles')]
     private Collection $users;
 
     public function __construct()

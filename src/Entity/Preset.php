@@ -14,31 +14,22 @@ namespace NumberNine\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use NumberNine\Repository\PresetRepository;
 
-/**
- * @ORM\Entity(repositoryClass=PresetRepository::class)
- */
+#[ORM\Entity(repositoryClass: PresetRepository::class)]
 class Preset
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id, ORM\GeneratedValue(strategy: 'IDENTITY'), ORM\Column(type: 'integer')]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $shortcodeName = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $name = null;
 
     /**
      * @ORM\Column(type="text")
      */
+    #[ORM\Column(type: 'text')]
     private ?string $content = null;
 
     public function getId(): ?int

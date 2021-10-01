@@ -12,28 +12,19 @@
 namespace NumberNine\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use NumberNine\Repository\ContentEntityRelationshipRepository;
 
-/**
- * @ORM\Entity(repositoryClass="NumberNine\Repository\CoreOptionRepository")
- * @ORM\Table(name="coreoption")
- */
+#[ORM\Entity(repositoryClass: ContentEntityRelationshipRepository::class)]
+#[ORM\Table(name: 'coreoption')]
 class CoreOption
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id, ORM\GeneratedValue(strategy: 'IDENTITY'), ORM\Column(type: 'integer')]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
     private ?string $name;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $value;
 
     public function getId(): ?int

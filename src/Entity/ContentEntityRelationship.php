@@ -14,35 +14,24 @@ declare(strict_types=1);
 namespace NumberNine\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use NumberNine\Repository\ContentEntityRelationshipRepository;
 
-/**
- * @ORM\Entity(repositoryClass="NumberNine\Repository\ContentEntityRelationshipRepository")
- * @ORM\Table(name="contententityrelationship")
- */
+#[ORM\Entity(repositoryClass: ContentEntityRelationshipRepository::class)]
+#[ORM\Table(name: 'contententityrelationship')]
 class ContentEntityRelationship
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id, ORM\GeneratedValue(strategy: 'IDENTITY'), ORM\Column(type: 'integer')]
     private int $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="NumberNine\Entity\ContentEntity", inversedBy="parents")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: ContentEntity::class, inversedBy: 'parents')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?ContentEntity $parent = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="NumberNine\Entity\ContentEntity", inversedBy="children")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: ContentEntity::class, inversedBy: 'children')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?ContentEntity $child = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $name = null;
 
     public function getId(): ?int

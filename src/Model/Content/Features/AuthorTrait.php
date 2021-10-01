@@ -17,10 +17,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 trait AuthorTrait
 {
-    /**
-     * @ORM\ManyToOne(targetEntity="NumberNine\Entity\User")
-     * @Groups({"author_get", "content_entity_get_full"})
-     */
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[Groups(['author_get', 'content_entity_get_full'])]
     protected ?User $author = null;
 
     public function getAuthor(): ?User

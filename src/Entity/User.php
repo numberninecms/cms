@@ -14,8 +14,9 @@ namespace NumberNine\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 use NumberNine\Model\Content\Features\CustomFieldsTrait;
+use NumberNine\Model\Content\Features\TimestampableTrait;
+use NumberNine\Repository\UserRepository;
 use Serializable;
 use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -23,15 +24,13 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Entity(repositoryClass="NumberNine\Repository\UserRepository")
- * @UniqueEntity(fields={"username"}, message="This username is already taken.")
- * @UniqueEntity(fields={"email"}, message="A user is already registered with this email.")
- */
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(fields: ['username'], message: 'This username is already taken.')]
+#[UniqueEntity(fields: ['email'], message: 'A user is already registered with this email.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface, Serializable, Stringable
 {
     use CustomFieldsTrait;
-    use TimestampableEntity;
+    use TimestampableTrait;
 
     public const DISPLAY_NAME_USERNAME = 'username';
     public const DISPLAY_NAME_FIRST_ONLY = 'first_only';
@@ -39,71 +38,51 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Seriali
     public const DISPLAY_NAME_FIRST_LAST = 'first_last';
     public const DISPLAY_NAME_LAST_FIRST = 'last_first';
 
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(type="integer")
-     * @Groups({"user_get", "author_get"})
-     */
+    #[ORM\Id, ORM\GeneratedValue(strategy: 'IDENTITY'), ORM\Column(type: 'integer')]
+    #[Groups(['user_get', 'author_get'])]
     protected int $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity="NumberNine\Entity\UserRole", inversedBy="users", fetch="EAGER")
-     * @ORM\JoinTable(name="userrole_user")
-     * @Groups({"user_get"})
-     *
      * @var Collection|UserRole[]
      */
+    #[ORM\ManyToMany(targetEntity: UserRole::class, inversedBy: 'users', fetch: 'EAGER')]
+    #[ORM\JoinTable(name: 'userrole_user')]
+    #[Groups(['user_get'])]
     private Collection $userRoles;
 
     /**
-     * @ORM\OneToMany(targetEntity="NumberNine\Entity\ContentEntity", mappedBy="author")
-     *
      * @var Collection|ContentEntity[]
      */
+    #[ORM\OneToMany(targetEntity: ContentEntity::class, mappedBy: 'author')]
     private Collection $contentEntities;
 
     /**
-     * @ORM\OneToMany(targetEntity="NumberNine\Entity\Comment", mappedBy="author")
-     *
      * @var Collection|Comment[]
      */
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'author')]
     private Collection $comments;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"user_get", "author_get"})
-     */
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[Groups(['user_get', 'author_get'])]
     private ?string $username = null;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"user_get"})
-     */
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[Groups(['user_get'])]
     private ?string $email = null;
 
-    /**
-     * @var ?string The hashed password
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: 'string')]
     private ?string $password = null;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Groups({"user_get"})
-     */
+    #[ORM\Column(type: 'string', nullable: true)]
+    #[Groups(['user_get'])]
     private ?string $firstName = null;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Groups({"user_get"})
-     */
+    #[ORM\Column(type: 'string', nullable: true)]
+    #[Groups(['user_get'])]
     private ?string $lastName = null;
 
-    /**
-     * @ORM\Column(type="string")
-     * @Groups({"user_get"})
-     */
+    #[ORM\Column(type: 'string')]
+    #[Groups(['user_get'])]
     private ?string $displayNameFormat = self::DISPLAY_NAME_USERNAME;
 
     public function __construct()
@@ -243,9 +222,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Seriali
         return $this;
     }
 
-    /**
-     * @Groups({"user_get", "author_get"})
-     */
+    #[Groups(['user_get', 'author_get'])]
     public function getDisplayName(): string
     {
         return match ($this->displayNameFormat) {

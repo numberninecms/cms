@@ -13,94 +13,65 @@ namespace NumberNine\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use NumberNine\Attribute\NormalizationContext;
+use NumberNine\Repository\MediaFileRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Entity(repositoryClass="NumberNine\Repository\MediaFileRepository")
- * @ORM\Table(name="mediafile")
- */
+#[ORM\Entity(repositoryClass: MediaFileRepository::class)]
+#[ORM\Table(name: 'mediafile')]
 #[NormalizationContext(groups: ['content_entity_get', 'web_access_get', 'author_get', 'media_file_get'])]
 class MediaFile extends ContentEntity
 {
-    /**
-     * @ORM\Column(type="string", length=1024, nullable=true)
-     * @Groups("media_file_get")
-     */
+    #[ORM\Column(type: 'string', length: 1024, nullable: true)]
+    #[Groups(['media_file_get'])]
     private ?string $path = null;
 
-    /**
-     * @ORM\Column(type="string", length=1024, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 1024, nullable: true)]
     private ?string $remoteUrl = null;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     * @Groups("media_file_get")
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
+    #[Groups(['media_file_get'])]
     private ?int $fileSize = null;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     * @Groups("media_file_get")
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
+    #[Groups(['media_file_get'])]
     private ?int $width = null;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     * @Groups("media_file_get")
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
+    #[Groups(['media_file_get'])]
     private ?int $height = null;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     * @Groups("media_file_get")
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
+    #[Groups(['media_file_get'])]
     private ?int $duration = null;
 
-    /**
-     * @ORM\Column(type="json", nullable=true)
-     * @Groups("media_file_get")
-     */
+    #[ORM\Column(type: 'json', nullable: true)]
+    #[Groups(['media_file_get'])]
     private array $sizes = [];
 
-    /**
-     * @ORM\Column(type="json", nullable=true)
-     * @Groups("media_file_get")
-     */
+    #[ORM\Column(type: 'json', nullable: true)]
+    #[Groups(['media_file_get'])]
     private array $exif = [];
 
-    /**
-     * @ORM\Column(type="json", nullable=true)
-     */
+    #[ORM\Column(type: 'json', nullable: true)]
     private array $keywords = [];
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $credit = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("media_file_get")
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups(['media_file_get'])]
     private ?string $caption = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("media_file_get")
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups(['media_file_get'])]
     private ?string $copyright = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("media_file_get")
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups(['media_file_get'])]
     private ?string $alternativeText = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("media_file_get")
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups(['media_file_get'])]
     private ?string $mimeType = null;
 
     public function getPath(): ?string

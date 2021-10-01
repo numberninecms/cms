@@ -16,8 +16,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 use NumberNine\Model\Content\CommentStatusInterface;
 use NumberNine\Model\Content\Features\AuthorTrait;
 use NumberNine\Model\Content\Features\CommentsTrait;
@@ -25,18 +23,21 @@ use NumberNine\Model\Content\Features\CustomFieldsTrait;
 use NumberNine\Model\Content\Features\CustomTypeTrait;
 use NumberNine\Model\Content\Features\EditorTrait;
 use NumberNine\Model\Content\Features\SeoTrait;
+use NumberNine\Model\Content\Features\SoftDeleteableTrait;
+use NumberNine\Model\Content\Features\TimestampableTrait;
 use NumberNine\Model\Content\Features\WebAccessTrait;
 use NumberNine\Model\Content\PublishingStatusInterface;
+use NumberNine\Repository\ContentEntityRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass="NumberNine\Repository\ContentEntityRepository")
- * @ORM\InheritanceType("JOINED")
- * @ORM\DiscriminatorColumn(name="content_type", type="string")
- * @ORM\Table(name="contententity")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  * @Gedmo\Loggable
  */
+#[ORM\Entity(repositoryClass: ContentEntityRepository::class)]
+#[ORM\InheritanceType('JOINED')]
+#[ORM\DiscriminatorColumn(name: 'content_type', type: 'string')]
+#[ORM\Table(name: 'contententity')]
 class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
 {
     use WebAccessTrait;
@@ -46,76 +47,49 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
     use CustomTypeTrait;
     use CustomFieldsTrait;
     use CommentsTrait;
-    use SoftDeleteableEntity;
-    use TimestampableEntity;
+    use TimestampableTrait;
+    use SoftDeleteableTrait;
 
     /**
      * @Gedmo\Slug(fields={"title"}, updatable=false)
-     * @ORM\Column(type="string", unique=true)
-     * @Groups({"content_entity_get", "content_entity_get_full"})
      * @Gedmo\Versioned
      */
+    #[ORM\Column(type: 'string', unique: true)]
+    #[Groups(['content_entity_get', 'content_entity_get_full'])]
     protected ?string $slug = null;
 
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     * @Groups({"content_entity_get", "content_entity_get_full"})
-     */
-    protected $createdAt;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="NumberNine\Entity\User", inversedBy="contentEntities")
-     * @Groups({"author_get", "content_entity_get_full"})
-     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'contentEntities')]
+    #[Groups(['content_entity_get', 'content_entity_get_full'])]
     protected ?User $author = null;
 
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(type="integer")
-     * @Groups({"content_entity_get", "content_entity_get_full", "menu_get"})
-     */
+    #[ORM\Id, ORM\GeneratedValue(strategy: 'IDENTITY'), ORM\Column(type: 'integer')]
+    #[Groups(['content_entity_get', 'content_entity_get_full', 'menu_get'])]
     private ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="NumberNine\Entity\ContentEntity")
-     */
+    #[ORM\ManyToOne(targetEntity: self::class)]
     private ?ContentEntity $parent = null;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $menuOrder = null;
 
     /**
      * @Gedmo\Timestampable(on="change", field="status", value="publish")
-     * @ORM\Column(type="datetime", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private ?DateTime $publishedAt = null;
 
-    /**
-     * @ORM\OneToMany(
-     *     targetEntity="NumberNine\Entity\ContentEntityTerm",
-     *     mappedBy="contentEntity",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     */
+    #[ORM\OneToMany(
+        targetEntity: ContentEntityTerm::class,
+        mappedBy: 'contentEntity',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true,
+    )]
     private Collection $contentEntityTerms;
 
-    /**
-     * @ORM\OneToMany(targetEntity="NumberNine\Entity\ContentEntityRelationship", mappedBy="child", cascade={"persist"})
-     */
+    #[ORM\OneToMany(targetEntity: ContentEntityRelationship::class, mappedBy: 'child', cascade: ['persist'])]
     private Collection $children;
 
-    /**
-     * @ORM\OneToMany(
-     *     targetEntity="NumberNine\Entity\ContentEntityRelationship",
-     *     mappedBy="parent",
-     *     cascade={"persist"}
-     * )
-     */
+    #[ORM\OneToMany(targetEntity: ContentEntityRelationship::class, mappedBy: 'parent', cascade: ['persist'])]
     private Collection $parents;
 
     public function __construct()
@@ -172,8 +146,8 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
      * Get terms sorted by their position.
      *
      * @return Term[]
-     * @Groups({"content_entity_get", "content_entity_get_full"})
      */
+    #[Groups(['content_entity_get', 'content_entity_get_full'])]
     public function getTerms(Taxonomy|string|null $taxonomy = null): array
     {
         $sorted = $this->contentEntityTerms->toArray();

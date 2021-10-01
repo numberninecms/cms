@@ -12,28 +12,19 @@
 namespace NumberNine\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use NumberNine\Repository\MenuRepository;
 use Stringable;
 
-/**
- * @ORM\Entity(repositoryClass="NumberNine\Repository\MenuRepository")
- */
+#[ORM\Entity(repositoryClass: MenuRepository::class)]
 class Menu implements Stringable
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id, ORM\GeneratedValue(strategy: 'IDENTITY'), ORM\Column(type: 'integer')]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $name;
 
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(type: 'json')]
     private array $menuItems = [];
 
     public function __toString(): string
