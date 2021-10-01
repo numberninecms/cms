@@ -42,8 +42,7 @@ final class NumberNineExtension extends ConfigurableExtension implements Prepend
             ]
         );
 
-        $reflection = new ReflectionClass(Settings::class);
-        $constants = $reflection->getConstants();
+        $constants = (new ReflectionClass(Settings::class))->getConstants();
 
         $container->loadFromExtension('twig', [
             'globals' => $constants,
@@ -54,8 +53,7 @@ final class NumberNineExtension extends ConfigurableExtension implements Prepend
 
         $extensions = $container->getExtensions();
 
-        $resource = Yaml::parseFile(__DIR__ . '/../Resources/config/app.yaml');
-        foreach ($resource as $name => $config) {
+        foreach (Yaml::parseFile(__DIR__ . '/../Resources/config/app.yaml') as $name => $config) {
             if (empty($extensions[$name])) {
                 continue;
             }
@@ -69,7 +67,7 @@ final class NumberNineExtension extends ConfigurableExtension implements Prepend
 
         if ($securityModified) {
             foreach ($securityConfigs as $config) {
-                $this->mergeConfigIntoOne($container, 'security', $config);
+                $this->mergeConfigIntoOne($container, 'security', $config, true);
             }
         }
     }
