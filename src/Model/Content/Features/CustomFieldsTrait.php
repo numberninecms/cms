@@ -16,10 +16,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 trait CustomFieldsTrait
 {
-    /**
-     * @ORM\Column(type="json", nullable=true)
-     * @Groups({"custom_fields_get", "content_entity_get_full"})
-     */
+    #[ORM\Column(type: 'json', nullable: true)]
+    #[Groups(['custom_fields_get', 'content_entity_get_full'])]
     private ?array $customFields = null;
 
     public function getCustomFields(): ?array

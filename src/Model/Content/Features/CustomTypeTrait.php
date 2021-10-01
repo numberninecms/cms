@@ -16,9 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 trait CustomTypeTrait
 {
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected ?string $customType = null;
 
     public function getCustomType(): ?string

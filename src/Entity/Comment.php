@@ -15,71 +15,51 @@ use ArrayAccess;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 use NumberNine\Model\Content\Features\AuthorTrait;
+use NumberNine\Model\Content\Features\SoftDeleteableTrait;
+use NumberNine\Model\Content\Features\TimestampableTrait;
+use NumberNine\Repository\CommentRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass="NumberNine\Repository\CommentRepository")
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  */
+#[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
 {
     use AuthorTrait;
-    use SoftDeleteableEntity;
-    use TimestampableEntity;
+    use TimestampableTrait;
+    use SoftDeleteableTrait;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="NumberNine\Entity\User", inversedBy="comments")
-     * @Groups("author_get")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'comments')]
+    #[Groups('author_get')]
     protected ?User $author = null;
 
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id, ORM\GeneratedValue(strategy: 'IDENTITY'), ORM\Column(type: 'integer')]
     private int $id;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $content;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: 'string', nullable: true)]
     private ?string $guestAuthorName;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: 'string', nullable: true)]
     private ?string $guestAuthorEmail;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: 'string', nullable: true)]
     private ?string $guestAuthorUrl;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="NumberNine\Entity\Comment", inversedBy="children")
-     */
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     private ?Comment $parent;
 
-    /**
-     * @ORM\OneToMany(targetEntity="NumberNine\Entity\Comment", mappedBy="parent", fetch="EAGER", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent', fetch: 'EAGER', orphanRemoval: true)]
     private Collection $children;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="NumberNine\Entity\ContentEntity", inversedBy="comments")
-     */
+    #[ORM\ManyToOne(targetEntity: ContentEntity::class, inversedBy: 'comments')]
     private ?ContentEntity $contentEntity;
 
-    /**
-     * Comment constructor.
-     */
     public function __construct()
     {
         $this->children = new ArrayCollection();

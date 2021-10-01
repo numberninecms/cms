@@ -14,38 +14,28 @@ namespace NumberNine\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use NumberNine\Repository\TaxonomyRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Entity(repositoryClass="NumberNine\Repository\TaxonomyRepository")
- */
+#[ORM\Entity(repositoryClass: TaxonomyRepository::class)]
 class Taxonomy
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(type="integer")
-     * @Groups({"taxonomy_get"})
-     */
+    #[ORM\Id, ORM\GeneratedValue(strategy: 'IDENTITY'), ORM\Column(type: 'integer')]
+    #[Groups(['taxonomy_get'])]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"taxonomy_get", "content_entity_get", "term_get"})
-     */
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['taxonomy_get', 'content_entity_get', 'term_get'])]
     private ?string $name;
 
-    /**
-     * @ORM\Column(type="json")
-     * @Groups({"taxonomy_get"})
-     */
+    #[ORM\Column(type: 'json')]
+    #[Groups(['taxonomy_get'])]
     private array $contentTypes = [];
 
     /**
-     * @ORM\OneToMany(targetEntity="NumberNine\Entity\Term", mappedBy="taxonomy", orphanRemoval=true)
-     *
      * @var Collection|Term[]
      */
+    #[ORM\OneToMany(targetEntity: Term::class, mappedBy: 'taxonomy', orphanRemoval: true)]
     private Collection $terms;
 
     public function __construct()

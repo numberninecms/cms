@@ -12,46 +12,33 @@
 namespace NumberNine\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use NumberNine\Repository\ContentEntityTermRepository;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Entity(repositoryClass="NumberNine\Repository\ContentEntityTermRepository")
- * @ORM\Table(
- *     name="contententity_term",
- *     uniqueConstraints={@ORM\UniqueConstraint(columns={"content_entity_id", "term_id"})}
- * )
- * @UniqueEntity(
- *     fields={"contentEntity", "term"},
- *     errorPath="term",
- *     message="This term is already in use on that content entity."
- * )
- */
+#[ORM\Entity(repositoryClass: ContentEntityTermRepository::class)]
+#[ORM\Table(name: 'contententity_term')]
+#[ORM\UniqueConstraint(columns: ['content_entity_id', 'term_id'])]
+#[UniqueEntity(
+    fields: ['contentEntity', 'term'],
+    errorPath: 'term',
+    message: 'This term is already in use on that content entity.',
+)]
 class ContentEntityTerm
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id, ORM\GeneratedValue(strategy: 'IDENTITY'), ORM\Column(type: 'integer')]
     private int $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="NumberNine\Entity\ContentEntity", inversedBy="contentEntityTerms")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: ContentEntity::class, inversedBy: 'contentEntityTerms')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?ContentEntity $contentEntity;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="NumberNine\Entity\Term", inversedBy="contentEntityTerms")
-     * @ORM\JoinColumn(nullable=false)
-     * @Groups({"content_entity_get", "content_entity_get_full"})
-     */
+    #[ORM\ManyToOne(targetEntity: Term::class, inversedBy: 'contentEntityTerms')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['content_entity_get', 'content_entity_get_full'])]
     private ?Term $term;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private int $position = 0;
 
     public function getId(): ?int

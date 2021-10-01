@@ -12,35 +12,24 @@
 namespace NumberNine\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use NumberNine\Repository\ThemeOptionsRepository;
 
-/**
- * @ORM\Entity(repositoryClass="NumberNine\Repository\ThemeOptionsRepository")
- * @ORM\Table(name="themeoptions")
- */
+#[ORM\Entity(repositoryClass: ThemeOptionsRepository::class)]
+#[ORM\Table(name: 'themeoptions')]
 class ThemeOptions
 {
     public const MENU_LOCATIONS = 'menu_locations';
 
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id, ORM\GeneratedValue(strategy: 'IDENTITY'), ORM\Column(type: 'integer')]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
     private ?string $theme;
 
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(type: 'json')]
     private array $options = [];
 
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(type: 'json')]
     private array $draftOptions = [];
 
     public function getId(): ?int

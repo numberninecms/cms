@@ -18,16 +18,13 @@ use Traversable;
 
 trait CommentsTrait
 {
-    /**
-     * @ORM\Column(type="string", length=20)
-     */
+    #[ORM\Column(type: 'string', length: 20)]
     private ?string $commentStatus;
 
     /**
-     * @ORM\OneToMany(targetEntity="NumberNine\Entity\Comment", mappedBy="contentEntity")
-     *
      * @var Collection|Comment[]
      */
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'contentEntity')]
     private Collection $comments;
 
     public function getCommentStatus(): ?string

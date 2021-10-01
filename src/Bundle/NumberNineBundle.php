@@ -42,10 +42,7 @@ final class NumberNineBundle extends Bundle
         $container->addCompilerPass(new ComponentCompilerPass());
         $container->addCompilerPass(new ShortcodeCompilerPass());
         $container->addCompilerPass(
-            DoctrineOrmMappingsPass::createAnnotationMappingDriver(
-                ['NumberNine\\Entity', 'NumberNine\\Model'],
-                [__DIR__ . '/../Entity', __DIR__ . '/../Model']
-            )
+            DoctrineOrmMappingsPass::createAttributeMappingDriver(['NumberNine\\Entity'], [__DIR__ . '/../Entity'])
         );
     }
 

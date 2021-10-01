@@ -16,9 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 trait SeoTrait
 {
-    /**
-     * @ORM\Column(type="json", nullable=true)
-     */
+    #[ORM\Column(type: 'json', nullable: true)]
     private ?array $seo = null;
 
     public function getSeo(): ?array

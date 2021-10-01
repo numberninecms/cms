@@ -13,10 +13,9 @@ namespace NumberNine\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use NumberNine\Attribute\NormalizationContext;
+use NumberNine\Repository\PostRepository;
 
-/**
- * @ORM\Entity(repositoryClass="NumberNine\Repository\PostRepository")
- */
+#[ORM\Entity(repositoryClass: PostRepository::class)]
 #[NormalizationContext(groups: ['content_entity_get', 'web_access_get', 'author_get'])]
 class Post extends ContentEntity
 {
