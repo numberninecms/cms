@@ -48,7 +48,9 @@ final class ConfigurationReadWriter
                     : $default;
 
                 try {
-                    $value = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+                    if ($value !== null) {
+                        $value = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+                    }
                 } catch (Exception) {
                     // this wasn't a json string
                 }

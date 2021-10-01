@@ -19,6 +19,7 @@ use NumberNine\Model\Content\Features\CustomFieldsTrait;
 use Serializable;
 use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -27,7 +28,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @UniqueEntity(fields={"username"}, message="This username is already taken.")
  * @UniqueEntity(fields={"email"}, message="A user is already registered with this email.")
  */
-class User implements UserInterface, Serializable, Stringable
+class User implements UserInterface, PasswordAuthenticatedUserInterface, Serializable, Stringable
 {
     use CustomFieldsTrait;
     use TimestampableEntity;
@@ -141,6 +142,11 @@ class User implements UserInterface, Serializable, Stringable
      *
      * @see UserInterface
      */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->username;
+    }
+
     public function getUsername(): string
     {
         return (string) $this->username;

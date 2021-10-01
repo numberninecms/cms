@@ -24,7 +24,6 @@ use RuntimeException;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Yaml\Yaml;
-use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -40,74 +39,67 @@ final class TemplateResolver implements TemplateResolverInterface
 
     public function resolveSingle(ContentEntity $entity, array $extraTemplates = []): TemplateWrapper
     {
-        return $this->cache->get(
-            sprintf('single_%s_id_%d', $entity->getCustomType(), $entity->getId()),
-            function (ItemInterface $item) use ($entity, $extraTemplates): TemplateWrapper {
-                $item->tag(sprintf('content_entity_%d', $entity->getId()));
+        $themeName = $this->themeStore->getCurrentThemeName();
 
-                $themeName = $this->themeStore->getCurrentThemeName();
-
-                $templates = array_merge(
-                    $extraTemplates,
-                    [
-                        sprintf('theme/%s/single_%s.html.twig', $entity->getCustomType(), $entity->getSlug()),
-                        sprintf('@%s/%s/single_%s.html.twig', $themeName, $entity->getCustomType(), $entity->getSlug()),
-                        sprintf('theme/%s/single_%d.html.twig', $entity->getCustomType(), $entity->getId()),
-                        sprintf('@%s/%s/single_%d.html.twig', $themeName, $entity->getCustomType(), $entity->getId()),
-                        sprintf('theme/%s/single.html.twig', $entity->getCustomType()),
-                        sprintf('@%s/%s/single.html.twig', $themeName, $entity->getCustomType()),
-                        sprintf('theme/content/single.html.twig'),
-                        sprintf('@%s/content/single.html.twig', $themeName),
-                    ]
-                );
-
-                if ($pageTemplate = $entity->getCustomField('page_template')) {
-                    $candidates = array_merge(
-                        $this->getContentEntitySingleTemplateCandidates(
-                            $this->contentService->getContentType((string) $entity->getCustomType())
-                        ),
-                        $this->getContentEntityIndexTemplateCandidates(),
-                    );
-
-                    $filename = \array_key_exists($pageTemplate, $candidates) ? $pageTemplate : false;
-
-                    if (\is_string($filename) && $filename) {
-                        if (preg_match('/^index\./', basename($filename))) {
-                            array_unshift(
-                                $templates,
-                                sprintf('theme/%s', $filename),
-                                sprintf('@%s/%s', $themeName, $filename),
-                            );
-                        } else {
-                            array_unshift(
-                                $templates,
-                                sprintf('theme/%s/%s', $entity->getCustomType(), $filename),
-                                sprintf('@%s/%s/%s', $themeName, $entity->getCustomType(), $filename),
-                                sprintf('theme/content/%s', $filename),
-                            );
-                        }
-                    }
-                }
-
-                try {
-                    $template = $this->twig->resolveTemplate($templates);
-
-                    if ($this->hasFrontMatterBlock($template->getSourceContext()->getCode())) {
-                        $template = $this->createTwigTemplateFromFrontMatterAnnotatedFile(
-                            $template->getSourceContext()->getPath()
-                        );
-                    }
-                } catch (SyntaxError $e) {
-                    if (($context = $e->getSourceContext()) && $this->hasFrontMatterBlock($context->getCode())) {
-                        $template = $this->createTwigTemplateFromFrontMatterAnnotatedFile($context->getPath());
-                    } else {
-                        throw $e;
-                    }
-                }
-
-                return $template;
-            }
+        $templates = array_merge(
+            $extraTemplates,
+            [
+                sprintf('theme/%s/single_%s.html.twig', $entity->getCustomType(), $entity->getSlug()),
+                sprintf('@%s/%s/single_%s.html.twig', $themeName, $entity->getCustomType(), $entity->getSlug()),
+                sprintf('theme/%s/single_%d.html.twig', $entity->getCustomType(), $entity->getId()),
+                sprintf('@%s/%s/single_%d.html.twig', $themeName, $entity->getCustomType(), $entity->getId()),
+                sprintf('theme/%s/single.html.twig', $entity->getCustomType()),
+                sprintf('@%s/%s/single.html.twig', $themeName, $entity->getCustomType()),
+                sprintf('theme/content/single.html.twig'),
+                sprintf('@%s/content/single.html.twig', $themeName),
+            ]
         );
+
+        if ($pageTemplate = $entity->getCustomField('page_template')) {
+            $candidates = array_merge(
+                $this->getContentEntitySingleTemplateCandidates(
+                    $this->contentService->getContentType((string) $entity->getCustomType())
+                ),
+                $this->getContentEntityIndexTemplateCandidates(),
+            );
+
+            $filename = \array_key_exists($pageTemplate, $candidates) ? $pageTemplate : false;
+
+            if (\is_string($filename) && $filename) {
+                if (preg_match('/^index\./', basename($filename))) {
+                    array_unshift(
+                        $templates,
+                        sprintf('theme/%s', $filename),
+                        sprintf('@%s/%s', $themeName, $filename),
+                    );
+                } else {
+                    array_unshift(
+                        $templates,
+                        sprintf('theme/%s/%s', $entity->getCustomType(), $filename),
+                        sprintf('@%s/%s/%s', $themeName, $entity->getCustomType(), $filename),
+                        sprintf('theme/content/%s', $filename),
+                    );
+                }
+            }
+        }
+
+        try {
+            $template = $this->twig->resolveTemplate($templates);
+
+            if ($this->hasFrontMatterBlock($template->getSourceContext()->getCode())) {
+                $template = $this->createTwigTemplateFromFrontMatterAnnotatedFile(
+                    $template->getSourceContext()->getPath()
+                );
+            }
+        } catch (SyntaxError $e) {
+            if (($context = $e->getSourceContext()) && $this->hasFrontMatterBlock($context->getCode())) {
+                $template = $this->createTwigTemplateFromFrontMatterAnnotatedFile($context->getPath());
+            } else {
+                throw $e;
+            }
+        }
+
+        return $template;
     }
 
     /**

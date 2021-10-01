@@ -2,7 +2,7 @@ framework:
     test: true
     secret: F00
     session:
-        storage_id: session.storage.mock_file
+        storage_factory_id: session.storage.factory.mock_file
 
 doctrine:
     dbal:
