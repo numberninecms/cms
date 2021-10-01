@@ -16,14 +16,14 @@ use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 final class UserAuthenticator
 {
     private ?Request $request;
 
     public function __construct(
-        private GuardAuthenticatorHandler $guardHandler,
+        private UserAuthenticatorInterface $authenticator,
         private LoginFormAuthenticator $formAuthenticator,
         RequestStack $requestStack
     ) {
@@ -36,11 +36,6 @@ final class UserAuthenticator
             throw new RuntimeException('Unable to authenticate user.');
         }
 
-        return $this->guardHandler->authenticateUserAndHandleSuccess(
-            $user,
-            $this->request,
-            $this->formAuthenticator,
-            'main'
-        );
+        return $this->authenticator->authenticateUser($user, $this->formAuthenticator, $this->request);
     }
 }

@@ -13,11 +13,11 @@ namespace NumberNine\Security;
 
 use Doctrine\ORM\EntityManagerInterface;
 use NumberNine\Entity\User;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class UserFactory
 {
-    public function __construct(private UserPasswordEncoderInterface $passwordEncoder, private EntityManagerInterface $entityManager)
+    public function __construct(private UserPasswordHasherInterface $userPasswordHasher, private EntityManagerInterface $entityManager)
     {
     }
 
@@ -31,7 +31,7 @@ final class UserFactory
         $user = new User();
         $user->setUsername($username);
         $user->setEmail($email);
-        $user->setPassword($this->passwordEncoder->encodePassword($user, $password));
+        $user->setPassword($this->userPasswordHasher->hashPassword($user, $password));
 
         if (!empty($roles)) {
             foreach ($roles as $role) {

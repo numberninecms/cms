@@ -11,6 +11,7 @@
 
 namespace NumberNine\Controller\Admin\Security;
 
+use Doctrine\ORM\EntityManagerInterface;
 use NumberNine\Entity\User;
 use NumberNine\Form\User\ChangePasswordFormType;
 use NumberNine\Form\User\ResetPasswordRequestFormType;
@@ -22,8 +23,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
@@ -33,8 +34,12 @@ final class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
 
-    public function __construct(private ResetPasswordHelperInterface $resetPasswordHelper, private TemplateResolverInterface $templateResolver, private AddressFactory $addressFactory)
-    {
+    public function __construct(
+        private ResetPasswordHelperInterface $resetPasswordHelper,
+        private TemplateResolverInterface $templateResolver,
+        private AddressFactory $addressFactory,
+        private EntityManagerInterface $entityManager,
+    ) {
     }
 
     /**
@@ -82,7 +87,7 @@ final class ResetPasswordController extends AbstractController
     #[Route(path: '/reset/{token}', name: 'numbernine_reset_password')]
     public function reset(
         Request $request,
-        UserPasswordEncoderInterface $passwordEncoder,
+        UserPasswordHasherInterface $userPasswordHasher,
         string $token = null
     ): Response {
         if ($token) {
@@ -116,10 +121,10 @@ final class ResetPasswordController extends AbstractController
             $this->resetPasswordHelper->removeResetRequest($token);
 
             // Encode the plain password, and set it.
-            $encodedPassword = $passwordEncoder->encodePassword($user, $form->get('plainPassword')->getData());
+            $encodedPassword = $userPasswordHasher->hashPassword($user, $form->get('plainPassword')->getData());
 
             $user->setPassword($encodedPassword);
-            $this->getDoctrine()->getManager()->flush();
+            $this->entityManager->flush();
 
             // The session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
@@ -137,7 +142,7 @@ final class ResetPasswordController extends AbstractController
 
     private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer): RedirectResponse
     {
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([
+        $user = $this->entityManager->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
         ]);
 
@@ -149,15 +154,6 @@ final class ResetPasswordController extends AbstractController
         try {
             $resetToken = $this->resetPasswordHelper->generateResetToken($user);
         } catch (ResetPasswordExceptionInterface) {
-            // If you want to tell the user why a reset email was not sent, uncomment
-            // the lines below and change the redirect to 'app_forgot_password_request'.
-            // Caution: This may reveal if a user is registered or not.
-            //
-            // $this->addFlash('reset_password_error', sprintf(
-            //     'There was a problem handling your password reset request - %s',
-            //     $e->getReason()
-            // ));
-
             return $this->redirectToRoute('numbernine_check_email');
         }
 

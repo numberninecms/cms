@@ -21,8 +21,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 #[Route(path: '/users/new/', name: 'numbernine_admin_user_create', methods: ['GET', 'POST'])]
 final class UserCreateAction extends AbstractController implements AdminController
@@ -30,7 +30,7 @@ final class UserCreateAction extends AbstractController implements AdminControll
     public function __invoke(
         Request $request,
         EntityManagerInterface $entityManager,
-        UserPasswordEncoderInterface $passwordEncoder
+        UserPasswordHasherInterface $userPasswordHasher,
     ): Response {
         $user = new User();
 
@@ -39,7 +39,7 @@ final class UserCreateAction extends AbstractController implements AdminControll
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword($passwordEncoder->encodePassword($user, $form['plainPassword']->getData()));
+            $user->setPassword($userPasswordHasher->hashPassword($user, $form['plainPassword']->getData()));
 
             $entityManager->persist($user);
             $entityManager->flush();
