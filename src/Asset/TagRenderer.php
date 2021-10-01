@@ -64,7 +64,7 @@ final class TagRenderer
                 'The "$entrypointLookupCollection" argument must be an instance of EntrypointLookupCollection.'
             );
         }
-        $this->request = $requestStack->getMasterRequest();
+        $this->request = $requestStack->getMainRequest();
     }
 
     public function renderWebpackScriptTags(
