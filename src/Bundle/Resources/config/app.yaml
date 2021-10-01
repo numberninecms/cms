@@ -1,9 +1,8 @@
 security:
     enable_authenticator_manager: true
 
-    encoders:
-        NumberNine\Entity\User:
-            algorithm: auto
+    password_hashers:
+        NumberNine\Entity\User: auto
 
     providers:
         numbernine_user_provider:
@@ -16,24 +15,23 @@ security:
             stateless: false
             lazy: true
             provider: numbernine_user_provider
-            guard:
-                authenticators:
-                    - NumberNine\Security\LoginFormAuthenticator
+            custom_authenticators:
+                - NumberNine\Security\LoginFormAuthenticator
             logout:
                 path: numbernine_logout
             remember_me:
-                secret:   '%kernel.secret%'
+                secret: '%kernel.secret%'
                 lifetime: 31536000 # 1 year in seconds
-                path:     /
+                path: /
             login_throttling:
                 limiter: numbernine.login_rate_limiter
 
     access_control:
-        - { path: ^/admin/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/logout, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/reset-password, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/, role: access_admin }
-        - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/login, role: PUBLIC_ACCESS }
+        - { path: ^/admin/logout, role: PUBLIC_ACCESS }
+        - { path: ^/admin/reset-password, role: PUBLIC_ACCESS }
+        - { path: ^/admin/, allow_if: "is_granted('access_admin') and is_fully_authenticated()" }
+        - { path: ^/, role: PUBLIC_ACCESS }
 
 twig:
     debug: '%kernel.debug%'
@@ -77,6 +75,7 @@ framework:
         handler_id: ~
         cookie_secure: auto
         cookie_samesite: lax
+        storage_factory_id: session.storage.factory.native
     rate_limiter:
         username_ip_login:
             policy: token_bucket

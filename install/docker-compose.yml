@@ -27,8 +27,8 @@ services:
             - .env.local
         volumes:
             - ./:/srv/app
-            - ./docker/php/xdebug.ini:/etc/php8/conf.d/50_xdebug.ini
-            - ./docker/php/symfony.ini:/etc/php8/conf.d/100_symfony.ini
+            - ./docker/php/xdebug.ini:/etc/php81/conf.d/50_xdebug.ini
+            - ./docker/php/symfony.ini:/etc/php81/conf.d/100_symfony.ini
         links:
             - blackfire
 
