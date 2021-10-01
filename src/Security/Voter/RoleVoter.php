@@ -18,7 +18,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 final class RoleVoter implements VoterInterface
 {
-    public function vote(TokenInterface $token, $subject, array $attributes)
+    public function vote(TokenInterface $token, $subject, array $attributes): int
     {
         $result = VoterInterface::ACCESS_ABSTAIN;
         /** @var User $user */
@@ -28,7 +28,7 @@ final class RoleVoter implements VoterInterface
             return $result;
         }
 
-        $roles = array_map(fn (UserRole $role): ?string => $role->getName(), $user->getUserRoles()->toArray());
+        $roles = array_map(static fn (UserRole $role): ?string => $role->getName(), $user->getUserRoles()->toArray());
 
         foreach ($attributes as $attribute) {
             $result = VoterInterface::ACCESS_DENIED;
