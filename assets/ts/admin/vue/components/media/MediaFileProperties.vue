@@ -66,8 +66,8 @@ export default defineComponent({
                     Dimensions: { value: `${mediaFile.value.width} x ${mediaFile.value.height} pixels` },
                 },
                 {
-                    Date: { value: dateFormat(mediaFile.value.createdAt, 'longDate') },
-                    Time: { value: dateFormat(mediaFile.value.createdAt, 'isoTime') },
+                    Date: { value: dateFormat(mediaFile.value.createdAt as Date, 'longDate') },
+                    Time: { value: dateFormat(mediaFile.value.createdAt as Date, 'isoTime') },
                 },
                 {
                     URL: {

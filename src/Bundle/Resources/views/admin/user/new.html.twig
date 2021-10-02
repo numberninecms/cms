@@ -12,7 +12,7 @@
 
             {% include '@NumberNine/admin/util/flashes.html.twig' %}
 
-            {{ form_start(form, {attr: {class: 'lg:max-w-md', 'data-controller': 'user--form', 'data-turbo-frame': '_top'}}) }}
+            {{ form_start(form, {attr: {class: 'lg:max-w-md mt-3 px-3', 'data-controller': 'user--form', 'data-turbo-frame': '_top'}}) }}
                 {{ form_row(form.username, {attr: {'data-user--form-target': 'username', 'data-action': 'user--form#updateUsername'}}) }}
                 {{ form_row(form.email) }}
                 {{ form_row(form.firstName, {attr: {'data-user--form-target': 'firstName', 'data-action': 'user--form#updateFirstName'}}) }}
