@@ -42,6 +42,7 @@
 import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 import { useMediaFilesStore } from 'admin/vue/stores/mediaFiles';
 import { useFlashesStore } from 'admin/vue/stores/flashes';
+import MediaFile from 'admin/interfaces/MediaFile';
 
 export default defineComponent({
     name: 'MediaThumbnailsSelectionBar',
@@ -60,7 +61,7 @@ export default defineComponent({
 
         async function deleteSelection() {
             try {
-                await mediaFilesStore.deleteMediaFiles([...mediaFilesStore.selectedMediaFiles]);
+                await mediaFilesStore.deleteMediaFiles([...(mediaFilesStore.selectedMediaFiles as MediaFile[])]);
                 mediaFilesStore.clearMediaFilesSelection();
 
                 flashesStore.label = 'success';

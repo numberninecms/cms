@@ -49,7 +49,7 @@ export default function useDropzone(): Dropzone {
         const div = document.createElement('div');
         return (
             ('draggable' in div || ('ondragstart' in div && 'ondrop' in div)) &&
-            !('ontouchstart' in window || navigator.msMaxTouchPoints)
+            !('ontouchstart' in window || navigator.maxTouchPoints)
         );
     }
 

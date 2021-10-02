@@ -6,10 +6,69 @@
     {{- parent() -}}
 {%- endblock form_row -%}
 
-{% block form_label %}
-    {%- set label_attr = label_attr|merge({class: label_attr.class|default(label_class|default('font-semibold text-quaternary'))}) -%}
-    {{- parent() -}}
-{% endblock form_label %}
+{% block form_label -%}
+    {%- if label is same as(false) -%}
+        <div class="{{ block('form_label_class') }}"></div>
+    {%- else -%}
+        {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' ' ~ block('form_label_class'))|trim}) -%}
+        <div>
+            {{- parent() -}}
+        </div>
+    {%- endif -%}
+{%- endblock form_label %}
+
+{%- block form_errors -%}
+    {%- if errors|length > 0 -%}
+        <div class="mb-4">
+            <div>
+                <ul class="list-reset">
+                    {%- for error in errors -%}
+                        <li class="text-red-600 text-xs italic">{{ error.message }}</li>
+                    {%- endfor -%}
+                </ul>
+            </div>
+        </div>
+    {%- endif -%}
+{%- endblock form_errors -%}
+
+{%- block form_widget_simple -%}
+    <input type="{{ type }}"
+           id="{{ id }}"
+           name={{ full_name }}
+           class="{{ block('input_class') }}"
+           {% if value is not empty %}value="{{ value }}" {% endif %}
+        {% if required is defined %}required {% endif %}/>
+{%- endblock form_widget_simple -%}
+
+{% block textarea_widget -%}
+    <textarea class="{{ block('textarea_class') }}"
+              id="{{ id }}"
+              name={{ full_name }}>
+        {{- value -}}
+    </textarea>
+{%- endblock textarea_widget %}
+
+{% block text_widget %}
+    {%- set type = type|default('text') -%}
+    {{ block('form_widget_simple') }}
+{% endblock %}
+
+{% block button_widget -%}
+    {%- if attr|length > 0 and attr.forgotten is defined and attr.forgotten is same as(true) -%}
+        <div class="flex items-center justify-between">
+            {%- set attr = attr|merge({class: (attr.class|default('btn btn-primary'))|trim}) -%}
+            {{- parent() -}}
+            <a class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href="">
+                Forgot Password?
+            </a>
+        </div>
+    {%- else -%}
+        <div class="flex justify-start">
+            {%- set attr = attr|merge({class: (attr.class|default('btn btn-primary'))|trim}) -%}
+            {{- parent() -}}
+        </div>
+    {%- endif -%}
+{%- endblock button_widget %}
 
 {%- block button_row -%}
     {%- set row_attr = row_attr|merge({class: row_attr.class|default('mt-4')}) -%}
@@ -17,6 +76,9 @@
         {{- form_widget(form, {attr: attr|merge({class: attr.class|default(row_class|default('btn btn-color-primary'))})}) -}}
     </div>
 {%- endblock button_row -%}
+
+{%- block checkbox_label -%}
+{%- endblock -%}
 
 {%- block checkbox_widget -%}
     {%- set label_attr = label_attr|merge({class: label_attr.class|default(label_class|default('flex flex-row space-x-3 items-center'))}) -%}
@@ -115,3 +177,15 @@
     {%- set row_attr = row_attr|merge({class: row_attr.class|default(row_class|default('flex flex-col'))}) -%}
     {{- block('form_row') -}}
 {%- endblock -%}
+
+{% block input_class -%}
+    {% if form.vars.errors|length %}border-red-600 border-1{% endif %} appearance-none bg-grey-lighter border border-grey-lighter rounded w-full py-2 px-4 text-grey-darker leading-tight focus:outline-none focus:bg-white focus:border-blue-light
+{% endblock input_class -%}
+
+{% block textarea_class -%}
+    {{ block('input_class') }} w-100 h-48
+{% endblock textarea_class -%}
+
+{% block form_label_class -%}
+    block font-semibold text-quaternary mb-1 pr-4
+{% endblock form_label_class -%}

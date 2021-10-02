@@ -46,6 +46,7 @@ import { eventBus } from 'admin/admin';
 import { EVENT_MEDIA_SELECT, EVENT_MODAL_CLOSE, EVENT_TINY_EDITOR_ADD_MEDIA } from 'admin/events/events';
 import MediaFileProperties from 'admin/vue/components/media/MediaFileProperties.vue';
 import MediaFileSettings from 'admin/vue/components/media/MediaFileSettings.vue';
+import MediaFile from 'admin/interfaces/MediaFile';
 
 export default defineComponent({
     name: 'MediaBrowser',
@@ -101,7 +102,7 @@ export default defineComponent({
         function selectFile(): void {
             if (mediaViewerStore.callback) {
                 mediaViewerStore.callback({
-                    files: [mediaFilesStore.mediaFiles[mediaViewerStore.displayIndex]],
+                    files: [mediaFilesStore.mediaFiles[mediaViewerStore.displayIndex] as MediaFile],
                     settings: mediaViewerStore.settings,
                 });
             }

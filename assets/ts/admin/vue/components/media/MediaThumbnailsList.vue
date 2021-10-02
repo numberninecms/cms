@@ -110,7 +110,7 @@ export default defineComponent({
         function onThumbnailClicked(index: number) {
             const event: MediaLibraryThumbnailClickedEvent = {
                 index,
-                file: mediaFilesStore.mediaFiles[index],
+                file: mediaFilesStore.mediaFiles[index] as MediaFile,
             };
 
             if (mediaFilesStore.selectMultiple) {
@@ -124,7 +124,7 @@ export default defineComponent({
         function onThumbnailShiftClicked(index: number) {
             const event = {
                 index,
-                file: mediaFilesStore.mediaFiles[index],
+                file: mediaFilesStore.mediaFiles[index] as MediaFile,
             };
 
             if (mediaFilesStore.selectMultiple) {

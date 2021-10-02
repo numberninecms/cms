@@ -108,7 +108,7 @@ export const useMediaFilesStore = defineStore({
             const isSelected = !!file;
 
             if (!isSelected) {
-                this.selectMediaFile(this.mediaFiles[index]);
+                this.selectMediaFile(this.mediaFiles[index] as MediaFile);
             } else {
                 this.selectedMediaFiles.splice(this.selectedMediaFiles.indexOf(file!), 1);
             }
