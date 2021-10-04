@@ -17,12 +17,13 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 final class MenuShortcodeStyleEvent extends Event
 {
-    /** @var string[] */
-    private array $styles;
-
-    public function __construct(array $styles = [])
-    {
-        $this->styles = $styles;
+    /**
+     * @param string[] $styles
+     */
+    public function __construct(
+        private array $styles = [],
+        private ?string $default = null,
+    ) {
     }
 
     public function getStyles(): array
@@ -49,8 +50,20 @@ final class MenuShortcodeStyleEvent extends Event
     public function removeStyle(string $style): self
     {
         if (($key = array_search($style, $this->styles, true)) !== false) {
-            unset($this->styles[$key]);
+            unset($this->styles[(int) $key]);
         }
+
+        return $this;
+    }
+
+    public function getDefault(): ?string
+    {
+        return $this->default;
+    }
+
+    public function setDefault(?string $default): self
+    {
+        $this->default = $default;
 
         return $this;
     }
