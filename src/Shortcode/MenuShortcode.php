@@ -46,9 +46,12 @@ final class MenuShortcode extends AbstractShortcode implements EditableShortcode
 
     public function configureParameters(OptionsResolver $resolver): void
     {
+        /** @var MenuShortcodeStyleEvent $event */
+        $event = $this->eventDispatcher->dispatch(new MenuShortcodeStyleEvent());
+
         $resolver->setDefaults([
             'id' => null,
-            'style' => null,
+            'style' => $event->getDefault(),
         ]);
     }
 
