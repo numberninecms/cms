@@ -20,7 +20,7 @@ use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
 /**
  * @internal
- * @coversNothing
+ * @covers \NumberNine\Form\Admin\Menu\AdminMenuFormType
  */
 final class AdminMenuFormTypeTest extends FormTestCase
 {
