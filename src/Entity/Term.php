@@ -18,9 +18,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use NumberNine\Attribute\NormalizationContext;
 use NumberNine\Model\Content\Features\CustomFieldsTrait;
 use NumberNine\Repository\TermRepository;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TermRepository::class)]
+#[UniqueEntity(['slug'])]
 #[NormalizationContext(groups: ['term_get'])]
 class Term
 {
@@ -29,7 +31,7 @@ class Term
     /**
      * @Gedmo\Slug(fields={"name"}, updatable=false)
      */
-    #[ORM\Column(type: 'string', unique: false)]
+    #[ORM\Column(type: 'string', unique: true)]
     #[Groups(['term_get'])]
     protected ?string $slug = null;
 
