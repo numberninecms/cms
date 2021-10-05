@@ -1,3 +1,9 @@
+security:
+    password_hashers:
+        NumberNine\Entity\User:
+            algorithm: auto
+            cost: 4
+
 framework:
     test: true
     secret: F00

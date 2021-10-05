@@ -13,17 +13,19 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Security\Csrf\CsrfTokenManager;
 
-abstract class FormTestCase extends KernelTestCase
+abstract class FormTestCase extends UserAwareTestCase
 {
     protected FormFactoryInterface $factory;
+    protected CsrfTokenManager $csrfTokenManager;
 
     protected function setUp(): void
     {
-        /** @var FormFactoryInterface $factory */
-        $factory = static::getContainer()->get('form.factory');
-        $this->factory = $factory;
+        parent::setUp();
+
+        $this->factory = $this->client->getContainer()->get('form.factory');
+        $this->csrfTokenManager = $this->client->getContainer()->get('security.csrf.token_manager');
     }
 }

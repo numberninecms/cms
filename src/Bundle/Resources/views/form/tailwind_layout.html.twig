@@ -36,6 +36,7 @@
     {%- if type == 'range' or type == 'color' -%}
         Attribute "required" is not supported
         {%- set required = false -%}
+        {# twigcs use-var required #}
     {%- endif -%}
     {% set attr = attr|merge({class: block('input_class')}) %}
     <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
