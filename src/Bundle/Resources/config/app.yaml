@@ -2,7 +2,9 @@ security:
     enable_authenticator_manager: true
 
     password_hashers:
-        NumberNine\Entity\User: auto
+        NumberNine\Entity\User:
+            algorithm: auto
+            cost: 15
 
     providers:
         numbernine_user_provider:

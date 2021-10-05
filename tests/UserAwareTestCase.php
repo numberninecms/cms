@@ -67,17 +67,24 @@ abstract class UserAwareTestCase extends DotEnvAwareWebTestCase
         $this->loginThenNavigateToAdminUrl('TestRole');
     }
 
-    protected function loginAs(string $role): User
+    protected function loginAs(User|string $userOrRole): User
     {
-        $user = $this->userFactory->createUser(
-            'test',
-            'test@numbernine-fakedomain.com',
+        if (\is_string($userOrRole)) {
+            $userOrRole = $this->createUser($userOrRole);
+        }
+
+        $this->client->loginUser($userOrRole);
+
+        return $userOrRole;
+    }
+
+    protected function createUser(string $role): User
+    {
+        return $this->userFactory->createUser(
+            strtolower($role),
+            strtolower($role) . '@numbernine-fakedomain.com',
             'password',
             [$this->userRoleRepository->findOneBy(['name' => $role])],
         );
-
-        $this->client->loginUser($user);
-
-        return $user;
     }
 }
