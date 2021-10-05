@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use NumberNine\Content\PermalinkGenerator;
 use NumberNine\Entity\ContentEntity;
+use NumberNine\Event\ContentEntityShowBeforeRenderEvent;
 use NumberNine\Event\ContentEntityShowForwardEvent;
 use NumberNine\Event\CurrentContentEntityEvent;
 use NumberNine\Event\TemplateToRenderEvent;
@@ -81,7 +82,10 @@ final class ContentEntityShowAction extends AbstractController
         $contentEntityShowForwardEvent = $eventDispatcher->dispatch(
             new ContentEntityShowForwardEvent($request, $entity)
         );
-        $forwardResponse = $contentEntityShowForwardEvent->getResponse();
+
+        if ($forwardResponse = $contentEntityShowForwardEvent->getResponse()) {
+            return $forwardResponse;
+        }
 
         /** @var TemplateToRenderEvent $templateToRenderEvent */
         $templateToRenderEvent = $eventDispatcher->dispatch(
@@ -91,13 +95,22 @@ final class ContentEntityShowAction extends AbstractController
         $template = $templateToRenderEvent->getTemplate();
 
         if (preg_match('@/([\w_-]+)/index\.@', $template->getTemplateName(), $matches)) {
-            return $forwardResponse ?? $this->forward(ContentEntityIndexAction::class, [
+            return $this->forward(ContentEntityIndexAction::class, [
                 'type' => $matches[1],
                 'template' => $template->getTemplateName(),
             ]);
         }
 
-        return $forwardResponse ?? new Response($templateToRenderEvent->getTemplate()->render(['entity' => $entity]));
+        /** @var ContentEntityShowBeforeRenderEvent $contentEntityShowBeforeRenderEvent */
+        $contentEntityShowBeforeRenderEvent = $eventDispatcher->dispatch(
+            new ContentEntityShowBeforeRenderEvent($request, $entity, $template)
+        );
+
+        if ($response = $contentEntityShowBeforeRenderEvent->getResponse()) {
+            return $response;
+        }
+
+        return new Response($template->render(['entity' => $entity]));
     }
 
     private function validateUrl(Request $request, ContentEntity $entity, PermalinkGenerator $permalinkGenerator): void

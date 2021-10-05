@@ -32,26 +32,19 @@
 {%- endblock form_errors -%}
 
 {%- block form_widget_simple -%}
-    <input type="{{ type }}"
-           id="{{ id }}"
-           name={{ full_name }}
-           class="{{ block('input_class') }}"
-           {% if value is not empty %}value="{{ value }}" {% endif %}
-        {% if required is defined %}required {% endif %}/>
+    {%- set type = type|default('text') -%}
+    {%- if type == 'range' or type == 'color' -%}
+        Attribute "required" is not supported
+        {%- set required = false -%}
+    {%- endif -%}
+    {% set attr = attr|merge({class: block('input_class')}) %}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
 {%- endblock form_widget_simple -%}
 
-{% block textarea_widget -%}
-    <textarea class="{{ block('textarea_class') }}"
-              id="{{ id }}"
-              name={{ full_name }}>
-        {{- value -}}
-    </textarea>
-{%- endblock textarea_widget %}
-
-{% block text_widget %}
-    {%- set type = type|default('text') -%}
-    {{ block('form_widget_simple') }}
-{% endblock %}
+{%- block textarea_widget -%}
+    {% set attr = attr|merge({class: block('textarea_class')}) %}
+    <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
+{%- endblock textarea_widget -%}
 
 {% block button_widget -%}
     {%- if attr|length > 0 and attr.forgotten is defined and attr.forgotten is same as(true) -%}
@@ -178,13 +171,13 @@
     {{- block('form_row') -}}
 {%- endblock -%}
 
-{% block input_class -%}
+{%- block input_class -%}
     {% if form.vars.errors|length %}border-red-600 border-1{% endif %} appearance-none bg-grey-lighter border border-grey-lighter rounded w-full py-2 px-4 text-grey-darker leading-tight focus:outline-none focus:bg-white focus:border-blue-light
-{% endblock input_class -%}
+{%- endblock input_class -%}
 
-{% block textarea_class -%}
+{%- block textarea_class -%}
     {{ block('input_class') }} w-100 h-48
-{% endblock textarea_class -%}
+{%- endblock textarea_class -%}
 
 {% block form_label_class -%}
     block font-semibold text-quaternary mb-1 pr-4
