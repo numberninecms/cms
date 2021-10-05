@@ -18,7 +18,7 @@ use NumberNine\Tests\DotEnvAwareWebTestCase;
 
 /**
  * @internal
- * @coversNothing
+ * @covers \NumberNine\Content\ArrayToShortcodeConverter
  */
 final class ArrayToShortcodeConverterTest extends DotEnvAwareWebTestCase
 {
@@ -27,7 +27,6 @@ final class ArrayToShortcodeConverterTest extends DotEnvAwareWebTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->client->request('GET', '/');
         $this->arrayToShortcodeConverter = static::getContainer()->get(ArrayToShortcodeConverter::class);
     }
 

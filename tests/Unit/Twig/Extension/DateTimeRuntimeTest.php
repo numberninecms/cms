@@ -18,7 +18,7 @@ use NumberNine\Twig\Extension\DateTimeRuntime;
 
 /**
  * @internal
- * @coversNothing
+ * @covers \NumberNine\Twig\Extension\DateTimeRuntime
  */
 final class DateTimeRuntimeTest extends DotEnvAwareWebTestCase
 {
@@ -27,7 +27,6 @@ final class DateTimeRuntimeTest extends DotEnvAwareWebTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->client->request('GET', '/');
         $this->runtime = static::getContainer()->get(DateTimeRuntime::class);
     }
 

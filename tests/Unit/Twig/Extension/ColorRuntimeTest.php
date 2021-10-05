@@ -19,7 +19,7 @@ use NumberNine\Twig\Extension\ColorRuntime;
 
 /**
  * @internal
- * @coversNothing
+ * @covers \NumberNine\Twig\Extension\ColorRuntime
  */
 final class ColorRuntimeTest extends DotEnvAwareWebTestCase
 {
@@ -28,7 +28,6 @@ final class ColorRuntimeTest extends DotEnvAwareWebTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->client->request('GET', '/');
         $this->runtime = static::getContainer()->get(ColorRuntime::class);
     }
 
