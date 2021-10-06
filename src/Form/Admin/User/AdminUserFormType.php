@@ -25,6 +25,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -33,8 +35,8 @@ final class AdminUserFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('username')
-            ->add('email', EmailType::class)
+            ->add('username', null, ['constraints' => new NotBlank()])
+            ->add('email', EmailType::class, ['constraints' => [new NotBlank(), new Email()]])
             ->add('firstName')
             ->add('lastName')
             ->add('userRoles', EntityType::class, [
@@ -97,12 +99,17 @@ final class AdminUserFormType extends AbstractType
         $firstLast = "{$firstName} {$lastName}";
         $lastFirst = "{$lastName} {$firstName}";
 
-        $form->add('displayNameFormat', ChoiceType::class, ['choices' => [
+        $choices = [
             $username => 'username',
             $firstName => 'first_only',
             $lastName => 'last_only',
             $firstLast => 'first_last',
             $lastFirst => 'last_first',
-        ]]);
+        ];
+
+        $form->add('displayNameFormat', ChoiceType::class, [
+            'choices' => $choices,
+            'constraints' => [new NotBlank(), new Choice(array_values($choices))],
+        ]);
     }
 }
