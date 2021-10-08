@@ -11,23 +11,23 @@
 
 namespace NumberNine\Form\Admin\Settings;
 
-use NumberNine\Content\ContentService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 final class AdminSettingsEmailsFormType extends AbstractType
 {
-    public function __construct(private ContentService $contentService)
-    {
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('mailer_sender_name', null, ['label' => 'Sender name'])
-            ->add('mailer_sender_address', EmailType::class, ['label' => 'Sender email address'])
+            ->add('mailer_sender_name', null, ['label' => 'Sender name', 'constraints' => new NotBlank()])
+            ->add('mailer_sender_address', EmailType::class, [
+                'label' => 'Sender email address',
+                'constraints' => [new NotBlank(), new Email()],
+            ])
             ->add('submit', SubmitType::class)
         ;
     }
