@@ -44,6 +44,9 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Valid;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use function NumberNine\Common\Util\ArrayUtil\array_merge_recursive_fixed;
 
@@ -62,22 +65,28 @@ final class AdminContentEntityEditFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $statusChoices = [
+            'Draft' => PublishingStatusInterface::STATUS_DRAFT,
+            'Private' => PublishingStatusInterface::STATUS_PRIVATE,
+            'Pending review' => PublishingStatusInterface::STATUS_PENDING_REVIEW,
+            'Publish' => PublishingStatusInterface::STATUS_PUBLISH,
+        ];
+
         $builder
-            ->add('title', TextType::class)
-            ->add('slug', HiddenType::class)
+            ->add('title', TextType::class, ['constraints' => new NotBlank()])
+            ->add('slug', HiddenType::class, ['constraints' => new NotBlank()])
             ->add('content', TinyEditorType::class, ['required' => false])
             ->add('seoTitle', null, ['required' => false])
             ->add('seoDescription', TextareaType::class, ['required' => false])
             ->add('customFields', KeyValueCollectionType::class, [
                 'add_new_label' => 'Add new custom field',
                 'required' => false,
+                'constraints' => new Valid(),
             ])
-            ->add('status', ChoiceType::class, ['choices' => [
-                'Draft' => PublishingStatusInterface::STATUS_DRAFT,
-                'Private' => PublishingStatusInterface::STATUS_PRIVATE,
-                'Pending review' => PublishingStatusInterface::STATUS_PENDING_REVIEW,
-                'Publish' => PublishingStatusInterface::STATUS_PUBLISH,
-            ]])
+            ->add('status', ChoiceType::class, [
+                'choices' => $statusChoices,
+                'constraints' => [new NotBlank(), new Choice(array_values($statusChoices))],
+            ])
             ->add('submit', SubmitType::class)
         ;
 
