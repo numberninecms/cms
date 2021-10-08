@@ -19,6 +19,8 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 final class AdminSettingsGeneralFormType extends AbstractType
 {
@@ -31,16 +33,32 @@ final class AdminSettingsGeneralFormType extends AbstractType
         $pages = $this->getPages();
 
         $builder
-            ->add('site_title')
+            ->add('site_title', null, ['constraints' => new NotBlank()])
             ->add('site_description', null, ['label' => 'Tagline', 'required' => false])
             ->add('blog_as_homepage', CheckboxType::class, [
                 'label' => 'Use posts archive as homepage',
                 'required' => false,
             ])
-            ->add('page_for_front', ChoiceType::class, ['choices' => $pages, 'required' => false])
-            ->add('page_for_posts', ChoiceType::class, ['choices' => $pages, 'required' => false])
-            ->add('page_for_my_account', ChoiceType::class, ['choices' => $pages, 'required' => false])
-            ->add('page_for_privacy', ChoiceType::class, ['choices' => $pages, 'required' => false])
+            ->add('page_for_front', ChoiceType::class, [
+                'choices' => $pages,
+                'required' => false,
+                'constraints' => [new NotBlank(), new Choice(array_values($pages))],
+            ])
+            ->add('page_for_posts', ChoiceType::class, [
+                'choices' => $pages,
+                'required' => false,
+                'constraints' => [new NotBlank(), new Choice(array_values($pages))],
+            ])
+            ->add('page_for_my_account', ChoiceType::class, [
+                'choices' => $pages,
+                'required' => false,
+                'constraints' => [new NotBlank(), new Choice(array_values($pages))],
+            ])
+            ->add('page_for_privacy', ChoiceType::class, [
+                'choices' => $pages,
+                'required' => false,
+                'constraints' => [new NotBlank(), new Choice(array_values($pages))],
+            ])
             ->add('submit', SubmitType::class)
         ;
     }
