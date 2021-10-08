@@ -63,7 +63,7 @@ jobs:
                 run: docker-compose up -d
 
             -   name: Run unit and functional tests
-                run: docker-compose exec -T php vendor/bin/phpunit
+                run: docker-compose exec -T php php -dmemory_limit=512M vendor/bin/phpunit
 
     project_installation_docker:
         name: New project installation (Docker)
