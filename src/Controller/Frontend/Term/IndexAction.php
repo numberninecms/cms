@@ -52,46 +52,45 @@ final class IndexAction extends AbstractController
         EventDispatcherInterface $eventDispatcher,
         Term $term
     ) {
-        $contentEntities = $cache->get(
-            sprintf('term_index_%s', sha1($request->getRequestUri())),
-            static function () use ($request, $serializer, $configurationReadWriter, $contentService, $term) {
-                /** @var PaginationParameters $paginationParameters */
-                $paginationParameters = $serializer->denormalize(
-                    $request->query->all(),
-                    PaginationParameters::class,
-                    null,
-                    [AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]
-                );
+        $contentEntities = [];
 
-                $paginationParameters
-                    ->setFetchCount($configurationReadWriter->read(Settings::POSTS_PER_PAGE, 12))
-                    ->setOrderBy('createdAt')
-                    ->setOrder('DESC')
-                    ->setTerms([$term])
-                ;
-
-                $criteria = (new Criteria())
-                    ->andWhere((Criteria::expr())->eq('c.status', 'publish'))
-                ;
-
-                $taxonomy = $term->getTaxonomy();
-
-                if ($taxonomy) {
-                    $contentTypes = array_values(
-                        array_filter(
-                            $contentService->getContentTypes(),
-                            static function (ContentType $contentType) use ($taxonomy): bool {
-                                return \in_array($contentType->getName(), $taxonomy->getContentTypes() ?? [], true);
-                            }
-                        )
-                    );
-
-                    return $contentService->getEntitiesOfMultipleTypes($contentTypes, $paginationParameters, $criteria);
-                }
-
-                return [];
-            }
+        /** @var PaginationParameters $paginationParameters */
+        $paginationParameters = $serializer->denormalize(
+            $request->query->all(),
+            PaginationParameters::class,
+            null,
+            [AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]
         );
+
+        $paginationParameters
+            ->setFetchCount($configurationReadWriter->read(Settings::POSTS_PER_PAGE, 12))
+            ->setOrderBy('createdAt')
+            ->setOrder('DESC')
+            ->setTerms([$term])
+        ;
+
+        $criteria = (new Criteria())
+            ->andWhere((Criteria::expr())->eq('c.status', 'publish'))
+        ;
+
+        $taxonomy = $term->getTaxonomy();
+
+        if ($taxonomy) {
+            $contentTypes = array_values(
+                array_filter(
+                    $contentService->getContentTypes(),
+                    static function (ContentType $contentType) use ($taxonomy): bool {
+                        return \in_array($contentType->getName(), $taxonomy->getContentTypes() ?? [], true);
+                    }
+                )
+            );
+
+            $contentEntities = $contentService->getEntitiesOfMultipleTypes(
+                $contentTypes,
+                $paginationParameters,
+                $criteria
+            );
+        }
 
         $eventDispatcher->dispatch(new CurrentRequestTermEvent($term));
 
