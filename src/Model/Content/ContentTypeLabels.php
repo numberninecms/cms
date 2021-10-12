@@ -55,7 +55,7 @@ final class ContentTypeLabels
             ->setNotFound("No {$pluralName} found")
             ->setNotFoundInTrash("No {$pluralName} found in trash")
             ->setAllItems('All ' . $pluralName)
-            ->setArchives($pluralName . ' archives')
+            ->setArchives(u($pluralName)->title() . ' archives')
         ;
     }
 

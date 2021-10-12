@@ -43,13 +43,13 @@ abstract class UserAwareTestCase extends DotEnvAwareWebTestCase
         $this->entityManager->flush(); // @phpstan-ignore-line
     }
 
-    public function loginThenNavigateToAdminUrl(string $role, ?string $url = null): void
+    public function loginThenNavigateToAdminUrl(User|string $userOrRole, ?string $url = null): void
     {
         if ($url && !str_starts_with($url, '/admin/')) {
             static::fail('$url parameter must be an admin URL.');
         }
 
-        $this->loginAs($role);
+        $this->loginAs($userOrRole);
         $this->client->request('GET', $url ?? '/admin/');
 
         /** @var AdminMenuBuilderStore $adminMenuBuilderStore */
