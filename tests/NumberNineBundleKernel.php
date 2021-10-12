@@ -28,6 +28,7 @@ use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 use Symfony\WebpackEncoreBundle\WebpackEncoreBundle;
 use SymfonyCasts\Bundle\ResetPassword\SymfonyCastsResetPasswordBundle;
+use Twig\Extra\TwigExtraBundle\TwigExtraBundle;
 
 final class NumberNineBundleKernel extends Kernel
 {
@@ -54,6 +55,7 @@ final class NumberNineBundleKernel extends Kernel
             new NumberNineChapterOneBundle(),
             new SymfonyCastsResetPasswordBundle(),
             new SensioFrameworkExtraBundle(),
+            new TwigExtraBundle(),
         ];
     }
 
