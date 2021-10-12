@@ -45,7 +45,7 @@ final class ShortcodeMarkupBeautifierTest extends DotEnvAwareWebTestCase impleme
         [/link]
     [/container]
     [container orientation="horizontal" justify="center" align="start" margin="0px auto 30px auto"]
-        [menu id="2"]
+        [menu style="main" id="2"]
     [/container]
 [/section]
 SHORTCODE;

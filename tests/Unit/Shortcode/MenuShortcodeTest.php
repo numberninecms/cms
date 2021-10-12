@@ -30,7 +30,7 @@ final class MenuShortcodeTest extends ShortcodeTestCase
 
         static::assertSame([
             'menuItems' => [],
-            'style' => null,
+            'style' => 'main',
         ], $parameters);
     }
 
@@ -40,7 +40,7 @@ final class MenuShortcodeTest extends ShortcodeTestCase
 
         static::assertSame([
             'menuItems' => [],
-            'style' => null,
+            'style' => 'main',
         ], $parameters);
     }
 
@@ -50,7 +50,7 @@ final class MenuShortcodeTest extends ShortcodeTestCase
 
         static::assertSame([
             'menuItems' => [],
-            'style' => null,
+            'style' => 'main',
         ], $parameters);
     }
 }
