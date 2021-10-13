@@ -10,7 +10,12 @@
 
 {% block content %}
     <turbo-frame id="numbernine_admin_content_entity_edit">
-        <div class="flex flex-col" data-controller="dynamic-tabs">
+        <div
+            class="flex flex-col"
+            data-controller="dynamic-tabs content-entity--edit"
+            data-content-entity--edit-id-value="{{ entity.id }}"
+            data-content-entity--edit-type-value="{{ type_slug }}"
+        >
             {% embed '@NumberNine/admin/util/toolbar.html.twig' with {title: entity.title ?? content_type.labels.newItem} %}
                 {% block tools %}
                     {% if entity.id %}
@@ -101,7 +106,14 @@
                         {% endblock %}
                         {% block footer %}
                             <div class="mt-4 px-3">
-                                <button class="btn btn-color-red" type="button"><i class="fa fa-trash"></i></button>
+                                <button
+                                    type="button"
+                                    class="btn btn-color-red"
+                                    title="{{ 'Delete'|trans }}"
+                                    data-action="content-entity--edit#deleteEntity"
+                                >
+                                    <i class="fa fa-trash"></i>
+                                </button>
                             </div>
                             {{ form_row(form.submit) }}
                         {% endblock %}
