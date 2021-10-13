@@ -26,10 +26,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[Route(path: '/{type}/', name: 'numbernine_admin_content_entity_index', methods: [
-    'GET',
-    'POST',
-], priority: -1000)]
+#[Route(
+    path: '/{type}/',
+    name: 'numbernine_admin_content_entity_index',
+    methods: ['GET', 'POST'],
+    priority: -1000,
+    options: ['expose' => true],
+)]
 final class ContentEntityIndexAction extends AbstractController implements AdminController
 {
     public function __invoke(
