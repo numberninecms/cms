@@ -12,7 +12,9 @@
 namespace NumberNine\Controller\Admin\Ui\ContentEntity;
 
 use NumberNine\Content\ContentService;
+use NumberNine\Model\Content\PublishingStatusInterface;
 use NumberNine\Repository\ContentEntityRepository;
+use NumberNine\Security\Capabilities;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/{type}/{id<\d+>}/', name: 'numbernine_admin_content_entity_edit', methods: [
     'GET',
     'POST',
-], priority: '-1000')]
+], priority: -1000)]
 final class ContentEntityEditAction extends AbstractContentEntityFormAction
 {
     public function __invoke(
@@ -32,6 +34,21 @@ final class ContentEntityEditAction extends AbstractContentEntityFormAction
     ): Response {
         $contentType = $contentService->getContentType($type);
         $entity = $contentEntityRepository->findOneForEdition($id);
+
+        $this->denyAccessUnlessGranted($contentType->getMappedCapability(Capabilities::EDIT_POSTS));
+
+        if ($this->getUser() !== $entity->getAuthor()) {
+            $this->denyAccessUnlessGranted($contentType->getMappedCapability(Capabilities::EDIT_OTHERS_POSTS));
+        }
+
+        if ($this->getUser() === $entity->getAuthor() && $entity->getStatus() === PublishingStatusInterface::STATUS_PUBLISH) {
+            $this->denyAccessUnlessGranted($contentType->getMappedCapability(Capabilities::EDIT_PUBLISHED_POSTS));
+        }
+
+        if ($entity->getStatus() === PublishingStatusInterface::STATUS_PRIVATE) {
+            $this->denyAccessUnlessGranted($contentType->getMappedCapability(Capabilities::EDIT_OTHERS_POSTS));
+            $this->denyAccessUnlessGranted($contentType->getMappedCapability(Capabilities::EDIT_PRIVATE_POSTS));
+        }
 
         return $this->handle($request, $contentType, $entity);
     }

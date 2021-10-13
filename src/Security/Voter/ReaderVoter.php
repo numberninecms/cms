@@ -24,10 +24,10 @@ final class ReaderVoter extends Voter
 
     public function __construct(iterable $capabilities)
     {
-        $this->readCapability = array_filter(
+        $this->readCapability = current(array_filter(
             [...$capabilities],
-            fn (CapabilityInterface $c): bool => $c->getName() === Capabilities::READ
-        )[0];
+            static fn (CapabilityInterface $c): bool => $c->getName() === Capabilities::READ,
+        ));
     }
 
     protected function supports(string $attribute, $subject): bool

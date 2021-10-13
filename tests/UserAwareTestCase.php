@@ -43,28 +43,30 @@ abstract class UserAwareTestCase extends DotEnvAwareWebTestCase
         $this->entityManager->flush(); // @phpstan-ignore-line
     }
 
-    public function loginThenNavigateToAdminUrl(User|string $userOrRole, ?string $url = null): void
+    public function loginThenNavigateToAdminUrl(User|string $userOrRole, ?string $url = null): User
     {
         if ($url && !str_starts_with($url, '/admin/')) {
             static::fail('$url parameter must be an admin URL.');
         }
 
-        $this->loginAs($userOrRole);
+        $user = $this->loginAs($userOrRole);
         $this->client->request('GET', $url ?? '/admin/');
 
         /** @var AdminMenuBuilderStore $adminMenuBuilderStore */
         $adminMenuBuilderStore = static::getContainer()->get(AdminMenuBuilderStore::class);
 
         $this->adminMenuBuilder = $adminMenuBuilderStore->getAdminMenuBuilder();
+
+        return $user;
     }
 
-    protected function setCapabilitiesThenLogin(array $capabilities): void
+    protected function setCapabilitiesThenLogin(array $capabilities): User
     {
         $this->testRole->setCapabilities($capabilities);
         $this->entityManager->persist($this->testRole);
         $this->entityManager->flush();
 
-        $this->loginThenNavigateToAdminUrl('TestRole');
+        return $this->loginThenNavigateToAdminUrl('TestRole');
     }
 
     protected function loginAs(User|string $userOrRole): User
@@ -78,13 +80,21 @@ abstract class UserAwareTestCase extends DotEnvAwareWebTestCase
         return $userOrRole;
     }
 
-    protected function createUser(string $role): User
+    protected function createUser(string|array $roleOrCapabilities): User
     {
-        return $this->userFactory->createUser(
-            strtolower($role),
-            strtolower($role) . '@numbernine-fakedomain.com',
-            'password',
-            [$this->userRoleRepository->findOneBy(['name' => $role])],
-        );
+        if (\is_string($roleOrCapabilities)) {
+            return $this->userFactory->createUser(
+                strtolower($roleOrCapabilities),
+                strtolower($roleOrCapabilities) . '@numbernine-fakedomain.com',
+                'password',
+                [$this->userRoleRepository->findOneBy(['name' => $roleOrCapabilities])],
+            );
+        }
+
+        $this->testRole->setCapabilities($roleOrCapabilities);
+        $this->entityManager->persist($this->testRole);
+        $this->entityManager->flush();
+
+        return $this->createUser('TestRole');
     }
 }
