@@ -19,6 +19,7 @@ use NumberNine\Model\Menu\Builder\AdminMenuBuilder;
 use NumberNine\Repository\UserRoleRepository;
 use NumberNine\Security\UserFactory;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Uid\Uuid;
 
 abstract class UserAwareTestCase extends DotEnvAwareWebTestCase
 {
@@ -27,30 +28,28 @@ abstract class UserAwareTestCase extends DotEnvAwareWebTestCase
     protected EntityManagerInterface $entityManager;
     protected AdminMenuBuilder $adminMenuBuilder;
     protected UrlGeneratorInterface $urlGenerator;
-    protected UserRole $testRole;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->userRoleRepository = static::getContainer()->get(UserRoleRepository::class); // @phpstan-ignore-line
-        $this->userFactory = static::getContainer()->get(UserFactory::class); // @phpstan-ignore-line
-        $this->entityManager = static::getContainer()->get(EntityManagerInterface::class); // @phpstan-ignore-line
-        $this->urlGenerator = static::getContainer()->get(UrlGeneratorInterface::class); // @phpstan-ignore-line
-
-        $this->testRole = (new UserRole())->setName('TestRole')->setCapabilities([]);
-        $this->entityManager->persist($this->testRole); // @phpstan-ignore-line
-        $this->entityManager->flush(); // @phpstan-ignore-line
+        $this->userRoleRepository = static::getContainer()->get(UserRoleRepository::class);
+        $this->userFactory = static::getContainer()->get(UserFactory::class);
+        $this->entityManager = static::getContainer()->get(EntityManagerInterface::class);
+        $this->urlGenerator = static::getContainer()->get(UrlGeneratorInterface::class);
     }
 
-    public function loginThenNavigateToAdminUrl(User|string $userOrRole, ?string $url = null): User
-    {
+    public function loginThenNavigateToAdminUrl(
+        User|array|string $userOrRoleOrCapabilities,
+        ?string $url = null,
+        string $method = 'GET',
+    ): User {
         if ($url && !str_starts_with($url, '/admin/')) {
             static::fail('$url parameter must be an admin URL.');
         }
 
-        $user = $this->loginAs($userOrRole);
-        $this->client->request('GET', $url ?? '/admin/');
+        $user = $this->loginAs($userOrRoleOrCapabilities);
+        $this->client->request($method, $url ?? '/admin/');
 
         /** @var AdminMenuBuilderStore $adminMenuBuilderStore */
         $adminMenuBuilderStore = static::getContainer()->get(AdminMenuBuilderStore::class);
@@ -62,39 +61,50 @@ abstract class UserAwareTestCase extends DotEnvAwareWebTestCase
 
     protected function setCapabilitiesThenLogin(array $capabilities): User
     {
-        $this->testRole->setCapabilities($capabilities);
-        $this->entityManager->persist($this->testRole);
-        $this->entityManager->flush();
+        $role = $this->createRole($capabilities);
 
-        return $this->loginThenNavigateToAdminUrl('TestRole');
+        return $this->loginThenNavigateToAdminUrl($role->getName());
     }
 
-    protected function loginAs(User|string $userOrRole): User
+    protected function loginAs(User|array|string $userOrRoleOrCapabilities): User
     {
-        if (\is_string($userOrRole)) {
-            $userOrRole = $this->createUser($userOrRole);
+        if (\is_string($userOrRoleOrCapabilities) || \is_array($userOrRoleOrCapabilities)) {
+            $userOrRoleOrCapabilities = $this->createUser($userOrRoleOrCapabilities);
         }
 
-        $this->client->loginUser($userOrRole);
+        $this->client->loginUser($userOrRoleOrCapabilities);
 
-        return $userOrRole;
+        return $userOrRoleOrCapabilities;
     }
 
-    protected function createUser(string|array $roleOrCapabilities): User
+    protected function createUser(string|array $roleOrCapabilities = []): User
     {
         if (\is_string($roleOrCapabilities)) {
+            $username = Uuid::v4();
+
             return $this->userFactory->createUser(
-                strtolower($roleOrCapabilities),
-                strtolower($roleOrCapabilities) . '@numbernine-fakedomain.com',
+                $username,
+                $username . '@numbernine-fakedomain.com',
                 'password',
                 [$this->userRoleRepository->findOneBy(['name' => $roleOrCapabilities])],
             );
         }
 
-        $this->testRole->setCapabilities($roleOrCapabilities);
-        $this->entityManager->persist($this->testRole);
+        $role = $this->createRole($roleOrCapabilities);
+
+        return $this->createUser($role->getName());
+    }
+
+    private function createRole(array $capabilities = []): UserRole
+    {
+        $role = (new UserRole())
+            ->setName(Uuid::v4())
+            ->setCapabilities($capabilities)
+        ;
+
+        $this->entityManager->persist($role);
         $this->entityManager->flush();
 
-        return $this->createUser('TestRole');
+        return $role;
     }
 }

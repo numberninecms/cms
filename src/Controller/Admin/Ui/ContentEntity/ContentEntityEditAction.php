@@ -41,7 +41,10 @@ final class ContentEntityEditAction extends AbstractContentEntityFormAction
             $this->denyAccessUnlessGranted($contentType->getMappedCapability(Capabilities::EDIT_OTHERS_POSTS));
         }
 
-        if ($this->getUser() === $entity->getAuthor() && $entity->getStatus() === PublishingStatusInterface::STATUS_PUBLISH) {
+        if (
+            $entity->getStatus() === PublishingStatusInterface::STATUS_PUBLISH
+            && $this->getUser() === $entity->getAuthor()
+        ) {
             $this->denyAccessUnlessGranted($contentType->getMappedCapability(Capabilities::EDIT_PUBLISHED_POSTS));
         }
 
