@@ -29,6 +29,7 @@
         "doctrine/data-fixtures": "1.5.x-dev",
         "doctrine/doctrine-bundle": "^2.5",
         "doctrine/doctrine-fixtures-bundle": "^3.5",
+        "doctrine/migrations": "<3.3",
         "doctrine/orm": "^2.10",
         "friendsofsymfony/jsrouting-bundle": "^2.6",
         "gedmo/doctrine-extensions": "^3.0",
