@@ -11,10 +11,9 @@
 
 namespace NumberNine\Tests\Functional\Controller\Admin\Ui\ContentEntity;
 
-use NumberNine\Entity\Post;
-use NumberNine\Entity\User;
 use NumberNine\Model\Content\PublishingStatusInterface;
 use NumberNine\Security\Capabilities;
+use NumberNine\Tests\CreateEntitiesHelperTrait;
 use NumberNine\Tests\UserAwareTestCase;
 
 /**
@@ -23,6 +22,8 @@ use NumberNine\Tests\UserAwareTestCase;
  */
 final class ContentEntityEditActionTest extends UserAwareTestCase
 {
+    use CreateEntitiesHelperTrait;
+
     public function testAuthorCantEditOwnPostIfPublished(): void
     {
         $user = $this->createUser([Capabilities::ACCESS_ADMIN, Capabilities::EDIT_POSTS]);
@@ -175,20 +176,5 @@ final class ContentEntityEditActionTest extends UserAwareTestCase
         );
 
         self::assertResponseIsSuccessful();
-    }
-
-    private function createPost(User $user, string $status): Post
-    {
-        $post = (new Post())
-            ->setCustomType('post')
-            ->setAuthor($user)
-            ->setTitle('Sample post')
-            ->setStatus($status)
-        ;
-
-        $this->entityManager->persist($post);
-        $this->entityManager->flush();
-
-        return $post;
     }
 }

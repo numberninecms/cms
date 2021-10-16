@@ -174,8 +174,6 @@ final class ContentService
     }
 
     /**
-     * @throws ORMException
-     *
      * @return never
      */
     public function deleteEntitiesOfType(string|ContentType $contentType, array $ids): void
