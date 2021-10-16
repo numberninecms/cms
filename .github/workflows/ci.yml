@@ -149,7 +149,7 @@ jobs:
                 run: |
                     docker run --rm -t -e HOST_PWD=$PWD \
                         -v $PWD:/srv/app -v /var/run/docker.sock:/var/run/docker.sock \
-                        projectinstaller testproject
+                        projectinstaller testproject -v
 
             -   name: Check that website is up and running
                 run: wget --spider --no-check-certificate https://testproject.localhost/
