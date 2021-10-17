@@ -115,6 +115,7 @@ jobs:
                     cd ..
                     rm -rf newproject
                     rm composer.lock
+                    rm docker-compose*.yaml
 
             -   name: Add NumberNine to the project
                 run: |
@@ -123,6 +124,10 @@ jobs:
                     composer config prefer-stable true
                     composer config repositories.0 path ./temp/cms
                     composer require numberninecms/cms:^0.3 numberninecms/chapterone:^0.3 --ignore-platform-reqs
+                    rm vendor/numberninecms/cms
+                    cd ./temp/cms
+                    cp -Rp . ../../vendor/numberninecms/cms
+                    cd ../..
 
             -   name: Create .env.local file
                 run: |
