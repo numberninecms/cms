@@ -12,7 +12,6 @@
 namespace NumberNine\Controller\Frontend\Content;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityNotFoundException;
 use NumberNine\Content\PermalinkGenerator;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Event\ContentEntityShowBeforeRenderEvent;
@@ -65,7 +64,7 @@ final class ContentEntityShowAction extends AbstractController
         }
 
         if ($entity === null) {
-            throw new EntityNotFoundException('Missing slug or ID.');
+            throw $this->createNotFoundException('This page does not exist.');
         }
 
         $this->validateUrl($request, $entity, $permalinkGenerator);

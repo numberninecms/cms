@@ -22,16 +22,23 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @internal
- * @coversNothing
+ * @covers \NumberNine\Controller\Frontend\Content\ContentEntityShowAction
  */
 final class ContentEntityShowActionTest extends UserAwareTestCase
 {
+    public function testAccessingNonExistentUrlThrows404NotFound(): void
+    {
+        $this->client->request('GET', '/thisurldoesnotexist');
+
+        static::assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
+    }
+
     public function testAccessingPrivatePostThrows404NotFound(): void
     {
         $this->createPrivatePost('2021/04/15');
         $this->client->request('GET', '/2021/04/15/this-page-is-private');
 
-        self::assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
+        static::assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
 
     public function testAuthorCanAccessHisPrivatePost(): void
@@ -40,8 +47,8 @@ final class ContentEntityShowActionTest extends UserAwareTestCase
         $this->createPrivatePost('2021/04/15', $user);
         $this->client->request('GET', '/2021/04/15/this-page-is-private');
 
-        self::assertResponseStatusCodeSame(Response::HTTP_OK);
-        self::assertSelectorTextSame('h1', 'Private: This page is private');
+        static::assertResponseStatusCodeSame(Response::HTTP_OK);
+        static::assertSelectorTextSame('h1', 'Private: This page is private');
     }
 
     public function testAllowedUsersCanAccessOtherUserPrivatePost(): void
@@ -50,19 +57,14 @@ final class ContentEntityShowActionTest extends UserAwareTestCase
         $this->setCapabilitiesThenLogin([Capabilities::READ_PRIVATE_POSTS]);
         $this->client->request('GET', '/2021/04/15/this-page-is-private');
 
-        self::assertResponseStatusCodeSame(Response::HTTP_OK);
-        self::assertSelectorTextSame('h1', 'Private: This page is private');
+        static::assertResponseStatusCodeSame(Response::HTTP_OK);
+        static::assertSelectorTextSame('h1', 'Private: This page is private');
     }
 
     private function createPrivatePost(string $date, ?User $user = null): void
     {
         if (!$user) {
-            $user = $this->userFactory->createUser(
-                'contributor',
-                'contributor@numbernine-fakedomain.com',
-                'password',
-                [$this->userRoleRepository->findOneBy(['name' => 'Contributor'])],
-            );
+            $user = $this->createUser('Contributor');
         }
 
         $post = (new Post())
