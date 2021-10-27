@@ -46,7 +46,7 @@
             <div class="flex-grow p-3">
                 {{ form_start(form) }}
                     {% include '@NumberNine/admin/util/content_entities_table.html.twig' %}
-                    <div class="flex gap-3 hidden" data-controller="visible-on-selected-rows">
+                    <div class="gap-3 hidden" data-controller="visible-on-selected-rows">
                         {% if is_trash %}
                             {{ form_row(form.restore, {row_attr: {class: 'mt-4'}}) }}
                         {% endif %}

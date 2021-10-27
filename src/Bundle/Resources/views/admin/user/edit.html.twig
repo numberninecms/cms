@@ -21,7 +21,7 @@
                 {{ form_row(form.lastName, {attr: {'data-user--form-target': 'lastName', 'data-action': 'user--form#updateLastName'}}) }}
                 {{ form_row(form.displayNameFormat, {attr: {'data-user--form-target': 'displayNameFormat'}}) }}
                 {{ form_row(form.userRoles) }}
-                <div class="flex">
+                <div class="flex gap-3">
                     {{ form_row(form.save) }}
                     {{ form_row(form.delete, {row_attr: {class: 'mt-4'}, attr: {class: 'btn btn-color-red'}}) }}
                 </div>
