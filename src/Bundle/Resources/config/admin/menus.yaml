@@ -9,17 +9,11 @@ menus:
         route: numbernine_admin_media_library_index
         icon: photo-video
         if_granted: edit_media_files
-    #    forms:
-    #        text: Forms
-    #        route:
-    #        icon: mdi-form-dropdown
-    #        children:
-    #            all:
-    #                text: All forms
-    #                link: /forms/
-    #            add_new:
-    #                text: Add new
-    #                link: /forms/new
+    comments:
+        text: Comments
+        route: numbernine_admin_comment_index
+        icon: mdi-comment
+        if_granted: moderate_comments
     users:
         text: Users
         route: numbernine_admin_user_index

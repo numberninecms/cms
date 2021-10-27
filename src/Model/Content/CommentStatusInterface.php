@@ -15,4 +15,8 @@ interface CommentStatusInterface
 {
     public const COMMENT_STATUS_OPEN = 'open';
     public const COMMENT_STATUS_CLOSED = 'closed';
+
+    public const COMMENT_STATUS_PENDING = 'pending';
+    public const COMMENT_STATUS_APPROVED = 'approved';
+    public const COMMENT_STATUS_SPAM = 'spam';
 }

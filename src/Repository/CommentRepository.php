@@ -12,8 +12,11 @@
 namespace NumberNine\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use NumberNine\Entity\Comment;
+use NumberNine\Model\Pagination\PaginationParameters;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -51,5 +54,66 @@ final class CommentRepository extends ServiceEntityRepository
             ->setGuestAuthorUrl(null)
             ->setAuthor(null)
         ;
+    }
+
+    public function getPaginatedCollectionQueryBuilder(
+        PaginationParameters $paginationParameters,
+        Criteria $criteria = null
+    ): QueryBuilder {
+        $queryBuilder = $this->createQueryBuilder('c')
+            ->select('c', 'ce', 'a')
+            ->leftJoin('c.author', 'a')
+            ->leftJoin('c.contentEntity', 'ce')
+            ->setFirstResult($paginationParameters->getStartRow() ?: 0)
+            ->setMaxResults($paginationParameters->getFetchCount() ?: PHP_INT_MAX)
+        ;
+
+        if ($paginationParameters->getStatus()) {
+            $status = explode(',', (string) $paginationParameters->getStatus());
+            $deleted = false;
+
+            if (\in_array('deleted', $status, true)) {
+                $deleted = true;
+                unset($status[(int) array_search('deleted', $status, true)]);
+            }
+
+            if (!empty($status)) {
+                $queryBuilder
+                    ->andWhere('c.status IN (:status)')
+                    ->setParameter('status', $status)
+                ;
+            }
+
+            if ($deleted) {
+                $this->_em->getFilters()->disable('softdeleteable');
+                $queryBuilder->andWhere('c.deletedAt IS NOT NULL');
+            }
+        }
+
+        if ($paginationParameters->getFilter()) {
+            $or = $queryBuilder->expr()->orx();
+            $or->add($queryBuilder->expr()->like('c.id', ':filter'));
+            $or->add($queryBuilder->expr()->like('c.content', ':filter'));
+            $or->add($queryBuilder->expr()->like('a.username', ':filter'));
+            $or->add($queryBuilder->expr()->like('a.email', ':filter'));
+            $or->add($queryBuilder->expr()->like('c.guestAuthorName', ':filter'));
+            $or->add($queryBuilder->expr()->like('c.guestAuthorEmail', ':filter'));
+
+            $queryBuilder
+                ->andWhere($or)
+                ->setParameter('filter', '%' . trim((string) $paginationParameters->getFilter()) . '%')
+            ;
+        }
+
+        if ($paginationParameters->getOrderBy()) {
+            $entity = $paginationParameters->getOrderBy() === 'username' ? 'a.' : 'c.';
+            $queryBuilder->addOrderBy($entity . $paginationParameters->getOrderBy(), $paginationParameters->getOrder());
+        }
+
+        if ($criteria) {
+            $queryBuilder->addCriteria($criteria);
+        }
+
+        return $queryBuilder;
     }
 }
