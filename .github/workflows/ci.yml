@@ -115,7 +115,7 @@ jobs:
                     cd ..
                     rm -rf newproject
                     rm composer.lock
-                    rm docker-compose*.yaml
+                    rm docker-compose*
 
             -   name: Add NumberNine to the project
                 run: |
