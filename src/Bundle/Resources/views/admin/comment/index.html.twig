@@ -1,0 +1,65 @@
+{% trans_default_domain 'numbernine' %}
+{% extends '@NumberNine/admin/base.html.twig' %}
+
+{% block title %}{{ 'Comments'|trans }}{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col select-text" data-controller="search">
+        {% embed '@NumberNine/admin/util/toolbar.html.twig' with {title: 'Comments'|trans} %}
+            {% block tools %}
+                <div class="flex flex-grow justify-between">
+                    <a href=""
+                       class="btn btn-color-white btn-size-xsmall"
+                       data-turbo-frame="_top"
+                    >
+                        {{ 'Add new comment'|trans }}
+                    </a>
+                    <div>
+                        <label class="flex gap-1">
+                            <input type="text" placeholder="Search..." class="text-xs p-1 text-quaternary" data-search-target="input" autocomplete="off">
+                            <button class="btn btn-style-flat btn-color-white" type="button" data-action="search#reset">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </label>
+                    </div>
+                </div>
+            {% endblock %}
+        {% endembed %}
+
+        <turbo-frame id="numbernine_admin_comment_index" data-search-target="frame">
+            {% include '@NumberNine/admin/util/flashes.html.twig' %}
+
+            <div class="tabs-toolbar">
+                <div class="tabs" data-controller="tabs">
+                    <a href="{{ path('numbernine_admin_comment_index') }}" data-tabs-target="tab" data-action="search#reset">
+                        <span>{{ 'All'|trans }}</span>
+                    </a>
+                    <a href="{{ path('numbernine_admin_comment_index', {status: 'pending'}) }}" data-tabs-target="tab" data-action="search#reset">
+                        <span>{{ 'Pending'|trans }}</span>
+                    </a>
+                    <a href="{{ path('numbernine_admin_comment_index', {status: 'approved'}) }}" data-tabs-target="tab" data-action="search#reset">
+                        <span>{{ 'Approved'|trans }}</span>
+                    </a>
+                    <a href="{{ path('numbernine_admin_comment_index', {status: 'spam'}) }}" data-tabs-target="tab" data-action="search#reset">
+                        <span>{{ 'Spam'|trans }}</span>
+                    </a>
+                    <a href="{{ path('numbernine_admin_comment_index', {status: 'deleted'}) }}" data-tabs-target="tab" data-action="search#reset">
+                        <span>{{ 'Trash'|trans }}</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="flex-grow p-3">
+                {{ form_start(form) }}
+                    {% include '@NumberNine/admin/comment/comments_table.html.twig' %}
+                    <div class="gap-3 hidden" data-controller="visible-on-selected-rows">
+                        {% if is_trash %}
+                            {{ form_row(form.restore, {row_attr: {class: 'mt-4'}}) }}
+                        {% endif %}
+                        {{ form_row(form.delete, {row_attr: {class: 'mt-4'}, attr: {class: 'btn btn-color-red'}}) }}
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </turbo-frame>
+    </div>
+{% endblock %}

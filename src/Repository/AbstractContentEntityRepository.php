@@ -51,7 +51,7 @@ abstract class AbstractContentEntityRepository extends ServiceEntityRepository
 
             if (\in_array('deleted', $status, true)) {
                 $deleted = true;
-                unset($status[array_search('deleted', $status, true)]);
+                unset($status[(int) array_search('deleted', $status, true)]);
             }
 
             if (!empty($status)) {

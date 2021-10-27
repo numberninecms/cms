@@ -112,6 +112,48 @@
         }
     }
 
+    &.btn-color-green {
+        @apply
+            text-light
+            bg-green-600
+            hover:bg-green-700
+            focus:ring-green-500 focus:ring-offset-green-200;
+
+        &.btn-style-outline {
+            @apply border-2 border-green-700;
+        }
+
+        &.btn-style-flat {
+            @apply
+                py-1 px-2
+                shadow-none
+                text-green-600
+                bg-transparent
+                hover:bg-green-600 hover:bg-opacity-10;
+        }
+    }
+
+    &.btn-color-orange {
+        @apply
+            text-light
+            bg-yellow-600
+            hover:bg-yellow-700
+            focus:ring-yellow-500 focus:ring-offset-yellow-200;
+
+        &.btn-style-outline {
+            @apply border-2 border-yellow-700;
+        }
+
+        &.btn-style-flat {
+            @apply
+                py-1 px-2
+                shadow-none
+                text-yellow-600
+                bg-transparent
+                hover:bg-yellow-600 hover:bg-opacity-10;
+        }
+    }
+
     &.btn-case-uppercase {
         @apply uppercase;
     }

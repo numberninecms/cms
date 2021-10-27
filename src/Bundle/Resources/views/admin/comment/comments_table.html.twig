@@ -1,0 +1,68 @@
+{% trans_default_domain 'numbernine' %}
+<table class="w-full" data-controller="select-all content-entity--index">
+    <thead>
+        <tr>
+            <th class="pl-3 w-8 select-row"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></th>
+            <th>{{ 'Author'|trans }}</th>
+            <th class="w-1/2">{{ 'Comment'|trans }}</th>
+            <th>{{ 'In response to'|trans }}</th>
+            <th>{{ 'Submitted on'|trans }}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for comment in comments %}
+        {% if comment.status == 'pending' %}
+            {% set tr_class = 'border-l-4 border-red-600 bg-red-100' %}
+        {% else %}
+            {% set tr_class = '' %}
+        {% endif %}
+        <tr data-entity-id="{{ comment.id }}" class="min-h-10 {{ tr_class }}">
+            <td class="pl-3 select-row">{{ form_widget(form['comment_' ~ comment.id], {attr: {'data-select-all-target': 'child'}}) }}</td>
+            <td>{{ comment.author }}</td>
+            <td>
+                <div class="gap-3 flex justify-between items-center">
+                    <div>{{ comment.content }}</div>
+                    <div class="btn-group">
+                        {% if comment.status == 'pending' %}
+                            <button
+                                type="button"
+                                class="btn btn-color-green btn-style-flat"
+                                title="{{ 'Approve'|trans }}"
+                            >
+                                <i class="mdi mdi-comment-check-outline mdi-18px"></i>
+                            </button>
+                        {% endif %}
+                        {% if comment.status == 'approved' %}
+                            <button
+                                type="button"
+                                class="btn btn-color-orange btn-style-flat"
+                                title="{{ 'Unapprove'|trans }}"
+                            >
+                                <i class="mdi mdi-comment-remove-outline mdi-18px"></i>
+                            </button>
+                        {% endif %}
+                        <button
+                            type="button"
+                            class="btn btn-color-secondary btn-style-flat"
+                            title="{{ 'Edit'|trans }}"
+                        >
+                            <i class="mdi mdi-comment-edit-outline mdi-18px"></i>
+                        </button>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <a href="{{ N9_entity_admin_url(comment.contentEntity) }}" data-turbo-frame="_top">
+                    {{ comment.contentEntity.title }}
+                </a>
+            </td>
+            <td>{{ comment.updatedAt|date('d/m/Y H:i:s') }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td class="pl-3 select-row" colspan="8"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></td>
+        </tr>
+    </tfoot>
+</table>

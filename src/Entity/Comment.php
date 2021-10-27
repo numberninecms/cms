@@ -51,6 +51,9 @@ class Comment
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $guestAuthorUrl;
 
+    #[ORM\Column(type: 'string', length: 10)]
+    private ?string $status = null;
+
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     private ?Comment $parent;
 
@@ -114,6 +117,18 @@ class Comment
     public function setGuestAuthorUrl(?string $guestAuthorUrl): self
     {
         $this->guestAuthorUrl = $guestAuthorUrl;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?string $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }
