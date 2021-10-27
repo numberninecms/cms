@@ -18,7 +18,9 @@ export default class extends Controller {
             checkbox.addEventListener('input', () => {
                 if (Array.from(rows).filter((c) => (c as HTMLInputElement).checked).length > 0) {
                     (this.element as HTMLElement).classList.remove('hidden');
+                    (this.element as HTMLElement).classList.add('flex');
                 } else {
+                    (this.element as HTMLElement).classList.remove('flex');
                     (this.element as HTMLElement).classList.add('hidden');
                 }
             });

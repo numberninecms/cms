@@ -58,7 +58,7 @@
                     {% if menus|length is same as 0 %}
                         {% do form.delete.setRendered() %}
                     {% else %}
-                        <div class="flex hidden" data-controller="visible-on-selected-rows">
+                        <div class="gap-3 hidden" data-controller="visible-on-selected-rows">
                             {{ form_row(form.delete, {row_attr: {class: 'mt-4'}, attr: {class: 'btn btn-color-red'}}) }}
                         </div>
                     {% endif %}
