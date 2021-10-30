@@ -75,9 +75,11 @@
                 </div>
             </td>
             <td>
-                <a href="{{ N9_entity_admin_url(comment.contentEntity) }}" data-turbo-frame="_top">
-                    {{ comment.contentEntity.title }}
-                </a>
+                {% if comment.contentEntity %}
+                    <a href="{{ N9_entity_admin_url(comment.contentEntity) }}" data-turbo-frame="_top">
+                        {{ comment.contentEntity.title }}
+                    </a>
+                {% endif %}
             </td>
             <td>{{ comment.updatedAt|date('d/m/Y H:i:s') }}</td>
         </tr>
