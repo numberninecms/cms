@@ -16,6 +16,8 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use NumberNine\Entity\Comment;
+use NumberNine\Exception\UnknownCommentStatusException;
+use NumberNine\Model\Content\CommentStatusInterface;
 use NumberNine\Model\Pagination\PaginationParameters;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -27,6 +29,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 final class CommentRepository extends ServiceEntityRepository
 {
+    use SoftDeletableEntityRepositoryTrait;
+
     public function __construct(ManagerRegistry $registry, private TranslatorInterface $translator)
     {
         parent::__construct($registry, Comment::class);
@@ -39,8 +43,15 @@ final class CommentRepository extends ServiceEntityRepository
             ->leftJoin('c.author', 'a')
             ->where('c.contentEntity = :contentEntityId')
             ->andWhere('c.parent IS NULL')
+            ->andWhere('c.status IN (:status)')
             ->orderBy('c.createdAt', 'asc')
-            ->setParameter('contentEntityId', $contentEntityId)
+            ->setParameters([
+                'contentEntityId' => $contentEntityId,
+                'status' => [
+                    CommentStatusInterface::COMMENT_STATUS_PENDING,
+                    CommentStatusInterface::COMMENT_STATUS_APPROVED,
+                ],
+            ])
             ->getQuery()
             ->getResult()
         ;
@@ -88,6 +99,11 @@ final class CommentRepository extends ServiceEntityRepository
                 $this->_em->getFilters()->disable('softdeleteable');
                 $queryBuilder->andWhere('c.deletedAt IS NOT NULL');
             }
+        } else {
+            $queryBuilder
+                ->andWhere('c.status != :status')
+                ->setParameter('status', CommentStatusInterface::COMMENT_STATUS_SPAM)
+            ;
         }
 
         if ($paginationParameters->getFilter()) {
@@ -115,5 +131,45 @@ final class CommentRepository extends ServiceEntityRepository
         }
 
         return $queryBuilder;
+    }
+
+    public function approveCollection(array $ids): void
+    {
+        $this->changeCollectionStatus($ids, CommentStatusInterface::COMMENT_STATUS_APPROVED);
+    }
+
+    public function unapproveCollection(array $ids): void
+    {
+        $this->changeCollectionStatus($ids, CommentStatusInterface::COMMENT_STATUS_PENDING);
+    }
+
+    public function markCollectionAsSpam(array $ids): void
+    {
+        $this->changeCollectionStatus($ids, CommentStatusInterface::COMMENT_STATUS_SPAM);
+    }
+
+    protected function removeEntity(Comment $entity): void
+    {
+        $this->_em->remove($entity);
+    }
+
+    private function changeCollectionStatus(array $ids, string $status): void
+    {
+        if (!\in_array($status, [
+            CommentStatusInterface::COMMENT_STATUS_APPROVED,
+            CommentStatusInterface::COMMENT_STATUS_PENDING,
+            CommentStatusInterface::COMMENT_STATUS_SPAM,
+        ], true)) {
+            throw new UnknownCommentStatusException($status);
+        }
+
+        $this->createQueryBuilder('c')
+            ->update()
+            ->set('c.status', ':status')
+            ->where('c.id IN (:ids)')
+            ->setParameters(compact('ids', 'status'))
+            ->getQuery()
+            ->execute()
+        ;
     }
 }

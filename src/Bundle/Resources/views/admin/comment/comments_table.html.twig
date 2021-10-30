@@ -12,6 +12,8 @@
     <tbody>
     {% for comment in comments %}
         {% if comment.status == 'pending' %}
+            {% set tr_class = 'border-l-4 border-yellow-600 bg-yellow-100' %}
+        {% elseif comment.status == 'spam' %}
             {% set tr_class = 'border-l-4 border-red-600 bg-red-100' %}
         {% else %}
             {% set tr_class = '' %}
@@ -21,7 +23,7 @@
             <td>{{ comment.author }}</td>
             <td>
                 <div class="gap-3 flex justify-between items-center">
-                    <div>{{ comment.content }}</div>
+                    <div class="text-sm">{{ comment.content }}</div>
                     <div class="btn-group">
                         {% if comment.status == 'pending' %}
                             <button

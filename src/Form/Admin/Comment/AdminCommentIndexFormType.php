@@ -21,14 +21,17 @@ final class AdminCommentIndexFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('delete', SubmitType::class, ['label' => 'Delete', 'attr' => ['value' => 'delete']])
-        ;
-
         if ($options['trash']) {
             $builder
                 ->add('restore', SubmitType::class, ['attr' => ['value' => 'restore']])
                 ->add('delete', SubmitType::class, ['label' => 'Permanently delete', 'attr' => ['value' => 'delete']])
+            ;
+        } else {
+            $builder
+                ->add('approve', SubmitType::class, ['label' => 'Approve', 'attr' => ['value' => 'approve']])
+                ->add('unapprove', SubmitType::class, ['label' => 'Unapprove', 'attr' => ['value' => 'unapprove']])
+                ->add('spam', SubmitType::class, ['label' => 'Spam', 'attr' => ['value' => 'spam']])
+                ->add('delete', SubmitType::class, ['label' => 'Delete', 'attr' => ['value' => 'delete']])
             ;
         }
 

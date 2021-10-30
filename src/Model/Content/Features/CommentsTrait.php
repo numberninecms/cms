@@ -24,7 +24,7 @@ trait CommentsTrait
     /**
      * @var Collection|Comment[]
      */
-    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'contentEntity')]
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'contentEntity', cascade: ['remove'])]
     private Collection $comments;
 
     public function getCommentStatus(): ?string

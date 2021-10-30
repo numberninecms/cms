@@ -27,6 +27,7 @@ use NumberNine\Model\Content\Features\SoftDeleteableTrait;
 use NumberNine\Model\Content\Features\TimestampableTrait;
 use NumberNine\Model\Content\Features\WebAccessTrait;
 use NumberNine\Model\Content\PublishingStatusInterface;
+use NumberNine\Model\Content\SoftDeletableEntity;
 use NumberNine\Repository\ContentEntityRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -38,7 +39,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\InheritanceType('JOINED')]
 #[ORM\DiscriminatorColumn(name: 'content_type', type: 'string')]
 #[ORM\Table(name: 'contententity')]
-class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
+class ContentEntity implements PublishingStatusInterface, CommentStatusInterface, SoftDeletableEntity
 {
     use WebAccessTrait;
     use EditorTrait;
@@ -86,10 +87,20 @@ class ContentEntity implements PublishingStatusInterface, CommentStatusInterface
     )]
     private Collection $contentEntityTerms;
 
-    #[ORM\OneToMany(targetEntity: ContentEntityRelationship::class, mappedBy: 'child', cascade: ['persist'])]
+    #[ORM\OneToMany(
+        targetEntity: ContentEntityRelationship::class,
+        mappedBy: 'child',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true,
+    )]
     private Collection $children;
 
-    #[ORM\OneToMany(targetEntity: ContentEntityRelationship::class, mappedBy: 'parent', cascade: ['persist'])]
+    #[ORM\OneToMany(
+        targetEntity: ContentEntityRelationship::class,
+        mappedBy: 'parent',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true,
+    )]
     private Collection $parents;
 
     public function __construct()

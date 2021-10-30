@@ -19,6 +19,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use NumberNine\Model\Content\Features\AuthorTrait;
 use NumberNine\Model\Content\Features\SoftDeleteableTrait;
 use NumberNine\Model\Content\Features\TimestampableTrait;
+use NumberNine\Model\Content\SoftDeletableEntity;
 use NumberNine\Repository\CommentRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -26,7 +27,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  */
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
-class Comment
+class Comment implements SoftDeletableEntity
 {
     use AuthorTrait;
     use TimestampableTrait;
