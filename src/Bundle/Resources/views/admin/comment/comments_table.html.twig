@@ -1,5 +1,5 @@
 {% trans_default_domain 'numbernine' %}
-<table class="w-full" data-controller="select-all content-entity--index">
+<table class="w-full" data-controller="select-all comment--index">
     <thead>
         <tr>
             <th class="pl-3 w-8 select-row"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></th>
@@ -25,30 +25,51 @@
                 <div class="gap-3 flex justify-between items-center">
                     <div class="text-sm">{{ comment.content }}</div>
                     <div class="btn-group">
-                        {% if comment.status == 'pending' %}
+                        {% if not is_trash %}
+                            {% if comment.status == 'pending' %}
+                                <button
+                                    type="button"
+                                    class="btn btn-color-green btn-style-flat"
+                                    title="{{ 'Approve'|trans }}"
+                                    data-action="comment--index#approveComment"
+                                >
+                                    <i class="mdi mdi-comment-check-outline mdi-18px"></i>
+                                </button>
+                            {% endif %}
+                            {% if comment.status == 'approved' %}
+                                <button
+                                    type="button"
+                                    class="btn btn-color-orange btn-style-flat"
+                                    title="{{ 'Unapprove'|trans }}"
+                                    data-action="comment--index#unapproveComment"
+                                >
+                                    <i class="mdi mdi-comment-remove-outline mdi-18px"></i>
+                                </button>
+                            {% endif %}
                             <button
                                 type="button"
-                                class="btn btn-color-green btn-style-flat"
-                                title="{{ 'Approve'|trans }}"
+                                class="btn btn-color-secondary btn-style-flat"
+                                title="{{ 'Edit'|trans }}"
                             >
-                                <i class="mdi mdi-comment-check-outline mdi-18px"></i>
+                                <i class="mdi mdi-comment-edit-outline mdi-18px"></i>
                             </button>
-                        {% endif %}
-                        {% if comment.status == 'approved' %}
+                        {% else %}
                             <button
                                 type="button"
-                                class="btn btn-color-orange btn-style-flat"
-                                title="{{ 'Unapprove'|trans }}"
+                                class="btn btn-color-primary btn-style-flat"
+                                title="{{ 'Restore'|trans }}"
+                                data-action="comment--index#restoreComment"
                             >
-                                <i class="mdi mdi-comment-remove-outline mdi-18px"></i>
+                                <i class="mdi mdi-backup-restore mdi-18px"></i>
                             </button>
                         {% endif %}
                         <button
                             type="button"
-                            class="btn btn-color-secondary btn-style-flat"
-                            title="{{ 'Edit'|trans }}"
+                            class="btn btn-color-red btn-style-flat"
+                            title="{{ ('Delete' ~ (is_trash ? ' permanently' : ''))|trans }}"
+                            data-action="comment--index#deleteComment"
                         >
-                            <i class="mdi mdi-comment-edit-outline mdi-18px"></i>
+                            <i class="mdi mdi-delete-outline mdi-18px"></i>
                         </button>
                     </div>
                 </div>
