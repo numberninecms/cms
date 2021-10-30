@@ -11,10 +11,10 @@ import { Controller } from 'stimulus';
 import checkAndSubmit from 'admin/functions/checkAndSubmit';
 
 export default class extends Controller {
-    private readonly formName = 'admin_content_entity_index_form';
-    private readonly formCheckboxPrefix = 'entity';
+    private readonly formName = 'admin_comment_index_form';
+    private readonly formCheckboxPrefix = 'comment';
 
-    public deleteEntity(event: MouseEvent): void {
+    public deleteComment(event: MouseEvent): void {
         event.preventDefault();
 
         checkAndSubmit({
@@ -28,7 +28,7 @@ export default class extends Controller {
         });
     }
 
-    public restoreEntity(event: MouseEvent): void {
+    public restoreComment(event: MouseEvent): void {
         event.preventDefault();
 
         checkAndSubmit({
@@ -37,6 +37,28 @@ export default class extends Controller {
             formCheckboxPrefix: this.formCheckboxPrefix,
             button: 'restore',
             confirm: true,
+        });
+    }
+
+    public approveComment(event: MouseEvent): void {
+        event.preventDefault();
+
+        checkAndSubmit({
+            event,
+            formName: this.formName,
+            formCheckboxPrefix: this.formCheckboxPrefix,
+            button: 'approve',
+        });
+    }
+
+    public unapproveComment(event: MouseEvent): void {
+        event.preventDefault();
+
+        checkAndSubmit({
+            event,
+            formName: this.formName,
+            formCheckboxPrefix: this.formCheckboxPrefix,
+            button: 'unapprove',
         });
     }
 }
