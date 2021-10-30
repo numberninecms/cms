@@ -18,6 +18,7 @@ use NumberNine\Form\Admin\Comment\AdminCommentIndexFormType;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Model\Pagination\PaginationParameters;
 use NumberNine\Repository\CommentRepository;
+use NumberNine\Security\Capabilities;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
@@ -41,6 +42,8 @@ final class CommentIndexAction extends AbstractController implements AdminContro
         CommentRepository $commentRepository,
         LoggerInterface $logger,
     ): Response {
+        $this->denyAccessUnlessGranted(Capabilities::MODERATE_COMMENTS);
+
         /** @var PaginationParameters $paginationParameters */
         $paginationParameters = $serializer->denormalize(
             $request->query->all(),
