@@ -189,7 +189,6 @@ final class ContentService
         /** @var AbstractContentEntityRepository $repository */
         $repository = $this->entityManager->getRepository($contentType->getEntityClassName());
         $repository->removeCollection($ids);
-        $this->entityManager->flush();
     }
 
     /**
@@ -209,8 +208,7 @@ final class ContentService
 
         /** @var AbstractContentEntityRepository $repository */
         $repository = $this->entityManager->getRepository($contentType->getEntityClassName());
-        $repository->hardDeleteAllDeleted($contentType->getName());
-        $this->entityManager->flush();
+        $repository->emptyTrash($contentType->getName());
     }
 
     /**
@@ -229,7 +227,6 @@ final class ContentService
         /** @var AbstractContentEntityRepository $repository */
         $repository = $this->entityManager->getRepository($contentType->getEntityClassName());
         $repository->restoreCollection($ids);
-        $this->entityManager->flush();
     }
 
     public function getFormTypeNewForType(ContentType $contentType, array $options = []): FormInterface

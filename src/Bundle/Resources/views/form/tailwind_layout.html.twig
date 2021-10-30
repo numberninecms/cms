@@ -75,7 +75,7 @@
 {%- endblock -%}
 
 {%- block checkbox_widget -%}
-    {%- set label_attr = label_attr|merge({class: label_attr.class|default(label_class|default('flex flex-row space-x-3 items-center'))}) -%}
+    {%- set label_attr = label_attr|merge({class: label_attr.class|default(label_class|default('flex flex-row gap-3 items-center'))}) -%}
     <label{% with {attr: label_attr} %} {{ block('attributes') }}{% endwith %}>
         {{- parent() -}}
         <span>{{- label -}}</span>
@@ -83,7 +83,7 @@
 {%- endblock checkbox_widget -%}
 
 {%- block radio_widget -%}
-    {%- set label_attr = label_attr|merge({class: label_attr.class|default(label_class|default('flex flex-row space-x-3 items-center'))}) -%}
+    {%- set label_attr = label_attr|merge({class: label_attr.class|default(label_class|default('flex flex-row gap-3 items-center'))}) -%}
     <label{% with {attr: label_attr} %} {{ block('attributes') }}{% endwith %}>
         {{- parent() -}}
         <span>{{- label -}}</span>
@@ -91,7 +91,7 @@
 {%- endblock radio_widget -%}
 
 {%- block key_value_row -%}
-    {%- set row_attr = row_attr|merge({class: row_attr.class|default('') ~ ' flex mt-2 space-y-2 md:space-y-0 md:space-x-3 flex-col md:flex-row'}) -%}
+    {%- set row_attr = row_attr|merge({class: row_attr.class|default('') ~ ' flex mt-2 space-y-2 md:space-y-0 md:gap-3 flex-col md:flex-row'}) -%}
     <div{% with {attr: row_attr} %} {{ block('attributes') }}{% endwith %}>
         {{- form_row(form.children['key'], {row_attr: {class: 'flex flex-col flex-grow md:max-w-xs'}}) -}}
         {{- form_row(form.children['value'], {row_attr: {class: 'flex flex-col flex-grow'}}) -}}

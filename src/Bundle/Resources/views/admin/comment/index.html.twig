@@ -7,13 +7,7 @@
     <div class="flex flex-col select-text" data-controller="search">
         {% embed '@NumberNine/admin/util/toolbar.html.twig' with {title: 'Comments'|trans} %}
             {% block tools %}
-                <div class="flex flex-grow justify-between">
-                    <a href=""
-                       class="btn btn-color-white btn-size-xsmall"
-                       data-turbo-frame="_top"
-                    >
-                        {{ 'Add new comment'|trans }}
-                    </a>
+                <div class="flex flex-grow justify-end">
                     <div>
                         <label class="flex gap-1">
                             <input type="text" placeholder="Search..." class="text-xs p-1 text-quaternary" data-search-target="input" autocomplete="off">
@@ -55,6 +49,10 @@
                     <div class="gap-3 hidden" data-controller="visible-on-selected-rows">
                         {% if is_trash %}
                             {{ form_row(form.restore, {row_attr: {class: 'mt-4'}}) }}
+                        {% else %}
+                            {{ form_row(form.approve, {row_attr: {class: 'mt-4'}, attr: {class: 'btn btn-color-green'}}) }}
+                            {{ form_row(form.unapprove, {row_attr: {class: 'mt-4'}, attr: {class: 'btn btn-color-orange'}}) }}
+                            {{ form_row(form.spam, {row_attr: {class: 'mt-4'}, attr: {class: 'btn btn-color-red'}}) }}
                         {% endif %}
                         {{ form_row(form.delete, {row_attr: {class: 'mt-4'}, attr: {class: 'btn btn-color-red'}}) }}
                     </div>

@@ -13,6 +13,7 @@ namespace NumberNine\Controller\Admin\Ui\Comment;
 
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Exception;
+use NumberNine\Exception\UnknownSubmitActionException;
 use NumberNine\Form\Admin\Comment\AdminCommentIndexFormType;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Model\Pagination\PaginationParameters;
@@ -66,18 +67,39 @@ final class CommentIndexAction extends AbstractController implements AdminContro
             );
 
             try {
-                if ($isTrash && $form->getClickedButton()->getName() === 'restore') { // @phpstan-ignore-line
-                    $commentRepository->restoreCollection($checkedIds);
-                    $this->addFlash('success', 'Comments have been successfully restored.');
-                } else {
-                    $commentRepository->deleteCollection($checkedIds);
+                switch ($form->getClickedButton()->getName()) {
+                    case 'restore':
+                        $commentRepository->restoreCollection($checkedIds);
+                        $this->addFlash('success', 'Comments have been successfully restored.');
 
-                    $this->addFlash(
-                        'success',
-                        $isTrash
-                        ? 'Comments have been permanently deleted.'
-                        : 'Comments have been deleted and placed in trash.'
-                    );
+                        break;
+                    case 'spam':
+                        $commentRepository->markCollectionAsSpam($checkedIds);
+                        $this->addFlash('success', 'Comments have been marked as spam.');
+
+                        break;
+                    case 'delete':
+                        $commentRepository->removeCollection($checkedIds);
+                        $this->addFlash(
+                            'success',
+                            $isTrash
+                                ? 'Comments have been permanently deleted.'
+                                : 'Comments have been deleted and placed in trash.'
+                        );
+
+                        break;
+                    case 'approve':
+                        $commentRepository->approveCollection($checkedIds);
+                        $this->addFlash('success', 'Comments have been successfully approved.');
+
+                        break;
+                    case 'unapprove':
+                        $commentRepository->unapproveCollection($checkedIds);
+                        $this->addFlash('success', 'Comments have been successfully unapproved.');
+
+                        break;
+                    default:
+                        throw new UnknownSubmitActionException();
                 }
 
                 return $this->redirectToRoute(

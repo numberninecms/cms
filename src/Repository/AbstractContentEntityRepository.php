@@ -28,6 +28,9 @@ use NumberNine\Model\Pagination\PaginationParameters;
 abstract class AbstractContentEntityRepository extends ServiceEntityRepository
 {
     use FindByCustomFieldTrait;
+    use SoftDeletableEntityRepositoryTrait {
+        emptyTrash as protected traitEmptyTrash;
+    }
 
     public function getPaginatedCollectionQueryBuilder(
         string $contentType,
@@ -126,61 +129,6 @@ abstract class AbstractContentEntityRepository extends ServiceEntityRepository
         ;
     }
 
-    public function removeCollection(array $ids): void
-    {
-        if ($this->_em->getFilters()->isEnabled('softdeleteable')) {
-            $this->_em->getFilters()->disable('softdeleteable');
-        }
-
-        $entities = $this->findBy(['id' => $ids]);
-
-        foreach ($entities as $entity) {
-            $this->removeEntity($entity);
-        }
-    }
-
-    public function restoreCollection(array $ids): void
-    {
-        if ($this->_em->getFilters()->isEnabled('softdeleteable')) {
-            $this->_em->getFilters()->disable('softdeleteable');
-        }
-
-        $entities = $this->findBy(['id' => $ids]);
-
-        foreach ($entities as $entity) {
-            $entity->setDeletedAt(null);
-        }
-    }
-
-    public function hardDeleteAllDeleted(string $type): void
-    {
-        if ($this->_em->getFilters()->isEnabled('softdeleteable')) {
-            $this->_em->getFilters()->disable('softdeleteable');
-        }
-
-        $entities = $this->createQueryBuilder('c')
-            ->where('c.deletedAt IS NOT NULL')
-            ->andWhere('c.customType = :type')
-            ->setParameter('type', $type)
-            ->getQuery()
-            ->toIterable()
-        ;
-
-        $counter = 0;
-
-        foreach ($entities as $row) {
-            $this->removeEntity($row[0]);
-
-            if (++$counter % 100 === 0) {
-                $this->_em->flush();
-                $this->_em->clear();
-            }
-        }
-
-        $this->_em->flush();
-        $this->_em->clear();
-    }
-
     public function findOneByRelationship(ContentEntity $entity, string $relationshipName): ?ContentEntity
     {
         $relationship = $this->_em->getRepository(ContentEntityRelationship::class)->findOneBy([
@@ -191,27 +139,21 @@ abstract class AbstractContentEntityRepository extends ServiceEntityRepository
         return $relationship ? $relationship->getChild() : null;
     }
 
-    private function removeEntity(ContentEntity $entity): void
+    public function emptyTrash(string $type): void
+    {
+        $criteria = (new Criteria())
+            ->andWhere((Criteria::expr())->eq('c.customType', $type))
+        ;
+
+        $this->traitEmptyTrash($criteria);
+    }
+
+    protected function removeEntity(ContentEntity $entity): void
     {
         if ($entity->getDeletedAt() !== null) {
-            foreach ($entity->getContentEntityTerms() as $contentEntityTerm) {
-                $this->_em->remove($contentEntityTerm);
-            }
-
             foreach ($entity->getComments() as $comment) {
-                $this->_em->remove($comment);
-            }
-
-            $relationships = $this->_em->getRepository(ContentEntityRelationship::class)->createQueryBuilder('r')
-                ->where('r.parent = :id')
-                ->orWhere('r.child = :id')
-                ->setParameter('id', $entity->getId())
-                ->getQuery()
-                ->getResult()
-            ;
-
-            foreach ($relationships as $relationship) {
-                $this->_em->remove($relationship);
+                // If not set manually, comments will be soft-deleted, causing integrity contraint violation
+                $comment->setDeletedAt(new \DateTime());
             }
         }
 

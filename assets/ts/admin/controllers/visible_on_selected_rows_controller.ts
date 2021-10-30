@@ -14,16 +14,27 @@ export default class extends Controller {
         const form = (this.element as HTMLElement).closest('form');
         const rows = form?.querySelectorAll('.select-row input');
 
+        this.toggleVisibility();
+
         rows?.forEach((checkbox) => {
             checkbox.addEventListener('input', () => {
-                if (Array.from(rows).filter((c) => (c as HTMLInputElement).checked).length > 0) {
-                    (this.element as HTMLElement).classList.remove('hidden');
-                    (this.element as HTMLElement).classList.add('flex');
-                } else {
-                    (this.element as HTMLElement).classList.remove('flex');
-                    (this.element as HTMLElement).classList.add('hidden');
-                }
+                this.toggleVisibility();
             });
         });
+    }
+
+    private toggleVisibility(): void {
+        const form = (this.element as HTMLElement).closest('form');
+        const rows = form?.querySelectorAll('.select-row input');
+
+        if (rows) {
+            if (Array.from(rows).filter((c) => (c as HTMLInputElement).checked).length > 0) {
+                (this.element as HTMLElement).classList.remove('hidden');
+                (this.element as HTMLElement).classList.add('flex');
+            } else {
+                (this.element as HTMLElement).classList.remove('flex');
+                (this.element as HTMLElement).classList.add('hidden');
+            }
+        }
     }
 }
