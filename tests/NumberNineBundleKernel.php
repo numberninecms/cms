@@ -20,6 +20,7 @@ use Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle;
 use Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Cmf\Bundle\RoutingBundle\CmfRoutingBundle;
@@ -56,6 +57,7 @@ final class NumberNineBundleKernel extends Kernel
             new SymfonyCastsResetPasswordBundle(),
             new SensioFrameworkExtraBundle(),
             new TwigExtraBundle(),
+            new MonologBundle(),
         ];
     }
 

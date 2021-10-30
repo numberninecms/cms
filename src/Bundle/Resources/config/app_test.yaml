@@ -13,3 +13,11 @@ framework:
 doctrine:
     dbal:
         url: "%env(resolve:DATABASE_URL)%"
+
+monolog:
+    handlers:
+        main:
+            type: rotating_file
+            path: "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
+            max_files: 1

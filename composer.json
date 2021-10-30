@@ -53,6 +53,7 @@
         "symfony/http-kernel": "^5.4",
         "symfony/mailer": "^5.4",
         "symfony/mime": "^5.4",
+        "symfony/monolog-bundle": "^3.7",
         "symfony/options-resolver": "^5.4",
         "symfony/process": "^5.4",
         "symfony/rate-limiter": "^5.4",
