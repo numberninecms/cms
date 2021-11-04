@@ -38,6 +38,7 @@ final class ThemeRuntimeTest extends UserAwareTestCase
     {
         parent::setUp();
         $this->client->request('GET', '/');
+        static::getContainer()->get('request_stack')->push($this->client->getRequest());
         $this->runtime = static::getContainer()->get(ThemeRuntime::class);
         $this->taxonomyRepository = static::getContainer()->get(TaxonomyRepository::class);
         $this->configurationReadWriter = static::getContainer()->get(ConfigurationReadWriter::class);

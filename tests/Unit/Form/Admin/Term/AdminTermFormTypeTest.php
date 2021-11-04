@@ -24,6 +24,13 @@ use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
  */
 final class AdminTermFormTypeTest extends FormTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->client->request('GET', '/');
+        static::getContainer()->get('request_stack')->push($this->client->getRequest());
+    }
+
     public function testSubmitValidData(): void
     {
         $formData = [

@@ -21,7 +21,7 @@ use NumberNine\Tests\UserAwareTestCase;
  */
 final class MenuIndexActionTest extends UserAwareTestCase
 {
-    public function testAdministratorCanAccessMediaLibrary(): void
+    public function testAdministratorCanAccessMenuIndex(): void
     {
         $this->loginThenNavigateToAdminUrl(
             'Administrator',
