@@ -21,9 +21,6 @@ final class RouteProvider implements RouteProviderInterface
 {
     private RouteCollection $collection;
 
-    /**
-     * RouteProvider constructor.
-     */
     public function __construct()
     {
         $this->collection = new RouteCollection();
@@ -39,7 +36,7 @@ final class RouteProvider implements RouteProviderInterface
         return $this->collection;
     }
 
-    public function getRouteByName($name): Route
+    public function getRouteByName(string $name): Route
     {
         $route = $this->collection->get($name);
 
@@ -50,7 +47,7 @@ final class RouteProvider implements RouteProviderInterface
         return $route;
     }
 
-    public function getRoutesByNames($names): array
+    public function getRoutesByNames(?array $names = null): iterable
     {
         $routes = [];
 

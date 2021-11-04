@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace NumberNine\Tests;
 
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Security\Csrf\CsrfTokenManager;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 abstract class FormTestCase extends UserAwareTestCase
 {
     protected FormFactoryInterface $factory;
-    protected CsrfTokenManager $csrfTokenManager;
+    protected CsrfTokenManagerInterface $csrfTokenManager;
 
     protected function setUp(): void
     {

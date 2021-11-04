@@ -1,6 +1,16 @@
 name: CI
 
-on: [ push, pull_request ]
+on:
+    push:
+        branches:
+            - master
+        paths-ignore:
+            - '**/README.md'
+    pull_request:
+        branches:
+            - '**'
+        paths-ignore:
+            - '**/README.md'
 
 jobs:
     bundle_tests:
@@ -11,6 +21,7 @@ jobs:
         strategy:
             matrix:
                 php: [ '8.1' ]
+                symfony: [ '6.0' ]
 
         steps:
             -   uses: FranzDiebold/github-env-vars-action@v2
@@ -63,7 +74,7 @@ jobs:
                 run: docker-compose up -d
 
             -   name: Run unit and functional tests
-                run: docker-compose exec -T php php -dmemory_limit=512M vendor/bin/phpunit
+                run: docker-compose exec -T php php --dxdebug.mode=off -dmemory_limit=1024M vendor/bin/phpunit --configuration phpunit.xml.dist
 
     project_installation_docker:
         name: New project installation (Docker)
@@ -73,6 +84,7 @@ jobs:
         strategy:
             matrix:
                 php: [ '8.1' ]
+                symfony: [ '6.0' ]
 
         steps:
             -   uses: FranzDiebold/github-env-vars-action@v2
@@ -86,14 +98,14 @@ jobs:
                 run: |
                     cd temp/cms
                     composer config --unset extra.branch-alias.dev-master
-                    composer config extra.branch-alias.dev-$CI_REF_NAME_SLUG 0.3.x-dev
+                    composer config extra.branch-alias.dev-$CI_REF_NAME_SLUG 0.4.x-dev
 
             -   name: Create temporary branch alias for pull requests
                 if: startsWith(github.ref, 'refs/pull/')
                 run: |
                     cd temp/cms
                     composer config --unset extra.branch-alias.dev-master
-                    composer config extra.branch-alias.dev-$CI_SHA 0.3.x-dev
+                    composer config extra.branch-alias.dev-$CI_SHA 0.4.x-dev
 
             -   name: Setup PHP
                 id: setup-php
@@ -109,7 +121,7 @@ jobs:
             -   name: Create a new project
                 continue-on-error: true
                 run: |
-                    symfony new newproject --full --no-git --version="5.4.x@dev"
+                    symfony new newproject --full --no-git --version="${{ matrix.symfony }}"
                     cd newproject
                     cp -Rp . ../
                     cd ..
@@ -123,7 +135,7 @@ jobs:
                     composer config minimum-stability dev
                     composer config prefer-stable true
                     composer config repositories.0 path ./temp/cms
-                    composer require numberninecms/cms:^0.3 numberninecms/chapterone:^0.3 --ignore-platform-reqs
+                    composer require numberninecms/cms:^0.4 numberninecms/chapterone:^0.4 --ignore-platform-reqs
                     rm vendor/numberninecms/cms
                     cd ./temp/cms
                     cp -Rp . ../../vendor/numberninecms/cms
@@ -167,6 +179,7 @@ jobs:
         strategy:
             matrix:
                 php: [ '8.1' ]
+                symfony: [ '6.0' ]
 
         steps:
             -   uses: FranzDiebold/github-env-vars-action@v2
@@ -183,14 +196,14 @@ jobs:
                 run: |
                     cd temp/cms
                     composer config --unset extra.branch-alias.dev-master
-                    composer config extra.branch-alias.dev-$CI_REF_NAME_SLUG 0.3.x-dev
+                    composer config extra.branch-alias.dev-$CI_REF_NAME_SLUG 0.4.x-dev
 
             -   name: Create temporary branch alias for pull requests
                 if: startsWith(github.ref, 'refs/pull/')
                 run: |
                     cd temp/cms
                     composer config --unset extra.branch-alias.dev-master
-                    composer config extra.branch-alias.dev-$CI_SHA 0.3.x-dev
+                    composer config extra.branch-alias.dev-$CI_SHA 0.4.x-dev
 
             -   name: Setup PHP
                 id: setup-php
@@ -206,7 +219,7 @@ jobs:
             -   name: Create a new project
                 continue-on-error: true
                 run: |
-                    symfony new newproject --full --no-git --version="5.4.x@dev"
+                    symfony new newproject --full --no-git --version="${{ matrix.symfony }}"
                     cd newproject
                     cp -Rp . ../
                     cd ..
@@ -219,7 +232,7 @@ jobs:
                     composer config minimum-stability dev
                     composer config prefer-stable true
                     composer config repositories.0 path ./temp/cms
-                    composer require numberninecms/cms:^0.3 numberninecms/chapterone:^0.3
+                    composer require numberninecms/cms:^0.4 numberninecms/chapterone:^0.4
 
             -   name: Create .env.local file
                 run: |

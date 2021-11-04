@@ -28,6 +28,7 @@ final class AdminContentEntityEditFormTypeTest extends FormTestCase
     {
         parent::setUp();
         $this->client->request('GET', '/');
+        static::getContainer()->get('request_stack')->push($this->client->getRequest());
     }
 
     public function testSubmitValidData(): void
