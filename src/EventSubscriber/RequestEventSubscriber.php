@@ -28,6 +28,7 @@ use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Contracts\Service\Attribute\SubscribedService;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
@@ -123,16 +124,19 @@ final class RequestEventSubscriber implements EventSubscriberInterface, ServiceS
         $this->areaStore()->setAreas($areasRegistrationEvent->getAreas());
     }
 
+    #[SubscribedService]
     private function eventDispatcher(): EventDispatcherInterface
     {
         return $this->container->get(__METHOD__);
     }
 
+    #[SubscribedService]
     private function contentService(): ContentService
     {
         return $this->container->get(__METHOD__);
     }
 
+    #[SubscribedService]
     private function imageSizeStore(): ImageSizeStore
     {
         return $this->container->get(__METHOD__);
@@ -141,11 +145,13 @@ final class RequestEventSubscriber implements EventSubscriberInterface, ServiceS
     /**
      * @return RouteProvider
      */
+    #[SubscribedService]
     private function routeProvider(): RouteProviderInterface
     {
         return $this->container->get(__METHOD__);
     }
 
+    #[SubscribedService]
     private function areaStore(): AreaStore
     {
         return $this->container->get(__METHOD__);

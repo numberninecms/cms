@@ -21,7 +21,7 @@ use NumberNine\Tests\UserAwareTestCase;
  */
 final class SettingsEmailsActionTest extends UserAwareTestCase
 {
-    public function testAdministratorCanAccessMediaLibrary(): void
+    public function testAdministratorCanAccessSettingsEmails(): void
     {
         $this->loginThenNavigateToAdminUrl(
             'Administrator',

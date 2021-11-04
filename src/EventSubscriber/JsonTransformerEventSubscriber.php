@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 final class JsonTransformerEventSubscriber implements EventSubscriberInterface
 {
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             RequestEvent::class => 'onKernelRequest',

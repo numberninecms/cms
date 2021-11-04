@@ -22,6 +22,13 @@ use NumberNine\Tests\FormTestCase;
  */
 final class AdminSettingsEmailsFormTypeTest extends FormTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->client->request('GET', '/');
+        static::getContainer()->get('request_stack')->push($this->client->getRequest());
+    }
+
     public function testSubmitValidData(): void
     {
         $formData = [

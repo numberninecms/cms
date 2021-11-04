@@ -21,7 +21,7 @@ use NumberNine\Tests\UserAwareTestCase;
  */
 final class SettingsPermalinksActionTest extends UserAwareTestCase
 {
-    public function testAdministratorCanAccessMediaLibrary(): void
+    public function testAdministratorCanAccessSettingsPermalinks(): void
     {
         $this->loginThenNavigateToAdminUrl(
             'Administrator',

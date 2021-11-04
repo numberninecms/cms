@@ -25,6 +25,13 @@ use NumberNine\Tests\FormTestCase;
  */
 final class CommentFormTypeTest extends FormTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->client->request('GET', '/');
+        static::getContainer()->get('request_stack')->push($this->client->getRequest());
+    }
+
     public function testGuestUserSubmitValidData(): void
     {
         $post = $this->getPost();

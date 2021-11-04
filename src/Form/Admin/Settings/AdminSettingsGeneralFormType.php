@@ -42,22 +42,22 @@ final class AdminSettingsGeneralFormType extends AbstractType
             ->add('page_for_front', ChoiceType::class, [
                 'choices' => $pages,
                 'required' => false,
-                'constraints' => [new NotBlank(), new Choice(array_values($pages))],
+                'constraints' => [new NotBlank(), new Choice(choices: array_values($pages))],
             ])
             ->add('page_for_posts', ChoiceType::class, [
                 'choices' => $pages,
                 'required' => false,
-                'constraints' => [new NotBlank(), new Choice(array_values($pages))],
+                'constraints' => [new NotBlank(), new Choice(choices: array_values($pages))],
             ])
             ->add('page_for_my_account', ChoiceType::class, [
                 'choices' => $pages,
                 'required' => false,
-                'constraints' => [new NotBlank(), new Choice(array_values($pages))],
+                'constraints' => [new NotBlank(), new Choice(choices: array_values($pages))],
             ])
             ->add('page_for_privacy', ChoiceType::class, [
                 'choices' => $pages,
                 'required' => false,
-                'constraints' => [new NotBlank(), new Choice(array_values($pages))],
+                'constraints' => [new NotBlank(), new Choice(choices: array_values($pages))],
             ])
             ->add('submit', SubmitType::class)
         ;
