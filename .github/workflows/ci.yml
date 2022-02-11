@@ -74,7 +74,7 @@ jobs:
                 run: docker-compose up -d
 
             -   name: Run unit and functional tests
-                run: docker-compose exec -T php php --dxdebug.mode=off -dmemory_limit=1024M vendor/bin/phpunit --configuration phpunit.xml.dist
+                run: docker-compose exec -T php php -dxdebug.mode=off -dmemory_limit=1024M vendor/bin/phpunit --configuration phpunit.xml.dist
 
     project_installation_docker:
         name: New project installation (Docker)
