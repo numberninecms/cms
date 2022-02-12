@@ -136,11 +136,9 @@ final class ConfigurationReadWriter
     }
 
     /**
-     * @param mixed $value
-     *
      * @throws InvalidArgumentException
      */
-    public function write(string $optionName, $value, bool $flush = true): void
+    public function write(string $optionName, mixed $value, bool $flush = true): void
     {
         $option = $this->coreOptionRepository->findOneBy(['name' => $optionName]);
 
@@ -149,11 +147,7 @@ final class ConfigurationReadWriter
             $option->setName($optionName);
         }
 
-        if (empty($value)) {
-            $value = null;
-        } else {
-            $value = $this->serializer->serialize($value, 'json');
-        }
+        $value = empty($value) ? null : $this->serializer->serialize($value, 'json');
 
         $option->setValue($value);
         $this->entityManager->persist($option);

@@ -100,8 +100,10 @@ final class RequestEventSubscriber implements EventSubscriberInterface, ServiceS
         /** @var RouteRegistrationEvent $routeRegistrationEvent */
         $routeRegistrationEvent = $this->eventDispatcher()->dispatch(new RouteRegistrationEvent());
 
+        $routeProvider = $this->routeProvider();
+
         foreach ($routeRegistrationEvent->getRoutes() as $name => $route) {
-            $this->routeProvider()->addRoute($name, $route);
+            $routeProvider->addRoute($name, $route);
         }
     }
 
