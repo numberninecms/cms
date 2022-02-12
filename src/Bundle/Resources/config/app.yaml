@@ -30,10 +30,10 @@ security:
                 limiter: numbernine.login_rate_limiter
 
     access_control:
-        - { path: ^/admin/login, role: PUBLIC_ACCESS }
-        - { path: ^/admin/logout, role: PUBLIC_ACCESS }
-        - { path: ^/admin/reset-password, role: PUBLIC_ACCESS }
-        - { path: ^/admin/, allow_if: "is_granted('access_admin') and is_fully_authenticated()" }
+        - { path: ^/%numbernine.config.admin_url_prefix%/login, role: PUBLIC_ACCESS }
+        - { path: ^/%numbernine.config.admin_url_prefix%/logout, role: PUBLIC_ACCESS }
+        - { path: ^/%numbernine.config.admin_url_prefix%/reset-password, role: PUBLIC_ACCESS }
+        - { path: ^/%numbernine.config.admin_url_prefix%/, allow_if: "is_granted('access_admin') and is_fully_authenticated()" }
         - { path: ^/, role: PUBLIC_ACCESS }
 
 twig:
