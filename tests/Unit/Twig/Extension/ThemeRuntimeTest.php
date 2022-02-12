@@ -141,7 +141,7 @@ final class ThemeRuntimeTest extends UserAwareTestCase
     public function testGetEntityAdminUrl(): void
     {
         static::assertSame(
-            sprintf('/admin/posts/%d/', $this->post->getId()),
+            sprintf('/%s/posts/%d/', $this->adminUrlPrefix, $this->post->getId()),
             $this->runtime->getEntityAdminUrl($this->post),
         );
     }
