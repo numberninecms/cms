@@ -18,3 +18,4 @@ yarn-error.log
 /var
 /public
 docker-compose.override.yml
+composer.lock
