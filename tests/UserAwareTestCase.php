@@ -28,6 +28,7 @@ abstract class UserAwareTestCase extends DotEnvAwareWebTestCase
     protected EntityManagerInterface $entityManager;
     protected AdminMenuBuilder $adminMenuBuilder;
     protected UrlGeneratorInterface $urlGenerator;
+    protected string $adminUrlPrefix;
 
     protected function setUp(): void
     {
@@ -37,6 +38,7 @@ abstract class UserAwareTestCase extends DotEnvAwareWebTestCase
         $this->userFactory = static::getContainer()->get(UserFactory::class);
         $this->entityManager = static::getContainer()->get(EntityManagerInterface::class);
         $this->urlGenerator = static::getContainer()->get(UrlGeneratorInterface::class);
+        $this->adminUrlPrefix = static::getContainer()->getParameter('numbernine.config.admin_url_prefix');
     }
 
     public function loginThenNavigateToAdminUrl(
@@ -44,12 +46,14 @@ abstract class UserAwareTestCase extends DotEnvAwareWebTestCase
         ?string $url = null,
         string $method = 'GET',
     ): User {
-        if ($url && !str_starts_with($url, '/admin/')) {
+        $prefix = sprintf('/%s/', $this->adminUrlPrefix);
+
+        if ($url && !str_starts_with($url, $prefix)) {
             static::fail('$url parameter must be an admin URL.');
         }
 
         $user = $this->loginAs($userOrRoleOrCapabilities);
-        $this->client->request($method, $url ?? '/admin/');
+        $this->client->request($method, $url ?? $prefix);
 
         /** @var AdminMenuBuilderStore $adminMenuBuilderStore */
         $adminMenuBuilderStore = static::getContainer()->get(AdminMenuBuilderStore::class);

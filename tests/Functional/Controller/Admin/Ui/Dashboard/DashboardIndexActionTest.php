@@ -22,8 +22,8 @@ final class DashboardIndexActionTest extends UserAwareTestCase
 {
     public function testAdminPageRedirectsToLogin(): void
     {
-        $this->client->request('GET', '/admin/');
-        self::assertResponseRedirects('/admin/login');
+        $this->client->request('GET', sprintf('/%s/', $this->adminUrlPrefix));
+        self::assertResponseRedirects(sprintf('/%s/login', $this->adminUrlPrefix), 302);
     }
 
     public function testAdministratorCanAccessAdmin(): void

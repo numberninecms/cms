@@ -5,9 +5,9 @@ controllers:
 admin_controllers:
     resource: ../../../Controller/Admin/
     type: annotation
-    prefix: /admin
+    prefix: /%numbernine.config.admin_url_prefix%
 
 admin_api_controllers:
     resource: ../../../Controller/Admin/Api
     type: annotation
-    prefix: /admin/api
+    prefix: /%numbernine.config.admin_url_prefix%/api

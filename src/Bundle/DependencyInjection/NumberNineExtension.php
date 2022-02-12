@@ -48,6 +48,8 @@ final class NumberNineExtension extends ConfigurableExtension implements Prepend
             'globals' => $constants,
         ]);
 
+        $container->setParameter('numbernine.config.admin_url_prefix', 'admin');
+
         $securityModified = false;
         $securityConfigs = [];
 
