@@ -34,6 +34,9 @@ Encore
         'assets': path.resolve(__dirname, 'assets/'),
         'vue': 'vue/dist/vue.esm-bundler',
     })
+    // .enableEslintPlugin((options) => {
+    //     options.extensions.push(...['ts', 'vue']);
+    // })
     .addRule({
         enforce: 'pre',
         test: /\.ts$/,

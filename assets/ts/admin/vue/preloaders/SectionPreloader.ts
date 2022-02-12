@@ -27,6 +27,7 @@ export class SectionPreloader implements Preloader {
         let value: MediaFile | undefined;
 
         if (parseInt(this.component.parameters.background as string)) {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
             value = (await contentEntityStore.fetchSingleEntity(
                 this.component.parameters.background as string,
                 'media_file',

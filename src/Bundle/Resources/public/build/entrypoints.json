@@ -2,9 +2,9 @@
   "entrypoints": {
     "adminbar": {
       "js": [
-        "/bundles/numbernine/build/runtime.0f3360ff.js",
-        "/bundles/numbernine/build/70.041abb1f.js",
-        "/bundles/numbernine/build/adminbar.a6289604.js"
+        "/bundles/numbernine/build/runtime.d13447f1.js",
+        "/bundles/numbernine/build/70.0d7b1de6.js",
+        "/bundles/numbernine/build/adminbar.a17f8a0d.js"
       ],
       "css": [
         "/bundles/numbernine/build/adminbar.da17a999.css"
@@ -12,30 +12,30 @@
     },
     "admin": {
       "js": [
-        "/bundles/numbernine/build/runtime.0f3360ff.js",
-        "/bundles/numbernine/build/70.041abb1f.js",
-        "/bundles/numbernine/build/333.7ab4ac1c.js",
-        "/bundles/numbernine/build/admin.bbc2da12.js"
+        "/bundles/numbernine/build/runtime.d13447f1.js",
+        "/bundles/numbernine/build/70.0d7b1de6.js",
+        "/bundles/numbernine/build/701.002590d1.js",
+        "/bundles/numbernine/build/admin.4cb2fb85.js"
       ],
       "css": [
-        "/bundles/numbernine/build/333.2511938f.css",
-        "/bundles/numbernine/build/admin.37897749.css"
+        "/bundles/numbernine/build/701.6fb0f00c.css",
+        "/bundles/numbernine/build/admin.37ef43b8.css"
       ]
     },
     "adminpreviewmode": {
       "js": [
-        "/bundles/numbernine/build/runtime.0f3360ff.js"
+        "/bundles/numbernine/build/runtime.d13447f1.js"
       ],
       "css": [
-        "/bundles/numbernine/build/adminpreviewmode.e95e2b9f.css"
+        "/bundles/numbernine/build/adminpreviewmode.7a3f718e.css"
       ]
     },
     "security": {
       "js": [
-        "/bundles/numbernine/build/runtime.0f3360ff.js"
+        "/bundles/numbernine/build/runtime.d13447f1.js"
       ],
       "css": [
-        "/bundles/numbernine/build/security.936d09a5.css"
+        "/bundles/numbernine/build/security.305b4142.css"
       ]
     }
   }

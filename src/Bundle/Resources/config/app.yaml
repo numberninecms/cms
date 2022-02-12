@@ -40,6 +40,8 @@ twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
     form_themes: ['@NumberNine/form/tailwind_layout.html.twig']
+    globals:
+        N9_ADMIN_URL_PREFIX: '%numbernine.config.admin_url_prefix%'
 
 cmf_routing:
     chain:
