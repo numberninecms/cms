@@ -19,7 +19,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 use Symfony\Component\String\AbstractUnicodeString;
@@ -68,7 +67,6 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
 
         $tasks = [
             [$this, 'prepareDockerComposeFile'],
-            [$this, 'symlinkAdmin'],
             [$this, 'createSSLCertificate'],
             [$this, 'requireRedisBundle'],
             [$this, 'findEmptyPort'],
@@ -145,7 +143,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
         file_put_env_variable(
             $this->envFile,
             'DATABASE_URL',
-            'mysql://user:user@mysql:3306/numbernine_app?serverVersion=5.7'
+            'mysql://user:user@mysql:3306/numbernine_app?serverVersion=8.0'
         );
         file_put_env_variable($this->envFile, 'REDIS_URL', 'redis://redis:6379');
 
@@ -157,7 +155,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
     private function prepareDockerComposeFile(): int
     {
         $finalFilename = "{$this->projectPath}/docker-compose.yml";
-        $recipeFilename = "{$this->projectPath}/docker/docker-compose.yml";
+        $recipeFilename = "{$this->projectPath}/install/docker/docker-compose.yml";
 
         if (!file_exists($finalFilename)) {
             $result = false;
@@ -194,22 +192,6 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
 
             return Command::FAILURE;
         }
-
-        return Command::SUCCESS;
-    }
-
-    private function symlinkAdmin(): int
-    {
-        $source = $this->publicPath . '/bundles/numbernine/admin';
-
-        if (!file_exists($source)) {
-            $this->io->error('You must call assets:install before calling this command.');
-
-            return Command::FAILURE;
-        }
-
-        $filesystem = new Filesystem();
-        $filesystem->mirror($source, $this->publicPath . '/admin/');
 
         return Command::SUCCESS;
     }
