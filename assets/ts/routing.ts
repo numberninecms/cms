@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import Routing from '../../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.min.js';
+import BaseRouting from '../../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.min.js';
 import routes from '../routing/routes.json';
 import GenericObject from 'admin/interfaces/GenericObject';
 
@@ -16,6 +16,21 @@ interface Router {
     generate(route: string, params?: GenericObject<any>): string;
 }
 
-(Routing as Router).setRoutingData(routes);
+declare const n9_admin_url_prefix: string;
+
+class DecoratedRouting implements Router {
+    public constructor(private decoratedRouting: Router) {}
+
+    public generate(route: string, params?: GenericObject<any>): string {
+        return this.decoratedRouting.generate(route, params).replace(/^\/admin\//, `/${n9_admin_url_prefix}/`);
+    }
+
+    public setRoutingData(routes: any): void {
+        return this.decoratedRouting.setRoutingData(routes);
+    }
+}
+
+const Routing = new DecoratedRouting(BaseRouting);
+Routing.setRoutingData(routes);
 
 export default Routing as Router;

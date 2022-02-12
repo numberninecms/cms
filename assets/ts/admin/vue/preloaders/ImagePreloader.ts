@@ -27,11 +27,13 @@ export class ImagePreloader implements Preloader {
         let value: MediaFile | undefined;
 
         if (this.component.parameters.id) {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
             value = (await contentEntityStore.fetchSingleEntity(
                 (this.component.parameters.id as number).toString(),
                 'media_file',
             )) as MediaFile;
         } else if (this.component.parameters.fromTitle) {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
             value = (await contentEntityStore.fetchSingleEntity(
                 this.component.parameters.fromTitle as string,
                 'media_file',

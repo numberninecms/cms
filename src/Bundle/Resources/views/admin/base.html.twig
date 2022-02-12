@@ -11,6 +11,7 @@
     {% endblock %}
 
     {% block javascripts_head %}
+        <script>const n9_admin_url_prefix = '{{ N9_ADMIN_URL_PREFIX }}';</script>
         {{ encore_entry_script_tags('admin', 'numbernine', 'numbernine') }}
     {% endblock %}
 </head>

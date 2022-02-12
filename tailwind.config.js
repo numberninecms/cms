@@ -12,7 +12,7 @@ function dynamicHsl(h, s, l) {
 
 module.exports = {
     mode: 'jit',
-    purge: [
+    content: [
         './assets/scss/purge_safelist.txt',
         './src/Bundle/Resources/views/**/*.twig',
         './assets/ts/**/*.{js,jsx,ts,tsx,vue}',
@@ -89,11 +89,6 @@ module.exports = {
                     900: dynamicHsl('var(--color-quaternary-h)', 'var(--color-quaternary-s)', 'calc(var(--color-quaternary-l) - 18%)'),
                 },
             },
-        },
-    },
-    variants: {
-        extend: {
-            opacity: ['disabled'],
         },
     },
     plugins: [
