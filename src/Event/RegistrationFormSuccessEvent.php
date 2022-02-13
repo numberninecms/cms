@@ -14,12 +14,13 @@ declare(strict_types=1);
 namespace NumberNine\Event;
 
 use NumberNine\Entity\User;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\EventDispatcher\Event;
 
 final class RegistrationFormSuccessEvent extends Event
 {
-    public function __construct(private User $user, private ?Response $response)
+    public function __construct(private User $user, private ?Response $response, private ?FormInterface $form = null)
     {
     }
 
@@ -38,5 +39,10 @@ final class RegistrationFormSuccessEvent extends Event
         $this->response = $response;
 
         return $this;
+    }
+
+    public function getForm(): ?FormInterface
+    {
+        return $this->form;
     }
 }

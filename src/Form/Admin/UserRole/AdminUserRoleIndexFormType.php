@@ -28,7 +28,7 @@ final class AdminUserRoleIndexFormType extends AbstractType
     {
         /** @var UserRole $role */
         foreach ($options['roles'] as $role) {
-            if (!\in_array($role->getName(), $options['built_in_roles'], true)) {
+            if (!$role->isLocked()) {
                 $key = sprintf('delete_%d', $role->getId());
                 $builder->add($key, SubmitType::class, ['attr' => ['value' => $key]]);
             }
@@ -48,10 +48,9 @@ final class AdminUserRoleIndexFormType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setRequired(['roles', 'capabilities', 'built_in_roles']);
+        $resolver->setRequired(['roles', 'capabilities']);
         $resolver->setAllowedTypes('roles', 'array');
         $resolver->setAllowedTypes('capabilities', 'array');
-        $resolver->setAllowedTypes('built_in_roles', 'array');
     }
 
     public function transformData(FormEvent $event): void
