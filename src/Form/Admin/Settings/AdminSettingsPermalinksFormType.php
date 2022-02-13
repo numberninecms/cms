@@ -15,6 +15,7 @@ use NumberNine\Content\ContentService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 
 final class AdminSettingsPermalinksFormType extends AbstractType
@@ -29,7 +30,7 @@ final class AdminSettingsPermalinksFormType extends AbstractType
             $builder->add($contentType->getName(), null, [
                 'required' => false,
                 'label' => ucfirst((string) $contentType->getLabels()->getPluralName()),
-                'constraints' => [new Regex('@^/[\d\w\-_{}/]*$$@')],
+                'constraints' => [new NotBlank(allowNull: true), new Regex('@^/[\d\w\-_{}/]*$$@')],
             ]);
         }
 

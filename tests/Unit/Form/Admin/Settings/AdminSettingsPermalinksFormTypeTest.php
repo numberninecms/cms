@@ -54,6 +54,31 @@ final class AdminSettingsPermalinksFormTypeTest extends FormTestCase
         static::assertCount(0, $form->getErrors(true));
     }
 
+    public function testSubmitWithOptionalDataOmitted(): void
+    {
+        $formData = [
+            'post' => null,
+            'page' => '/valid/path/{slug}/',
+            'block' => null,
+            '_token' => $this->csrfTokenManager->getToken('admin_settings_permalinks_form')->getValue(),
+        ];
+
+        $form = $this->factory->create(AdminSettingsPermalinksFormType::class);
+
+        $expected = [
+            'post' => null,
+            'page' => '/valid/path/{slug}/',
+            'block' => null,
+            'media_file' => null,
+        ];
+
+        $form->submit($formData);
+
+        static::assertTrue($form->isSynchronized());
+        static::assertEquals($expected, $form->getData());
+        static::assertCount(0, $form->getErrors(true));
+    }
+
     public function testSubmitInvalidData(): void
     {
         $formData = [
