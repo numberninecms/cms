@@ -32,12 +32,13 @@ class UserRole implements Stringable
     #[Groups(['user_get', 'role_get'])]
     private ?string $name = null;
 
-    /**
-     * @var string[]
-     */
     #[ORM\Column(type: 'json')]
     #[Groups(['role_get'])]
     private array $capabilities = [];
+
+    #[ORM\Column(type: 'boolean')]
+    #[Groups(['role_get'])]
+    private ?bool $locked;
 
     /**
      * @var Collection|User[]
@@ -47,6 +48,7 @@ class UserRole implements Stringable
 
     public function __construct()
     {
+        $this->locked = false;
         $this->users = new ArrayCollection();
     }
 
@@ -80,6 +82,18 @@ class UserRole implements Stringable
     public function setCapabilities(array $capabilities): self
     {
         $this->capabilities = $capabilities;
+
+        return $this;
+    }
+
+    public function isLocked(): ?bool
+    {
+        return $this->locked;
+    }
+
+    public function setLocked(?bool $locked): self
+    {
+        $this->locked = $locked;
 
         return $this;
     }

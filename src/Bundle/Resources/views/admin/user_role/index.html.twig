@@ -27,10 +27,11 @@
                                 <th></th>
                                 {% for role in roles %}
                                     <th>
-                                        <div class="flex justify-center items-end">
+                                        <div class="flex h-100 gap-2 justify-center items-center">
                                             <span>{{ role.name }}</span>
-                                            {% if role.name not in built_in_roles %}
+                                            {% if not role.locked %}
                                                 {{ form_row(form['delete_' ~ role.id], {
+                                                    row_attr: {class: 'm-0'},
                                                     attr: {
                                                         title: 'Delete this role'|trans,
                                                         class: 'btn btn-color-red btn-size-xsmall'

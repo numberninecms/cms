@@ -28,10 +28,12 @@ final class UserRolesFixtures extends Fixture implements FixtureGroupInterface
     {
         $banned = (new UserRole())
             ->setName('Banned')
+            ->setLocked(true)
         ;
 
         $subscriber = (new UserRole())
             ->setName('Subscriber')
+            ->setLocked(true)
             ->setCapabilities(
                 [Capabilities::READ, ...$this->capabilityGenerator->generateMappedSubscriberCapabilities('post')]
             )
@@ -39,6 +41,7 @@ final class UserRolesFixtures extends Fixture implements FixtureGroupInterface
 
         $contributor = (new UserRole())
             ->setName('Contributor')
+            ->setLocked(true)
             ->setCapabilities(
                 [
                     Capabilities::READ,
@@ -50,6 +53,7 @@ final class UserRolesFixtures extends Fixture implements FixtureGroupInterface
 
         $author = (new UserRole())
             ->setName('Author')
+            ->setLocked(true)
             ->setCapabilities(
                 [
                     Capabilities::READ,
@@ -63,6 +67,7 @@ final class UserRolesFixtures extends Fixture implements FixtureGroupInterface
 
         $editor = (new UserRole())
             ->setName('Editor')
+            ->setLocked(true)
             ->setCapabilities(
                 [
                     Capabilities::READ,
@@ -80,6 +85,7 @@ final class UserRolesFixtures extends Fixture implements FixtureGroupInterface
 
         $administrator = (new UserRole())
             ->setName('Administrator')
+            ->setLocked(true)
             ->setCapabilities(
                 [
                     Capabilities::READ,

@@ -16,6 +16,7 @@ namespace NumberNine\Controller\Admin\Ui\UserRole;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Exception;
+use NumberNine\Exception\UserRoleLockedException;
 use NumberNine\Form\Admin\UserRole\AdminUserRoleIndexFormType;
 use NumberNine\Model\Admin\AdminController;
 use NumberNine\Repository\UserRoleRepository;
@@ -45,13 +46,11 @@ final class UserRoleIndexAction extends AbstractController implements AdminContr
 
         $roles = $userRoleRepository->findAll();
         $capabilities = $capabilityStore->getAllAvailableCapabilities();
-        $builtInRoles = ['Subscriber', 'Contributor', 'Author', 'Editor', 'Administrator', 'Banned'];
 
         /** @var Form $form */
         $form = $this->createForm(AdminUserRoleIndexFormType::class, null, [
             'roles' => $roles,
             'capabilities' => $capabilities,
-            'built_in_roles' => $builtInRoles,
         ]);
 
         $form->handleRequest($request);
@@ -78,6 +77,10 @@ final class UserRoleIndexAction extends AbstractController implements AdminContr
                         throw new EntityNotFoundException();
                     }
 
+                    if ($userRole->isLocked()) {
+                        throw new UserRoleLockedException($userRole);
+                    }
+
                     $entityManager->remove($userRole);
                     $entityManager->flush();
                     $this->addFlash('success', 'Role deleted successfully.');
@@ -94,7 +97,6 @@ final class UserRoleIndexAction extends AbstractController implements AdminContr
 
         return $this->render('@NumberNine/admin/user_role/index.html.twig', [
             'roles' => $roles,
-            'built_in_roles' => $builtInRoles,
             'capabilities' => $capabilities,
             'form' => $form->createView(),
         ], $response);
