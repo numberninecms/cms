@@ -84,8 +84,41 @@ final class AdminSettingsGeneralFormTypeTest extends FormTestCase
         static::assertGreaterThan(0, \count($form->getErrors()));
         static::assertGreaterThan(0, \count($form['site_title']->getErrors(true)));
         static::assertGreaterThan(0, \count($form['page_for_front']->getErrors(true)));
-        static::assertGreaterThan(0, \count($form['page_for_posts']->getErrors(true)));
         static::assertGreaterThan(0, \count($form['page_for_my_account']->getErrors(true)));
+    }
+
+    public function testSubmitWithOptionalDataOmitted(): void
+    {
+        $pages = $this->createPages();
+
+        $formData = [
+            'site_title' => 'NumberNine CMS',
+            'site_description' => 'Demo website',
+            'blog_as_homepage' => true,
+            'page_for_front' => $pages[0]->getId(),
+            'page_for_posts' => $pages[1]->getId(),
+            'page_for_my_account' => $pages[2]->getId(),
+            'page_for_privacy' => null,
+            '_token' => $this->csrfTokenManager->getToken('admin_settings_general_form')->getValue(),
+        ];
+
+        $form = $this->factory->create(AdminSettingsGeneralFormType::class);
+
+        $expected = [
+            'site_title' => 'NumberNine CMS',
+            'site_description' => 'Demo website',
+            'blog_as_homepage' => true,
+            'page_for_front' => $pages[0]->getId(),
+            'page_for_posts' => $pages[1]->getId(),
+            'page_for_my_account' => $pages[2]->getId(),
+            'page_for_privacy' => null,
+        ];
+
+        $form->submit($formData);
+
+        static::assertTrue($form->isSynchronized());
+        static::assertEquals($expected, $form->getData());
+        static::assertCount(0, $form->getErrors(true));
     }
 
     public function testPageChoices(): void
