@@ -16,6 +16,8 @@ use NumberNine\Theme\ThemeStore;
 
 final class ComponentStore
 {
+    private const CORE_COMPONENT_NAMESPACE = 'NumberNine\\Component\\';
+
     private string $appComponentsNamespace;
 
     /** @var ComponentInterface[] */
@@ -33,6 +35,22 @@ final class ComponentStore
     public function addComponent(ComponentInterface $component): void
     {
         $this->components[$component::class] = $component;
+
+        $appComponents = [];
+        $coreComponents = [];
+        $themeComponents = [];
+
+        foreach ($this->components as $class => $instance) {
+            if (str_starts_with($class, $this->appComponentsNamespace)) {
+                $appComponents[$class] = $instance;
+            } elseif (str_starts_with($class, self::CORE_COMPONENT_NAMESPACE)) {
+                $coreComponents[$class] = $instance;
+            } else {
+                $themeComponents[$class] = $instance;
+            }
+        }
+
+        $this->components = [...$appComponents, ...$themeComponents, ...$coreComponents];
     }
 
     public function getComponent(string $componentName): ?ComponentInterface
@@ -42,8 +60,13 @@ final class ComponentStore
         foreach ($this->components as $componentFqcn => $component) {
             if (
                 trim(\dirname(str_replace(
-                    [$theme->getComponentNamespace(), $this->appComponentsNamespace, '\\'],
-                    ['', '', '/'],
+                    [
+                        self::CORE_COMPONENT_NAMESPACE,
+                        $theme->getComponentNamespace(),
+                        $this->appComponentsNamespace,
+                        '\\',
+                    ],
+                    ['', '', '', '/'],
                     $componentFqcn
                 )), '/') === str_replace('\\', '/', $componentName)
             ) {
