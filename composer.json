@@ -112,7 +112,9 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "NumberNine\\Tests\\": "tests/"
+            "NumberNine\\Tests\\": "tests/",
+            "NumberNine\\ChapterOne\\": "tests/Dummy/ChapterOne/",
+            "App\\": "tests/Dummy/App/"
         }
     },
     "config": {
