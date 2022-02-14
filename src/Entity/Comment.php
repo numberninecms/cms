@@ -16,6 +16,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use NumberNine\Model\Content\CommentStatusInterface;
 use NumberNine\Model\Content\Features\AuthorTrait;
 use NumberNine\Model\Content\Features\SoftDeleteableTrait;
 use NumberNine\Model\Content\Features\TimestampableTrait;
@@ -53,7 +54,7 @@ class Comment implements SoftDeletableEntity
     private ?string $guestAuthorUrl;
 
     #[ORM\Column(type: 'string', length: 10)]
-    private ?string $status = null;
+    private ?string $status = CommentStatusInterface::COMMENT_STATUS_PENDING;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     private ?Comment $parent;
