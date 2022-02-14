@@ -12,6 +12,8 @@
 namespace NumberNine\Bundle\DependencyInjection\Compiler;
 
 use NumberNine\Content\ComponentStore;
+use NumberNine\Model\Component\AbstractFormComponent;
+use NumberNine\Theme\TemplateResolverInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -20,7 +22,7 @@ final class ComponentCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        if ($container->has(ComponentStore::class) === false) {
+        if (!$container->has(ComponentStore::class)) {
             return;
         }
 
@@ -29,6 +31,16 @@ final class ComponentCompilerPass implements CompilerPassInterface
 
         foreach ($taggedComponents as $componentServiceId => $componentTags) {
             $definition->addMethodCall('addComponent', [new Reference($componentServiceId)]);
+
+            $componentDefinition = $container->findDefinition($componentServiceId);
+
+            if (is_subclass_of($componentDefinition->getClass(), AbstractFormComponent::class)) {
+                $componentDefinition
+                    ->addMethodCall('setEventDispatcher', [new Reference('event_dispatcher')])
+                    ->addMethodCall('setTemplateResolver', [new Reference(TemplateResolverInterface::class)])
+                    ->addMethodCall('initialize')
+                ;
+            }
         }
     }
 }

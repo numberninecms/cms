@@ -15,9 +15,9 @@ namespace NumberNine\Model\Component;
 
 use NumberNine\Event\ContentEntityShowBeforeRenderEvent;
 use NumberNine\Model\Component\Event\ComponentSupportedTemplatesEvent;
+use NumberNine\Theme\TemplateResolverInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,18 +30,8 @@ abstract class AbstractFormComponent implements ComponentInterface, EventSubscri
     /** @var string[] */
     protected array $supportedTemplates = [];
 
-    public function __construct(
-        private FormFactoryInterface $formFactory,
-        private EventDispatcherInterface $eventDispatcher,
-    ) {
-        /** @var ComponentSupportedTemplatesEvent $event */
-        $event = $eventDispatcher->dispatch(new ComponentSupportedTemplatesEvent(
-            static::class,
-            $this->supportedTemplates,
-        ));
-
-        $this->supportedTemplates = $event->getSupportedTemplates();
-    }
+    private EventDispatcherInterface $eventDispatcher;
+    private TemplateResolverInterface $templateResolver;
 
     public static function getSubscribedEvents(): array
     {
@@ -50,9 +40,25 @@ abstract class AbstractFormComponent implements ComponentInterface, EventSubscri
         ];
     }
 
+    /**
+     * @internal
+     */
     public function processForm(ContentEntityShowBeforeRenderEvent $event): void
     {
-        if (!\in_array($event->getTemplate()->getTemplateName(), $this->supportedTemplates, true)) {
+        $found = false;
+
+        foreach ($this->supportedTemplates as $template) {
+            if (
+                $event->getTemplate()->getTemplateName() ===
+                $this->templateResolver->resolvePath($template)->getTemplateName()
+            ) {
+                $found = true;
+
+                break;
+            }
+        }
+
+        if (!$found) {
             return;
         }
 
@@ -74,10 +80,39 @@ abstract class AbstractFormComponent implements ComponentInterface, EventSubscri
         ];
     }
 
+    /**
+     * @internal
+     */
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher): void
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
+    /**
+     * @internal
+     */
+    public function setTemplateResolver(TemplateResolverInterface $templateResolver): void
+    {
+        $this->templateResolver = $templateResolver;
+    }
+
+    /**
+     * @internal
+     */
+    public function initialize(): void
+    {
+        /** @var ComponentSupportedTemplatesEvent $event */
+        $event = $this->eventDispatcher->dispatch(
+            new ComponentSupportedTemplatesEvent(static::class, $this->supportedTemplates)
+        );
+
+        $this->supportedTemplates = $event->getSupportedTemplates();
+    }
+
     abstract protected function handleSubmittedAndValidForm(Request $request): Response;
 
     /**
-     * This method should initialize `$this->form` if null, using `$this->formFactory`.
+     * This method should initialize `$this->form` if null, using FormFactoryInterface.
      */
     abstract protected function getForm(): FormInterface;
 
