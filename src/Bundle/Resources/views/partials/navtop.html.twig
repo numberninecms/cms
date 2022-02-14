@@ -16,7 +16,7 @@
     <div class="n9-topbar-menu">
         <div>
             <a href="{{ path('numbernine_homepage') }}">{{ 'Home'|trans }}</a>
-            <a href="/admin/" target="_blank">{{ 'Dashboard'|trans }}</a>
+            <a href="{{ path('numbernine_admin_index') }}" target="_blank">{{ 'Dashboard'|trans }}</a>
             {% if entity %}
                 <a href="{{ N9_entity_admin_url(entity) }}" target="_blank">{{ 'Edit %1%'|trans({'%1%': content_type.labels.singularName}) }}</a>
             {% endif %}
