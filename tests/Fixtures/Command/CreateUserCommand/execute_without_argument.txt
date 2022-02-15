@@ -1,0 +1,11 @@
+Create a new user
+=================
+
+ Choose a username:
+ > 
+ Choose an email:
+ > 
+ Choose a password:
+ > 
+
+ [OK] User john has been created.

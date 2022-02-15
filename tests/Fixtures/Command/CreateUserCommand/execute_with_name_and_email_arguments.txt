@@ -1,0 +1,7 @@
+Create a new user
+=================
+
+ Choose a password:
+ > 
+
+ [OK] User john has been created.
