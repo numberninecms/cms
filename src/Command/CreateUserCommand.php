@@ -38,7 +38,8 @@ final class CreateUserCommand extends Command
             ->addArgument('username', InputArgument::OPTIONAL, 'Username')
             ->addArgument('email', InputArgument::OPTIONAL, 'Email')
             ->addArgument('password', InputArgument::OPTIONAL, 'Password')
-            ->addOption('admin', null, InputOption::VALUE_NONE, 'Admin role for this user')
+            ->addOption('admin', 'a', InputOption::VALUE_NONE, 'Admin role for this user')
+            ->addOption('roles', 'r', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Roles for this user')
         ;
     }
 
@@ -65,13 +66,18 @@ final class CreateUserCommand extends Command
             }
         }
 
-        $isAdmin = $input->getOption('admin');
-        $adminRole = $this->userRoleRepository->findOneBy(['name' => 'Administrator']);
-        $subscriberRole = $this->userRoleRepository->findOneBy(['name' => 'Subscriber']);
-        $roles = ($isAdmin && $adminRole) ? [$adminRole] : [$subscriberRole];
+        $roles = $input->getOption('roles');
+
+        if ($input->getOption('admin')) {
+            $roles[] = 'Administrator';
+        } elseif (empty($roles)) {
+            $roles[] = 'Subscriber';
+        }
+
+        $userRoles = $this->userRoleRepository->findByName(array_unique($roles));
 
         try {
-            $this->userFactory->createUser($username, $email, $password, $roles);
+            $this->userFactory->createUser($username, $email, $password, $userRoles);
         } catch (Exception $e) {
             $io->error('User cannot be created. This username is probably already in use.');
             $io->writeln($e->getMessage());
