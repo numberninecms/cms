@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Content;
 
+use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use NumberNine\Content\PermalinkGenerator;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\Post;
 use NumberNine\Exception\ContentTypeNotFoundException;
 use NumberNine\Model\Content\PublishingStatusInterface;
-use NumberNine\Tests\DotEnvAwareWebTestCase;
 
 /**
  * @internal

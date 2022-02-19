@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Functional\Controller\Admin\Ui\UserRole;
 
-use NumberNine\Tests\UserAwareTestCase;
+use NumberNine\Bundle\Test\UserAwareTestCase;
 
 /**
  * @internal
@@ -23,7 +23,7 @@ final class UserRoleCreateActionTest extends UserAwareTestCase
 {
     public function testAdministratorCanAccessMediaLibrary(): void
     {
-        $this->loginThenNavigateToAdminUrl(
+        $this->loginThenNavigateToUrl(
             'Administrator',
             $this->urlGenerator->generate('numbernine_admin_user_role_create')
         );

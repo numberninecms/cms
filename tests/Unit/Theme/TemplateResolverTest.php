@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Theme;
 
+use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use NumberNine\Entity\Post;
 use NumberNine\Entity\Taxonomy;
 use NumberNine\Entity\Term;
 use NumberNine\Shortcode\TextShortcode;
-use NumberNine\Tests\DotEnvAwareWebTestCase;
 use NumberNine\Tests\Dummy\Shortcode\SampleShortcode;
 use NumberNine\Theme\TemplateResolver;
 use Twig\Error\LoaderError;

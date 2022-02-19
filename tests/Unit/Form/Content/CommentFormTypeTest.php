@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Form\Content;
 
+use NumberNine\Bundle\Test\FormTestCase;
 use NumberNine\Entity\Comment;
 use NumberNine\Entity\Post;
 use NumberNine\Form\Content\CommentFormType;
 use NumberNine\Model\Content\PublishingStatusInterface;
-use NumberNine\Tests\FormTestCase;
 
 /**
  * @internal

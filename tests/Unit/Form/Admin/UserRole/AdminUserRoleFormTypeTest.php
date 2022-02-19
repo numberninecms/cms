@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Form\Admin\UserRole;
 
+use NumberNine\Bundle\Test\FormTestCase;
 use NumberNine\Entity\UserRole;
 use NumberNine\Form\Admin\UserRole\AdminUserRoleFormType;
-use NumberNine\Tests\FormTestCase;
 
 /**
  * @internal

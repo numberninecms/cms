@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Twig\Extension;
 
-use NumberNine\Tests\DotEnvAwareWebTestCase;
+use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use NumberNine\Twig\Extension\AssetRuntime;
 use Symfony\WebpackEncoreBundle\Exception\EntrypointNotFoundException;
 

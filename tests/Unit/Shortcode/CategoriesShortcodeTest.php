@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace NumberNine\Tests\Unit\Shortcode;
 
 use Doctrine\ORM\EntityManagerInterface;
+use NumberNine\Bundle\Test\ShortcodeTestCase;
 use NumberNine\Entity\Term;
 use NumberNine\Event\CurrentRequestTermEvent;
 use NumberNine\Repository\TaxonomyRepository;
 use NumberNine\Repository\TermRepository;
 use NumberNine\Shortcode\CategoriesShortcode;
-use NumberNine\Tests\ShortcodeTestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**

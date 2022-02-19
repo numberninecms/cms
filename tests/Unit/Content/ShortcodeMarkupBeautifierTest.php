@@ -11,9 +11,9 @@
 
 namespace NumberNine\Tests\Unit\Content;
 
+use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use NumberNine\Command\ThemeAwareCommandInterface;
 use NumberNine\Content\ShortcodeMarkupBeautifier;
-use NumberNine\Tests\DotEnvAwareWebTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**

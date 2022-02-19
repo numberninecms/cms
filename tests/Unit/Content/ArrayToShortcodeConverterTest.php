@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Content;
 
+use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use NumberNine\Content\ArrayToShortcodeConverter;
-use NumberNine\Tests\DotEnvAwareWebTestCase;
 
 /**
  * @internal

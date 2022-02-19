@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Shortcode;
 
+use NumberNine\Bundle\Test\ShortcodeTestCase;
 use NumberNine\Shortcode\TextShortcode;
-use NumberNine\Tests\ShortcodeTestCase;
 
 /**
  * @internal

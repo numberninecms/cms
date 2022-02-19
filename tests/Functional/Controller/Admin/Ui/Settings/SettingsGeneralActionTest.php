@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Functional\Controller\Admin\Ui\Settings;
 
-use NumberNine\Tests\UserAwareTestCase;
+use NumberNine\Bundle\Test\UserAwareTestCase;
 
 /**
  * @internal
@@ -23,7 +23,7 @@ final class SettingsGeneralActionTest extends UserAwareTestCase
 {
     public function testAdministratorCanAccessSettingsGeneral(): void
     {
-        $this->loginThenNavigateToAdminUrl(
+        $this->loginThenNavigateToUrl(
             'Administrator',
             $this->urlGenerator->generate('numbernine_admin_settings_general')
         );

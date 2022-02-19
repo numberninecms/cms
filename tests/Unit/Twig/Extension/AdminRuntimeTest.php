@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Twig\Extension;
 
+use NumberNine\Bundle\Test\UserAwareTestCase;
 use NumberNine\Entity\Post;
 use NumberNine\Model\Menu\MenuItem;
-use NumberNine\Tests\UserAwareTestCase;
 use NumberNine\Twig\Extension\AdminRuntime;
 
 /**
@@ -34,7 +34,7 @@ final class AdminRuntimeTest extends UserAwareTestCase
 
     public function testGetAdminMenuItems(): void
     {
-        $this->loginThenNavigateToAdminUrl('Administrator');
+        $this->loginThenNavigateToUrl('Administrator');
         $menuItems = $this->runtime->getAdminMenuItems();
         static::assertContainsOnlyInstancesOf(MenuItem::class, $menuItems);
         static::assertGreaterThanOrEqual(8, \count($menuItems));
@@ -42,7 +42,7 @@ final class AdminRuntimeTest extends UserAwareTestCase
 
     public function testGetHighlightedPermalinkUrlForPost(): void
     {
-        $this->loginThenNavigateToAdminUrl('Administrator');
+        $this->loginThenNavigateToUrl('Administrator');
         $post = (new Post())
             ->setTitle('Title for this post')
             ->setCustomType('post')
@@ -56,7 +56,7 @@ final class AdminRuntimeTest extends UserAwareTestCase
 
     public function testGetHighlightedPermalinkUrlForPage(): void
     {
-        $this->loginThenNavigateToAdminUrl('Administrator');
+        $this->loginThenNavigateToUrl('Administrator');
         $page = (new Post())
             ->setTitle('Title for this page')
             ->setCustomType('page')

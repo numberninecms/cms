@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Tests;
+namespace NumberNine\Bundle\Test;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;

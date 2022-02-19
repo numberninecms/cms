@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Content;
 
+use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use NumberNine\Component\Content\Comments\Comments;
 use NumberNine\Content\ComponentStore;
-use NumberNine\Tests\DotEnvAwareWebTestCase;
 
 /**
  * @internal

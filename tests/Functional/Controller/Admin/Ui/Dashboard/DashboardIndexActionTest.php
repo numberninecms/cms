@@ -11,8 +11,8 @@
 
 namespace NumberNine\Tests\Functional\Controller\Admin\Ui\Dashboard;
 
+use NumberNine\Bundle\Test\UserAwareTestCase;
 use NumberNine\Security\Capabilities;
-use NumberNine\Tests\UserAwareTestCase;
 
 /**
  * @internal
@@ -28,35 +28,35 @@ final class DashboardIndexActionTest extends UserAwareTestCase
 
     public function testAdministratorCanAccessAdmin(): void
     {
-        $this->loginThenNavigateToAdminUrl('Administrator');
+        $this->loginThenNavigateToUrl('Administrator');
         self::assertResponseIsSuccessful();
         self::assertSelectorExists('div.ui-area');
     }
 
     public function testEditorCanAccessAdmin(): void
     {
-        $this->loginThenNavigateToAdminUrl('Editor');
+        $this->loginThenNavigateToUrl('Editor');
         self::assertResponseIsSuccessful();
         self::assertSelectorExists('div.ui-area');
     }
 
     public function testAuthorCanAccessAdmin(): void
     {
-        $this->loginThenNavigateToAdminUrl('Author');
+        $this->loginThenNavigateToUrl('Author');
         self::assertResponseIsSuccessful();
         self::assertSelectorExists('div.ui-area');
     }
 
     public function testContributorCanAccessAdmin(): void
     {
-        $this->loginThenNavigateToAdminUrl('Contributor');
+        $this->loginThenNavigateToUrl('Contributor');
         self::assertResponseIsSuccessful();
         self::assertSelectorExists('div.ui-area');
     }
 
     public function testSubscriberCannotAccessAdmin(): void
     {
-        $this->loginThenNavigateToAdminUrl('Subscriber');
+        $this->loginThenNavigateToUrl('Subscriber');
         self::assertResponseRedirects('/');
     }
 
