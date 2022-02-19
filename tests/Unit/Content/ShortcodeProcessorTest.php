@@ -11,9 +11,9 @@
 
 namespace NumberNine\Tests\Unit\Content;
 
+use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use NumberNine\Command\ThemeAwareCommandInterface;
 use NumberNine\Content\ShortcodeProcessor;
-use NumberNine\Tests\DotEnvAwareWebTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 use function NumberNine\Common\Util\ArrayUtil\unset_recursive;
 

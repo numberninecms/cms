@@ -11,8 +11,8 @@
 
 namespace NumberNine\Tests\Functional\Controller\Admin\Api\PageBuilder;
 
+use NumberNine\Bundle\Test\UserAwareTestCase;
 use NumberNine\Security\Capabilities;
-use NumberNine\Tests\UserAwareTestCase;
 
 /**
  * @internal

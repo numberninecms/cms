@@ -11,10 +11,10 @@
 
 namespace NumberNine\Tests\Functional\Controller\Admin\Api\ContentEntity;
 
+use NumberNine\Bundle\Test\UserAwareTestCase;
 use NumberNine\Model\Content\PublishingStatusInterface;
 use NumberNine\Security\Capabilities;
 use NumberNine\Tests\CreateEntitiesHelperTrait;
-use NumberNine\Tests\UserAwareTestCase;
 
 /**
  * @internal
@@ -43,7 +43,7 @@ final class ContentEntityDeleteActionTest extends UserAwareTestCase
     {
         $author = $this->createUser('Author');
         $post = $this->createPost($author, PublishingStatusInterface::STATUS_PUBLISH);
-        $this->loginThenNavigateToAdminUrl(
+        $this->loginThenNavigateToUrl(
             [Capabilities::ACCESS_ADMIN],
             $this->urlGenerator->generate('numbernine_admin_contententity_delete_item', [
                 'type' => 'post',
@@ -59,7 +59,7 @@ final class ContentEntityDeleteActionTest extends UserAwareTestCase
     {
         $author = $this->createUser([Capabilities::ACCESS_ADMIN, Capabilities::DELETE_POSTS]);
         $post = $this->createPost($author, PublishingStatusInterface::STATUS_DRAFT);
-        $this->loginThenNavigateToAdminUrl(
+        $this->loginThenNavigateToUrl(
             $author,
             $this->urlGenerator->generate('numbernine_admin_contententity_delete_item', [
                 'type' => 'post',
@@ -76,7 +76,7 @@ final class ContentEntityDeleteActionTest extends UserAwareTestCase
     {
         $author = $this->createUser();
         $post = $this->createPost($author, PublishingStatusInterface::STATUS_PUBLISH);
-        $this->loginThenNavigateToAdminUrl(
+        $this->loginThenNavigateToUrl(
             [Capabilities::ACCESS_ADMIN, Capabilities::DELETE_POSTS],
             $this->urlGenerator->generate('numbernine_admin_contententity_delete_item', [
                 'type' => 'post',
@@ -92,7 +92,7 @@ final class ContentEntityDeleteActionTest extends UserAwareTestCase
     {
         $author = $this->createUser();
         $post = $this->createPost($author, PublishingStatusInterface::STATUS_DRAFT);
-        $this->loginThenNavigateToAdminUrl(
+        $this->loginThenNavigateToUrl(
             [Capabilities::ACCESS_ADMIN, Capabilities::DELETE_POSTS, Capabilities::DELETE_OTHERS_POSTS],
             $this->urlGenerator->generate('numbernine_admin_contententity_delete_item', [
                 'type' => 'post',
@@ -109,7 +109,7 @@ final class ContentEntityDeleteActionTest extends UserAwareTestCase
     {
         $author = $this->createUser([Capabilities::ACCESS_ADMIN, Capabilities::DELETE_POSTS]);
         $post = $this->createPost($author, PublishingStatusInterface::STATUS_PUBLISH);
-        $this->loginThenNavigateToAdminUrl(
+        $this->loginThenNavigateToUrl(
             $author,
             $this->urlGenerator->generate('numbernine_admin_contententity_delete_item', [
                 'type' => 'post',
@@ -125,7 +125,7 @@ final class ContentEntityDeleteActionTest extends UserAwareTestCase
     {
         $author = $this->createUser();
         $post = $this->createPost($author, PublishingStatusInterface::STATUS_PUBLISH);
-        $this->loginThenNavigateToAdminUrl(
+        $this->loginThenNavigateToUrl(
             [
                 Capabilities::ACCESS_ADMIN,
                 Capabilities::DELETE_POSTS,
@@ -147,7 +147,7 @@ final class ContentEntityDeleteActionTest extends UserAwareTestCase
     {
         $author = $this->createUser([Capabilities::ACCESS_ADMIN, Capabilities::DELETE_POSTS]);
         $post = $this->createPost($author, PublishingStatusInterface::STATUS_PRIVATE);
-        $this->loginThenNavigateToAdminUrl(
+        $this->loginThenNavigateToUrl(
             $author,
             $this->urlGenerator->generate('numbernine_admin_contententity_delete_item', [
                 'type' => 'post',
@@ -163,7 +163,7 @@ final class ContentEntityDeleteActionTest extends UserAwareTestCase
     {
         $author = $this->createUser();
         $post = $this->createPost($author, PublishingStatusInterface::STATUS_PRIVATE);
-        $this->loginThenNavigateToAdminUrl(
+        $this->loginThenNavigateToUrl(
             [
                 Capabilities::ACCESS_ADMIN,
                 Capabilities::DELETE_POSTS,

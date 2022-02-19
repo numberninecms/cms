@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Tests;
+namespace NumberNine\Bundle\Test;
 
 use Doctrine\ORM\EntityManagerInterface;
 use NumberNine\Admin\AdminMenuBuilderStore;
@@ -41,33 +41,31 @@ abstract class UserAwareTestCase extends DotEnvAwareWebTestCase
         $this->adminUrlPrefix = static::getContainer()->getParameter('numbernine.config.admin_url_prefix');
     }
 
-    public function loginThenNavigateToAdminUrl(
+    public function loginThenNavigateToUrl(
         User|array|string $userOrRoleOrCapabilities,
         ?string $url = null,
         string $method = 'GET',
     ): User {
         $prefix = sprintf('/%s/', $this->adminUrlPrefix);
 
-        if ($url && !str_starts_with($url, $prefix)) {
-            static::fail('$url parameter must be an admin URL.');
-        }
-
         $user = $this->loginAs($userOrRoleOrCapabilities);
         $this->client->request($method, $url ?? $prefix);
 
-        /** @var AdminMenuBuilderStore $adminMenuBuilderStore */
-        $adminMenuBuilderStore = static::getContainer()->get(AdminMenuBuilderStore::class);
+        if (!$url || str_starts_with($url, $prefix)) {
+            /** @var AdminMenuBuilderStore $adminMenuBuilderStore */
+            $adminMenuBuilderStore = static::getContainer()->get(AdminMenuBuilderStore::class);
 
-        $this->adminMenuBuilder = $adminMenuBuilderStore->getAdminMenuBuilder();
+            $this->adminMenuBuilder = $adminMenuBuilderStore->getAdminMenuBuilder();
+        }
 
         return $user;
     }
 
-    protected function setCapabilitiesThenLogin(array $capabilities): User
+    protected function setCapabilitiesThenLogin(array $capabilities, ?string $url = null, string $method = 'GET'): User
     {
         $role = $this->createRole($capabilities);
 
-        return $this->loginThenNavigateToAdminUrl($role->getName());
+        return $this->loginThenNavigateToUrl($role->getName(), $url, $method);
     }
 
     protected function loginAs(User|array|string $userOrRoleOrCapabilities): User

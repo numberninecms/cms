@@ -11,8 +11,8 @@
 
 namespace NumberNine\Tests\Functional\Controller\Admin\Ui\Comment;
 
+use NumberNine\Bundle\Test\UserAwareTestCase;
 use NumberNine\Security\Capabilities;
-use NumberNine\Tests\UserAwareTestCase;
 
 /**
  * @internal
@@ -24,10 +24,7 @@ final class CommentIndexActionTest extends UserAwareTestCase
     {
         $user = $this->createUser([Capabilities::ACCESS_ADMIN]);
 
-        $this->loginThenNavigateToAdminUrl(
-            $user,
-            $this->urlGenerator->generate('numbernine_admin_comment_index'),
-        );
+        $this->loginThenNavigateToUrl($user, $this->urlGenerator->generate('numbernine_admin_comment_index'),);
 
         self::assertResponseRedirects('/');
     }
@@ -36,10 +33,7 @@ final class CommentIndexActionTest extends UserAwareTestCase
     {
         $user = $this->createUser([Capabilities::ACCESS_ADMIN, Capabilities::MODERATE_COMMENTS]);
 
-        $this->loginThenNavigateToAdminUrl(
-            $user,
-            $this->urlGenerator->generate('numbernine_admin_comment_index'),
-        );
+        $this->loginThenNavigateToUrl($user, $this->urlGenerator->generate('numbernine_admin_comment_index'),);
 
         self::assertResponseIsSuccessful();
     }

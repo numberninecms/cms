@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace NumberNine\Tests;
+namespace NumberNine\Bundle\Test;
 
 use NumberNine\Model\Shortcode\ShortcodeInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

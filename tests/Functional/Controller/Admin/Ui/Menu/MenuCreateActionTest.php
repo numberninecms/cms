@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Functional\Controller\Admin\Ui\Menu;
 
-use NumberNine\Tests\UserAwareTestCase;
+use NumberNine\Bundle\Test\UserAwareTestCase;
 
 /**
  * @internal
@@ -23,7 +23,7 @@ final class MenuCreateActionTest extends UserAwareTestCase
 {
     public function testAdministratorCanAccessMenuCreate(): void
     {
-        $this->loginThenNavigateToAdminUrl(
+        $this->loginThenNavigateToUrl(
             'Administrator',
             $this->urlGenerator->generate('numbernine_admin_menu_create')
         );

@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Twig\Extension;
 
+use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use NumberNine\Entity\Post;
 use NumberNine\Exception\ThemeEventNotFoundException;
-use NumberNine\Tests\DotEnvAwareWebTestCase;
 use NumberNine\Twig\Extension\EventRuntime;
 
 /**

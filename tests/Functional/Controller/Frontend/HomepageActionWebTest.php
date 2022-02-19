@@ -11,7 +11,7 @@
 
 namespace NumberNine\Tests\Functional\Controller\Frontend;
 
-use NumberNine\Tests\DotEnvAwareWebTestCase;
+use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

@@ -11,10 +11,10 @@
 
 namespace NumberNine\Tests\Functional\Controller\Admin\Ui\ContentEntity;
 
+use NumberNine\Bundle\Test\UserAwareTestCase;
 use NumberNine\Model\Content\PublishingStatusInterface;
 use NumberNine\Security\Capabilities;
 use NumberNine\Tests\CreateEntitiesHelperTrait;
-use NumberNine\Tests\UserAwareTestCase;
 
 /**
  * @internal
@@ -29,7 +29,7 @@ final class ContentEntityEditActionTest extends UserAwareTestCase
         $user = $this->createUser([Capabilities::ACCESS_ADMIN, Capabilities::EDIT_POSTS]);
         $post = $this->createPost($user, PublishingStatusInterface::STATUS_PUBLISH);
 
-        $this->loginThenNavigateToAdminUrl(
+        $this->loginThenNavigateToUrl(
             $user,
             $this->urlGenerator->generate('numbernine_admin_content_entity_edit', [
                 'type' => 'posts',
@@ -45,7 +45,7 @@ final class ContentEntityEditActionTest extends UserAwareTestCase
         $user = $this->createUser([Capabilities::ACCESS_ADMIN, Capabilities::EDIT_POSTS]);
         $post = $this->createPost($user, PublishingStatusInterface::STATUS_PRIVATE);
 
-        $this->loginThenNavigateToAdminUrl(
+        $this->loginThenNavigateToUrl(
             $user,
             $this->urlGenerator->generate('numbernine_admin_content_entity_edit', [
                 'type' => 'posts',
@@ -61,7 +61,7 @@ final class ContentEntityEditActionTest extends UserAwareTestCase
         $user = $this->createUser([Capabilities::ACCESS_ADMIN, Capabilities::EDIT_POSTS]);
         $post = $this->createPost($user, PublishingStatusInterface::STATUS_DRAFT);
 
-        $this->loginThenNavigateToAdminUrl(
+        $this->loginThenNavigateToUrl(
             $user,
             $this->urlGenerator->generate('numbernine_admin_content_entity_edit', [
                 'type' => 'posts',
@@ -78,7 +78,7 @@ final class ContentEntityEditActionTest extends UserAwareTestCase
         $author = $this->createUser('Author');
         $post = $this->createPost($author, PublishingStatusInterface::STATUS_DRAFT);
 
-        $this->loginThenNavigateToAdminUrl(
+        $this->loginThenNavigateToUrl(
             $user,
             $this->urlGenerator->generate('numbernine_admin_content_entity_edit', [
                 'type' => 'posts',
@@ -100,7 +100,7 @@ final class ContentEntityEditActionTest extends UserAwareTestCase
         $author = $this->createUser('Author');
         $post = $this->createPost($author, PublishingStatusInterface::STATUS_DRAFT);
 
-        $this->loginThenNavigateToAdminUrl(
+        $this->loginThenNavigateToUrl(
             $editor,
             $this->urlGenerator->generate('numbernine_admin_content_entity_edit', [
                 'type' => 'posts',
@@ -122,7 +122,7 @@ final class ContentEntityEditActionTest extends UserAwareTestCase
         $author = $this->createUser('Author');
         $post = $this->createPost($author, PublishingStatusInterface::STATUS_PUBLISH);
 
-        $this->loginThenNavigateToAdminUrl(
+        $this->loginThenNavigateToUrl(
             $editor,
             $this->urlGenerator->generate('numbernine_admin_content_entity_edit', [
                 'type' => 'posts',
@@ -144,7 +144,7 @@ final class ContentEntityEditActionTest extends UserAwareTestCase
         $author = $this->createUser('Author');
         $post = $this->createPost($author, PublishingStatusInterface::STATUS_PRIVATE);
 
-        $this->loginThenNavigateToAdminUrl(
+        $this->loginThenNavigateToUrl(
             $editor,
             $this->urlGenerator->generate('numbernine_admin_content_entity_edit', [
                 'type' => 'posts',
@@ -167,7 +167,7 @@ final class ContentEntityEditActionTest extends UserAwareTestCase
         $author = $this->createUser('Author');
         $post = $this->createPost($author, PublishingStatusInterface::STATUS_PRIVATE);
 
-        $this->loginThenNavigateToAdminUrl(
+        $this->loginThenNavigateToUrl(
             $editor,
             $this->urlGenerator->generate('numbernine_admin_content_entity_edit', [
                 'type' => 'posts',

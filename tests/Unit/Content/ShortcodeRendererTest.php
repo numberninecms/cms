@@ -11,9 +11,9 @@
 
 namespace NumberNine\Tests\Unit\Content;
 
+use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use NumberNine\Content\ShortcodeRenderer;
 use NumberNine\Shortcode\TextShortcode;
-use NumberNine\Tests\DotEnvAwareWebTestCase;
 use NumberNine\Tests\Dummy\Shortcode\SampleShortcode;
 
 /**
