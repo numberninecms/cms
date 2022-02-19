@@ -13,22 +13,24 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Twig\Extension;
 
-use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use NumberNine\Entity\Post;
 use NumberNine\Exception\ThemeEventNotFoundException;
 use NumberNine\Twig\Extension\EventRuntime;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * @internal
  * @coversNothing
  */
-final class EventRuntimeTest extends DotEnvAwareWebTestCase
+final class EventRuntimeTest extends WebTestCase
 {
+    private KernelBrowser $client;
     private EventRuntime $runtime;
 
     protected function setUp(): void
     {
-        parent::setUp();
+        $this->client = static::createClient();
         $this->client->request('GET', '/');
         $this->runtime = static::getContainer()->get(EventRuntime::class);
     }

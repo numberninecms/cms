@@ -11,16 +11,17 @@
 
 namespace NumberNine\Tests\Unit\Content;
 
-use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use NumberNine\Command\ThemeAwareCommandInterface;
 use NumberNine\Content\ShortcodeMarkupBeautifier;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @internal
  * @coversNothing
  */
-final class ShortcodeMarkupBeautifierTest extends DotEnvAwareWebTestCase implements ThemeAwareCommandInterface
+final class ShortcodeMarkupBeautifierTest extends WebTestCase implements ThemeAwareCommandInterface
 {
     private const SAMPLE_SHORTCODE_DIRTY = '[section backgroundSize="original" margin="0px" padding="0px 0px 0px 0px"' .
         ' color="light"][section backgroundSize="original" backgroundColor="#46a6e9" margin="0px" padding="5px 30px' .
@@ -50,12 +51,13 @@ final class ShortcodeMarkupBeautifierTest extends DotEnvAwareWebTestCase impleme
 [/section]
 SHORTCODE;
 
+    private KernelBrowser $client;
     private ?ShortcodeMarkupBeautifier $shortcodeMarkupBeautifier;
     private ?SerializerInterface $serializer;
 
     protected function setUp(): void
     {
-        parent::setUp();
+        $this->client = static::createClient();
         $this->client->request('GET', '/');
         $this->shortcodeMarkupBeautifier = static::getContainer()->get(ShortcodeMarkupBeautifier::class);
         $this->serializer = static::getContainer()->get('serializer');

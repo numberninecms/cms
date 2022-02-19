@@ -13,21 +13,23 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Twig\Extension;
 
-use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use NumberNine\Twig\Extension\AssetRuntime;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\WebpackEncoreBundle\Exception\EntrypointNotFoundException;
 
 /**
  * @internal
  * @coversNothing
  */
-final class AssetRuntimeTest extends DotEnvAwareWebTestCase
+final class AssetRuntimeTest extends WebTestCase
 {
+    private KernelBrowser $client;
     private AssetRuntime $runtime;
 
     protected function setUp(): void
     {
-        parent::setUp();
+        $this->client = static::createClient();
         $this->client->request('GET', '/');
         $this->runtime = static::getContainer()->get(AssetRuntime::class);
     }

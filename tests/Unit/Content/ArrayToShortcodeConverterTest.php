@@ -13,20 +13,22 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Content;
 
-use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use NumberNine\Content\ArrayToShortcodeConverter;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * @internal
  * @covers \NumberNine\Content\ArrayToShortcodeConverter
  */
-final class ArrayToShortcodeConverterTest extends DotEnvAwareWebTestCase
+final class ArrayToShortcodeConverterTest extends WebTestCase
 {
+    private KernelBrowser $client;
     private ArrayToShortcodeConverter $arrayToShortcodeConverter;
 
     protected function setUp(): void
     {
-        parent::setUp();
+        $this->client = static::createClient();
         $this->arrayToShortcodeConverter = static::getContainer()->get(ArrayToShortcodeConverter::class);
     }
 

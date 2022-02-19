@@ -11,9 +11,10 @@
 
 namespace NumberNine\Tests\Unit\Content;
 
-use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use NumberNine\Command\ThemeAwareCommandInterface;
 use NumberNine\Content\ShortcodeProcessor;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 use function NumberNine\Common\Util\ArrayUtil\unset_recursive;
 
@@ -21,7 +22,7 @@ use function NumberNine\Common\Util\ArrayUtil\unset_recursive;
  * @internal
  * @coversNothing
  */
-final class ShortcodeProcessorTest extends DotEnvAwareWebTestCase implements ThemeAwareCommandInterface
+final class ShortcodeProcessorTest extends WebTestCase implements ThemeAwareCommandInterface
 {
     private const SAMPLE_SHORTCODE = '
         [container justify="center" align="center" margin="10px auto 10px auto"]
@@ -31,12 +32,13 @@ final class ShortcodeProcessorTest extends DotEnvAwareWebTestCase implements The
         [/container]
     ';
 
+    private KernelBrowser $client;
     private ?ShortcodeProcessor $shortcodeProcessor;
     private ?SerializerInterface $serializer;
 
     protected function setUp(): void
     {
-        parent::setUp();
+        $this->client = static::createClient();
         $this->client->request('GET', '/');
         $this->shortcodeProcessor = static::getContainer()->get(ShortcodeProcessor::class);
         $this->serializer = static::getContainer()->get('serializer');

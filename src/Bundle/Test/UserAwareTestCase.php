@@ -18,11 +18,14 @@ use NumberNine\Entity\UserRole;
 use NumberNine\Model\Menu\Builder\AdminMenuBuilder;
 use NumberNine\Repository\UserRoleRepository;
 use NumberNine\Security\UserFactory;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Uid\Uuid;
 
-abstract class UserAwareTestCase extends DotEnvAwareWebTestCase
+abstract class UserAwareTestCase extends WebTestCase
 {
+    protected KernelBrowser $client;
     protected UserRoleRepository $userRoleRepository;
     protected UserFactory $userFactory;
     protected EntityManagerInterface $entityManager;
@@ -32,8 +35,7 @@ abstract class UserAwareTestCase extends DotEnvAwareWebTestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
-
+        $this->client = static::createClient();
         $this->userRoleRepository = static::getContainer()->get(UserRoleRepository::class);
         $this->userFactory = static::getContainer()->get(UserFactory::class);
         $this->entityManager = static::getContainer()->get(EntityManagerInterface::class);

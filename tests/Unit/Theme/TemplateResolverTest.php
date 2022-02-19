@@ -13,28 +13,30 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Theme;
 
-use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use NumberNine\Entity\Post;
 use NumberNine\Entity\Taxonomy;
 use NumberNine\Entity\Term;
 use NumberNine\Shortcode\TextShortcode;
 use NumberNine\Tests\Dummy\Shortcode\SampleShortcode;
 use NumberNine\Theme\TemplateResolver;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Twig\Error\LoaderError;
 
 /**
  * @internal
  * @coversNothing
  */
-final class TemplateResolverTest extends DotEnvAwareWebTestCase
+final class TemplateResolverTest extends WebTestCase
 {
+    private KernelBrowser $client;
     private TemplateResolver $templateResolver;
     private TextShortcode $textShortcode;
     private SampleShortcode $sampleShortcode;
 
     protected function setUp(): void
     {
-        parent::setUp();
+        $this->client = static::createClient();
         $this->client->request('GET', '/');
         $this->templateResolver = static::getContainer()->get(TemplateResolver::class);
         $this->textShortcode = static::getContainer()->get(TextShortcode::class);
