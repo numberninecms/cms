@@ -3,8 +3,8 @@ services:
         autowire: true
         autoconfigure: true
         public: false
-        bind:
-            string $projectPath: '%kernel.project_dir%'
 
-    NumberNine\Tests\Dummy\Twig\Loader\TestTemplatesTwigLoader: ~
+    NumberNine\Tests\Dummy\Twig\Loader\TestTemplatesTwigLoader:
+        arguments:
+            $projectPath: '%kernel.project_dir%'
     NumberNine\Tests\Dummy\Shortcode\SampleShortcode: ~

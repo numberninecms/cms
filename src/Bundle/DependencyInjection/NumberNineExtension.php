@@ -81,10 +81,12 @@ final class NumberNineExtension extends ConfigurableExtension implements Prepend
 
         $env = $container->getParameter('kernel.environment');
 
-        try {
-            $loader->load("services_{$env}.yaml"); // @phpstan-ignore-line
-        } catch (FileLocatorFileNotFoundException) {
-            // ignore
+        if ($env !== 'test') {
+            try {
+                $loader->load("services_{$env}.yaml"); // @phpstan-ignore-line
+            } catch (FileLocatorFileNotFoundException) {
+                // ignore
+            }
         }
 
         $container->setParameter(
