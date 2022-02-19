@@ -13,20 +13,22 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Twig\Extension;
 
-use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use NumberNine\Twig\Extension\DateTimeRuntime;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * @internal
  * @covers \NumberNine\Twig\Extension\DateTimeRuntime
  */
-final class DateTimeRuntimeTest extends DotEnvAwareWebTestCase
+final class DateTimeRuntimeTest extends WebTestCase
 {
+    private KernelBrowser $client;
     private DateTimeRuntime $runtime;
 
     protected function setUp(): void
     {
-        parent::setUp();
+        $this->client = static::createClient();
         $this->runtime = static::getContainer()->get(DateTimeRuntime::class);
     }
 

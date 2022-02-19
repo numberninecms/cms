@@ -13,21 +13,23 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Twig\Extension;
 
-use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use NumberNine\Entity\Post;
 use NumberNine\Twig\Extension\RelationshipRuntime;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * @internal
  * @coversNothing
  */
-final class RelationshipRuntimeTest extends DotEnvAwareWebTestCase
+final class RelationshipRuntimeTest extends WebTestCase
 {
+    private KernelBrowser $client;
     private RelationshipRuntime $runtime;
 
     protected function setUp(): void
     {
-        parent::setUp();
+        $this->client = static::createClient();
         $this->client->request('GET', '/');
         $this->runtime = static::getContainer()->get(RelationshipRuntime::class);
     }

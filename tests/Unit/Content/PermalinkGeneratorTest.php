@@ -13,24 +13,26 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Content;
 
-use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use NumberNine\Content\PermalinkGenerator;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\Post;
 use NumberNine\Exception\ContentTypeNotFoundException;
 use NumberNine\Model\Content\PublishingStatusInterface;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * @internal
  * @coversNothing
  */
-final class PermalinkGeneratorTest extends DotEnvAwareWebTestCase
+final class PermalinkGeneratorTest extends WebTestCase
 {
+    private KernelBrowser $client;
     private PermalinkGenerator $permalinkGenerator;
 
     protected function setUp(): void
     {
-        parent::setUp();
+        $this->client = static::createClient();
         $this->client->request('GET', '/');
         $this->permalinkGenerator = static::getContainer()->get(PermalinkGenerator::class);
     }

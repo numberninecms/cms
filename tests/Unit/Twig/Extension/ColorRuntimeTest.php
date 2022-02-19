@@ -13,21 +13,23 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Twig\Extension;
 
-use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use NumberNine\Exception\InvalidHexColorValueException;
 use NumberNine\Twig\Extension\ColorRuntime;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * @internal
  * @covers \NumberNine\Twig\Extension\ColorRuntime
  */
-final class ColorRuntimeTest extends DotEnvAwareWebTestCase
+final class ColorRuntimeTest extends WebTestCase
 {
+    private KernelBrowser $client;
     private ColorRuntime $runtime;
 
     protected function setUp(): void
     {
-        parent::setUp();
+        $this->client = static::createClient();
         $this->runtime = static::getContainer()->get(ColorRuntime::class);
     }
 

@@ -12,22 +12,24 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Content;
 
-use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use NumberNine\Component\Content\Comments\Comments;
 use NumberNine\Content\ComponentStore;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * @internal
  * @coversNothing
  */
-final class ComponentStoreTest extends DotEnvAwareWebTestCase
+final class ComponentStoreTest extends WebTestCase
 {
+    private KernelBrowser $client;
     private ComponentStore $componentStore;
     private Comments $commentsComponent;
 
     protected function setUp(): void
     {
-        parent::setUp();
+        $this->client = static::createClient();
         $this->client->request('GET', '/');
         $this->componentStore = static::getContainer()->get(ComponentStore::class);
         $this->commentsComponent = static::getContainer()->get(Comments::class);

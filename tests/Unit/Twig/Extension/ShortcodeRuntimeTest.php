@@ -13,20 +13,22 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Twig\Extension;
 
-use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use NumberNine\Twig\Extension\ShortcodeRuntime;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * @internal
  * @coversNothing
  */
-final class ShortcodeRuntimeTest extends DotEnvAwareWebTestCase
+final class ShortcodeRuntimeTest extends WebTestCase
 {
+    private KernelBrowser $client;
     private ShortcodeRuntime $runtime;
 
     protected function setUp(): void
     {
-        parent::setUp();
+        $this->client = static::createClient();
         $this->client->request('GET', '/');
         $this->runtime = static::getContainer()->get(ShortcodeRuntime::class);
     }

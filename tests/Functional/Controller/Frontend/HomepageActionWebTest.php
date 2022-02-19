@@ -11,17 +11,21 @@
 
 namespace NumberNine\Tests\Functional\Controller\Frontend;
 
-use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @internal
  * @coversNothing
  */
-final class HomepageActionWebTest extends DotEnvAwareWebTestCase
+final class HomepageActionWebTest extends WebTestCase
 {
+    private KernelBrowser $client;
+
     public function testHomepageIsAccessible(): void
     {
+        $this->client = static::createClient();
         $this->client->request('GET', '/');
 
         static::assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());

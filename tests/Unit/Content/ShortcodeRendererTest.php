@@ -11,24 +11,26 @@
 
 namespace NumberNine\Tests\Unit\Content;
 
-use NumberNine\Bundle\Test\DotEnvAwareWebTestCase;
 use NumberNine\Content\ShortcodeRenderer;
 use NumberNine\Shortcode\TextShortcode;
 use NumberNine\Tests\Dummy\Shortcode\SampleShortcode;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * @internal
  * @coversNothing
  */
-final class ShortcodeRendererTest extends DotEnvAwareWebTestCase
+final class ShortcodeRendererTest extends WebTestCase
 {
+    private KernelBrowser $client;
     private ShortcodeRenderer $shortcodeRenderer;
     private TextShortcode $textShortcode;
     private SampleShortcode $sampleShortcode;
 
     protected function setUp(): void
     {
-        parent::setUp();
+        $this->client = static::createClient();
         $this->client->request('GET', '/');
         $this->shortcodeRenderer = static::getContainer()->get(ShortcodeRenderer::class);
         $this->textShortcode = static::getContainer()->get(TextShortcode::class);
