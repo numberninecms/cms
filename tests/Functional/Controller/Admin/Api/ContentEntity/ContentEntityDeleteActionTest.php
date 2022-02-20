@@ -52,7 +52,7 @@ final class ContentEntityDeleteActionTest extends UserAwareTestCase
             'DELETE',
         );
 
-        self::assertResponseRedirects('/');
+        self::assertResponseRedirects($this->urlGenerator->generate('numbernine_login'));
     }
 
     public function testAuthorCanDeleteOwnPost(): void
@@ -85,7 +85,7 @@ final class ContentEntityDeleteActionTest extends UserAwareTestCase
             'DELETE',
         );
 
-        self::assertResponseRedirects('/');
+        self::assertResponseRedirects($this->urlGenerator->generate('numbernine_login'));
     }
 
     public function testEditorCanDeleteOthersPost(): void
@@ -118,7 +118,7 @@ final class ContentEntityDeleteActionTest extends UserAwareTestCase
             'DELETE',
         );
 
-        self::assertResponseRedirects('/');
+        self::assertResponseRedirects($this->urlGenerator->generate('numbernine_login'));
     }
 
     public function testEditorCanDeletePublishedPost(): void
@@ -156,7 +156,7 @@ final class ContentEntityDeleteActionTest extends UserAwareTestCase
             'DELETE',
         );
 
-        self::assertResponseRedirects('/');
+        self::assertResponseRedirects($this->urlGenerator->generate('numbernine_login'));
     }
 
     public function testEditorCanDeletePrivatePost(): void

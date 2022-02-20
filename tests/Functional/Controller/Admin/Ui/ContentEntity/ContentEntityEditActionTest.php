@@ -37,7 +37,7 @@ final class ContentEntityEditActionTest extends UserAwareTestCase
             ]),
         );
 
-        self::assertResponseRedirects('/');
+        self::assertResponseRedirects($this->urlGenerator->generate('numbernine_login'));
     }
 
     public function testAuthorCantEditOwnPostIfPrivate(): void
@@ -53,7 +53,7 @@ final class ContentEntityEditActionTest extends UserAwareTestCase
             ]),
         );
 
-        self::assertResponseRedirects('/');
+        self::assertResponseRedirects($this->urlGenerator->generate('numbernine_login'));
     }
 
     public function testAuthorCanEditOwnPostIfDraft(): void
@@ -86,7 +86,7 @@ final class ContentEntityEditActionTest extends UserAwareTestCase
             ]),
         );
 
-        self::assertResponseRedirects('/');
+        self::assertResponseRedirects($this->urlGenerator->generate('numbernine_login'));
     }
 
     public function testEditorCanEditOtherAuthorPostIfDraft(): void
@@ -152,7 +152,7 @@ final class ContentEntityEditActionTest extends UserAwareTestCase
             ]),
         );
 
-        self::assertResponseRedirects('/');
+        self::assertResponseRedirects($this->urlGenerator->generate('numbernine_login'));
     }
 
     public function testEditorCanEditOtherAuthorPostIfPrivate(): void
