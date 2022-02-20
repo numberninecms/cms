@@ -26,7 +26,7 @@ final class CommentIndexActionTest extends UserAwareTestCase
 
         $this->loginThenNavigateToUrl($user, $this->urlGenerator->generate('numbernine_admin_comment_index'),);
 
-        self::assertResponseRedirects('/');
+        self::assertResponseRedirects($this->urlGenerator->generate('numbernine_login'));
     }
 
     public function testAuthorizedUserCanAccessPage(): void

@@ -22,15 +22,21 @@ final class PageBuilderAreaComponentsGetActionTest extends UserAwareTestCase
 {
     public function testNotLoggedInUserCantAccessUrl(): void
     {
-        $this->client->request('GET', '/admin/api/page_builder/header/components');
-        self::assertResponseRedirects('/admin/login');
+        $this->client->request('GET', $this->urlGenerator->generate(
+            'numbernine_admin_pagebuilder_area_get_components',
+            ['area' => 'header'],
+        ));
+        self::assertResponseRedirects($this->urlGenerator->generate('numbernine_login'));
     }
 
     public function testNonAllowedUserCantAccessUrl(): void
     {
         $this->setCapabilitiesThenLogin([Capabilities::ACCESS_ADMIN]);
-        $this->client->request('GET', '/admin/api/page_builder/header/components');
-        self::assertResponseRedirects('/');
+        $this->client->request('GET', $this->urlGenerator->generate(
+            'numbernine_admin_pagebuilder_area_get_components',
+            ['area' => 'header'],
+        ));
+        self::assertResponseRedirects($this->urlGenerator->generate('numbernine_login'));
     }
 
     public function testResponseIsSuccessfulForAllowedUser(): void

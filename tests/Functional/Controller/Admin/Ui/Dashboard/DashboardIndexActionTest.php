@@ -23,7 +23,7 @@ final class DashboardIndexActionTest extends UserAwareTestCase
     public function testAdminPageRedirectsToLogin(): void
     {
         $this->client->request('GET', sprintf('/%s/', $this->adminUrlPrefix));
-        self::assertResponseRedirects(sprintf('/%s/login', $this->adminUrlPrefix), 302);
+        self::assertResponseRedirects('/admin/login', 302);
     }
 
     public function testAdministratorCanAccessAdmin(): void
@@ -57,13 +57,13 @@ final class DashboardIndexActionTest extends UserAwareTestCase
     public function testSubscriberCannotAccessAdmin(): void
     {
         $this->loginThenNavigateToUrl('Subscriber');
-        self::assertResponseRedirects('/');
+        self::assertResponseRedirects('/admin/login');
     }
 
     public function testNoCapabilityCannotAccessAdmin(): void
     {
         $this->setCapabilitiesThenLogin([]);
-        self::assertResponseRedirects('/');
+        self::assertResponseRedirects('/admin/login');
     }
 
     public function testAccessAdminCapabilityCanAccessAdmin(): void
