@@ -12,6 +12,7 @@
 namespace NumberNine\Command;
 
 use Exception;
+use NumberNine\Content\ComponentGenerator;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -23,8 +24,10 @@ final class MakeComponentCommand extends Command
 {
     protected static $defaultName = 'numbernine:make:component';
 
-    public function __construct(private string $componentsPath, private string $projectPath)
-    {
+    public function __construct(
+        private ComponentGenerator $componentGenerator,
+        private string $componentsPath,
+    ) {
         parent::__construct();
     }
 
@@ -52,52 +55,21 @@ final class MakeComponentCommand extends Command
             }
         }
 
-        try {
-            $path = $this->componentsPath;
-            $componentPath = $path . $componentName . '/';
-            $relativeComponentPath = substr($componentPath, (int) strpos($componentPath, 'src/'));
-            $namespace = trim('App\\' . str_replace(
-                [$this->projectPath . '/src/', '//', '/'],
-                ['', '/', '\\'],
-                $componentPath,
-            ), '\\');
+        $path = $this->componentsPath;
+        $componentPath = $path . $componentName . '/';
+        $relativeComponentPath = substr($componentPath, (int) strpos($componentPath, 'src/'));
 
-            if (!mkdir($componentPath, 0755, true) && !is_dir($componentPath)) {
+        $componentBasename = basename($componentName);
+        $componentClassFilename = $componentBasename . '.php';
+
+        try {
+            if (!file_exists($componentPath) && !mkdir($componentPath, 0755, true) && !is_dir($componentPath)) {
                 throw new RuntimeException("Unable to create directory {$componentPath}.");
             }
 
-            $componentBasename = basename($componentName);
-            $componentClassFilename = $componentBasename . '.php';
-
-            file_put_contents(
-                $componentPath . $componentClassFilename,
-                <<<COMPONENT
-<?php
-
-declare(strict_types=1);
-
-namespace {$namespace};
-
-use NumberNine\\Model\\Component\\ComponentInterface;
-
-final class {$componentBasename} implements ComponentInterface
-{
-    public function getTemplateParameters(): array
-    {
-        return [
-            'name' => '{$componentBasename}',
-        ];
-    }
-}
-COMPONENT
-            );
-
-            file_put_contents(
-                $componentPath . 'template.html.twig',
-                <<<'TEMPLATE'
-<p>I'm a component. My name is {{ name }}.</p>
-TEMPLATE
-            );
+            $result = $this->componentGenerator->generate($componentName);
+            file_put_contents($componentPath . $componentClassFilename, $result['class']);
+            file_put_contents($componentPath . 'template.html.twig', $result['template']);
         } catch (Exception $e) {
             $io->error('Component cannot be created.');
             $io->writeln($e->getMessage());
