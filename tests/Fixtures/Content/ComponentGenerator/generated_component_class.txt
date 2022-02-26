@@ -1,0 +1,17 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Component\Dummy;
+
+use NumberNine\Model\Component\ComponentInterface;
+
+final class Dummy implements ComponentInterface
+{
+    public function getTemplateParameters(): array
+    {
+        return [
+            'name' => 'Dummy',
+        ];
+    }
+}

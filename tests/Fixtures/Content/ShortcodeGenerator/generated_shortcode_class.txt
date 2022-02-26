@@ -1,0 +1,40 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Shortcode;
+
+use NumberNine\Attribute\Shortcode;
+use NumberNine\Model\PageBuilder\Control\SliderControl;
+use NumberNine\Model\PageBuilder\PageBuilderFormBuilderInterface;
+use NumberNine\Model\Shortcode\EditableShortcodeInterface;
+use NumberNine\Model\Shortcode\ShortcodeInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+#[Shortcode(name: 'turtle', label: 'Turtle', icon: 'mdi-tortoise')]
+final class TurtleShortcode implements ShortcodeInterface, EditableShortcodeInterface
+{
+    public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void
+    {
+        $builder
+            ->add('title')
+            ->add('age', SliderControl::class)
+        ;
+    }
+
+    public function configureParameters(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'title' => 'Welcome to the Turtle Age Show',
+            'age' => 40,
+        ]);
+    }
+
+    public function processParameters(array $parameters): array
+    {
+        return [
+            'title' => $parameters['title'],
+            'age' => $parameters['age'],
+        ];
+    }
+}

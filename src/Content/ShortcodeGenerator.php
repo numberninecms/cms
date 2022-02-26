@@ -95,7 +95,7 @@ final class ShortcodeGenerator
             'label' => $options['label'],
         ];
 
-        if (!empty($options['container']) ) {
+        if (!empty($options['container'])) {
             $attributeArguments['container'] = true;
         }
 
