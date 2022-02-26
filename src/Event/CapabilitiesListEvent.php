@@ -30,6 +30,11 @@ final class CapabilitiesListEvent extends Event
         }
     }
 
+    public function addCapabilities(array $capabilities): void
+    {
+        $this->capabilities = array_unique(array_merge($this->capabilities, $capabilities));
+    }
+
     public function getCapabilities(): array
     {
         return $this->capabilities;
