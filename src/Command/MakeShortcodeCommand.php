@@ -12,6 +12,7 @@
 namespace NumberNine\Command;
 
 use Exception;
+use NumberNine\Content\ShortcodeGenerator;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -27,6 +28,7 @@ final class MakeShortcodeCommand extends Command
     protected static $defaultName = 'numbernine:make:shortcode';
 
     public function __construct(
+        private ShortcodeGenerator $shortcodeGenerator,
         private Environment $twig,
         private string $shortcodesPath,
         private string $projectPath,
@@ -65,8 +67,8 @@ final class MakeShortcodeCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $shortcodeClassName = $input->getArgument('shortcode-class-name');
         $shortcodeName = $input->getArgument('shortcode-name');
-        $editable = (bool) $input->getOption('editable');
-        $container = (bool) $input->getOption('container');
+        $isEditable = (bool) $input->getOption('editable');
+        $isContainer = (bool) $input->getOption('container');
         $icon = $input->getOption('icon');
 
         if (!$shortcodeClassName || !$shortcodeName) {
@@ -83,15 +85,15 @@ final class MakeShortcodeCommand extends Command
                 );
             }
 
-            if ($editable === false) {
-                $editable = (bool) $io->confirm('Will this shortcode be editable in page builder?', true);
+            if (!$isEditable) {
+                $isEditable = $io->confirm('Will this shortcode be editable in page builder?', true);
             }
 
-            if ($container === false) {
-                $container = (bool) $io->confirm('Can this shortcode contain other shortcodes?', false);
+            if (!$isContainer) {
+                $isContainer = $io->confirm('Can this shortcode contain other shortcodes?', false);
             }
 
-            if ($editable && !$icon) {
+            if ($isEditable && !$icon) {
                 $icon = $io->ask(
                     'Choose an icon name (see material.io or materialdesignicons.com for full list)',
                     'mdi-tortoise'
@@ -99,54 +101,32 @@ final class MakeShortcodeCommand extends Command
             }
         }
 
-        try {
-            $shortcodeTemplatesPath = $this->shortcodesPath . $shortcodeClassName . '/';
-            $relativeShortcodePath = substr($this->shortcodesPath, (int) strpos($this->shortcodesPath, 'src/'));
-            $namespace = trim('App\\' . str_replace(
-                [$this->projectPath . '/src/', '//', '/'],
-                ['', '/', '\\'],
-                $this->shortcodesPath,
-            ), '\\');
+        $shortcodeTemplatesPath = $this->shortcodesPath . $shortcodeClassName . '/';
+        $relativeShortcodePath = substr($this->shortcodesPath, (int) strpos($this->shortcodesPath, 'src/'));
 
-            if (!file_exists($shortcodeTemplatesPath)) {
-                if (!mkdir($shortcodeTemplatesPath, 0755, true) && !is_dir($shortcodeTemplatesPath)) {
-                    throw new RuntimeException("Unable to create directory {$shortcodeTemplatesPath}.");
-                }
+        $shortcodeBasename = basename($shortcodeClassName);
+        $shortcodeClassFilename = $shortcodeBasename . '.php';
+
+        try {
+            if (
+                !file_exists($shortcodeTemplatesPath)
+                && !mkdir($shortcodeTemplatesPath, 0755, true)
+                && !is_dir($shortcodeTemplatesPath)
+            ) {
+                throw new RuntimeException("Unable to create directory {$shortcodeTemplatesPath}.");
             }
 
-            $shortcodeBasename = basename($shortcodeClassName);
-            $shortcodeClassFilename = $shortcodeBasename . '.php';
+            $result = $this->shortcodeGenerator->generate($shortcodeClassName, [
+                'name' => $shortcodeName,
+                'label' => str_replace('Shortcode', '', $shortcodeBasename),
+                'container' => $isContainer,
+                'editable' => $isEditable,
+                'icon' => $icon,
+            ]);
 
-            $attribute = sprintf(
-                "#[Shortcode(name: '%s', label: '%s'%s%s)]",
-                $shortcodeName,
-                str_replace('Shortcode', '', $shortcodeBasename),
-                $container ? ', container: true' : '',
-                $editable && $icon ? ", icon: '" . $icon . "'" : ''
-            );
-
-            $editableInterface = $editable ? "use NumberNine\\Model\\Shortcode\\EditableShortcodeInterface;\n" : '';
-            $implementsEditable = $editable ? ', EditableShortcodeInterface' : '';
-
-            file_put_contents(
-                $this->shortcodesPath . $shortcodeClassFilename,
-                $this->twig->render('@NumberNine/templates/shortcode.php.twig', compact(
-                    'namespace',
-                    'attribute',
-                    'editableInterface',
-                    'implementsEditable',
-                ))
-            );
-
-            copy(
-                __DIR__ . '/../Bundle/Resources/views/templates/shortcode_template.html.twig',
-                $shortcodeTemplatesPath . 'template.html.twig'
-            );
-
-            copy(
-                __DIR__ . '/../Bundle/Resources/views/templates/shortcode_template.vue.twig',
-                $shortcodeTemplatesPath . 'template.vue.twig'
-            );
+            file_put_contents($this->shortcodesPath . $shortcodeClassFilename, $result['class']);
+            file_put_contents($shortcodeTemplatesPath . 'template.html.twig', $result['template_html']);
+            file_put_contents($shortcodeTemplatesPath . 'template.vue.twig', $result['template_vue']);
         } catch (Exception $e) {
             $io->error('Shortcode cannot be created.');
             $io->writeln($e->getMessage());
