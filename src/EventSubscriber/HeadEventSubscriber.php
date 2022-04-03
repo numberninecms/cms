@@ -66,9 +66,13 @@ final class HeadEventSubscriber implements EventSubscriberInterface
 
     public function stylesheets(HeadEvent $event): void
     {
-        $stylesheets = $this->tagRenderer->renderWebpackLinkTags();
+        $themeStylesheets = $this->tagRenderer->renderWebpackLinkTags();
+        $appStylesheets = $this->tagRenderer->renderWebpackLinkTags('app', 'app');
 
-        $stylesheetsEvent = $this->eventDispatcher->dispatch(new HeadStylesheetsEvent($stylesheets));
+        $stylesheetsEvent = $this->eventDispatcher->dispatch(
+            new HeadStylesheetsEvent($themeStylesheets . $appStylesheets)
+        );
+
         $event->setObject($event . $stylesheetsEvent);
     }
 
@@ -90,7 +94,7 @@ final class HeadEventSubscriber implements EventSubscriberInterface
             $styles = '';
         }
         $stylesEvent = $this->eventDispatcher->dispatch(new HeadThemeCustomStylesEvent($styles));
-        $event->setObject($event . sprintf('<style type="text/css">%s</style>', (string) $stylesEvent));
+        $event->setObject($event . sprintf('<style>%s</style>', (string) $stylesEvent));
     }
 
     /**
@@ -100,8 +104,10 @@ final class HeadEventSubscriber implements EventSubscriberInterface
      */
     public function scripts(HeadEvent $event): void
     {
-        $scripts = $this->tagRenderer->renderWebpackScriptTags();
-        $scriptsEvent = $this->eventDispatcher->dispatch(new HeaderScriptsEvent($scripts));
+        $themeScripts = $this->tagRenderer->renderWebpackScriptTags();
+        $appScripts = $this->tagRenderer->renderWebpackScriptTags('app', 'app');
+
+        $scriptsEvent = $this->eventDispatcher->dispatch(new HeaderScriptsEvent($themeScripts . $appScripts));
         $event->setObject($event . $scriptsEvent);
     }
 }
