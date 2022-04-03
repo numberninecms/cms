@@ -158,7 +158,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Seriali
             $userRoles = $userRoles->toArray();
         }
 
-        return array_map(fn (UserRole $userRole): string => (string) $userRole->getName(), $userRoles);
+        return array_map(static fn (UserRole $userRole): string => (string) $userRole->getName(), $userRoles);
+    }
+
+    public function hasRole(string $role): bool
+    {
+        return \in_array($role, $this->getRoles(), true);
     }
 
     /**
