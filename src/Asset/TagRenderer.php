@@ -22,21 +22,17 @@ use Symfony\Component\WebLink\GenericLinkProvider;
 use Symfony\Component\WebLink\Link;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupCollection;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
-use TypeError;
 
 final class TagRenderer
 {
     private ?Request $request;
     private EntrypointLookupCollection $entrypointLookupCollection;
 
-    /**
-     * @param EntrypointLookupInterface|EntrypointLookupCollection $entrypointLookupCollection
-     */
     public function __construct(
         private ThemeStore $themeStore,
         private Packages $packages,
         RequestStack $requestStack,
-        $entrypointLookupCollection
+        EntrypointLookupInterface|EntrypointLookupCollection $entrypointLookupCollection
     ) {
         if ($entrypointLookupCollection instanceof EntrypointLookupInterface) {
             @trigger_error(
@@ -57,13 +53,10 @@ final class TagRenderer
                     ]
                 )
             );
-        } elseif ($entrypointLookupCollection instanceof EntrypointLookupCollection) {
-            $this->entrypointLookupCollection = $entrypointLookupCollection;
         } else {
-            throw new TypeError(
-                'The "$entrypointLookupCollection" argument must be an instance of EntrypointLookupCollection.'
-            );
+            $this->entrypointLookupCollection = $entrypointLookupCollection;
         }
+
         $this->request = $requestStack->getMainRequest();
     }
 
@@ -76,21 +69,29 @@ final class TagRenderer
         $configName = $configName ?? $this->themeStore->getCurrentTheme()->getWebpackConfigName();
 
         $scriptTags = [];
-        foreach ($this->getEntrypointLookup($configName)->getJavaScriptFiles((string) $entryName) as $filename) {
-            if ($ignoreRuntime && preg_match('@(:?/runtime.*\.js)$@iU', $filename)) {
-                continue;
+
+        try {
+            foreach ($this->getEntrypointLookup($configName)->getJavaScriptFiles((string) $entryName) as $filename) {
+                if ($ignoreRuntime && preg_match('@(:?/runtime.*\.js)$@iU', $filename)) {
+                    continue;
+                }
+
+                $assetPath = $this->getAssetPath($filename, $configName);
+
+                if ($this->request) {
+                    $linkProvider = $this->request->attributes->get('_links', new GenericLinkProvider());
+                    $this->request->attributes->set(
+                        '_links',
+                        $linkProvider->withLink((new Link('preload', $assetPath))->withAttribute('as', 'script'))
+                    );
+                }
+
+                $scriptTags[] = sprintf('<script src="%s" defer></script>', $assetPath);
             }
-
-            $assetPath = htmlentities($this->getAssetPath($filename, $configName));
-
-            if ($this->request) {
-                $linkProvider = $this->request->attributes->get('_links', new GenericLinkProvider());
-                $this->request->attributes->set('_links', $linkProvider->withLink(
-                    (new Link('preload', $assetPath))->withAttribute('as', 'script')
-                ));
+        } catch (\InvalidArgumentException $e) {
+            if ($configName !== 'app') {
+                throw $e;
             }
-
-            $scriptTags[] = sprintf('<script src="%s" defer></script>', $assetPath);
         }
 
         return implode('', $scriptTags);
@@ -130,9 +131,14 @@ final class TagRenderer
 
         $assetPaths = [];
 
-        foreach ($this->getEntrypointLookup($configName)->getCssFiles((string) $entryName) as $filename) {
-            $assetPath = htmlentities($this->getAssetPath($filename, $configName));
-            $assetPaths[] = $assetPath;
+        try {
+            foreach ($this->getEntrypointLookup($configName)->getCssFiles((string) $entryName) as $filename) {
+                $assetPaths[] = $this->getAssetPath($filename, $configName);
+            }
+        } catch (\InvalidArgumentException $e) {
+            if ($configName !== 'app') {
+                throw $e;
+            }
         }
 
         return $assetPaths;
@@ -145,11 +151,11 @@ final class TagRenderer
 
     private function getAssetPath(string $assetPath, string $packageName = null): string
     {
-        return $this->packages->getUrl($assetPath, $packageName);
+        return $this->packages->getUrl($assetPath, $packageName === 'app' ? null : $packageName);
     }
 
     private function getEntrypointLookup(string $buildName): EntrypointLookupInterface
     {
-        return $this->entrypointLookupCollection->getEntrypointLookup($buildName);
+        return $this->entrypointLookupCollection->getEntrypointLookup($buildName === 'app' ? null : $buildName);
     }
 }
