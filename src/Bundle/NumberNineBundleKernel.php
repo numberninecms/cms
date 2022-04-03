@@ -14,6 +14,7 @@ namespace NumberNine\Bundle;
 use DAMA\DoctrineTestBundle\DAMADoctrineTestBundle;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle;
+use Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle;
 use FOS\JsRoutingBundle\FOSJsRoutingBundle;
 use NumberNine\ChapterOne\NumberNineChapterOneBundle;
 use Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle;
@@ -49,6 +50,7 @@ final class NumberNineBundleKernel extends Kernel
             new WebpackEncoreBundle(),
             new DoctrineBundle(),
             new DoctrineFixturesBundle(),
+            new DoctrineMigrationsBundle(),
             new DAMADoctrineTestBundle(),
             new NumberNineBundle(),
             new NumberNineChapterOneBundle(),

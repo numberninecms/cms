@@ -14,6 +14,7 @@ namespace NumberNine\Tests;
 use DAMA\DoctrineTestBundle\DAMADoctrineTestBundle;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle;
+use Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle;
 use NumberNine\Bundle\NumberNineBundle;
 use NumberNine\ChapterOne\NumberNineChapterOneBundle;
 use Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle;
@@ -51,6 +52,7 @@ final class NumberNineBundleKernel extends Kernel
             new WebpackEncoreBundle(),
             new DoctrineBundle(),
             new DoctrineFixturesBundle(),
+            new DoctrineMigrationsBundle(),
             new DAMADoctrineTestBundle(),
             new NumberNineBundle(),
             new NumberNineChapterOneBundle(),
