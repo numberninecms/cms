@@ -137,5 +137,8 @@ doctrine:
                 alias: GedmoLoggable
                 is_bundle: false
 
+doctrine_migrations:
+    transactional: false
+
 symfonycasts_reset_password:
     request_password_repository: NumberNine\Repository\ResetPasswordRequestRepository
