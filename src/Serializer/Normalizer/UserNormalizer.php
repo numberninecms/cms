@@ -33,7 +33,10 @@ final class UserNormalizer implements NormalizerInterface
         /** @var array $data */
         $data = $this->normalizer->normalize($object, $format, $context);
 
-        if (\is_array($data)) {
+        if (
+            \is_array($data)
+            && \in_array('author_get', $context['groups'] ?? [], true)
+        ) {
             $data['postsCount'] = $this->postRepository->count(['author' => $object->getId()]);
         }
 
