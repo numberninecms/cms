@@ -12,10 +12,14 @@
 namespace NumberNine\Controller\Admin\Security;
 
 use Doctrine\ORM\EntityManagerInterface;
+use NumberNine\Configuration\ConfigurationReadWriter;
+use NumberNine\Content\PermalinkGenerator;
 use NumberNine\Entity\User;
 use NumberNine\Form\User\ChangePasswordFormType;
 use NumberNine\Form\User\ResetPasswordRequestFormType;
 use NumberNine\Mailer\AddressFactory;
+use NumberNine\Model\General\Settings;
+use NumberNine\Repository\ContentEntityRepository;
 use NumberNine\Theme\TemplateResolverInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,7 +33,7 @@ use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
-#[Route(path: '/reset-password')]
+#[Route(path: '%numbernine.config.reset_password_url_prefix%/reset-password')]
 final class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
@@ -88,6 +92,9 @@ final class ResetPasswordController extends AbstractController
     public function reset(
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
+        ContentEntityRepository $contentEntityRepository,
+        ConfigurationReadWriter $configurationReadWriter,
+        PermalinkGenerator $permalinkGenerator,
         string $token = null
     ): Response {
         if ($token) {
@@ -128,6 +135,13 @@ final class ResetPasswordController extends AbstractController
 
             // The session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
+
+            $entityId = $configurationReadWriter->read(Settings::PAGE_FOR_MY_ACCOUNT);
+            $entity = $contentEntityRepository->find($entityId);
+
+            if ($entity) {
+                return $this->redirect($permalinkGenerator->generateContentEntityPermalink($entity));
+            }
 
             return $this->redirectToRoute('numbernine_login');
         }
