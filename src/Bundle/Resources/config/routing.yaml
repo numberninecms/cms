@@ -3,9 +3,10 @@ controllers:
     type: annotation
 
 admin_controllers:
-    resource: ../../../Controller/Admin/
+    resource: '../../../Controller/Admin/**/*'
     type: annotation
     prefix: /%numbernine.config.admin_url_prefix%
+    exclude: '../../../Controller/Admin/Security/ResetPasswordController.php'
 
 admin_api_controllers:
     resource: ../../../Controller/Admin/Api

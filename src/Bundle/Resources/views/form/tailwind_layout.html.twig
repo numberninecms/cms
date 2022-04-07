@@ -52,7 +52,7 @@
         <div class="flex items-center justify-between">
             {%- set attr = attr|merge({class: (attr.class|default('btn btn-primary'))|trim}) -%}
             {{- parent() -}}
-            <a class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href="">
+            <a class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href="{{ path('numbernine_forgot_password_request') }}">
                 Forgot Password?
             </a>
         </div>

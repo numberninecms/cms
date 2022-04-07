@@ -49,6 +49,10 @@ final class NumberNineExtension extends ConfigurableExtension implements Prepend
         ]);
 
         $container->setParameter('numbernine.config.admin_url_prefix', 'admin');
+        $container->setParameter(
+            'numbernine.config.reset_password_url_prefix',
+            '/%numbernine.config.admin_url_prefix%'
+        );
 
         $securityModified = false;
         $securityConfigs = [];
