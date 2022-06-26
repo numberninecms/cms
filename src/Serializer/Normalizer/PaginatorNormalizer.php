@@ -13,13 +13,17 @@ namespace NumberNine\Serializer\Normalizer;
 
 use Exception;
 use NumberNine\Pagination\Paginator;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 final class PaginatorNormalizer implements NormalizerInterface
 {
-    public function __construct(private ObjectNormalizer $normalizer, private iterable $normalizers)
-    {
+    public function __construct(
+        #[Autowire(service: ObjectNormalizer::class)]
+        private NormalizerInterface $normalizer,
+        private iterable $normalizers,
+    ) {
     }
 
     /**
