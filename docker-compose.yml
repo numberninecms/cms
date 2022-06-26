@@ -10,9 +10,6 @@ services:
         working_dir: /srv/app
         user: '1000:1000'
         restart: 'no'
-        env_file:
-            - .env
-            - .env.test.local
         volumes:
             - ./:/srv/app
             - ./docker/symfony.ini:/etc/php81/conf.d/symfony.ini

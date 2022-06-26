@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Dotenv\Dotenv;
+
 !passthru(sprintf('rm -rf "%s/../public/uploads"', __DIR__)) || exit(1);
 
 if (!empty($_ENV['BOOTSTRAP_RESET_DATABASE'])) {
@@ -41,3 +43,7 @@ if (!empty($_ENV['BOOTSTRAP_RESET_DATABASE'])) {
 }
 
 require __DIR__ . '/../vendor/autoload.php';
+
+if (method_exists(Dotenv::class, 'bootEnv')) {
+    (new Dotenv())->bootEnv(dirname(__DIR__) . '/.env');
+}

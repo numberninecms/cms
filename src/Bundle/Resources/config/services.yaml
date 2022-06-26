@@ -77,6 +77,20 @@ services:
         tags:
             - { name: 'doctrine.event_subscriber' }
 
+    ### For Symfony 6.0 compatibility
+    NumberNine\Serializer\Normalizer\ContentEntityNormalizer:
+        arguments:
+            $normalizer: '@Symfony\Component\Serializer\Normalizer\ObjectNormalizer'
+
+    NumberNine\Serializer\Normalizer\PaginatorNormalizer:
+        arguments:
+            $normalizer: '@Symfony\Component\Serializer\Normalizer\ObjectNormalizer'
+
+    NumberNine\Serializer\Normalizer\UserNormalizer:
+        arguments:
+            $normalizer: '@Symfony\Component\Serializer\Normalizer\ObjectNormalizer'
+    ### -----------------------------
+
     Twig\Extension\StringLoaderExtension: ~
 
     Symfony\Cmf\Component\Routing\RouteProviderInterface: '@NumberNine\Routing\RouteProvider'

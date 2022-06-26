@@ -13,14 +13,18 @@ namespace NumberNine\Serializer\Normalizer;
 
 use NumberNine\Entity\User;
 use NumberNine\Repository\PostRepository;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 final class UserNormalizer implements NormalizerInterface
 {
-    public function __construct(private ObjectNormalizer $normalizer, private PostRepository $postRepository)
-    {
+    public function __construct(
+        #[Autowire(service: ObjectNormalizer::class)]
+        private NormalizerInterface $normalizer,
+        private PostRepository $postRepository,
+    ) {
     }
 
     /**

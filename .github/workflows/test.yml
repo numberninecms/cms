@@ -21,7 +21,7 @@ jobs:
         strategy:
             matrix:
                 php: [ '8.1' ]
-                symfony: [ '6.0' ]
+                symfony: [ '6.0', '6.1' ]
 
         steps:
             -   uses: FranzDiebold/github-env-vars-action@v2
@@ -84,7 +84,7 @@ jobs:
         strategy:
             matrix:
                 php: [ '8.1' ]
-                symfony: [ '6.0' ]
+                symfony: [ '6.0', '6.1' ]
 
         steps:
             -   uses: FranzDiebold/github-env-vars-action@v2
@@ -121,7 +121,9 @@ jobs:
             -   name: Create a new project
                 continue-on-error: true
                 run: |
-                    symfony new newproject --full --no-git --version="${{ matrix.symfony }}"
+                    git config --global user.email "no-reply@numberninecms.com"
+                    git config --global user.name "NumberNine CMS"
+                    symfony new newproject --webapp --version="${{ matrix.symfony }}"
                     cd newproject
                     cp -Rp . ../
                     cd ..
@@ -179,7 +181,7 @@ jobs:
         strategy:
             matrix:
                 php: [ '8.1' ]
-                symfony: [ '6.0' ]
+                symfony: [ '6.0', '6.1' ]
 
         steps:
             -   uses: FranzDiebold/github-env-vars-action@v2
@@ -219,7 +221,9 @@ jobs:
             -   name: Create a new project
                 continue-on-error: true
                 run: |
-                    symfony new newproject --full --no-git --version="${{ matrix.symfony }}"
+                    git config --global user.email "no-reply@numberninecms.com"
+                    git config --global user.name "NumberNine CMS"
+                    symfony new newproject --webapp --version="${{ matrix.symfony }}"
                     cd newproject
                     cp -Rp . ../
                     cd ..

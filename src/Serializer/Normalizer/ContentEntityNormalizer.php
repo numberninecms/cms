@@ -13,14 +13,18 @@ namespace NumberNine\Serializer\Normalizer;
 
 use NumberNine\Content\PermalinkGenerator;
 use NumberNine\Entity\ContentEntity;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 final class ContentEntityNormalizer implements NormalizerInterface
 {
-    public function __construct(private ObjectNormalizer $normalizer, private PermalinkGenerator $permalinkGenerator)
-    {
+    public function __construct(
+        #[Autowire(service: ObjectNormalizer::class)]
+        private NormalizerInterface $normalizer,
+        private PermalinkGenerator $permalinkGenerator,
+    ) {
     }
 
     /**
