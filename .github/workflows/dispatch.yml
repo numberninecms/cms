@@ -22,3 +22,14 @@ jobs:
                             workflow_id: 'test.yml',
                             ref: 'master'
                         })
+
+            -   uses: actions/github-script@v6
+                with:
+                    github-token: ${{ secrets.PAT_TOKEN }}
+                    script: |
+                        await github.rest.actions.createWorkflowDispatch({
+                            owner: 'numberninecms',
+                            repo: 'installer',
+                            workflow_id: 'build.yml',
+                            ref: 'master'
+                        })
