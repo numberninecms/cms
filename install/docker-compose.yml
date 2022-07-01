@@ -2,13 +2,12 @@
 # This file builds a development environment only.
 #
 
-version: "3.8"
+version: '3.8'
 
 services:
     nginx:
         image: nginx:alpine
-        ports:
-            - 443:443
+        ports: ['443:443']
         restart: 'no'
         working_dir: /srv/app
         volumes:
@@ -22,15 +21,10 @@ services:
         working_dir: /srv/app
         user: '1000:1000'
         restart: 'no'
-        env_file:
-            - .env
-            - .env.local
         volumes:
             - ./:/srv/app
             - ./docker/php/xdebug.ini:/etc/php81/conf.d/50_xdebug.ini
             - ./docker/php/symfony.ini:/etc/php81/conf.d/100_symfony.ini
-        links:
-            - blackfire
 
     mysql:
         image: mysql:latest
@@ -55,8 +49,7 @@ services:
     maildev:
         image: maildev/maildev
         command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
-        ports:
-            - 8010:80
+        ports: ['8010:80']
         restart: 'no'
 
 volumes:
