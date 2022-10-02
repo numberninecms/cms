@@ -19,6 +19,7 @@ use NumberNine\Exception\ContentTypeNotFoundException;
 use NumberNine\Model\Component\ComponentInterface;
 use NumberNine\Model\Content\ContentType;
 use NumberNine\Model\Shortcode\ShortcodeInterface;
+use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use RuntimeException;
 use Symfony\Component\Finder\Finder;
@@ -33,8 +34,16 @@ use function Symfony\Component\String\u;
 
 final class TemplateResolver implements TemplateResolverInterface
 {
-    public function __construct(private Environment $twig, private ThemeStore $themeStore, private ContentService $contentService, private TagAwareCacheInterface $cache, private SluggerInterface $slugger, private array $bundles, private string $templatePath)
-    {
+    public function __construct(
+        private Environment $twig,
+        private ThemeStore $themeStore,
+        private ContentService $contentService,
+        private TagAwareCacheInterface $cache,
+        private SluggerInterface $slugger,
+        private LoggerInterface $logger,
+        private array $bundles,
+        private string $templatePath,
+    ) {
     }
 
     public function resolveSingle(ContentEntity $entity, array $extraTemplates = []): TemplateWrapper
@@ -98,6 +107,13 @@ final class TemplateResolver implements TemplateResolverInterface
                 throw $e;
             }
         }
+
+        $this->logger->debug(sprintf(
+            'Template found for entity "%s" with ID "%d": "%s"',
+            $entity::class,
+            $entity->getId(),
+            str_replace(\dirname($this->templatePath), '', $template->getSourceContext()->getPath()),
+        ));
 
         return $template;
     }
