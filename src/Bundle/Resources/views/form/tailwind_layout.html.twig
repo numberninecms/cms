@@ -38,12 +38,12 @@
         {%- set required = false -%}
         {# twigcs use-var required #}
     {%- endif -%}
-    {% set attr = attr|merge({class: block('input_class')}) %}
+    {% set attr = attr|merge({class: attr.class|default(block('input_class'))}) %}
     <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
 {%- endblock form_widget_simple -%}
 
 {%- block textarea_widget -%}
-    {% set attr = attr|merge({class: block('textarea_class')}) %}
+    {% set attr = attr|merge({class: attr.class|default(block('textarea_class'))}) %}
     <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
 {%- endblock textarea_widget -%}
 
