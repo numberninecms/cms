@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace NumberNine\Tests\Unit\Twig\Extension;
 
 use NumberNine\Bundle\Test\UserAwareTestCase;
+use NumberNine\Content\ContentService;
 use NumberNine\Entity\ContentEntityRelationship;
 use NumberNine\Entity\MediaFile;
 use NumberNine\Entity\Post;
@@ -29,6 +30,7 @@ final class MediaRuntimeTest extends UserAwareTestCase
     private MediaRuntime $runtime;
     private MediaFileFactory $mediaFileFactory;
     private MediaFile $mediaFile;
+    private ContentService $contentService;
 
     protected function setUp(): void
     {
@@ -36,6 +38,7 @@ final class MediaRuntimeTest extends UserAwareTestCase
         $this->client->request('GET', '/');
         $this->runtime = static::getContainer()->get(MediaRuntime::class);
         $this->mediaFileFactory = static::getContainer()->get(MediaFileFactory::class);
+        $this->contentService = static::getContainer()->get(ContentService::class);
 
         $this->mediaFile = $this->mediaFileFactory
             ->createMediaFileFromFilename(__DIR__ . '/../../../../assets/images/NumberNine512_slogan.png', null)
@@ -70,6 +73,16 @@ final class MediaRuntimeTest extends UserAwareTestCase
             ),
             $this->runtime->getFeaturedImage($post),
         );
+    }
+
+    public function testPostSupportsFeaturedImage(): void
+    {
+        static::assertTrue($this->runtime->supportsFeaturedImage($this->contentService->getContentType('post')));
+    }
+
+    public function testMediaFileDoesNotSupportsFeaturedImage(): void
+    {
+        static::assertFalse($this->runtime->supportsFeaturedImage($this->contentService->getContentType('media_file')));
     }
 
     public function testGetImageUrl(): void
