@@ -15,6 +15,7 @@ namespace NumberNine\Controller\Admin\Ui\Term;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use NumberNine\Content\ContentService;
 use NumberNine\Entity\Taxonomy;
 use NumberNine\Entity\Term;
 use NumberNine\Exception\InvalidTermTaxonomyException;
@@ -27,7 +28,6 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\String\Inflector\EnglishInflector;
 
 /**
  * @ParamConverter("taxonomy", options={"mapping": {"taxonomy": "name"}})
@@ -38,6 +38,7 @@ final class TermEditAction extends AbstractController implements AdminController
     public function __invoke(
         Request $request,
         EntityManagerInterface $entityManager,
+        ContentService $contentService,
         LoggerInterface $logger,
         Taxonomy $taxonomy,
         Term $term
@@ -45,8 +46,6 @@ final class TermEditAction extends AbstractController implements AdminController
         if (($tax = $term->getTaxonomy()) && $tax->getId() !== $taxonomy->getId()) {
             throw new InvalidTermTaxonomyException($taxonomy, $term);
         }
-
-        $inflector = new EnglishInflector();
 
         /** @var Form $form */
         $form = $this->createForm(AdminTermFormType::class, $term, ['mode' => 'edit']);
@@ -91,7 +90,8 @@ final class TermEditAction extends AbstractController implements AdminController
         return $this->render('@NumberNine/admin/term/edit.html.twig', [
             'taxonomy' => $taxonomy,
             'term' => $term,
-            'taxonomy_plural_name' => (string) current($inflector->pluralize((string) $taxonomy->getName())),
+            'taxonomy_singular_name' => $contentService->getTaxonomyDisplayName($taxonomy->getName()),
+            'taxonomy_plural_name' => $contentService->getTaxonomyDisplayName($taxonomy->getName(), true),
             'form' => $form->createView(),
         ], $response);
     }

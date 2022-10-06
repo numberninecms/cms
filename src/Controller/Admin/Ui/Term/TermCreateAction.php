@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace NumberNine\Controller\Admin\Ui\Term;
 
 use Doctrine\ORM\EntityManagerInterface;
+use NumberNine\Content\ContentService;
 use NumberNine\Entity\Taxonomy;
 use NumberNine\Entity\Term;
 use NumberNine\Form\Admin\Term\AdminTermFormType;
@@ -23,7 +24,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\String\Inflector\EnglishInflector;
 
 /**
  * @ParamConverter("taxonomy", options={"mapping": {"taxonomy": "name"}})
@@ -31,9 +31,12 @@ use Symfony\Component\String\Inflector\EnglishInflector;
 #[Route(path: '/taxonomy/{taxonomy}/term/', name: 'numbernine_admin_term_create', methods: ['GET', 'POST'])]
 final class TermCreateAction extends AbstractController implements AdminController
 {
-    public function __invoke(Request $request, EntityManagerInterface $entityManager, Taxonomy $taxonomy): Response
-    {
-        $inflector = new EnglishInflector();
+    public function __invoke(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        ContentService $contentService,
+        Taxonomy $taxonomy,
+    ): Response {
         $term = (new Term())->setTaxonomy($taxonomy);
         $form = $this->createForm(AdminTermFormType::class, $term);
         $form->handleRequest($request);
@@ -57,7 +60,8 @@ final class TermCreateAction extends AbstractController implements AdminControll
 
         return $this->render('@NumberNine/admin/term/new.html.twig', [
             'taxonomy' => $taxonomy,
-            'taxonomy_plural_name' => (string) current($inflector->pluralize((string) $taxonomy->getName())),
+            'taxonomy_singular_name' => $contentService->getTaxonomyDisplayName($taxonomy->getName()),
+            'taxonomy_plural_name' => $contentService->getTaxonomyDisplayName($taxonomy->getName(), true),
             'form' => $form->createView(),
         ], $response);
     }

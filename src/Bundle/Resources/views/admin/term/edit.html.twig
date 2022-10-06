@@ -1,7 +1,7 @@
 {% trans_default_domain 'numbernine' %}
 {% extends '@NumberNine/admin/base.html.twig' %}
 
-{% block title %}{{ 'Editing %1% %2%'|trans({'%1%': taxonomy.name, '%2%': term.id}) }}{% endblock %}
+{% block title %}{{ 'Editing %1% %2%'|trans({'%1%': taxonomy_singular_name, '%2%': term.id}) }}{% endblock %}
 
 {% block active_menu_url %}{{ path('numbernine_admin_term_index', {taxonomy: taxonomy.name}) }}{% endblock %}
 
@@ -9,7 +9,7 @@
     <div class="flex flex-col">
         <turbo-frame id="numbernine_admin_term">
             {% include '@NumberNine/admin/util/toolbar.html.twig' with {
-                title: 'Editing %1% %2%'|trans({'%1%': taxonomy.name, '%2%': term.id}),
+                title: 'Editing %1% %2%'|trans({'%1%': taxonomy_singular_name, '%2%': term.id}),
             } %}
 
             {% include '@NumberNine/admin/util/flashes.html.twig' %}
