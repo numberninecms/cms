@@ -3,9 +3,9 @@
     <thead>
         <tr>
             <th class="w-8 select-row"><input type="checkbox" data-action="select-all#toggle" data-select-all-target="child"></th>
-            {% if content_type.name != 'media_file' %}
+            {% if content_type is defined and content_type.name != 'media_file' and N9_supports_featured_image(content_type) %}
                 <th class="w-10"></th>
-            {% else %}
+            {% elseif content_type is defined and content_type.name == 'media_file' %}
                 <th class="w-32">{{ 'Image'|trans }}</th>
             {% endif %}
             <th class="w-1/3">{{ 'Title'|trans }}</th>
@@ -21,9 +21,9 @@
     {% for entity in entities %}
         <tr data-entity-id="{{ entity.id }}">
             <td class="select-row">{{ form_widget(form['entity_' ~ entity.id], {attr: {'data-select-all-target': 'child'}}) }}</td>
-            {% if content_type is defined and content_type.name != 'media_file' %}
+            {% if content_type is defined and content_type.name != 'media_file' and N9_supports_featured_image(content_type) %}
                 <td>{{ N9_featured_image(entity, 'thumbnail', {class: 'p-1'}) }}</td>
-            {% else %}
+            {% elseif content_type is defined and content_type.name == 'media_file' %}
                 <td>{{ N9_image(entity, 'thumbnail', {width: '50', height: '50', class: 'p-1'}) }}</td>
             {% endif %}
             <td>

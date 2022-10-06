@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use NumberNine\Entity\ContentEntity;
 use NumberNine\Entity\MediaFile;
 use NumberNine\Exception\InvalidMimeTypeException;
+use NumberNine\Model\Content\ContentType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\WebLink\GenericLinkProvider;
@@ -61,6 +62,13 @@ final class MediaRuntime implements RuntimeExtensionInterface
         $attributes['alt'] ??= $contentEntity->getTitle();
 
         return $this->getImage($featuredImage, $size, $attributes);
+    }
+
+    public function supportsFeaturedImage(ContentType $contentType): bool
+    {
+        $repository = $this->entityManager->getRepository($contentType->getEntityClassName());
+
+        return method_exists($repository, 'findFeaturedImage');
     }
 
     /**
