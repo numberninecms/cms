@@ -203,6 +203,15 @@ final class ThemeRuntime implements RuntimeExtensionInterface
         return $this->requestAnalyzer->isHomePage();
     }
 
+    public function getTaxonomyDisplayName(
+        string $taxonomy,
+        bool $plural = false,
+        ?string $domain = null,
+        ?string $locale = null,
+    ): string {
+        return $this->contentService->getTaxonomyDisplayName($taxonomy, $plural, $domain, $locale);
+    }
+
     private function getTermsLinkArray(
         ContentEntity $contentEntity,
         string $taxonomyName,

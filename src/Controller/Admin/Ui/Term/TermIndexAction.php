@@ -16,6 +16,7 @@ namespace NumberNine\Controller\Admin\Ui\Term;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Exception;
+use NumberNine\Content\ContentService;
 use NumberNine\Entity\Taxonomy;
 use NumberNine\Form\Admin\Term\AdminTermIndexFormType;
 use NumberNine\Model\Admin\AdminController;
@@ -29,7 +30,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\String\Inflector\EnglishInflector;
 
 /**
  * @ParamConverter("taxonomy", options={"mapping": {"taxonomy": "name"}})
@@ -41,12 +41,11 @@ final class TermIndexAction extends AbstractController implements AdminControlle
         Request $request,
         SerializerInterface $serializer,
         EntityManagerInterface $entityManager,
+        ContentService $contentService,
         TermRepository $termRepository,
         LoggerInterface $logger,
         Taxonomy $taxonomy
     ): Response {
-        $inflector = new EnglishInflector();
-
         /** @var PaginationParameters $paginationParameters */
         $paginationParameters = $serializer->denormalize(
             $request->query->all(),
@@ -92,7 +91,8 @@ final class TermIndexAction extends AbstractController implements AdminControlle
 
         return $this->render('@NumberNine/admin/term/index.html.twig', [
             'taxonomy' => $taxonomy,
-            'taxonomy_plural_name' => (string) current($inflector->pluralize((string) $taxonomy->getName())),
+            'taxonomy_singular_name' => $contentService->getTaxonomyDisplayName($taxonomy->getName()),
+            'taxonomy_plural_name' => $contentService->getTaxonomyDisplayName($taxonomy->getName(), true),
             'terms' => $terms,
             'form' => $form->createView(),
         ], $response);

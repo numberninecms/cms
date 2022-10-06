@@ -26,7 +26,6 @@ use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\String\Inflector\EnglishInflector;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -35,7 +34,6 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
 {
     use QuickTranslate;
 
-    private EnglishInflector $inflector;
     private string $configFile;
 
     public function __construct(
@@ -50,7 +48,6 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
         string $adminMenuConfigPath,
         private string $environment
     ) {
-        $this->inflector = new EnglishInflector();
         $this->configFile = __DIR__ . '/../Bundle/Resources/config/' . $adminMenuConfigPath . '/menus.yaml';
     }
 
@@ -171,10 +168,9 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
 
         foreach ($taxonomies as $taxonomy) {
             $name = $taxonomy->getName();
-            $plural = (string) current($this->inflector->pluralize((string) $name));
 
             $menus[$name . '_taxonomy'] = [
-                'text' => $this->__(ucfirst($plural)),
+                'text' => $this->__(ucfirst($this->contentService->getTaxonomyDisplayName($name, true))),
                 'link' => $this->urlGenerator->generate('numbernine_admin_term_index', [
                     'taxonomy' => $name,
                 ]),

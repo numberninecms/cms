@@ -192,6 +192,12 @@ final class ThemeRuntimeTest extends UserAwareTestCase
         static::assertSame('/page/4/', $this->runtime->getCurrentRoutePagePath(4));
     }
 
+    public function testGetTaxonomyDisplayName(): void
+    {
+        static::assertSame('category', $this->runtime->getTaxonomyDisplayName('category'));
+        static::assertSame('categories', $this->runtime->getTaxonomyDisplayName('category', true));
+    }
+
     private function getPost(): Post
     {
         $author = $this->userFactory->createUser(

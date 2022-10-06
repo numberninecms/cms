@@ -40,6 +40,7 @@ final class ThemeExtension extends AbstractExtension
             new TwigFunction('N9_path', [ThemeRuntime::class, 'getPath']),
             new TwigFunction('N9_page', [ThemeRuntime::class, 'getCurrentRoutePagePath']),
             new TwigFunction('N9_is_home', [ThemeRuntime::class, 'isHomepage']),
+            new TwigFunction('N9_taxonomy_display_name', [ThemeRuntime::class, 'getTaxonomyDisplayName']),
         ];
     }
 }

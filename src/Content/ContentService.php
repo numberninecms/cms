@@ -14,7 +14,6 @@ namespace NumberNine\Content;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use LogicException;
@@ -36,16 +35,28 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\String\Inflector\EnglishInflector;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use function Symfony\Component\String\u;
 
 final class ContentService
 {
+    private EnglishInflector $inflector;
+
     /** @var ContentType[] */
     private array $contentTypes = [];
 
-    public function __construct(private EntityManagerInterface $entityManager, private FormFactoryInterface $formFactory, private Reader $annotationReader, private TokenStorageInterface $tokenStorage, private EventDispatcherInterface $eventDispatcher, private SluggerInterface $slugger)
-    {
+    public function __construct(
+        private readonly EntityManagerInterface $entityManager,
+        private readonly FormFactoryInterface $formFactory,
+        private readonly Reader $annotationReader,
+        private readonly TokenStorageInterface $tokenStorage,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly SluggerInterface $slugger,
+        private readonly TranslatorInterface $translator,
+    ) {
+        $this->inflector = new EnglishInflector();
     }
 
     /**
@@ -139,7 +150,7 @@ final class ContentService
     /**
      * @param ContentType|string $contentType Either the ContentType object or the content type name as registered
      *
-     * @return ContentEntity|object|null
+     * @return ContentEntity|null
      */
     public function getEntityOfType(ContentType|string $contentType, int $id): ?object
     {
@@ -158,7 +169,7 @@ final class ContentService
      * @param ContentType|string $contentType Either the ContentType object or the content type name as registered
      * @param array              $criteria    Associative array representing the fields to search
      *
-     * @return ContentEntity|object|null
+     * @return ContentEntity|null
      */
     public function getEntityOfTypeBy(ContentType|string $contentType, array $criteria): ?object
     {
@@ -173,9 +184,6 @@ final class ContentService
         return $this->entityManager->getRepository($contentType->getEntityClassName())->findOneBy($criteria);
     }
 
-    /**
-     * @return never
-     */
     public function deleteEntitiesOfType(string|ContentType $contentType, array $ids): void
     {
         if (\is_string($contentType)) {
@@ -191,11 +199,6 @@ final class ContentService
         $repository->removeCollection($ids);
     }
 
-    /**
-     * @throws ORMException
-     *
-     * @return never
-     */
     public function deletePermanentlyAllEntitiesOfType(string|ContentType $contentType): void
     {
         if (\is_string($contentType)) {
@@ -211,9 +214,6 @@ final class ContentService
         $repository->emptyTrash($contentType->getName());
     }
 
-    /**
-     * @return never
-     */
     public function restoreEntitiesOfType(string|ContentType $contentType, array $ids): void
     {
         if (\is_string($contentType)) {
@@ -270,9 +270,25 @@ final class ContentService
         return $this->formFactory->create($formType->edit, $entity, $options);
     }
 
-    /**
-     * @return never
-     */
+    public function getTaxonomyDisplayName(
+        string $taxonomy,
+        bool $plural = false,
+        ?string $domain = null,
+        ?string $locale = null,
+    ): string {
+        if ($plural) {
+            $taxonomy = (string) current($this->inflector->pluralize($taxonomy));
+        }
+
+        $translation = $this->translator->trans('taxonomy.' . $taxonomy, [], $domain, $locale);
+
+        if ($translation === 'taxonomy.' . $taxonomy) {
+            return strtolower(str_replace('_', ' ', $taxonomy));
+        }
+
+        return $translation;
+    }
+
     private function validateFormTypeAnnotation(?FormType $formType, ContentType $contentType): void
     {
         if (!$formType) {
