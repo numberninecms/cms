@@ -22,7 +22,12 @@ use NumberNine\Repository\TermRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-#[Shortcode(name: 'categories', label: 'Categories', description: 'Displays the posts categories.', icon: 'mdi-view-list')]
+#[Shortcode(
+    name: 'categories',
+    label: 'Categories',
+    description: 'Displays the posts categories.',
+    icon: 'mdi-view-list',
+)]
 final class CategoriesShortcode extends AbstractShortcode implements EditableShortcodeInterface, EventSubscriberInterface
 {
     private ?Term $term = null;

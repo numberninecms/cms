@@ -18,7 +18,12 @@ use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use NumberNine\Repository\PostRepository;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-#[Shortcode(name: 'recent_posts', label: 'Recent posts', description: 'Displays the most recent posts.', icon: 'mdi-format-list-bulleted')]
+#[Shortcode(
+    name: 'recent_posts',
+    label: 'Recent posts',
+    description: 'Displays the most recent posts.',
+    icon: 'mdi-format-list-bulleted',
+)]
 final class RecentPostsShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
     public function __construct(private PostRepository $postRepository)
