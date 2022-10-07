@@ -18,7 +18,12 @@ use NumberNine\Model\Shortcode\AbstractShortcode;
 use NumberNine\Model\Shortcode\EditableShortcodeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-#[Shortcode(name: 'logo', label: 'Site logo', description: 'Displays the site logo with dynamic header tag for better SEO.', icon: 'mdi-symfony')]
+#[Shortcode(
+    name: 'logo',
+    label: 'Site logo',
+    description: 'Displays the site logo with dynamic header tag for better SEO.',
+    icon: 'mdi-symfony',
+)]
 final class LogoShortcode extends AbstractShortcode implements EditableShortcodeInterface
 {
     public function buildPageBuilderForm(PageBuilderFormBuilderInterface $builder): void

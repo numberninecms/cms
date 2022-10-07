@@ -401,7 +401,7 @@ final class TemplateResolver implements TemplateResolverInterface
         }
     }
 
-    private function hasFrontMatterBlock(string $template, array & $matches = null): bool
+    private function hasFrontMatterBlock(string $template, array &$matches = null): bool
     {
         return preg_match('@^---[\r\n]+(.*)\s---[\r\n]+@simU', $template, $matches) > 0;
     }

@@ -82,7 +82,7 @@ final class AdminMenuBuilder
      * @param string[]   $path
      * @param MenuItem[] $items
      */
-    private function insertAfterItem(array & $path, array & $items, array $menuToInsert): bool
+    private function insertAfterItem(array &$path, array &$items, array $menuToInsert): bool
     {
         $currentPath = (string) array_shift($path);
 

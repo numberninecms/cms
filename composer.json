@@ -40,11 +40,11 @@
         "numberninecms/common": "^0.1.12",
         "psr/cache": ">=1.0",
         "psr/log": ">=1.1",
-        "scienta/doctrine-json-functions": "^4.1",
+        "scienta/doctrine-json-functions": "^4.1 || ^5.1",
         "sensio/framework-extra-bundle": "^5.1 || ^6.1",
         "stof/doctrine-extensions-bundle": "^1.4",
         "symfony-cmf/routing-bundle": "^3.0",
-        "symfony/cache-contracts": "^2.4",
+        "symfony/cache-contracts": "^2.4 || ^3.1",
         "symfony/dependency-injection": "^6.0",
         "symfony/doctrine-bridge": "^6.0",
         "symfony/event-dispatcher": "^6.0",
@@ -65,7 +65,7 @@
         "symfony/stopwatch": "^6.0",
         "symfony/string": "^6.0",
         "symfony/translation": "^6.0",
-        "symfony/translation-contracts": "^2.0",
+        "symfony/translation-contracts": "^2.0 || ^3.1",
         "symfony/twig-bundle": "^6.0",
         "symfony/uid": "^6.0",
         "symfony/ux-turbo": "^2.1",
@@ -81,10 +81,11 @@
         "wapmorgan/media-file": "^0.1.4"
     },
     "require-dev": {
-        "dama/doctrine-test-bundle": "^6.7",
+        "dama/doctrine-test-bundle": "^7.1",
         "ergebnis/composer-normalize": "^2.11",
         "friendsoftwig/twigcs": "dev-master",
         "jetbrains/phpstorm-attributes": "^1.0",
+        "kubawerlos/php-cs-fixer-custom-fixers": "^3.11",
         "nikic/php-parser": "^4.10",
         "numberninecms/chapterone": "^0.4.1",
         "php-parallel-lint/php-parallel-lint": "^1.2",
@@ -101,7 +102,7 @@
         "symfony/css-selector": "^6.0",
         "symfony/dotenv": "^6.0",
         "symfony/error-handler": "^6.0",
-        "symplify/easy-coding-standard": "^9.4"
+        "symplify/easy-coding-standard": "^11.1"
     },
     "suggest": {
         "numberninecms/chapterone": "Startup theme for NumberNine CMS"
