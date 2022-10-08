@@ -32,8 +32,7 @@ final class TermDeleteAction implements AdminController
         ResponseFactory $responseFactory,
         string $taxonomy
     ): JsonResponse {
-        /** @var array $ids */
-        $ids = $request->request->get('ids');
+        $ids = $request->request->all('ids');
 
         try {
             $termRepository->removeCollection($ids);

@@ -37,7 +37,7 @@
         "imagine/imagine": "^1.2",
         "mpratt/relativetime": "^1.5",
         "nette/php-generator": "^4.0",
-        "numberninecms/common": "^0.1.11",
+        "numberninecms/common": "^0.1.12",
         "psr/cache": ">=1.0",
         "psr/log": ">=1.1",
         "scienta/doctrine-json-functions": "^4.1",

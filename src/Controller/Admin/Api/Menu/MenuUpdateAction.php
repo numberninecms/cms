@@ -30,8 +30,7 @@ final class MenuUpdateAction implements AdminController
         ResponseFactory $responseFactory,
         Menu $menu
     ): JsonResponse {
-        /** @var array $menuItems */
-        $menuItems = $request->request->get('menuItems') ?: [];
+        $menuItems = $request->request->all('menuItems');
 
         $menu->setMenuItems($menuItems);
 
