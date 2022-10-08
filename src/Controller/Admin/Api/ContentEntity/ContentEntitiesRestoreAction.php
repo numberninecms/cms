@@ -31,8 +31,7 @@ final class ContentEntitiesRestoreAction
         ResponseFactory $responseFactory,
         string $type
     ): JsonResponse {
-        /** @var array $ids */
-        $ids = $request->request->get('ids');
+        $ids = $request->request->all('ids');
 
         try {
             $contentService->restoreEntitiesOfType($type, $ids);

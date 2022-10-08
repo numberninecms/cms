@@ -38,8 +38,7 @@ final class ContentEntitiesDeleteAction extends AbstractController implements Ad
 
         $this->denyAccessUnlessGranted($contentType->getMappedCapability(Capabilities::DELETE_POSTS));
 
-        /** @var array $ids */
-        $ids = $request->request->get('ids');
+        $ids = $request->request->all('ids');
 
         try {
             if (empty($ids)) {

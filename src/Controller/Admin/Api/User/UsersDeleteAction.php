@@ -35,8 +35,7 @@ final class UsersDeleteAction extends AbstractController implements AdminControl
     ): JsonResponse {
         $this->denyAccessUnlessGranted(Capabilities::DELETE_USERS);
 
-        /** @var array $ids */
-        $ids = $request->request->get('ids');
+        $ids = $request->request->all('ids');
         /** @var string $associatedContent */
         $associatedContent = $request->request->get('associatedContent', 'reassign');
 
