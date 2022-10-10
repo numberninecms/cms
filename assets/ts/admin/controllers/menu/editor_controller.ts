@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { Controller } from 'stimulus';
+import { Controller } from '@hotwired/stimulus';
 import { createApp } from 'vue';
 import MenuEditor from 'admin/vue/components/menu/MenuEditor.vue';
 

@@ -35,7 +35,7 @@
             v-if="isColorPickerVisible"
             v-model="model"
             :position="position"
-            @update:modelValue="$emit('input', $event)"
+            @update:model-value="$emit('input', $event)"
             @close="isColorPickerVisible = false"
         />
     </div>

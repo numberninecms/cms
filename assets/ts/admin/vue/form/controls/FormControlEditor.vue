@@ -10,7 +10,7 @@
 <template>
     <div class="flex flex-col">
         <label class="font-semibold text-quaternary">{{ parameters.label }}</label>
-        <TinyEditor :modelValue="value" @update:modelValue="$emit('input', $event)" />
+        <TinyEditor :modelValue="value" @update:model-value="$emit('input', $event)" />
     </div>
 </template>
 

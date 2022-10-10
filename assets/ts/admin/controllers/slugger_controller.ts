@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { Controller } from 'stimulus';
+import { Controller } from '@hotwired/stimulus';
 import slugify from 'slugify';
 
 export default class extends Controller {

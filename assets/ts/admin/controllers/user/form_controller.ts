@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { Controller } from 'stimulus';
+import { Controller } from '@hotwired/stimulus';
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {

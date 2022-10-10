@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { Controller } from 'stimulus';
+import { Controller } from '@hotwired/stimulus';
 import { eventBus } from 'admin/admin';
 import { EVENT_MODAL_SHOW, EVENT_PAGE_BUILDER_REQUEST_FOR_SHOW_SHORTCODE } from 'admin/events/events';
 import axios from 'axios';

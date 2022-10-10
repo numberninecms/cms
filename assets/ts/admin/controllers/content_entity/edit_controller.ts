@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { Controller } from 'stimulus';
+import { Controller } from '@hotwired/stimulus';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import Routing from 'assets/ts/routing';

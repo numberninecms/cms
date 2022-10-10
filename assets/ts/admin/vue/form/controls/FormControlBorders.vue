@@ -16,7 +16,7 @@
                     v-model="model.data.left"
                     class="items-stretch"
                     border="left"
-                    @update:modelValue="updateValue"
+                    @update:model-value="updateValue"
                 />
             </div>
             <div v-if="hasBorder('top')" class="col-span-1 flex">
@@ -24,7 +24,7 @@
                     v-model="model.data.top"
                     class="items-stretch"
                     border="top"
-                    @update:modelValue="updateValue"
+                    @update:model-value="updateValue"
                 />
             </div>
             <div v-if="hasBorder('right')" class="col-span-1 flex">
@@ -32,7 +32,7 @@
                     v-model="model.data.right"
                     class="items-stretch"
                     border="right"
-                    @update:modelValue="updateValue"
+                    @update:model-value="updateValue"
                 />
             </div>
             <div v-if="hasBorder('bottom')" class="col-span-1 flex">
@@ -40,7 +40,7 @@
                     v-model="model.data.bottom"
                     class="items-stretch"
                     border="bottom"
-                    @update:modelValue="updateValue"
+                    @update:model-value="updateValue"
                 />
             </div>
         </div>

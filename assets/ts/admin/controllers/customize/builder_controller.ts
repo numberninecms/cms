@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { Controller } from 'stimulus';
+import { Controller } from '@hotwired/stimulus';
 import { createApp } from 'vue';
 import PageBuilderFrame from 'admin/vue/components/builder/PageBuilderFrame.vue';
 import { eventBus } from 'admin/admin';

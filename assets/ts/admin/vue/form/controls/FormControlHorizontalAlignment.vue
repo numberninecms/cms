@@ -20,7 +20,7 @@
                 { value: 'between', label: 'Align between' },
                 { value: 'around', label: 'Align around' },
             ]"
-            @update:modelValue="$emit('input', $event)"
+            @update:model-value="$emit('input', $event)"
         >
             <template #start>
                 <i class="mdi mdi-24px mdi-align-horizontal-left"></i>

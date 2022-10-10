@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { Controller } from 'stimulus';
+import { Controller } from '@hotwired/stimulus';
 import tinymce from 'tinymce';
 import 'tinymce/icons/default';
 import 'tinymce/themes/silver';

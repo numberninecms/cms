@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, nextTick, onMounted, ref } from 'vue';
+import { computed, defineComponent, onMounted } from 'vue';
 import { usePageBuilderStore } from 'admin/vue/stores/pageBuilder';
 import GenericObject from 'admin/interfaces/GenericObject';
 import { useMouseStore } from 'admin/vue/stores/mouse';

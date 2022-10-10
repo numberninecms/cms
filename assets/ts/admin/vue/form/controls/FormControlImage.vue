@@ -14,7 +14,7 @@
             :modelValue="model"
             :find-by="findBy"
             class="w-full"
-            @update:modelValue="$emit('input', $event)"
+            @update:model-value="$emit('input', $event)"
             @input-computed="$emit('input-computed', $event)"
         />
     </div>

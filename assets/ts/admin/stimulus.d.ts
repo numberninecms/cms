@@ -8,6 +8,6 @@
  */
 
 declare module '@symfony/stimulus-bridge' {
-    import { Application } from 'stimulus';
+    import { Application } from '@hotwired/stimulus';
     export function startStimulusApp(context?: __WebpackModuleApi.RequireContext): Application;
 }
