@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { Controller } from 'stimulus';
+import { Controller } from '@hotwired/stimulus';
 import { createApp } from 'vue';
 import MediaUploader from 'admin/vue/components/media/MediaUploader.vue';
 

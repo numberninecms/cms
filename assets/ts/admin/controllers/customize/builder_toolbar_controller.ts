@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { Controller } from 'stimulus';
+import { Controller } from '@hotwired/stimulus';
 import { ViewportSize } from 'admin/types/ViewportSize';
 import { eventBus } from 'admin/admin';
 import {

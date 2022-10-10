@@ -22,7 +22,9 @@
             :prev="previous"
             :current="current"
         />
+        <!-- eslint-disable vue/no-v-html -->
         <div v-else v-html="current"></div>
+        <!--eslint-enable-->
     </div>
 </template>
 

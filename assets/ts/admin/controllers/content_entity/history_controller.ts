@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { Controller } from 'stimulus';
+import { Controller } from '@hotwired/stimulus';
 import { createApp } from 'vue';
 import ContentEntityHistory from 'admin/vue/components/content_entity/ContentEntityHistory.vue';
 import VueDiff from 'vue-diff';

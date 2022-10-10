@@ -29,7 +29,7 @@
                     :min="parameters.min"
                     :max="parameters.max"
                     :suffix="parameters.suffix"
-                    @update:modelValue="$emit('input', $event)"
+                    @update:model-value="$emit('input', $event)"
                 />
             </div>
         </div>

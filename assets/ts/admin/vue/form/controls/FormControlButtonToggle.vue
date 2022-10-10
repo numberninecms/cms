@@ -14,7 +14,7 @@
             class="flex-grow"
             :modelValue="value"
             :options="parameters.choices"
-            @update:modelValue="$emit('input', $event)"
+            @update:model-value="$emit('input', $event)"
         />
     </div>
 </template>

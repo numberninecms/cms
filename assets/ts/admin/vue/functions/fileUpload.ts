@@ -131,13 +131,16 @@ export default function useFileUpload(options: Options): FileUpload {
             formData.append('file', file.file);
         }
 
+        // @ts-ignore
         return axios.post(options.uploadUrl, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
-            maxContentLength: options.maxUploadSize,
-            onUploadProgress: (progressEvent: ProgressEvent) => {
-                files.value[files.value.indexOf(file)].uploadProgress = progressEvent.loaded / progressEvent.total;
+            maxContentLength: options.maxUploadSize ?? Infinity,
+            onUploadProgress: (progressEvent) => {
+                if (progressEvent.total && progressEvent.total > 0) {
+                    files.value[files.value.indexOf(file)].uploadProgress = progressEvent.loaded / progressEvent.total;
+                }
             },
         });
     }

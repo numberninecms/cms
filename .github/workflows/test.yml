@@ -16,17 +16,17 @@ jobs:
     bundle_tests:
         name: Bundle tests
 
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-latest
 
         strategy:
             matrix:
                 php: [ '8.1' ]
-                symfony: [ '6.0', '6.1' ]
+                symfony: [ '6.0', '6.1', '6.2' ]
 
         steps:
             -   uses: FranzDiebold/github-env-vars-action@v2
 
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v3
 
             -   name: Setup PHP
                 id: setup-php
@@ -79,12 +79,12 @@ jobs:
     project_installation_docker:
         name: New project installation (Docker)
 
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-latest
 
         strategy:
             matrix:
                 php: [ '8.1' ]
-                symfony: [ '6.0', '6.1' ]
+                symfony: [ '6.0', '6.1', '6.2' ]
 
         steps:
             -   uses: FranzDiebold/github-env-vars-action@v2
@@ -176,12 +176,12 @@ jobs:
     project_installation_manual:
         name: New project installation (manual)
 
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-latest
 
         strategy:
             matrix:
                 php: [ '8.1' ]
-                symfony: [ '6.0', '6.1' ]
+                symfony: [ '6.0', '6.1', '6.2' ]
 
         steps:
             -   uses: FranzDiebold/github-env-vars-action@v2

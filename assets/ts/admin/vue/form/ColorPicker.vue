@@ -16,7 +16,7 @@
             'border-color': model,
         }"
     >
-        <Sketch v-model="model" :preset-colors="swatches" @update:modelValue="update" />
+        <Sketch v-model="model" :preset-colors="swatches" @update:model-value="update" />
         <div class="mt-2">
             <button type="button" class="btn btn-color-primary btn-size-xsmall" @click="$emit('close')">OK</button>
         </div>

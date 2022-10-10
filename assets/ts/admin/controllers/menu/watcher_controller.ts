@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { Controller } from 'stimulus';
+import { Controller } from '@hotwired/stimulus';
 import { eventBus } from 'admin/admin';
 import { EVENT_MENU_ITEMS_UPDATED } from 'admin/events/events';
 

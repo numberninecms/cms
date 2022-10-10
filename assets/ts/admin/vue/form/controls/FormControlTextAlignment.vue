@@ -18,7 +18,7 @@
                 { value: 'center', label: 'Center' },
                 { value: 'right', label: 'Right' },
             ]"
-            @update:modelValue="$emit('input', $event)"
+            @update:model-value="$emit('input', $event)"
         >
             <template #left>
                 <i class="mdi mdi-24px mdi-format-align-left"></i>

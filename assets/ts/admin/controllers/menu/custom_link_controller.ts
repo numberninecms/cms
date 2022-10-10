@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { Controller } from 'stimulus';
+import { Controller } from '@hotwired/stimulus';
 import { eventBus } from 'admin/admin';
 import { EVENT_MENU_ADD_ITEMS } from 'admin/events/events';
 import { v4 as uuidv4 } from 'uuid';

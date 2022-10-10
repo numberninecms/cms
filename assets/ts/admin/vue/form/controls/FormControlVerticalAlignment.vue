@@ -20,7 +20,7 @@
                 { value: 'stretch', label: 'Stretch' },
                 { value: 'baseline', label: 'Align baseline' },
             ]"
-            @update:modelValue="$emit('input', $event)"
+            @update:model-value="$emit('input', $event)"
         >
             <template #start>
                 <i class="mdi mdi-24px mdi-align-vertical-top"></i>

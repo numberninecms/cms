@@ -7,11 +7,10 @@
  * file that was distributed with this source code.
  */
 
-import { Controller } from '@hotwired/stimulus';
-
-export default class extends Controller {
-    public dismiss(event: MouseEvent): void {
-        event.preventDefault();
-        (this.element as HTMLElement).style.display = 'none';
-    }
+module.exports = {
+  plugins: {
+      'postcss-import': {},
+      tailwindcss: {},
+      autoprefixer: {},
+  },
 }
