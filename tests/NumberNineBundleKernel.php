@@ -17,7 +17,6 @@ use Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle;
 use Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle;
 use NumberNine\ChapterOne\NumberNineChapterOneBundle;
 use NumberNine\NumberNineBundle;
-use Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle;
 use Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
@@ -57,7 +56,6 @@ final class NumberNineBundleKernel extends Kernel
             new NumberNineBundle(),
             new NumberNineChapterOneBundle(),
             new SymfonyCastsResetPasswordBundle(),
-            new SensioFrameworkExtraBundle(),
             new TwigExtraBundle(),
             new MonologBundle(),
         ];

@@ -22,16 +22,13 @@ use NumberNine\Exception\InvalidTermTaxonomyException;
 use NumberNine\Form\Admin\Term\AdminTermFormType;
 use NumberNine\Model\Admin\AdminController;
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @ParamConverter("taxonomy", options={"mapping": {"taxonomy": "name"}})
- */
 #[Route(path: '/taxonomy/{taxonomy}/term/{id}/', name: 'numbernine_admin_term_edit', methods: ['GET', 'POST'])]
 final class TermEditAction extends AbstractController implements AdminController
 {
@@ -40,7 +37,7 @@ final class TermEditAction extends AbstractController implements AdminController
         EntityManagerInterface $entityManager,
         ContentService $contentService,
         LoggerInterface $logger,
-        Taxonomy $taxonomy,
+        #[MapEntity(mapping: ['taxonomy' => 'name'])] Taxonomy $taxonomy,
         Term $term
     ): Response {
         if (($tax = $term->getTaxonomy()) && $tax->getId() !== $taxonomy->getId()) {
