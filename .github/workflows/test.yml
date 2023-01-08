@@ -137,6 +137,7 @@ jobs:
 
             -   name: Add NumberNine to the project
                 run: |
+                    export SYMFONY_ENDPOINT=https://raw.githubusercontent.com/symfony/recipes-contrib/flex/pull-1473/index.json
                     composer config extra.symfony.allow-contrib true
                     composer config minimum-stability dev
                     composer config prefer-stable true
@@ -236,6 +237,7 @@ jobs:
 
             -   name: Add NumberNine to the project
                 run: |
+                    export SYMFONY_ENDPOINT=https://raw.githubusercontent.com/symfony/recipes-contrib/flex/pull-1473/index.json
                     composer config extra.symfony.allow-contrib true
                     composer config minimum-stability dev
                     composer config prefer-stable true
