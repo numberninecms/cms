@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Form\Admin\User;
 
-use NumberNine\Bundle\Test\FormTestCase;
 use NumberNine\Entity\User;
 use NumberNine\Form\Admin\User\AdminUserFormType;
+use NumberNine\Test\FormTestCase;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
 /**

@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Twig\Extension;
 
-use NumberNine\Bundle\Test\UserAwareTestCase;
 use NumberNine\Entity\Post;
 use NumberNine\Model\Menu\MenuItem;
+use NumberNine\Test\UserAwareTestCase;
 use NumberNine\Twig\Extension\AdminRuntime;
 
 /**

@@ -153,11 +153,11 @@ final class ShortcodeGenerator
 
     private function generateHtmlTemplate(): string
     {
-        return file_get_contents(__DIR__ . '/../Bundle/Resources/views/templates/shortcode_template.html.twig');
+        return file_get_contents(__DIR__ . '/../../templates/templates/shortcode_template.html.twig');
     }
 
     private function generateVueTemplate(): string
     {
-        return file_get_contents(__DIR__ . '/../Bundle/Resources/views/templates/shortcode_template.vue.twig');
+        return file_get_contents(__DIR__ . '/../../templates/templates/shortcode_template.vue.twig');
     }
 }

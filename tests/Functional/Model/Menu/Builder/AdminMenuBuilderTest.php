@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Functional\Model\Menu\Builder;
 
-use NumberNine\Bundle\Test\UserAwareTestCase;
 use NumberNine\Security\Capabilities;
+use NumberNine\Test\UserAwareTestCase;
 
 /**
  * @internal

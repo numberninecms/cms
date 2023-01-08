@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Form\Admin\Content;
 
-use NumberNine\Bundle\Test\FormTestCase;
 use NumberNine\Entity\Post;
 use NumberNine\Form\Admin\Content\AdminContentEntityEditFormType;
 use NumberNine\Model\Content\PublishingStatusInterface;
+use NumberNine\Test\FormTestCase;
 
 /**
  * @internal

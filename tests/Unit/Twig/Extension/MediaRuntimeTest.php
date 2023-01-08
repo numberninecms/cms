@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Twig\Extension;
 
-use NumberNine\Bundle\Test\UserAwareTestCase;
 use NumberNine\Content\ContentService;
 use NumberNine\Entity\ContentEntityRelationship;
 use NumberNine\Entity\MediaFile;
 use NumberNine\Entity\Post;
 use NumberNine\Media\MediaFileFactory;
+use NumberNine\Test\UserAwareTestCase;
 use NumberNine\Twig\Extension\MediaRuntime;
 
 /**

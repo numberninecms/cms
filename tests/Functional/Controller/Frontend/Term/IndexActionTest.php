@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Functional\Controller\Frontend\Term;
 
-use NumberNine\Bundle\Test\UserAwareTestCase;
 use NumberNine\Entity\ContentEntityTerm;
 use NumberNine\Entity\Post;
 use NumberNine\Entity\Term;
 use NumberNine\Model\Content\PublishingStatusInterface;
 use NumberNine\Repository\TaxonomyRepository;
+use NumberNine\Test\UserAwareTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

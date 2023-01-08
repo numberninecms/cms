@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Bundle;
+namespace NumberNine;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
-use NumberNine\Bundle\DependencyInjection\Compiler\ComponentCompilerPass;
-use NumberNine\Bundle\DependencyInjection\Compiler\ShortcodeCompilerPass;
 use NumberNine\Common\Bundle\BundleTrait;
+use NumberNine\DependencyInjection\Compiler\ComponentCompilerPass;
+use NumberNine\DependencyInjection\Compiler\ShortcodeCompilerPass;
 use NumberNine\Model\Component\ComponentInterface;
 use NumberNine\Model\DataTransformer\DataTransformerInterface;
 use NumberNine\Model\Shortcode\ShortcodeInterface;
@@ -26,6 +26,11 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 final class NumberNineBundle extends Bundle
 {
     use BundleTrait;
+
+    public function getPath(): string
+    {
+        return \dirname(__DIR__);
+    }
 
     public function build(ContainerBuilder $container): void
     {
@@ -42,7 +47,7 @@ final class NumberNineBundle extends Bundle
         $container->addCompilerPass(new ComponentCompilerPass());
         $container->addCompilerPass(new ShortcodeCompilerPass());
         $container->addCompilerPass(
-            DoctrineOrmMappingsPass::createAttributeMappingDriver(['NumberNine\\Entity'], [__DIR__ . '/../Entity'])
+            DoctrineOrmMappingsPass::createAttributeMappingDriver(['NumberNine\\Entity'], [__DIR__ . '/Entity'])
         );
     }
 

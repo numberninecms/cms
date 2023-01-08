@@ -27,27 +27,25 @@ services:
             array $bundles: '%kernel.bundles%'
             string $environment: '%kernel.environment%'
 
-    NumberNine\Bundle\:
-        resource: '../../*'
-        exclude: '../../{DependencyInjection,Resources,NumberNineBundle.php}'
-
     NumberNine\:
-        resource: '../../../*'
+        resource: '../src/*'
         exclude:
-            - '../../../Annotation'
-            - '../../../Entity'
-            - '../../../Event'
-            - '../../../Exception'
-            - '../../../Pagination'
-            - '../../../Model'
-            - '../../../Security/Capabilities.php'
+            - '../src/Annotation'
+            - '../src/DependencyInjection'
+            - '../src/Entity'
+            - '../src/Event'
+            - '../src/Exception'
+            - '../src/Pagination'
+            - '../src/Model'
+            - '../src/Security/Capabilities.php'
+            - '../src/NumberNineBundle.php'
 
     NumberNine\Controller\:
-        resource: '../../../Controller/*'
+        resource: '../src/Controller/*'
         tags: ['controller.service_arguments']
 
     NumberNine\Serializer\Normalizer\:
-        resource: '../../../Serializer/Normalizer/*'
+        resource: '../src/Serializer/Normalizer/*'
         tags: ['numbernine.serializer.normalizer']
 
     # Annotation

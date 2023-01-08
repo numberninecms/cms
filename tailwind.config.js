@@ -29,11 +29,11 @@ function palette(color) {
     }
 }
 
+/** @type {import('tailwindcss').Config} */
 module.exports = {
     content: [
-        './assets/scss/purge_safelist.txt',
-        './src/Bundle/Resources/views/**/*.twig',
         './assets/ts/**/*.{js,jsx,ts,tsx,vue}',
+        './templates/**/*.{html,twig}',
     ],
     theme: {
         screens: {

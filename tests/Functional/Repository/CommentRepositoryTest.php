@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace NumberNine\Tests\Functional\Repository;
 
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
-use NumberNine\Bundle\Test\UserAwareTestCase;
 use NumberNine\Entity\Comment;
 use NumberNine\Model\Content\CommentStatusInterface;
 use NumberNine\Model\Pagination\PaginationParameters;
 use NumberNine\Pagination\Paginator;
 use NumberNine\Repository\CommentRepository;
+use NumberNine\Test\UserAwareTestCase;
 use NumberNine\Tests\CreateEntitiesHelperTrait;
 
 /**

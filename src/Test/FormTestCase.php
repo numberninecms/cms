@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace NumberNine\Bundle\Test;
+namespace NumberNine\Test;
 
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;

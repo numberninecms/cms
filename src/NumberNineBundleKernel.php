@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Bundle;
+namespace NumberNine;
 
 use DAMA\DoctrineTestBundle\DAMADoctrineTestBundle;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
@@ -61,7 +61,7 @@ final class NumberNineBundleKernel extends Kernel
 
     public function getCacheDir(): string
     {
-        return __DIR__ . '/../../var/cache/dev/';
+        return __DIR__ . '/../var/cache/dev/';
     }
 
     public function build(ContainerBuilder $container): void
@@ -72,13 +72,13 @@ final class NumberNineBundleKernel extends Kernel
 
     protected function configureContainer(ContainerConfigurator $container): void
     {
-        $container->import(__DIR__ . '/Resources/config/app.yaml');
-        $container->import(__DIR__ . '/Resources/config/{app}_' . $this->environment . '.yaml');
-        $container->import(__DIR__ . '/Resources/config/services.yaml');
+        $container->import(__DIR__ . '/../config/app.yaml');
+        $container->import(__DIR__ . '/../config/{app}_' . $this->environment . '.yaml');
+        $container->import(__DIR__ . '/../config/services.yaml');
     }
 
     protected function configureRoutes(RoutingConfigurator $routes): void
     {
-        $routes->import(__DIR__ . '/Resources/config/routing.yaml');
+        $routes->import(__DIR__ . '/../config/routing.yaml');
     }
 }
