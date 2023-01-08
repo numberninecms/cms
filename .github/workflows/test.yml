@@ -12,6 +12,10 @@ on:
         paths-ignore:
             - '**/README.md'
 
+concurrency:
+    group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
+    cancel-in-progress: true
+
 jobs:
     bundle_tests:
         name: Bundle tests
@@ -44,10 +48,10 @@ jobs:
 
             -   name: Get composer cache directory
                 id: composer-cache
-                run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+                run: echo "dir="$(composer config cache-files-dir)"" >> $GITHUB_OUTPUT
 
             -   name: Cache dependencies
-                uses: actions/cache@v2
+                uses: actions/cache@v3
                 with:
                     path: ${{ steps.composer-cache.outputs.dir }}
                     key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -89,7 +93,7 @@ jobs:
         steps:
             -   uses: FranzDiebold/github-env-vars-action@v2
 
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v3
                 with:
                     path: temp/cms
 
@@ -98,14 +102,14 @@ jobs:
                 run: |
                     cd temp/cms
                     composer config --unset extra.branch-alias.dev-master
-                    composer config extra.branch-alias.dev-$CI_REF_NAME_SLUG 0.4.x-dev
+                    composer config extra.branch-alias.dev-$CI_REF_NAME_SLUG 0.5.x-dev
 
             -   name: Create temporary branch alias for pull requests
                 if: startsWith(github.ref, 'refs/pull/')
                 run: |
                     cd temp/cms
                     composer config --unset extra.branch-alias.dev-master
-                    composer config extra.branch-alias.dev-$CI_SHA 0.4.x-dev
+                    composer config extra.branch-alias.dev-$CI_SHA 0.5.x-dev
 
             -   name: Setup PHP
                 id: setup-php
@@ -137,7 +141,7 @@ jobs:
                     composer config minimum-stability dev
                     composer config prefer-stable true
                     composer config repositories.0 path ./temp/cms
-                    composer require numberninecms/cms:^0.4 numberninecms/chapterone:^0.4 --ignore-platform-reqs
+                    composer require numberninecms/cms:^0.5 numberninecms/chapterone:^0.5 --ignore-platform-reqs
                     rm vendor/numberninecms/cms
                     cd ./temp/cms
                     cp -Rp . ../../vendor/numberninecms/cms
@@ -189,7 +193,7 @@ jobs:
             -   name: Start MySQL
                 run: sudo systemctl start mysql.service
 
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v3
                 with:
                     path: temp/cms
 
@@ -198,14 +202,14 @@ jobs:
                 run: |
                     cd temp/cms
                     composer config --unset extra.branch-alias.dev-master
-                    composer config extra.branch-alias.dev-$CI_REF_NAME_SLUG 0.4.x-dev
+                    composer config extra.branch-alias.dev-$CI_REF_NAME_SLUG 0.5.x-dev
 
             -   name: Create temporary branch alias for pull requests
                 if: startsWith(github.ref, 'refs/pull/')
                 run: |
                     cd temp/cms
                     composer config --unset extra.branch-alias.dev-master
-                    composer config extra.branch-alias.dev-$CI_SHA 0.4.x-dev
+                    composer config extra.branch-alias.dev-$CI_SHA 0.5.x-dev
 
             -   name: Setup PHP
                 id: setup-php
@@ -236,7 +240,7 @@ jobs:
                     composer config minimum-stability dev
                     composer config prefer-stable true
                     composer config repositories.0 path ./temp/cms
-                    composer require numberninecms/cms:^0.4 numberninecms/chapterone:^0.4
+                    composer require numberninecms/cms:^0.5 numberninecms/chapterone:^0.5
 
             -   name: Create .env.local file
                 run: |

@@ -48,7 +48,7 @@ final class AdminMenuEventSubscriber implements EventSubscriberInterface
         string $adminMenuConfigPath,
         private string $environment
     ) {
-        $this->configFile = __DIR__ . '/../Bundle/Resources/config/' . $adminMenuConfigPath . '/menus.yaml';
+        $this->configFile = __DIR__ . '/../../config/' . $adminMenuConfigPath . '/menus.yaml';
     }
 
     public static function getSubscribedEvents(): array

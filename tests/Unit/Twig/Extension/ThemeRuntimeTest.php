@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Twig\Extension;
 
-use NumberNine\Bundle\Test\UserAwareTestCase;
 use NumberNine\Configuration\ConfigurationReadWriter;
 use NumberNine\Entity\ContentEntityTerm;
 use NumberNine\Entity\Post;
@@ -21,6 +20,7 @@ use NumberNine\Entity\Term;
 use NumberNine\Model\Content\PublishingStatusInterface;
 use NumberNine\Model\General\Settings;
 use NumberNine\Repository\TaxonomyRepository;
+use NumberNine\Test\UserAwareTestCase;
 use NumberNine\Twig\Extension\ThemeRuntime;
 
 /**

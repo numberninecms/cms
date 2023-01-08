@@ -11,9 +11,9 @@
 
 namespace NumberNine\Tests\Functional\Controller\Admin\Api\ContentEntity;
 
-use NumberNine\Bundle\Test\UserAwareTestCase;
 use NumberNine\Model\Content\PublishingStatusInterface;
 use NumberNine\Security\Capabilities;
+use NumberNine\Test\UserAwareTestCase;
 use NumberNine\Tests\CreateEntitiesHelperTrait;
 
 /**

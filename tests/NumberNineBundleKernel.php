@@ -15,8 +15,8 @@ use DAMA\DoctrineTestBundle\DAMADoctrineTestBundle;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle;
 use Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle;
-use NumberNine\Bundle\NumberNineBundle;
 use NumberNine\ChapterOne\NumberNineChapterOneBundle;
+use NumberNine\NumberNineBundle;
 use Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle;
 use Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
@@ -70,14 +70,14 @@ final class NumberNineBundleKernel extends Kernel
 
     protected function configureContainer(ContainerConfigurator $container): void
     {
-        $container->import('../src/Bundle/Resources/config/app.yaml');
-        $container->import('../src/Bundle/Resources/config/app_test.yaml');
-        $container->import('../src/Bundle/Resources/config/services.yaml');
-        $container->import('../src/Bundle/Resources/config/services_test.yaml');
+        $container->import('../config/app.yaml');
+        $container->import('../config/app_test.yaml');
+        $container->import('../config/services.yaml');
+        $container->import('../config/services_test.yaml');
     }
 
     protected function configureRoutes(RoutingConfigurator $routes): void
     {
-        $routes->import('../src/Bundle/Resources/config/routing.yaml');
+        $routes->import('../config/routing.yaml');
     }
 }

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Bundle\Test;
+namespace NumberNine\Test;
 
 use Doctrine\ORM\EntityManagerInterface;
 use NumberNine\Admin\AdminMenuBuilderStore;
@@ -22,6 +22,8 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Uid\Uuid;
+
+use function NumberNine\Bundle\Test\str_starts_with;
 
 abstract class UserAwareTestCase extends WebTestCase
 {

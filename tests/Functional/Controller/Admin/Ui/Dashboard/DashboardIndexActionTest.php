@@ -11,8 +11,8 @@
 
 namespace NumberNine\Tests\Functional\Controller\Admin\Ui\Dashboard;
 
-use NumberNine\Bundle\Test\UserAwareTestCase;
 use NumberNine\Security\Capabilities;
+use NumberNine\Test\UserAwareTestCase;
 
 /**
  * @internal

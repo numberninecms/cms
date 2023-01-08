@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Unit\Form\Admin\Settings;
 
-use NumberNine\Bundle\Test\FormTestCase;
 use NumberNine\Form\Admin\Settings\AdminSettingsEmailsFormType;
+use NumberNine\Test\FormTestCase;
 
 /**
  * @internal

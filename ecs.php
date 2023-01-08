@@ -32,7 +32,7 @@ return static function (ECSConfig $ecsConfig): void {
     ]);
 
     $ecsConfig->skip([
-        __DIR__ . '/src/Bundle/Resources/public',
+        __DIR__ . '/public',
         SwitchCaseSemicolonToColonFixer::class,
         PhpUnitStrictFixer::class,
     ]);

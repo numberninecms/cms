@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Functional\Controller\Admin\Api\PageBuilder;
 
-use NumberNine\Bundle\Test\UserAwareTestCase;
 use NumberNine\Entity\Post;
 use NumberNine\Model\Content\PublishingStatusInterface;
 use NumberNine\Security\Capabilities;
+use NumberNine\Test\UserAwareTestCase;
 
 /**
  * @internal

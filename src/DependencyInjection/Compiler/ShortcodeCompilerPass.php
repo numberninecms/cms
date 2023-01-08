@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Bundle\DependencyInjection\Compiler;
+namespace NumberNine\DependencyInjection\Compiler;
 
 use NumberNine\Content\ShortcodeStore;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;

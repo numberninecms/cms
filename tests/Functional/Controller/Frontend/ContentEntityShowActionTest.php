@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Functional\Controller\Frontend;
 
-use NumberNine\Bundle\Test\UserAwareTestCase;
 use NumberNine\Entity\Post;
 use NumberNine\Entity\User;
 use NumberNine\Model\Content\PublishingStatusInterface;
 use NumberNine\Security\Capabilities;
+use NumberNine\Test\UserAwareTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

@@ -9,7 +9,7 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
 }
 
 Encore
-    .setOutputPath('src/Bundle/Resources/public/build/')
+    .setOutputPath('public/build/')
     .setPublicPath('/bundles/numbernine/build')
     .setManifestKeyPrefix('bundles/numbernine/build/')
 

@@ -89,7 +89,7 @@
         "jetbrains/phpstorm-attributes": "^1.0",
         "kubawerlos/php-cs-fixer-custom-fixers": "^3.11",
         "nikic/php-parser": "^4.10",
-        "numberninecms/chapterone": "^0.4.1",
+        "numberninecms/chapterone": "^0.5",
         "php-parallel-lint/php-parallel-lint": "^1.2",
         "phpro/grumphp": "^1.0",
         "phpstan/phpstan": "^1.4.6",

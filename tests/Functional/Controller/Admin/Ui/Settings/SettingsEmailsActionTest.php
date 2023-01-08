@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace NumberNine\Tests\Functional\Controller\Admin\Ui\Settings;
 
-use NumberNine\Bundle\Test\UserAwareTestCase;
+use NumberNine\Test\UserAwareTestCase;
 
 /**
  * @internal

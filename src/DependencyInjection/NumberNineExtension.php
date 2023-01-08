@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace NumberNine\Bundle\DependencyInjection;
+namespace NumberNine\DependencyInjection;
 
 use NumberNine\Common\Bundle\MergeConfigurationTrait;
 use NumberNine\Model\General\Settings;
@@ -37,7 +37,7 @@ final class NumberNineExtension extends ConfigurableExtension implements Prepend
             'framework',
             [
                 'translator' => [
-                    'paths' => [__DIR__ . '/../Resources/translations'],
+                    'paths' => [__DIR__ . '/../../translations'],
                 ],
             ]
         );
@@ -59,7 +59,7 @@ final class NumberNineExtension extends ConfigurableExtension implements Prepend
 
         $extensions = $container->getExtensions();
 
-        foreach (Yaml::parseFile(__DIR__ . '/../Resources/config/app.yaml') as $name => $config) {
+        foreach (Yaml::parseFile(__DIR__ . '/../../config/app.yaml') as $name => $config) {
             if (empty($extensions[$name])) {
                 continue;
             }
@@ -80,7 +80,7 @@ final class NumberNineExtension extends ConfigurableExtension implements Prepend
 
     protected function loadInternal(array $mergedConfig, ContainerBuilder $container): void
     {
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
         $loader->load('services.yaml');
 
         $env = $container->getParameter('kernel.environment');
