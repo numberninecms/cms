@@ -32,7 +32,6 @@ if (!empty($_ENV['BOOTSTRAP_RESET_DATABASE'])) {
     !passthru(
         sprintf('php "%s/../bin/console" doctrine:schema:update --env=test --force --no-interaction', __DIR__)
     ) || exit(1);
-    !passthru(sprintf('rm -rf "%s/../public"', __DIR__)) || exit(1);
     !passthru(
         sprintf('php "%s/../bin/console" doctrine:fixtures:load --env=test --no-interaction', __DIR__)
     ) || exit(1);

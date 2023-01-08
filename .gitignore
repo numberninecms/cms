@@ -16,6 +16,7 @@ yarn-error.log
 
 .phpunit.result.cache
 /var
-/public
+/public/*
+!/public/build
 docker-compose.override.yml
 composer.lock
