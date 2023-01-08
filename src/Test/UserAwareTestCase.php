@@ -23,8 +23,6 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Uid\Uuid;
 
-use function NumberNine\Bundle\Test\str_starts_with;
-
 abstract class UserAwareTestCase extends WebTestCase
 {
     protected KernelBrowser $client;

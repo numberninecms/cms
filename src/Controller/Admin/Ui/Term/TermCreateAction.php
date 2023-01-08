@@ -19,15 +19,12 @@ use NumberNine\Entity\Taxonomy;
 use NumberNine\Entity\Term;
 use NumberNine\Form\Admin\Term\AdminTermFormType;
 use NumberNine\Model\Admin\AdminController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @ParamConverter("taxonomy", options={"mapping": {"taxonomy": "name"}})
- */
 #[Route(path: '/taxonomy/{taxonomy}/term/', name: 'numbernine_admin_term_create', methods: ['GET', 'POST'])]
 final class TermCreateAction extends AbstractController implements AdminController
 {
@@ -35,7 +32,7 @@ final class TermCreateAction extends AbstractController implements AdminControll
         Request $request,
         EntityManagerInterface $entityManager,
         ContentService $contentService,
-        Taxonomy $taxonomy,
+        #[MapEntity(mapping: ['taxonomy' => 'name'])] Taxonomy $taxonomy,
     ): Response {
         $term = (new Term())->setTaxonomy($taxonomy);
         $form = $this->createForm(AdminTermFormType::class, $term);

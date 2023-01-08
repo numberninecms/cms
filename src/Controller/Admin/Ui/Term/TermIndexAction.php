@@ -23,7 +23,7 @@ use NumberNine\Model\Admin\AdminController;
 use NumberNine\Model\Pagination\PaginationParameters;
 use NumberNine\Repository\TermRepository;
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,9 +31,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-/**
- * @ParamConverter("taxonomy", options={"mapping": {"taxonomy": "name"}})
- */
 #[Route(path: '/taxonomy/{taxonomy}/', name: 'numbernine_admin_term_index', methods: ['GET', 'POST'])]
 final class TermIndexAction extends AbstractController implements AdminController
 {
@@ -44,7 +41,7 @@ final class TermIndexAction extends AbstractController implements AdminControlle
         ContentService $contentService,
         TermRepository $termRepository,
         LoggerInterface $logger,
-        Taxonomy $taxonomy
+        #[MapEntity(mapping: ['taxonomy' => 'name'])] Taxonomy $taxonomy
     ): Response {
         /** @var PaginationParameters $paginationParameters */
         $paginationParameters = $serializer->denormalize(
