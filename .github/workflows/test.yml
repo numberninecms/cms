@@ -147,13 +147,13 @@ jobs:
                     cd ./temp/cms
                     cp -Rp . ../../vendor/numberninecms/cms
                     cd ../..
-
-            -   name: Create .env.local file
-                run: |
-                    echo "APP_NAME=numbernine" > .env.local
+                    cp vendor/numberninecms/cms/install/docker-compose.yml docker-compose.yml
+                    cp vendor/numberninecms/cms/install/Makefile Makefile
+                    echo "APP_NAME=numbernine" >> .env
+                    echo "PROJECT_DIR=${PWD##*/}" >> .env
                     echo "DATABASE_URL=mysql://user:user@mysql:3306/numbernine_app?serverVersion=8.0" >> .env.local
                     echo "REDIS_URL=redis://redis:6379" >> .env.local
-                    echo "MAILER_DSN=smtp://maildev:25" >> .env.local
+                    echo "MAILER_DSN=smtp://mailer:1025" >> .env.local
 
             -   name: Install redis bundle
                 run: |
@@ -163,20 +163,23 @@ jobs:
 
             -   name: Build Docker installer
                 run: |
-                    wget https://raw.githubusercontent.com/numberninecms/installer/master/.dockerignore
+                    wget https://raw.githubusercontent.com/numberninecms/installer/0.5.x/.dockerignore
                     mkdir build
-                    wget -O build/Dockerfile https://raw.githubusercontent.com/numberninecms/installer/master/build/Dockerfile
-                    wget -O build/docker-entrypoint.sh https://raw.githubusercontent.com/numberninecms/installer/master/build/docker-entrypoint.sh
+                    wget -O build/Dockerfile https://raw.githubusercontent.com/numberninecms/installer/0.5.x/build/Dockerfile
+                    wget -O build/docker-entrypoint.sh https://raw.githubusercontent.com/numberninecms/installer/0.5.x/build/docker-entrypoint.sh
                     docker build --no-cache -t projectinstaller:latest -f ./build/Dockerfile .
 
             -   name: Create Docker environment
                 run: |
                     docker run --rm -t -e HOST_PWD=$PWD \
-                        -v $PWD:/srv/app -v /var/run/docker.sock:/var/run/docker.sock \
+                        -v $PWD:/app -v /var/run/docker.sock:/var/run/docker.sock \
                         projectinstaller testproject -v
 
             -   name: Check that website is up and running
                 run: wget --spider --no-check-certificate https://testproject.localhost/
+
+            -   name: Check that Maildev is up and running
+                run: wget --spider --no-check-certificate https://testproject-mail.localhost/
 
     project_installation_manual:
         name: New project installation (manual)

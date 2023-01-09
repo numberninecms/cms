@@ -247,7 +247,7 @@ final class DockerInstallCommand extends Command implements ContentTypeAwareComm
     {
         $composerBaseCmd = sprintf(
             'docker run --rm --name numbernine_installer %s -u "$(id -u):$(id -g)" ' .
-            '-v %s:/srv/app -w /srv/app numberninecms/php:7.4-fpm-dev composer ',
+            '-v %s:/app -w /srv/app numberninecms/php:7.4-fpm-dev composer ',
             Process::isTtySupported() ? '-it' : '',
             $this->projectPath
         );
