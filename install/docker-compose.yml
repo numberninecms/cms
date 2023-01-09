@@ -5,30 +5,44 @@
 version: '3.8'
 
 services:
-    nginx:
-        image: nginx:alpine
-        ports: ['443:443']
-        restart: 'no'
-        working_dir: /srv/app
-        volumes:
-            - ./docker/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
-            - ./docker/nginx/cert/localhost.crt:/etc/ssl/certs/localhost.crt
-            - ./docker/nginx/cert/localhost.key:/etc/ssl/private/localhost.key
-            - ./:/srv/app
-
     php:
-        image: numberninecms/php:8.1-fpm-dev
-        working_dir: /srv/app
+        build:
+            context: .
+            dockerfile: docker/dk.php.Dockerfile
+            args:
+                PHP_VERSION: 8.1-fpm-dev
         user: '1000:1000'
         restart: 'no'
         volumes:
-            - ./:/srv/app
-            - ./docker/php/xdebug.ini:/etc/php81/conf.d/50_xdebug.ini
-            - ./docker/php/symfony.ini:/etc/php81/conf.d/100_symfony.ini
+            - ./:/var/www/html
+            - ./docker/php/xdebug.ini:/etc/php81/conf.d/50_xdebug.ini:ro
+            - ./docker/php/symfony.ini:/etc/php81/conf.d/99_symfony.ini:ro
+        extra_hosts:
+            - host.docker.internal:host-gateway
+
+    nginx:
+        build:
+            context: .
+            dockerfile: docker/dk.nginx.Dockerfile
+        restart: 'no'
+        volumes:
+            - ./public/:/var/www/html/public:ro
+        depends_on:
+            - php
+            - traefik
+        networks:
+            - default
+            - traefik
+        labels:
+            - app.proxy.name=${APP_NAME:-numbernine}
+            - traefik.enable=true
+            - traefik.http.routers.${APP_NAME:-numbernine}.rule=Host(`${APP_NAME:-numbernine}.localhost`)
+            - traefik.http.routers.${APP_NAME:-numbernine}.tls=true
+            - traefik.http.routers.${APP_NAME:-numbernine}.entrypoints=websecure
+            - traefik.http.services.${APP_NAME:-numbernine}.loadbalancer.server.port=80
 
     mysql:
-        image: mysql:latest
-        command: --default-authentication-plugin=mysql_native_password
+        image: mysql
         restart: 'no'
         environment:
             - MYSQL_USER=user
@@ -42,15 +56,61 @@ services:
         image: redis:alpine
         restart: 'no'
 
-    blackfire:
-        image: blackfire/blackfire:2
-        restart: 'no'
-
-    maildev:
+    mailer:
         image: maildev/maildev
-        command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
-        ports: ['8010:80']
         restart: 'no'
+        networks:
+            - default
+            - traefik
+        depends_on:
+            - traefik
+        labels:
+            - app.proxy.name=${APP_NAME:-numbernine}
+            - traefik.enable=true
+            - traefik.http.routers.${APP_NAME:-numbernine}-mail.rule=Host(`${APP_NAME:-numbernine}-mail.localhost`)
+            - traefik.http.routers.${APP_NAME:-numbernine}-mail.tls=true
+            - traefik.http.routers.${APP_NAME:-numbernine}-mail.entrypoints=websecure
+            - traefik.http.services.${APP_NAME:-numbernine}-mail.loadbalancer.server.port=1080
+            - traefik.tcp.routers.${APP_NAME:-numbernine}-smtp.rule=HostSNI(`${APP_NAME:-numbernine}-smtp.localhost`)
+            - traefik.tcp.routers.${APP_NAME:-numbernine}-smtp.entrypoints=smtpsecure
+            - traefik.tcp.routers.${APP_NAME:-numbernine}-smtp.tls=true
+            - traefik.tcp.routers.${APP_NAME:-numbernine}-smtp.service=${APP_NAME:-numbernine}-smtp
+            - traefik.tcp.services.${APP_NAME:-numbernine}-smtp.loadbalancer.server.port=1025
+
+    traefik:
+        image: traefik
+        restart: 'no'
+        ports:
+            - '443:443'
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+        networks:
+            - traefik
+        command:
+            - --providers.docker
+            - --providers.docker.exposedbydefault=false
+            - --providers.docker.network=${PROJECT_DIR:-numbernine}_traefik
+            - --providers.docker.constraints=Label(`app.proxy.name`, `${APP_NAME:-numbernine}`)
+            - --entrypoints.web.address=:80
+            - --entrypoints.web.http.redirections.entryPoint.to=websecure
+            - --entrypoints.web.http.redirections.entryPoint.scheme=https
+            - --entrypoints.websecure.address=:443
+            - --entrypoints.smtp.address=:25
+            - --entrypoints.smtpsecure.address=:465
+            - --accesslog
+            - --log
+            - --api
+        labels:
+            - app.proxy.name=${APP_NAME:-numbernine}
+            - traefik.enable=true
+            - traefik.http.routers.${APP_NAME:-numbernine}-traefik.rule=Host(`${APP_NAME:-numbernine}-traefik.localhost`)
+            - traefik.http.routers.${APP_NAME:-numbernine}-traefik.entrypoints=websecure
+            - traefik.http.routers.${APP_NAME:-numbernine}-traefik.tls=true
+            - traefik.http.routers.${APP_NAME:-numbernine}-traefik.service=api@internal
+            - traefik.http.services.${APP_NAME:-numbernine}-traefik.loadbalancer.server.port=8080
 
 volumes:
     mysql_data:
+
+networks:
+    traefik:
