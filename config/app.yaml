@@ -62,6 +62,7 @@ stof_doctrine_extensions:
             loggable: true
 
 framework:
+    trusted_proxies: '127.0.0.1,REMOTE_ADDR'
     profiler: { only_exceptions: false }
     cache:
         prefix_seed: ~
