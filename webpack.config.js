@@ -55,12 +55,12 @@ Encore
     .enableVersioning(Encore.isProduction())
 
     // configure Babel
-    // .configureBabel(function(config) {
-    //     config.plugins.push(['prismjs', {
-    //         'languages': ['shortcode'],
-    //         'css': true,
-    //     }]);
-    // })
+    .configureBabel((config) => {
+        config.plugins.push(['prismjs', {
+            'languages': ['shortcode'],
+            'css': true,
+        }]);
+    })
 
     // enables and configure @babel/preset-env polyfills
     .configureBabelPresetEnv((config) => {

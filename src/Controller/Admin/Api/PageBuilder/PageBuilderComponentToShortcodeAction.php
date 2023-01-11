@@ -31,7 +31,7 @@ final class PageBuilderComponentToShortcodeAction implements AdminController
         ShortcodeMarkupBeautifier $shortcodeMarkupBeautifier
     ): JsonResponse {
         $text = $arrayToShortcodeConverter->convertMany(
-            [$request->request->get('component')],
+            [$request->request->all('component')],
             (bool) $request->request->get('beautify', false),
         );
 
