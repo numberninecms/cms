@@ -20,6 +20,7 @@
         "@vueuse/core": "^9.10.0",
         "autoprefixer": "^10.4.13",
         "axios": "^1.2.2",
+        "babel-plugin-prismjs": "^2.1.0",
         "change-case": "^4.1.2",
         "core-js": "^3.27.1",
         "dateformat": "^5.0.3",
